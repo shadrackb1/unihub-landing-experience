@@ -184,7 +184,7 @@ export function SiteFooter() {
           />
         </div>
         <div className="mt-14 flex flex-col gap-3 border-t border-border pt-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-          <p>© 2026 UniHub — Premium student housing in Kenya</p>
+          <p>© 2026 UniHub · Student housing in Kenya</p>
           <p className="flex items-center gap-2">
             <Mail className="size-3.5" /> hello@unihub.ke
           </p>

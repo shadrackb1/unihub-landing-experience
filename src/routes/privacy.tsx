@@ -5,7 +5,7 @@ import { Reveal } from "@/components/VideoPanel";
 
 export const Route = createFileRoute("/privacy")({
   head: () => ({
-    meta: [{ title: "Privacy — UniHub" }],
+    meta: [{ title: "Privacy · UniHub" }],
   }),
   component: PrivacyPage,
 });
@@ -22,8 +22,8 @@ function PrivacyPage() {
           <div className="mt-8 space-y-5 text-sm leading-relaxed text-muted-foreground sm:text-base">
             <p>
               UniHub collects only what we need to help you discover housing and
-              contact landlords or agents — for example messages you send through
-              WhatsApp links or email.
+              contact landlords or agents. That can include messages you send
+              through WhatsApp links or email.
             </p>
             <p>
               We do not require an account to browse. We do not sell student

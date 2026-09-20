@@ -8,7 +8,7 @@ import { sampleListings } from "@/data/listings";
 export const Route = createFileRoute("/listings")({
   head: () => ({
     meta: [
-      { title: "Listings — UniHub" },
+      { title: "Listings · UniHub" },
       {
         name: "description",
         content:
@@ -33,7 +33,7 @@ function ListingsPage() {
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
               Sample verified homes students shortlist first. Contact agents on
-              WhatsApp when you’re ready — no account required to browse.
+              WhatsApp when you are ready. No account required to browse.
             </p>
           </Reveal>
 
@@ -68,7 +68,8 @@ function ListingsPage() {
                 Need a room this semester?
               </p>
               <p className="mt-2 text-sm text-muted-foreground">
-                Tell us your campus and budget — we’ll point you to verified options.
+                Tell us your campus and budget. We will point you to verified
+                options.
               </p>
             </div>
             <ul className="space-y-2 text-sm text-secondary-foreground">

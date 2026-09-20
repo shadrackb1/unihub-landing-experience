@@ -5,7 +5,7 @@ import { Reveal } from "@/components/VideoPanel";
 
 export const Route = createFileRoute("/terms")({
   head: () => ({
-    meta: [{ title: "Terms — UniHub" }],
+    meta: [{ title: "Terms · UniHub" }],
   }),
   component: TermsPage,
 });

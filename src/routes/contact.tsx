@@ -6,7 +6,7 @@ import { Reveal } from "@/components/VideoPanel";
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
-      { title: "Contact — UniHub" },
+      { title: "Contact · UniHub" },
       {
         name: "description",
         content:
@@ -29,7 +29,7 @@ function ContactPage() {
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
               Questions about a listing, verification, or listing your property?
-              Message us directly — no account required.
+              Message us directly. No account required.
             </p>
           </Reveal>
 
@@ -66,7 +66,7 @@ function ContactPage() {
               <MapPin className="size-5 text-highlight" aria-hidden="true" />
               <h2 className="mt-6 font-display text-2xl font-medium">Coverage</h2>
               <p className="mt-3 text-sm text-muted-foreground">
-                Student towns across Kenya — Nairobi, Juja, Thika, Kahawa,
+                Student towns across Kenya: Nairobi, Juja, Thika, Kahawa,
                 Eldoret, Nakuru, and more.
               </p>
             </Reveal>

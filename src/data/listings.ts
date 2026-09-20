@@ -16,7 +16,7 @@ export type SampleListing = {
 
 export const sampleListings: SampleListing[] = [
   {
-    title: "Modern Bedsitter — Juja Town",
+    title: "Modern Bedsitter in Juja Town",
     location: "Near JKUAT",
     category: "Bedsitter",
     price: "KES 9,500",
@@ -24,7 +24,7 @@ export const sampleListings: SampleListing[] = [
     image: bedsitterImage,
   },
   {
-    title: "Secure Hostel Room — Gendered wing",
+    title: "Secure Hostel Room, gendered wing",
     location: "Near University of Nairobi",
     category: "Hostel",
     price: "KES 7,200",
@@ -32,7 +32,7 @@ export const sampleListings: SampleListing[] = [
     image: hostelImage,
   },
   {
-    title: "Spacious Single Room — Kahawa",
+    title: "Spacious Single Room in Kahawa",
     location: "Near Kenyatta University",
     category: "Single room",
     price: "KES 8,000",
@@ -40,7 +40,7 @@ export const sampleListings: SampleListing[] = [
     image: apartmentImage,
   },
   {
-    title: "Furnished Studio — Madaraka",
+    title: "Furnished Studio in Madaraka",
     location: "Near Strathmore University",
     category: "Studio",
     price: "KES 14,500",
@@ -48,7 +48,7 @@ export const sampleListings: SampleListing[] = [
     image: studioImage,
   },
   {
-    title: "Twin Hostel Room — Kesses",
+    title: "Twin Hostel Room in Kesses",
     location: "Near Moi University",
     category: "Hostel",
     price: "KES 6,500",
@@ -56,7 +56,7 @@ export const sampleListings: SampleListing[] = [
     image: twinHostelImage,
   },
   {
-    title: "Shared Apartment — Njoro",
+    title: "Shared Apartment in Njoro",
     location: "Near Egerton University",
     category: "Shared apartment",
     price: "KES 8,500",

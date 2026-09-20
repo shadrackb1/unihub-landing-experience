@@ -46,17 +46,17 @@ const residenceClips: ResidenceClip[] = [
     title: "Spacious student rooms",
     meta: "From KES 15,000",
     blurb:
-      "Own kitchen and bathroom — even when you share. Free gym, lounges, and more amenities for campus life.",
+      "Own kitchen and bathroom even when you share. Free gym and lounges for campus life.",
     src: studentRoomsVideo,
     poster: studentRoomsPoster,
     ariaLabel: "Spacious student rooms tour with kitchen bathroom and gym",
   },
   {
     id: "female-hostel",
-    title: "Female hostel · Kigamboni",
+    title: "Female hostel in Kigamboni",
     meta: "Student-focused",
     blurb:
-      "Modern women’s hostel near ferry routes — built for students around IFM, CBE, TIA, UTUMISHI, and nearby colleges. Free Wi‑Fi.",
+      "Modern women’s hostel near ferry routes. Built for students around IFM, CBE, TIA, UTUMISHI, and nearby colleges. Free Wi‑Fi.",
     src: femaleHostelVideo,
     poster: femaleHostelPoster,
     ariaLabel: "Luxury female hostel for students in Kigamboni",
@@ -66,7 +66,7 @@ const residenceClips: ResidenceClip[] = [
     title: "Maison Bauchart suites",
     meta: "Premium stays",
     blurb:
-      "Tailored suites and curated hospitality — a reference for elevated short stays beyond the usual hostel budget.",
+      "Tailored suites for short stays above typical hostel budgets.",
     src: maisonVideo,
     poster: maisonPoster,
     ariaLabel: "Maison Bauchart tailored suites hospitality video",
@@ -76,13 +76,13 @@ const residenceClips: ResidenceClip[] = [
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "UniHub — Verified Student Housing in Kenya" },
+      { title: "UniHub · Verified Student Housing in Kenya" },
       {
         name: "description",
         content:
-          "Browse verified hostels, bedsitters, and rentals near Kenyan university campuses. No account required—contact landlords directly.",
+          "Browse verified hostels, bedsitters, and rentals near Kenyan university campuses. No account required. Contact landlords directly.",
       },
-      { property: "og:title", content: "UniHub — Find your perfect home." },
+      { property: "og:title", content: "UniHub · Find your perfect home." },
       {
         property: "og:description",
         content:
@@ -224,7 +224,7 @@ function Index() {
               <LetterReveal text="Find your perfect home." />
               <p className="reveal reveal-3 mt-7 max-w-2xl text-base leading-relaxed text-secondary-foreground sm:text-xl">
                 Browse verified hostels, bedsitters, and rentals near campus.
-                Message landlords on WhatsApp — no account needed to search.
+                Message landlords on WhatsApp. No account needed to search.
               </p>
               <div className="reveal reveal-4 mt-9 flex flex-wrap items-center gap-5">
                 <PrimaryLink href="/listings">Browse Listings</PrimaryLink>
@@ -314,7 +314,7 @@ function Index() {
                   id="walkthrough"
                   eyebrow="Site walkthrough"
                   title="See how to navigate UniHub."
-                  description="Browse listings, shortlist a place, and contact an agent — no account wall."
+                  description="Browse listings, shortlist a place, and contact an agent."
                   src={walkthroughVideo}
                   poster={walkthroughPoster}
                 />
@@ -383,9 +383,9 @@ function Index() {
           <div className="mx-auto max-w-7xl px-5 md:px-8">
             <Reveal className="section-heading max-w-3xl">
               <p className="eyebrow">Housing on the ground</p>
-              <h2>See student residences, not just listings.</h2>
+              <h2>See the residences behind the listings.</h2>
               <p>
-                Student housing footage from residences across the region —
+                Student housing footage from residences across the region:
                 rooms, hostels, and premium stays.
               </p>
             </Reveal>
@@ -456,8 +456,9 @@ function Index() {
                   Rooms you can almost walk into.
                 </h3>
                 <p className="mt-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
-                  Spacious student rooms from <span className="text-foreground">KES 15,000</span> —
-                  private kitchen and bathroom options, free gym and lounges.
+                  Spacious student rooms from{" "}
+                  <span className="text-foreground">KES 15,000</span>. Private
+                  kitchen and bathroom options, free gym and lounges.
                 </p>
                 <div className="mt-7 flex flex-wrap gap-3">
                   <PrimaryLink href="/listings">Open listings</PrimaryLink>
@@ -544,7 +545,7 @@ function Index() {
               <p className="eyebrow">Popular areas</p>
               <h2>Housing keyed to campus.</h2>
               <p>
-                Search by the town you already know — Juja, Kahawa, Kesses —
+                Search by the town you already know (Juja, Kahawa, Kesses),
                 then shortlist places that keep the commute short.
               </p>
               <div className="mt-8 flex flex-wrap gap-2">
@@ -603,8 +604,8 @@ function Index() {
               </h3>
               <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
                 Modern hostels with Wi‑Fi for learners around IFM, CBE, TIA,
-                UTUMISHI, and nearby colleges — watch the space before you
-                message an agent.
+                UTUMISHI, and nearby colleges. See the space before you message
+                an agent.
               </p>
             </Reveal>
           </div>

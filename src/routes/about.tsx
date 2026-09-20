@@ -7,7 +7,7 @@ import { Reveal } from "@/components/VideoPanel";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "About — UniHub" },
+      { title: "About · UniHub" },
       {
         name: "description",
         content:
@@ -26,13 +26,13 @@ const pillars = [
   },
   {
     icon: GraduationCap,
-    title: "Campus-shaped",
-    copy: "Housing is organized around universities and student towns — Juja, Kahawa, Eldoret, Nakuru — not generic city noise.",
+    title: "Built around campuses",
+    copy: "Housing sits near universities and student towns such as Juja, Kahawa, Eldoret, and Nakuru. It is not generic city inventory.",
   },
   {
     icon: MessageCircle,
     title: "Direct contact",
-    copy: "Browse freely, then WhatsApp or email the agent. UniHub stays out of the way when you’re ready to move.",
+    copy: "Browse freely, then WhatsApp or email the agent. UniHub stays out of the way when you are ready to move.",
   },
 ];
 
@@ -47,9 +47,9 @@ function AboutPage() {
               Built for students. Designed for trust.
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-              Finding a safe place near campus in Kenya shouldn’t mean endless
+              Finding a safe place near campus in Kenya should not mean endless
               WhatsApp groups and risky deposits. UniHub connects students with
-              verified hostels, bedsitters, and rentals — then gets out of the way.
+              verified hostels, bedsitters, and rentals, then gets out of the way.
             </p>
           </Reveal>
 

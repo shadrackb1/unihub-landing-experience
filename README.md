@@ -1,6 +1,6 @@
 # UniHub Landing Experience
 
-Marketing site for **UniHub** — verified student housing near Kenyan campuses. Students browse hostels, bedsitters, and rentals, then contact landlords or agents directly. No account required to browse.
+Marketing site for **UniHub**: verified student housing near Kenyan campuses. Students browse hostels, bedsitters, and rentals, then contact landlords or agents directly. No account required to browse.
 
 ## Stack
 
@@ -71,6 +71,13 @@ src/
   routes/          # file-based pages
   styles.css       # design tokens + motion utilities
 ```
+
+Anti-slop skills live under `.mimocode/skills/`:
+- `anti-ai-slop` — bundled writing + UI copy rules (use this)
+- `anti-ai-slop-writing` — source writing skill from GitHub
+- Bundled skill vendors key refs from jalaalrd writing, misbahsy anti-ai-slop, and Nutlope hallmark design copy rules
+
+Global install: `~/.config/mimocode/skills/anti-ai-slop/`
 
 ## Lovable
 
