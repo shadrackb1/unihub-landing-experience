@@ -287,9 +287,9 @@ function Index() {
               <Reveal>
                 <VideoPanel
                   id="walkthrough"
-                  eyebrow="Site walkthrough"
+                  eyebrow="Site walkthrough · full recording"
                   title="See how to navigate UniHub."
-                  description="A quick screen recording of browsing listings, shortlisting a place, and reaching out — no account wall in the way."
+                  description="The complete screen recording (about 2 minutes), looping as you scroll — browse listings, shortlist a place, and contact an agent without an account wall."
                   src={walkthroughVideo}
                   poster={walkthroughPoster}
                 />
@@ -301,8 +301,8 @@ function Index() {
                 </h3>
                 <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
                   Find a campus area, open verified listings, pick a room, then
-                  message the agent. The walkthrough shows that flow end to end
-                  on the live interface.
+                  message the agent. The full walkthrough shows that flow end to
+                  end on the live interface — play it on loop while you read.
                 </p>
                 <ul className="mt-6 space-y-3 text-sm text-secondary-foreground">
                   {["Browse without signing up", "Compare price and location", "Contact via WhatsApp"].map(
