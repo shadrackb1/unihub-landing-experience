@@ -83,7 +83,17 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ---
 
-## Design system
+## Brand
+
+Logo assets:
+
+- `public/logo.svg` — horizontal lockup (mark + wordmark)
+- `public/logo-mark.svg` / `public/favicon.svg` — mark only
+- React: `src/components/Logo.tsx` (`Logo`, `LogoMark`)
+
+Mark meaning: campus roofline + **U** monogram + mint verification seal (matches `--highlight`).
+
+### Design system
 
 Defined once in `src/styles.css` (oklch tokens).
 

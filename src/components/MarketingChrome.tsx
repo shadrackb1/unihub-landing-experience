@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Mail, Menu, MessageCircle, X } from "lucide-react";
+import { Logo } from "@/components/Logo";
 
 export const WHATSAPP_URL =
   "https://wa.me/254700000000?text=Hi%20UniHub%2C%20I%27d%20like%20help%20finding%20verified%20student%20housing";
@@ -14,16 +15,7 @@ const NAV_LINKS = [
 ] as const;
 
 function Wordmark() {
-  return (
-    <Link to="/" className="group flex flex-col gap-0.5" aria-label="UniHub home">
-      <span className="font-display text-xl font-medium tracking-normal">
-        Uni<span className="text-muted-foreground">Hub</span>
-      </span>
-      <span className="instrument hidden text-[0.58rem] opacity-80 sm:block">
-        Campus housing · Kenya
-      </span>
-    </Link>
-  );
+  return <Logo showTagline />;
 }
 
 export function SiteHeader() {
