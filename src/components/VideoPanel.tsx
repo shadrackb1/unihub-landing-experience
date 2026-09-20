@@ -1,3 +1,5 @@
+import { useEffect, useRef } from "react";
+
 type VideoPanelProps = {
   src: string;
   poster: string;
@@ -7,6 +9,31 @@ type VideoPanelProps = {
   id?: string;
 };
 
+function useRespectReducedMotion() {
+  const ref = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = ref.current;
+    if (!video) return;
+
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const sync = () => {
+      if (media.matches) {
+        video.pause();
+        return;
+      }
+      video.muted = true;
+      void video.play().catch(() => {});
+    };
+
+    sync();
+    media.addEventListener("change", sync);
+    return () => media.removeEventListener("change", sync);
+  }, []);
+
+  return ref;
+}
+
 export function VideoPanel({
   src,
   poster,
@@ -15,13 +42,19 @@ export function VideoPanel({
   eyebrow,
   id,
 }: VideoPanelProps) {
+  const videoRef = useRespectReducedMotion();
+
   return (
     <div className="overflow-hidden rounded-3xl border border-border bg-card">
       <div className="relative aspect-video bg-black/60">
         <video
+          ref={videoRef}
           className="h-full w-full object-cover"
-          controls
+          autoPlay
+          muted
+          loop
           playsInline
+          controls
           preload="metadata"
           poster={poster}
           aria-label={title}
@@ -42,5 +75,37 @@ export function VideoPanel({
         </p>
       </div>
     </div>
+  );
+}
+
+export function PortraitVideo({
+  src,
+  poster,
+  ariaLabel,
+  className = "",
+}: {
+  src: string;
+  poster: string;
+  ariaLabel: string;
+  className?: string;
+}) {
+  const videoRef = useRespectReducedMotion();
+
+  return (
+    <video
+      ref={videoRef}
+      className={className}
+      autoPlay
+      muted
+      loop
+      playsInline
+      controls
+      preload="metadata"
+      poster={poster}
+      aria-label={ariaLabel}
+    >
+      <source src={src} type="video/mp4" />
+      Your browser does not support embedded video.
+    </video>
   );
 }

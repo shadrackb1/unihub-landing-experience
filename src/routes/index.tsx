@@ -10,7 +10,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { SiteFooter, SiteHeader, WHATSAPP_URL } from "@/components/MarketingChrome";
-import { VideoPanel } from "@/components/VideoPanel";
+import { PortraitVideo, VideoPanel } from "@/components/VideoPanel";
 import heroImage from "@/assets/unihub-hero.jpg";
 import bedsitterImage from "@/assets/listing-bedsitter.jpg";
 import hostelImage from "@/assets/listing-hostel.jpg";
@@ -361,17 +361,12 @@ function Index() {
             <div className="mt-12 grid gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
               <div className="mx-auto w-full max-w-sm overflow-hidden rounded-3xl border border-border bg-card">
                 <div className="relative aspect-[9/16] bg-black/60">
-                  <video
+                  <PortraitVideo
                     className="h-full w-full object-cover"
-                    controls
-                    playsInline
-                    preload="metadata"
+                    src={documentaryVideo}
                     poster={documentaryPoster}
-                    aria-label="Qwetu Qejani student residences documentary"
-                  >
-                    <source src={documentaryVideo} type="video/mp4" />
-                    Your browser does not support embedded video.
-                  </video>
+                    ariaLabel="Qwetu Qejani student residences documentary"
+                  />
                 </div>
                 <div className="p-5">
                   <p className="verified-stamp">
