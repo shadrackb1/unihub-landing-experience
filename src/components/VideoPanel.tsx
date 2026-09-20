@@ -121,8 +121,12 @@ export function VideoPanel({
   const { videoRef, wrapRef } = useAutoplayInView();
 
   return (
-    <div className="overflow-hidden rounded-3xl border border-border bg-card">
-      <div ref={wrapRef} className="relative aspect-video bg-black/60">
+    <div className="video-card group relative overflow-hidden rounded-[1.75rem] border border-border bg-card/80 backdrop-blur-xl">
+      <div className="pointer-events-none absolute left-4 top-4 z-20 inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-black/45 px-3 py-1.5 text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-white backdrop-blur-md">
+        Loop · scroll play
+      </div>
+      <div ref={wrapRef} className="relative aspect-video bg-black/70">
+        <div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-t from-black/40 via-transparent to-black/20" />
         <video
           ref={videoRef}
           className="h-full w-full object-cover"
@@ -138,7 +142,7 @@ export function VideoPanel({
           Your browser does not support embedded video.
         </video>
       </div>
-      <div className="p-6 sm:p-7">
+      <div className="relative z-10 border-t border-white/10 p-6 sm:p-7">
         {eyebrow ? (
           <p id={id} className="eyebrow">
             {eyebrow}

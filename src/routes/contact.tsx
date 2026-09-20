@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { MessageCircle } from "lucide-react";
+import { Mail, MapPin, MessageCircle } from "lucide-react";
 import { MarketingShell, WHATSAPP_URL } from "@/components/MarketingChrome";
+import { Reveal } from "@/components/VideoPanel";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -19,31 +20,57 @@ export const Route = createFileRoute("/contact")({
 function ContactPage() {
   return (
     <MarketingShell>
-      <section className="mx-auto flex min-h-[70svh] max-w-3xl flex-col justify-center px-5 py-20 md:px-8">
-        <p className="eyebrow">Support</p>
-        <h1 className="mt-4 font-display text-4xl font-medium leading-tight sm:text-6xl">
-          Talk to UniHub.
-        </h1>
-        <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-          Questions about a listing, verification, or listing your property?
-          Message us directly — no account required.
-        </p>
-        <div className="mt-9 flex flex-wrap gap-4">
-          <a
-            href={WHATSAPP_URL}
-            target="_blank"
-            rel="noreferrer"
-            className="cta-shine inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-glow transition-transform hover:-translate-y-0.5"
-          >
-            <MessageCircle className="size-4" aria-hidden="true" /> WhatsApp
-            support
-          </a>
-          <a
-            href="mailto:hello@unihub.ke"
-            className="inline-flex min-h-12 items-center justify-center rounded-full border border-border bg-card px-6 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-accent"
-          >
-            hello@unihub.ke
-          </a>
+      <section className="section-shell">
+        <div className="mx-auto max-w-7xl px-5 md:px-8">
+          <Reveal className="max-w-3xl">
+            <p className="eyebrow">Support</p>
+            <h1 className="mt-3 font-display text-4xl font-medium leading-tight sm:text-6xl">
+              Talk to UniHub.
+            </h1>
+            <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+              Questions about a listing, verification, or listing your property?
+              Message us directly — no account required.
+            </p>
+          </Reveal>
+
+          <div className="mt-12 grid gap-6 md:grid-cols-3">
+            <Reveal className="glass-card p-7">
+              <MessageCircle className="size-5 text-highlight" aria-hidden="true" />
+              <h2 className="mt-6 font-display text-2xl font-medium">WhatsApp</h2>
+              <p className="mt-3 text-sm text-muted-foreground">
+                Fastest for listing questions and campus recommendations.
+              </p>
+              <a
+                href={WHATSAPP_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="mt-6 inline-flex min-h-12 items-center rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground shadow-glow"
+              >
+                Open WhatsApp
+              </a>
+            </Reveal>
+            <Reveal className="glass-card p-7" delay={80}>
+              <Mail className="size-5 text-highlight" aria-hidden="true" />
+              <h2 className="mt-6 font-display text-2xl font-medium">Email</h2>
+              <p className="mt-3 text-sm text-muted-foreground">
+                Partnerships, media, and longer requests.
+              </p>
+              <a
+                href="mailto:hello@unihub.ke"
+                className="mt-6 inline-flex min-h-12 items-center rounded-full border border-border bg-accent px-5 text-sm font-semibold"
+              >
+                hello@unihub.ke
+              </a>
+            </Reveal>
+            <Reveal className="glass-card p-7" delay={140}>
+              <MapPin className="size-5 text-highlight" aria-hidden="true" />
+              <h2 className="mt-6 font-display text-2xl font-medium">Coverage</h2>
+              <p className="mt-3 text-sm text-muted-foreground">
+                Student towns across Kenya — Nairobi, Juja, Thika, Kahawa,
+                Eldoret, Nakuru, and more.
+              </p>
+            </Reveal>
+          </div>
         </div>
       </section>
     </MarketingShell>

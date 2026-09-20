@@ -23,15 +23,11 @@ import {
   ResidenceVideoGallery,
   type ResidenceClip,
 } from "@/components/ResidenceVideoGallery";
+import { sampleListings } from "@/data/listings";
+import apartmentImage from "@/assets/listing-apartment.jpg";
 import heroImage from "@/assets/unihub-hero.jpg";
 import heroVideo from "@/assets/unihub-hero.mp4";
 import heroPoster from "@/assets/unihub-hero-poster.jpg";
-import bedsitterImage from "@/assets/listing-bedsitter.jpg";
-import hostelImage from "@/assets/listing-hostel.jpg";
-import apartmentImage from "@/assets/listing-apartment.jpg";
-import studioImage from "@/assets/listing-studio.jpg";
-import twinHostelImage from "@/assets/listing-twin-hostel.jpg";
-import sharedImage from "@/assets/listing-shared.jpg";
 import walkthroughVideo from "@/assets/unihub-site-walkthrough.mp4";
 import walkthroughPoster from "@/assets/unihub-walkthrough-poster.jpg";
 import documentaryVideo from "@/assets/unihub-qwetu-documentary.mp4";
@@ -100,56 +96,7 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-const listings = [
-  {
-    title: "Modern Bedsitter — Juja Town",
-    location: "Near JKUAT",
-    category: "Bedsitter",
-    price: "KES 9,500",
-    deposit: "Deposit: 1 month",
-    image: bedsitterImage,
-  },
-  {
-    title: "Secure Hostel Room — Gendered wing",
-    location: "Near University of Nairobi",
-    category: "Hostel",
-    price: "KES 7,200",
-    deposit: "Shared facilities",
-    image: hostelImage,
-  },
-  {
-    title: "Spacious Single Room — Kahawa",
-    location: "Near Kenyatta University",
-    category: "Single room",
-    price: "KES 8,000",
-    deposit: "Deposit: KES 8,000",
-    image: apartmentImage,
-  },
-  {
-    title: "Furnished Studio — Madaraka",
-    location: "Near Strathmore University",
-    category: "Studio",
-    price: "KES 14,500",
-    deposit: "Water included",
-    image: studioImage,
-  },
-  {
-    title: "Twin Hostel Room — Kesses",
-    location: "Near Moi University",
-    category: "Hostel",
-    price: "KES 6,500",
-    deposit: "Per student / month",
-    image: twinHostelImage,
-  },
-  {
-    title: "Shared Apartment — Njoro",
-    location: "Near Egerton University",
-    category: "Shared apartment",
-    price: "KES 8,500",
-    deposit: "Wi-Fi ready",
-    image: sharedImage,
-  },
-];
+const listings = sampleListings;
 
 const journey = [
   ["01", "Find your perfect home", "Start with the campus or area that works for you."],
