@@ -6,10 +6,11 @@ export const WHATSAPP_URL =
   "https://wa.me/254700000000?text=Hi%20UniHub%2C%20I%27d%20like%20help%20finding%20verified%20student%20housing";
 
 const NAV_LINKS = [
+  { label: "Journey", to: "/" },
   { label: "Listings", to: "/listings" },
-  { label: "Hostels", to: "/listings" },
   { label: "About", to: "/about" },
   { label: "Contact", to: "/contact" },
+  { label: "List property", to: "/list-property" },
 ] as const;
 
 function Wordmark() {
@@ -199,7 +200,7 @@ export function MarketingShell({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen overflow-x-hidden bg-background text-foreground">
+    <div className="page-frame min-h-screen overflow-x-hidden bg-background text-foreground">
       <SiteHeader />
       <main id="main" className="pt-20">
         {children}

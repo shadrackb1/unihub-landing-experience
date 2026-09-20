@@ -17,6 +17,7 @@ import {
   VideoPanel,
   usePrefersReducedMotion,
 } from "@/components/VideoPanel";
+import { Act, JourneyRail, ScrollProgress } from "@/components/Experience";
 import { LetterReveal } from "@/components/LetterReveal";
 import {
   CoolVideoCard,
@@ -190,8 +191,10 @@ function Index() {
   }, [reduced]);
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-background text-foreground">
+    <div className="page-frame min-h-screen overflow-x-hidden bg-background text-foreground">
+      <ScrollProgress />
       <SiteHeader />
+      <JourneyRail />
 
       <main id="main">
         <section
@@ -264,13 +267,27 @@ function Index() {
                   ))}
                 </div>
               </div>
+
+              <div className="reveal reveal-4 mt-14">
+                <span className="scroll-cue">Begin the journey</span>
+              </div>
             </div>
           </div>
         </section>
 
-        <section
+        <div className="act-interlude mx-auto max-w-3xl px-5">
+          <p className="instrument text-highlight/80">The UniHub experience</p>
+          <p className="font-display text-2xl font-medium text-foreground sm:text-3xl">
+            One path from curiosity to keys — watched, verified, then chosen.
+          </p>
+        </div>
+
+        <Act
           id="how-it-works"
-          className="section-shell border-y border-border bg-panel"
+          index="II"
+          title="Orient"
+          tone="panel"
+          className="section-shell"
         >
           <div className="mx-auto max-w-7xl px-5 md:px-8">
             <Reveal className="section-heading">
@@ -332,9 +349,9 @@ function Index() {
               </Reveal>
             </div>
           </div>
-        </section>
+        </Act>
 
-        <section id="trust" className="section-shell">
+        <Act id="trust" index="III" title="Believe" className="section-shell">
           <div className="mx-auto max-w-7xl px-5 md:px-8">
             <Reveal className="section-heading max-w-3xl">
               <p className="eyebrow">Why UniHub</p>
@@ -368,9 +385,9 @@ function Index() {
               ))}
             </div>
           </div>
-        </section>
+        </Act>
 
-        <section id="residences" className="section-shell">
+        <Act id="residences" index="IV" title="Witness" tone="panel" className="section-shell">
           <div className="mx-auto max-w-7xl px-5 md:px-8">
             <Reveal className="section-heading max-w-3xl">
               <p className="eyebrow">Housing on the ground</p>
@@ -426,9 +443,9 @@ function Index() {
             </div>
             <ResidenceVideoGallery clips={residenceClips} />
           </div>
-        </section>
+        </Act>
 
-        <section id="listings" className="section-shell bg-panel">
+        <Act id="listings" index="V" title="Choose" className="section-shell">
           <div className="mx-auto max-w-7xl px-5 md:px-8">
             <Reveal className="flex items-end justify-between gap-6">
               <div className="section-heading">
@@ -529,9 +546,9 @@ function Index() {
               <ArrowLink href="/listings">View all listings</ArrowLink>
             </div>
           </div>
-        </section>
+        </Act>
 
-        <section id="locations" className="section-shell">
+        <Act id="locations" index="VI" title="Place" tone="panel" className="section-shell">
           <div className="mx-auto grid max-w-7xl gap-12 px-5 md:px-8 lg:grid-cols-[0.78fr_1.22fr] lg:items-center">
             <Reveal className="section-heading">
               <p className="eyebrow">Popular areas</p>
@@ -601,7 +618,7 @@ function Index() {
               </p>
             </Reveal>
           </div>
-        </section>
+        </Act>
 
         <section className="border-y border-border bg-foreground text-background">
           <div className="mx-auto grid max-w-7xl gap-12 px-5 py-20 md:px-8 md:py-28 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
@@ -635,7 +652,7 @@ function Index() {
           </div>
         </section>
 
-        <section className="section-shell bg-panel">
+        <Act id="close" index="VII" title="Move" tone="deep" className="section-shell">
           <div className="mx-auto grid max-w-7xl overflow-hidden rounded-3xl border border-border bg-card lg:grid-cols-2">
             <Reveal className="min-h-[26rem] overflow-hidden">
               <img
@@ -674,7 +691,7 @@ function Index() {
           <div className="mx-auto mt-10 max-w-md">
             <CoolVideoCard clip={residenceClips[2]!} />
           </div>
-        </section>
+        </Act>
 
         <section className="relative overflow-hidden px-5 py-24 text-center md:px-8 md:py-36">
           <div
