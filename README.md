@@ -80,6 +80,40 @@ Anti-slop skills live under `.mimocode/skills/`:
 
 Global install: `~/.config/mimocode/skills/anti-ai-slop/`
 
+## Deploy on Vercel
+
+The app is a TanStack Start + Nitro project. `vite.config.ts` pins Nitro to the **`vercel`** preset so production builds emit Vercel Build Output (`.vercel/output`).
+
+### Import from GitHub
+
+1. Push this repo to GitHub (`shadrackb1/unihub-landing-experience`).
+2. In [Vercel](https://vercel.com/new), import that repository.
+3. Project settings (already reflected in `vercel.json`):
+   - Framework preset: **Other**
+   - Install: `npm install`
+   - Build: `npm run build`
+   - Output: `.vercel/output` (Nitro writes this; do not point at `dist`)
+   - Node: **20.x** or newer
+4. Deploy. Preview and production URLs come from Vercel.
+
+No map API keys are required. WhatsApp number is still a placeholder in `MarketingChrome.tsx`.
+
+### Local production build
+
+```sh
+npm install
+npm run build
+```
+
+Confirm `.vercel/output` appears after the build. For Cloudflare instead, set `nitro.preset` back to `cloudflare-module` in `vite.config.ts`.
+
+### CLI (optional)
+
+```sh
+npm i -g vercel
+vercel
+```
+
 ## Lovable
 
 Continue in the [Lovable editor](https://lovable.dev/projects/6df20188-3834-4b7d-b8ba-fbcff9e78846). Commits pushed to `main` sync back into Lovable.
