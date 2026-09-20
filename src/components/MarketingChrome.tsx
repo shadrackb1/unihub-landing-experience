@@ -162,6 +162,7 @@ export function SiteFooter() {
               ["Listings", "/listings"],
               ["Hostels", "/listings"],
               ["Map", "/#locations"],
+              ["Residences", "/#residences"],
             ]}
           />
           <FooterColumn

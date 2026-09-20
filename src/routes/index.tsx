@@ -10,6 +10,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { SiteFooter, SiteHeader, WHATSAPP_URL } from "@/components/MarketingChrome";
+import { VideoPanel } from "@/components/VideoPanel";
 import heroImage from "@/assets/unihub-hero.jpg";
 import bedsitterImage from "@/assets/listing-bedsitter.jpg";
 import hostelImage from "@/assets/listing-hostel.jpg";
@@ -17,6 +18,10 @@ import apartmentImage from "@/assets/listing-apartment.jpg";
 import studioImage from "@/assets/listing-studio.jpg";
 import twinHostelImage from "@/assets/listing-twin-hostel.jpg";
 import sharedImage from "@/assets/listing-shared.jpg";
+import walkthroughVideo from "@/assets/unihub-site-walkthrough.mp4";
+import walkthroughPoster from "@/assets/unihub-walkthrough-poster.jpg";
+import documentaryVideo from "@/assets/unihub-qwetu-documentary.mp4";
+import documentaryPoster from "@/assets/unihub-qwetu-poster.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -275,6 +280,38 @@ function Index() {
                 </li>
               ))}
             </ol>
+
+            <div className="mt-12 grid gap-6 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
+              <VideoPanel
+                id="walkthrough"
+                eyebrow="Site walkthrough"
+                title="See how to navigate UniHub."
+                description="A quick screen recording of browsing listings, shortlisting a place, and reaching out — no account wall in the way."
+                src={walkthroughVideo}
+                poster={walkthroughPoster}
+              />
+              <div className="glass-card p-7 sm:p-9">
+                <p className="eyebrow">Prefer to watch?</p>
+                <h3 className="mt-3 font-display text-2xl font-medium">
+                  Same path as the four steps.
+                </h3>
+                <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+                  Find a campus area, open verified listings, pick a room, then
+                  message the agent. The walkthrough shows that flow end to end
+                  on the live interface.
+                </p>
+                <ul className="mt-6 space-y-3 text-sm text-secondary-foreground">
+                  {["Browse without signing up", "Compare price and location", "Contact via WhatsApp"].map(
+                    (item) => (
+                      <li key={item} className="flex gap-3">
+                        <Check className="mt-0.5 size-4 shrink-0 text-highlight" />{" "}
+                        {item}
+                      </li>
+                    ),
+                  )}
+                </ul>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -306,6 +343,68 @@ function Index() {
                   </p>
                 </article>
               ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="residences" className="section-shell">
+          <div className="mx-auto max-w-7xl px-5 md:px-8">
+            <div className="section-heading max-w-3xl">
+              <p className="eyebrow">Housing on the ground</p>
+              <h2>See student residences, not just listings.</h2>
+              <p>
+                A short documentary on Qwetu Qejani residences — the kind of
+                safe, campus-adjacent housing international and local students
+                ask about most.
+              </p>
+            </div>
+            <div className="mt-12 grid gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+              <div className="mx-auto w-full max-w-sm overflow-hidden rounded-3xl border border-border bg-card">
+                <div className="relative aspect-[9/16] bg-black/60">
+                  <video
+                    className="h-full w-full object-cover"
+                    controls
+                    playsInline
+                    preload="metadata"
+                    poster={documentaryPoster}
+                    aria-label="Qwetu Qejani student residences documentary"
+                  >
+                    <source src={documentaryVideo} type="video/mp4" />
+                    Your browser does not support embedded video.
+                  </video>
+                </div>
+                <div className="p-5">
+                  <p className="verified-stamp">
+                    <ShieldCheck className="size-3.5" aria-hidden="true" />{" "}
+                    Campus housing spotlight
+                  </p>
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    Best student hostels in Kenya · Qwetu Qejani
+                  </p>
+                </div>
+              </div>
+              <div className="glass-card p-7 sm:p-10">
+                <p className="eyebrow">Why this matters</p>
+                <h3 className="mt-3 font-display text-3xl font-medium leading-tight">
+                  Trust starts with seeing the place.
+                </h3>
+                <p className="mt-5 text-sm leading-relaxed text-muted-foreground sm:text-base">
+                  Students and parents often ask where it is safe to stay while
+                  visiting or studying in Kenya. Real residence footage helps
+                  you judge space, security, and vibe before you message an
+                  agent.
+                </p>
+                <div className="mt-8 flex flex-wrap gap-4">
+                  <PrimaryLink href="/listings">Browse listings</PrimaryLink>
+                  <a
+                    href="#how-it-works"
+                    className="inline-flex min-h-12 items-center gap-2 text-sm font-medium text-foreground hover:text-highlight"
+                  >
+                    How UniHub works
+                    <ArrowRight className="size-4" aria-hidden="true" />
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
         </section>
