@@ -14,12 +14,13 @@ const NAV_LINKS = [
 
 function Wordmark() {
   return (
-    <Link
-      to="/"
-      className="font-display text-xl font-medium tracking-normal"
-      aria-label="UniHub home"
-    >
-      Uni<span className="text-muted-foreground">Hub</span>
+    <Link to="/" className="group flex flex-col gap-0.5" aria-label="UniHub home">
+      <span className="font-display text-xl font-medium tracking-normal">
+        Uni<span className="text-muted-foreground">Hub</span>
+      </span>
+      <span className="instrument hidden text-[0.58rem] opacity-80 sm:block">
+        Campus housing · Kenya
+      </span>
     </Link>
   );
 }
@@ -35,7 +36,14 @@ export function SiteHeader() {
   }, [open]);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-transparent bg-background/65 backdrop-blur-xl supports-[backdrop-filter]:bg-background/55">
+    <>
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-primary-foreground"
+      >
+        Skip to content
+      </a>
+      <header className="fixed inset-x-0 top-0 z-50 border-b border-transparent bg-background/65 backdrop-blur-xl supports-[backdrop-filter]:bg-background/55">
       <nav
         className="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 md:px-8"
         aria-label="Main navigation"
@@ -53,13 +61,13 @@ export function SiteHeader() {
         <div className="flex items-center gap-3">
           <Link
             to="/listings"
-            className="hidden min-h-10 items-center rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground shadow-glow transition-transform hover:-translate-y-0.5 sm:inline-flex"
+            className="hidden min-h-10 items-center rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground shadow-glow transition-transform hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:inline-flex"
           >
             Browse Listings
           </Link>
           <button
             type="button"
-            className="inline-flex size-10 items-center justify-center rounded-full border border-border bg-card text-foreground md:hidden"
+            className="inline-flex size-10 items-center justify-center rounded-full border border-border bg-card text-foreground transition-colors hover:bg-accent md:hidden"
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
             onClick={() => setOpen((value) => !value)}
@@ -80,7 +88,7 @@ export function SiteHeader() {
               <Link
                 key={link.label}
                 to={link.to}
-                className="rounded-2xl px-3 py-3 text-sm font-medium text-foreground hover:bg-accent"
+                className="min-h-12 rounded-2xl px-3 py-3 text-sm font-medium text-foreground hover:bg-accent"
                 onClick={() => setOpen(false)}
               >
                 {link.label}
@@ -96,7 +104,8 @@ export function SiteHeader() {
           </div>
         </div>
       ) : null}
-    </header>
+      </header>
+    </>
   );
 }
 
@@ -191,7 +200,9 @@ export function MarketingShell({
   return (
     <div className="min-h-screen overflow-x-hidden bg-background text-foreground">
       <SiteHeader />
-      <main className="pt-20">{children}</main>
+      <main id="main" className="pt-20">
+        {children}
+      </main>
       <SiteFooter />
     </div>
   );

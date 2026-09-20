@@ -120,14 +120,16 @@ const trust = [
   },
 ];
 
-const campuses = [
-  "University of Nairobi",
-  "JKUAT",
-  "Kenyatta University",
-  "Moi University",
-  "Egerton University",
-  "Strathmore",
+const campusCodes = [
+  { code: "UoN", name: "Nairobi" },
+  { code: "JKUAT", name: "Juja" },
+  { code: "KU", name: "Kahawa" },
+  { code: "MU", name: "Kesses" },
+  { code: "EGU", name: "Njoro" },
+  { code: "SU", name: "Madaraka" },
 ];
+
+const campuses = campusCodes.map((campus) => campus.name);
 
 function ArrowLink({
   href,
@@ -195,10 +197,10 @@ function Index() {
     <div className="min-h-screen overflow-x-hidden bg-background text-foreground">
       <SiteHeader />
 
-      <main>
+      <main id="main">
         <section
           id="top"
-          className="relative flex min-h-[94svh] items-end overflow-hidden pb-16 pt-32 md:items-center md:pb-8"
+          className="relative flex min-h-[94svh] items-end overflow-hidden pb-10 pt-28 md:items-center md:pb-8"
         >
           <video
             ref={heroVideoRef}
@@ -255,6 +257,23 @@ function Index() {
                   WhatsApp
                 </span>
               </div>
+
+              {/* Signature: campus instrument rail — housing keyed to campus codes */}
+              <div className="reveal reveal-4 mt-12 max-w-3xl">
+                <p className="instrument mb-3 text-highlight/80">
+                  Live campus coverage
+                </p>
+                <div className="campus-rail">
+                  {campusCodes.map((campus) => (
+                    <span key={campus.code} className="campus-code">
+                      {campus.code}
+                      <span className="font-normal tracking-normal text-muted-foreground normal-case">
+                        {campus.name}
+                      </span>
+                    </span>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -272,15 +291,15 @@ function Index() {
               {journey.map(([number, title, copy]) => (
                 <li
                   key={number}
-                  className="group min-h-64 bg-card p-7 transition-colors duration-500 hover:bg-accent md:p-8"
+                  className="journey-step group min-h-64 bg-card p-7 transition-colors duration-500 hover:bg-accent md:p-8"
                 >
-                  <span className="font-display text-sm text-muted-foreground">
+                  <span className="relative z-10 font-display text-sm text-highlight">
                     {number}
                   </span>
-                  <h3 className="mt-16 font-display text-xl font-medium">
+                  <h3 className="relative z-10 mt-16 font-display text-xl font-medium">
                     {title}
                   </h3>
-                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                  <p className="relative z-10 mt-3 text-sm leading-relaxed text-muted-foreground">
                     {copy}
                   </p>
                 </li>
@@ -356,8 +375,14 @@ function Index() {
                     </span>
                   </div>
                   <div className="p-6">
-                    <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                      <MapPin className="size-3.5" /> {listing.location}
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                        <MapPin className="size-3.5" /> {listing.location}
+                      </div>
+                      <span className="verified-stamp">
+                        <ShieldCheck className="size-3.5" aria-hidden="true" />{" "}
+                        Vetted
+                      </span>
                     </div>
                     <h3 className="mt-3 min-h-14 font-display text-xl font-medium leading-snug">
                       {listing.title}
@@ -397,15 +422,16 @@ function Index() {
           <div className="mx-auto grid max-w-7xl gap-12 px-5 md:px-8 lg:grid-cols-[0.78fr_1.22fr] lg:items-center">
             <div className="section-heading">
               <p className="eyebrow">Popular areas</p>
-              <h2>Housing near your campus</h2>
+              <h2>Housing keyed to campus.</h2>
               <p>
-                Explore student-friendly options around the places where campus
-                life happens.
+                Search by the town you already know — Juja, Kahawa, Kesses —
+                then shortlist places that keep the commute short.
               </p>
               <div className="mt-8 flex flex-wrap gap-2">
-                {campuses.map((campus) => (
-                  <span key={campus} className="campus-chip">
-                    {campus}
+                {campusCodes.map((campus) => (
+                  <span key={campus.code} className="campus-chip">
+                    <span className="mr-2 text-highlight">{campus.code}</span>
+                    {campus.name}
                   </span>
                 ))}
               </div>

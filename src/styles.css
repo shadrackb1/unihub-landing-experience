@@ -162,6 +162,11 @@
   html { scroll-behavior: smooth; }
 
   ::selection { background: var(--color-foreground); color: var(--color-background); }
+
+  :focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 3px;
+  }
 }
 
 @utility section-shell { padding-block: clamp(5rem, 10vw, 8rem); }
@@ -173,7 +178,56 @@
 
 @utility eyebrow { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.18em; color: var(--color-muted-foreground); }
 
-@utility nav-link { font-size: 0.82rem; font-weight: 500; color: var(--color-muted-foreground); transition: color 250ms ease; &:hover { color: var(--color-foreground); } }
+@utility instrument {
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-muted-foreground);
+}
+
+@utility campus-rail {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem 1.15rem;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  padding-block: 0.85rem;
+}
+
+@utility campus-code {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-secondary-foreground);
+
+  &::before {
+    content: "";
+    width: 0.35rem;
+    height: 0.35rem;
+    border-radius: 999px;
+    background: var(--color-highlight);
+  }
+}
+
+@utility verified-stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-highlight);
+}
+
+@utility nav-link { font-size: 0.82rem; font-weight: 500; color: var(--color-muted-foreground); transition: color 250ms ease; border-radius: 0.35rem; &:hover { color: var(--color-foreground); } &:focus-visible { color: var(--color-foreground); } }
 
 @utility glass-card {
   border-radius: var(--radius); border: 1px solid var(--color-border); background: color-mix(in oklab, var(--color-card) 84%, transparent); backdrop-filter: blur(18px); transition: transform 450ms cubic-bezier(0.16, 1, 0.3, 1), border-color 450ms ease;
@@ -197,6 +251,33 @@
 }
 
 @utility listing-card { transition: transform 450ms cubic-bezier(0.16, 1, 0.3, 1), border-color 450ms ease; &:hover { transform: translateY(-6px); border-color: color-mix(in oklab, var(--color-foreground) 20%, transparent); } }
+
+/* Sequence connector: encodes real order 01→04 on desktop */
+@media (min-width: 768px) {
+  .journey-step {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .journey-step::after {
+    content: "";
+    position: absolute;
+    top: 1.35rem;
+    right: 0;
+    width: calc(100% - 2.5rem);
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      color-mix(in oklab, var(--color-highlight) 35%, transparent),
+      var(--color-border)
+    );
+    z-index: 0;
+  }
+
+  .journey-step:last-child::after {
+    display: none;
+  }
+}
 
 @utility map-card {
   background-image: radial-gradient(circle at 42% 44%, color-mix(in oklab, var(--color-highlight) 12%, transparent), transparent 28%), linear-gradient(28deg, transparent 47%, color-mix(in oklab, var(--color-foreground) 10%, transparent) 48%, color-mix(in oklab, var(--color-foreground) 10%, transparent) 49%, transparent 50%), linear-gradient(118deg, transparent 48%, color-mix(in oklab, var(--color-foreground) 7%, transparent) 49%, color-mix(in oklab, var(--color-foreground) 7%, transparent) 50%, transparent 51%);
