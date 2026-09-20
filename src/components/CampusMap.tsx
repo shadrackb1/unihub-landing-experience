@@ -1,4 +1,5 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { cn } from "@/lib/utils";
 
 export type CampusPin = {
   id: string;
@@ -9,7 +10,6 @@ export type CampusPin = {
   lat: number;
 };
 
-/** Approximate campus-area pins for Kenya student housing search. */
 export const campusPins: CampusPin[] = [
   { id: "uon", code: "UoN", name: "University of Nairobi", town: "Nairobi", lng: 36.814, lat: -1.279 },
   { id: "jkuat", code: "JKUAT", name: "Jomo Kenyatta University", town: "Juja", lng: 37.015, lat: -1.093 },
@@ -20,6 +20,56 @@ export const campusPins: CampusPin[] = [
   { id: "egu", code: "EGU", name: "Egerton University", town: "Njoro", lng: 35.944, lat: -0.366 },
   { id: "nku", code: "NKU", name: "Nakuru campus belt", town: "Nakuru", lng: 36.08, lat: -0.303 },
 ];
+
+type BasemapId = "dark" | "satellite";
+
+/** Free providers. No API keys. Attribution required in UI. */
+const BASEMAPS: Record<
+  BasemapId,
+  {
+    label: string;
+    attribution: string;
+    style: Record<string, unknown>;
+  }
+> = {
+  dark: {
+    label: "Dark",
+    attribution:
+      '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> · <a href="https://openfreemap.org/">OpenFreeMap</a>',
+    // Vector style from OpenFreeMap (free, keyless)
+    style: "https://tiles.openfreemap.org/styles/dark",
+  },
+  satellite: {
+    label: "Satellite",
+    attribution:
+      'Imagery © <a href="https://www.esri.com/">Esri</a>, Maxar, Earthstar Geographics',
+    style: {
+      version: 8,
+      name: "Esri World Imagery",
+      sources: {
+        esri: {
+          type: "raster",
+          tiles: [
+            "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+          ],
+          tileSize: 256,
+          attribution:
+            'Imagery © <a href="https://www.esri.com/">Esri</a>, Maxar, Earthstar Geographics',
+          maxzoom: 19,
+        },
+      },
+      layers: [
+        {
+          id: "esri-imagery",
+          type: "raster",
+          source: "esri",
+          minzoom: 0,
+          maxzoom: 19,
+        },
+      ],
+    },
+  },
+};
 
 function markerEl(pin: CampusPin) {
   const el = document.createElement("button");
@@ -35,12 +85,13 @@ function markerEl(pin: CampusPin) {
 
 export function CampusMap({ className = "" }: { className?: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [basemap, setBasemap] = useState<BasemapId>("dark");
+  const mapRef = useRef<import("maplibre-gl").Map | null>(null);
 
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
-    let map: import("maplibre-gl").Map | null = null;
     let cancelled = false;
 
     void (async () => {
@@ -48,34 +99,10 @@ export function CampusMap({ className = "" }: { className?: string }) {
       await import("maplibre-gl/dist/maplibre-gl.css");
       if (cancelled || !container) return;
 
-      map = new maplibregl.Map({
+      const cfg = BASEMAPS.dark;
+      const map = new maplibregl.Map({
         container,
-        style: {
-          version: 8,
-          name: "UniHub dark",
-          sources: {
-            carto: {
-              type: "raster",
-              tiles: [
-                "https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png",
-                "https://b.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png",
-                "https://c.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png",
-              ],
-              tileSize: 256,
-              attribution:
-                '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> · <a href="https://carto.com/attributions">CARTO</a>',
-            },
-          },
-          layers: [
-            {
-              id: "carto-dark",
-              type: "raster",
-              source: "carto",
-              minzoom: 0,
-              maxzoom: 19,
-            },
-          ],
-        },
+        style: cfg.style as never,
         center: [36.5, -0.7],
         zoom: 5.6,
         pitch: 28,
@@ -83,6 +110,7 @@ export function CampusMap({ className = "" }: { className?: string }) {
         maxPitch: 55,
         attributionControl: false,
       });
+      mapRef.current = map;
 
       map.addControl(
         new maplibregl.NavigationControl({ showCompass: false }),
@@ -112,13 +140,13 @@ export function CampusMap({ className = "" }: { className?: string }) {
         new maplibregl.Marker({ element: el, anchor: "bottom" })
           .setLngLat([pin.lng, pin.lat])
           .setPopup(popup)
-          .addTo(map!);
+          .addTo(map);
 
         bounds.extend([pin.lng, pin.lat]);
       });
 
       map.on("load", () => {
-        map?.fitBounds(bounds, {
+        map.fitBounds(bounds, {
           padding: { top: 48, bottom: 72, left: 40, right: 40 },
           duration: 0,
           maxZoom: 8.2,
@@ -128,16 +156,51 @@ export function CampusMap({ className = "" }: { className?: string }) {
 
     return () => {
       cancelled = true;
-      map?.remove();
+      mapRef.current?.remove();
+      mapRef.current = null;
     };
   }, []);
 
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+    const cfg = BASEMAPS[basemap];
+    map.setStyle(cfg.style as never);
+    map.once("style.load", () => {
+      map.resize();
+    });
+  }, [basemap]);
+
   return (
-    <div
-      ref={containerRef}
-      className={`unihub-map relative min-h-[28rem] overflow-hidden rounded-3xl border border-border bg-card ${className}`}
-      role="region"
-      aria-label="Campus housing map of Kenya"
-    />
+    <div className={cn("relative", className)}>
+      <div className="pointer-events-none absolute left-4 top-4 z-10 flex gap-2">
+        {(Object.keys(BASEMAPS) as BasemapId[]).map((id) => {
+          const active = basemap === id;
+          return (
+            <button
+              key={id}
+              type="button"
+              className={cn(
+                "pointer-events-auto rounded-full border px-3 py-2 text-[0.68rem] font-semibold uppercase tracking-[0.12em] backdrop-blur-md transition-colors",
+                active
+                  ? "border-highlight/50 bg-highlight/20 text-foreground"
+                  : "border-border bg-background/70 text-muted-foreground hover:text-foreground",
+              )}
+              onClick={() => setBasemap(id)}
+              aria-pressed={active}
+            >
+              {BASEMAPS[id].label}
+            </button>
+          );
+        })}
+      </div>
+      <div
+        ref={containerRef}
+        className="unihub-map min-h-[28rem] overflow-hidden rounded-3xl border border-border bg-card"
+        role="region"
+        aria-label="Campus housing map of Kenya"
+      />
+      <p className="sr-only">{BASEMAPS[basemap].attribution.replace(/<[^>]+>/g, "")}</p>
+    </div>
   );
 }
