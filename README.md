@@ -7,6 +7,7 @@ Marketing site for **UniHub**: verified student housing near Kenyan campuses. St
 - TanStack Start + React 19 + TypeScript
 - Tailwind CSS 4
 - TanStack Router (file-based routes)
+- MapLibre GL + CARTO dark OSM tiles (free, no API key) for the campus map
 - Lovable-synced repo (`AGENTS.md` — do not force-push history)
 
 ## Run

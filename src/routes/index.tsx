@@ -18,6 +18,7 @@ import {
   usePrefersReducedMotion,
 } from "@/components/VideoPanel";
 import { Act, JourneyRail, ScrollProgress } from "@/components/Experience";
+import { CampusMap } from "@/components/CampusMap";
 import { LetterReveal } from "@/components/LetterReveal";
 import {
   CoolVideoCard,
@@ -560,38 +561,8 @@ function Index() {
                 <PrimaryLink href="/listings">Explore by location</PrimaryLink>
               </div>
             </Reveal>
-            <Reveal className="map-card relative min-h-[28rem] overflow-hidden rounded-3xl border border-border bg-card" delay={100}>
-              <div className="absolute left-[11%] top-[14%] rounded-full border border-border bg-background/85 px-4 py-2 text-xs backdrop-blur-md">
-                Nairobi
-              </div>
-              <div className="absolute left-[42%] top-[31%] rounded-full border border-border bg-background/85 px-4 py-2 text-xs backdrop-blur-md">
-                Juja
-              </div>
-              <div className="absolute right-[11%] top-[18%] rounded-full border border-border bg-background/85 px-4 py-2 text-xs backdrop-blur-md">
-                Thika
-              </div>
-              <div className="absolute bottom-[18%] left-[19%] rounded-full border border-border bg-background/85 px-4 py-2 text-xs backdrop-blur-md">
-                Nakuru
-              </div>
-              <div className="absolute bottom-[12%] right-[18%] rounded-full border border-border bg-background/85 px-4 py-2 text-xs backdrop-blur-md">
-                Eldoret
-              </div>
-              <MapPin className="map-pin left-[36%] top-[19%]" />
-              <MapPin className="map-pin right-[26%] top-[42%]" />
-              <MapPin className="map-pin bottom-[31%] left-[43%]" />
-              <div className="absolute bottom-6 left-6 right-6 flex items-center justify-between rounded-2xl border border-border bg-background/80 p-4 backdrop-blur-xl">
-                <div>
-                  <p className="text-xs text-muted-foreground">
-                    Browse by campus
-                  </p>
-                  <p className="mt-1 font-display font-medium">
-                    Verified places, closer to class.
-                  </p>
-                </div>
-                <div className="flex size-10 items-center justify-center rounded-full bg-primary text-primary-foreground">
-                  <MapPin className="size-4" />
-                </div>
-              </div>
+            <Reveal className="min-h-[28rem]" delay={100}>
+              <CampusMap className="h-full min-h-[28rem]" />
             </Reveal>
           </div>
 

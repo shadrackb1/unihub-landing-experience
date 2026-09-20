@@ -408,6 +408,111 @@
   100% { transform: scaleY(1); opacity: 0; transform-origin: top; }
 }
 
+/* MapLibre campus map */
+.unihub-map .maplibregl-canvas { outline: none; }
+
+.unihub-map .maplibregl-ctrl-group {
+  background: color-mix(in oklab, var(--color-card) 88%, transparent);
+  border: 1px solid var(--color-border);
+  backdrop-filter: blur(12px);
+}
+
+.unihub-map .maplibregl-ctrl-group button { background: transparent; }
+
+.unihub-map .maplibregl-ctrl-attrib {
+  background: color-mix(in oklab, var(--color-background) 72%, transparent) !important;
+  color: var(--color-muted-foreground);
+}
+
+.unihub-map .maplibregl-ctrl-attrib a { color: var(--color-secondary-foreground); }
+
+.unihub-map-marker {
+  display: grid;
+  justify-items: center;
+  gap: 0.35rem;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.45));
+}
+
+.unihub-map-marker__dot {
+  width: 0.85rem;
+  height: 0.85rem;
+  border-radius: 999px;
+  background: var(--color-highlight);
+  box-shadow:
+    0 0 0 3px color-mix(in oklab, var(--color-highlight) 25%, transparent),
+    0 0 0 8px color-mix(in oklab, var(--color-highlight) 12%, transparent);
+  transition: transform 200ms ease;
+}
+
+.unihub-map-marker:hover .unihub-map-marker__dot,
+.unihub-map-marker:focus-visible .unihub-map-marker__dot { transform: scale(1.15); }
+
+.unihub-map-marker__label {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in oklab, var(--color-highlight) 35%, transparent);
+  background: color-mix(in oklab, var(--color-background) 82%, transparent);
+  padding: 0.25rem 0.55rem;
+  font-family: var(--font-sans);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-foreground);
+  backdrop-filter: blur(10px);
+}
+
+.unihub-map-marker__label em {
+  font-style: normal;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  color: var(--color-muted-foreground);
+  font-size: 0.58rem;
+}
+
+.unihub-map-popup .maplibregl-popup-content {
+  border-radius: 1rem;
+  border: 1px solid var(--color-border);
+  background: color-mix(in oklab, var(--color-card) 92%, transparent);
+  color: var(--color-foreground);
+  padding: 0.9rem 1rem;
+  backdrop-filter: blur(14px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+}
+
+.unihub-map-popup .maplibregl-popup-tip {
+  border-top-color: color-mix(in oklab, var(--color-card) 92%, transparent);
+}
+
+.unihub-map-popup__code {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-highlight);
+}
+
+.unihub-map-popup__title {
+  margin-top: 0.25rem;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.unihub-map-popup__town {
+  margin-top: 0.15rem;
+  font-size: 0.75rem;
+  color: var(--color-muted-foreground);
+}
+
 @media (max-width: 640px) { .hero-overlay { background: linear-gradient(0deg, var(--color-background) 0%, color-mix(in oklab, var(--color-background) 62%, transparent) 60%, color-mix(in oklab, var(--color-background) 45%, transparent) 100%); } }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
