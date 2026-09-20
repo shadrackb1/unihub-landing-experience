@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { Link, createFileRoute } from "@tanstack/react-router";
 import {
   ArrowRight,
@@ -10,8 +11,16 @@ import {
   Sparkles,
 } from "lucide-react";
 import { SiteFooter, SiteHeader, WHATSAPP_URL } from "@/components/MarketingChrome";
-import { PortraitVideo, Reveal, VideoPanel } from "@/components/VideoPanel";
+import {
+  PortraitVideo,
+  Reveal,
+  VideoPanel,
+  usePrefersReducedMotion,
+} from "@/components/VideoPanel";
+import { LetterReveal } from "@/components/LetterReveal";
 import heroImage from "@/assets/unihub-hero.jpg";
+import heroVideo from "@/assets/unihub-hero.mp4";
+import heroPoster from "@/assets/unihub-hero-poster.jpg";
 import bedsitterImage from "@/assets/listing-bedsitter.jpg";
 import hostelImage from "@/assets/listing-hostel.jpg";
 import apartmentImage from "@/assets/listing-apartment.jpg";
@@ -174,6 +183,21 @@ function PrimaryLink({
 }
 
 function Index() {
+  const heroVideoRef = useRef<HTMLVideoElement>(null);
+  const reduced = usePrefersReducedMotion();
+
+  useEffect(() => {
+    const video = heroVideoRef.current;
+    if (!video) return;
+
+    video.muted = true;
+    if (reduced) {
+      video.pause();
+      return;
+    }
+    void video.play().catch(() => {});
+  }, [reduced]);
+
   return (
     <div className="min-h-screen overflow-x-hidden bg-background text-foreground">
       <SiteHeader />
@@ -183,13 +207,18 @@ function Index() {
           id="top"
           className="relative flex min-h-[94svh] items-end overflow-hidden pb-10 pt-28 md:items-center md:pb-8"
         >
-          <img
-            src={heroImage}
-            alt="Modern student residences near a leafy Kenyan campus"
-            width={1600}
-            height={1008}
-            className="hero-image absolute inset-0 h-full w-full object-cover"
-          />
+          <video
+            ref={heroVideoRef}
+            className="hero-image absolute inset-0 h-full w-full object-cover object-center"
+            muted
+            loop
+            playsInline
+            preload="auto"
+            poster={heroPoster || heroImage}
+            aria-hidden="true"
+          >
+            <source src={heroVideo} type="video/mp4" />
+          </video>
           <div className="hero-overlay absolute inset-0" aria-hidden="true" />
           <div className="noise absolute inset-0 opacity-50" aria-hidden="true" />
           <div className="relative z-10 mx-auto w-full max-w-7xl px-5 md:px-8">
@@ -198,9 +227,7 @@ function Index() {
                 <ShieldCheck className="size-4" aria-hidden="true" />
                 Verified student housing across Kenya
               </div>
-              <h1 className="reveal reveal-2 max-w-4xl font-display text-5xl font-medium leading-[0.98] tracking-normal sm:text-7xl lg:text-[6.8rem]">
-                Find your perfect home.
-              </h1>
+              <LetterReveal text="Find your perfect home." />
               <p className="reveal reveal-3 mt-7 max-w-2xl text-base leading-relaxed text-secondary-foreground sm:text-xl">
                 Verified student hostels, bedsitters, and rentals near campus —
                 without the scams.
