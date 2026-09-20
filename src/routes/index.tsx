@@ -1,4 +1,3 @@
-import { useEffect, useRef } from "react";
 import { Link, createFileRoute } from "@tanstack/react-router";
 import {
   ArrowRight,
@@ -12,7 +11,6 @@ import {
 } from "lucide-react";
 import { SiteFooter, SiteHeader, WHATSAPP_URL } from "@/components/MarketingChrome";
 import heroImage from "@/assets/unihub-hero.jpg";
-import heroVideo from "@/assets/unihub-hero.mp4";
 import bedsitterImage from "@/assets/listing-bedsitter.jpg";
 import hostelImage from "@/assets/listing-hostel.jpg";
 import apartmentImage from "@/assets/listing-apartment.jpg";
@@ -171,28 +169,6 @@ function PrimaryLink({
 }
 
 function Index() {
-  const heroVideoRef = useRef<HTMLVideoElement>(null);
-
-  useEffect(() => {
-    const video = heroVideoRef.current;
-    if (!video) return;
-
-    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const syncPlayback = () => {
-      if (media.matches) {
-        video.pause();
-        return;
-      }
-      void video.play().catch(() => {
-        // Autoplay can fail before user gesture; poster still shows.
-      });
-    };
-
-    syncPlayback();
-    media.addEventListener("change", syncPlayback);
-    return () => media.removeEventListener("change", syncPlayback);
-  }, []);
-
   return (
     <div className="min-h-screen overflow-x-hidden bg-background text-foreground">
       <SiteHeader />
@@ -202,19 +178,13 @@ function Index() {
           id="top"
           className="relative flex min-h-[94svh] items-end overflow-hidden pb-10 pt-28 md:items-center md:pb-8"
         >
-          <video
-            ref={heroVideoRef}
+          <img
+            src={heroImage}
+            alt="Modern student residences near a leafy Kenyan campus"
+            width={1600}
+            height={1008}
             className="hero-image absolute inset-0 h-full w-full object-cover"
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            poster={heroImage}
-            aria-hidden="true"
-          >
-            <source src={heroVideo} type="video/mp4" />
-          </video>
+          />
           <div className="hero-overlay absolute inset-0" aria-hidden="true" />
           <div className="noise absolute inset-0 opacity-50" aria-hidden="true" />
           <div className="relative z-10 mx-auto w-full max-w-7xl px-5 md:px-8">
