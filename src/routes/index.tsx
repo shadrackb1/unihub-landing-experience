@@ -269,18 +269,11 @@ function Index() {
               </div>
 
               <div className="reveal reveal-4 mt-14">
-                <span className="scroll-cue">Begin the journey</span>
+                <span className="scroll-cue" aria-hidden="true" />
               </div>
             </div>
           </div>
         </section>
-
-        <div className="act-interlude mx-auto max-w-3xl px-5">
-          <p className="instrument text-highlight/80">The UniHub experience</p>
-          <p className="font-display text-2xl font-medium text-foreground sm:text-3xl">
-            One path from curiosity to keys — watched, verified, then chosen.
-          </p>
-        </div>
 
         <Act
           id="how-it-works"
@@ -319,22 +312,21 @@ function Index() {
               <Reveal>
                 <VideoPanel
                   id="walkthrough"
-                  eyebrow="Site walkthrough · full recording"
+                  eyebrow="Site walkthrough"
                   title="See how to navigate UniHub."
-                  description="The complete screen recording (about 2 minutes), looping as you scroll — browse listings, shortlist a place, and contact an agent without an account wall."
+                  description="Browse listings, shortlist a place, and contact an agent — no account wall."
                   src={walkthroughVideo}
                   poster={walkthroughPoster}
                 />
               </Reveal>
               <Reveal className="glass-card p-7 sm:p-9" delay={120}>
-                <p className="eyebrow">Prefer to watch?</p>
+                <p className="eyebrow">The path</p>
                 <h3 className="mt-3 font-display text-2xl font-medium">
                   Same path as the four steps.
                 </h3>
                 <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
                   Find a campus area, open verified listings, pick a room, then
-                  message the agent. The full walkthrough shows that flow end to
-                  end on the live interface — play it on loop while you read.
+                  message the agent.
                 </p>
                 <ul className="mt-6 space-y-3 text-sm text-secondary-foreground">
                   {["Browse without signing up", "Compare price and location", "Contact via WhatsApp"].map(
@@ -394,8 +386,7 @@ function Index() {
               <h2>See student residences, not just listings.</h2>
               <p>
                 Student housing footage from residences across the region —
-                rooms, hostels, and premium stays. Full clips loop while you
-                scroll.
+                rooms, hostels, and premium stays.
               </p>
             </Reveal>
             <div className="mt-12 grid gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
@@ -460,14 +451,13 @@ function Index() {
             <div className="mt-10 grid gap-6 md:grid-cols-2">
               <CoolVideoCard clip={residenceClips[0]!} delay={0} />
               <Reveal className="glass-card flex flex-col justify-center p-7 sm:p-10" delay={100}>
-                <p className="eyebrow">Watch first, then shortlist</p>
+                <p className="eyebrow">Featured rooms</p>
                 <h3 className="mt-3 font-display text-3xl font-medium leading-tight">
                   Rooms you can almost walk into.
                 </h3>
                 <p className="mt-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
                   Spacious student rooms from <span className="text-foreground">KES 15,000</span> —
                   private kitchen and bathroom options, free gym and lounges.
-                  Pair video tours with the listings grid below.
                 </p>
                 <div className="mt-7 flex flex-wrap gap-3">
                   <PrimaryLink href="/listings">Open listings</PrimaryLink>
