@@ -10,7 +10,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { SiteFooter, SiteHeader, WHATSAPP_URL } from "@/components/MarketingChrome";
-import { PortraitVideo, VideoPanel } from "@/components/VideoPanel";
+import { PortraitVideo, Reveal, VideoPanel } from "@/components/VideoPanel";
 import heroImage from "@/assets/unihub-hero.jpg";
 import bedsitterImage from "@/assets/listing-bedsitter.jpg";
 import hostelImage from "@/assets/listing-hostel.jpg";
@@ -258,14 +258,16 @@ function Index() {
           className="section-shell border-y border-border bg-panel"
         >
           <div className="mx-auto max-w-7xl px-5 md:px-8">
-            <div className="section-heading">
+            <Reveal className="section-heading">
               <p className="eyebrow">The simple way home</p>
               <h2>From campus search to agent chat.</h2>
-            </div>
+            </Reveal>
             <ol className="mt-12 grid gap-px overflow-hidden rounded-3xl border border-border bg-border md:grid-cols-4">
-              {journey.map(([number, title, copy]) => (
-                <li
+              {journey.map(([number, title, copy], index) => (
+                <Reveal
                   key={number}
+                  as="li"
+                  delay={index * 80}
                   className="journey-step group min-h-64 bg-card p-7 transition-colors duration-500 hover:bg-accent md:p-8"
                 >
                   <span className="relative z-10 font-display text-sm text-highlight">
@@ -277,20 +279,22 @@ function Index() {
                   <p className="relative z-10 mt-3 text-sm leading-relaxed text-muted-foreground">
                     {copy}
                   </p>
-                </li>
+                </Reveal>
               ))}
             </ol>
 
             <div className="mt-12 grid gap-6 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
-              <VideoPanel
-                id="walkthrough"
-                eyebrow="Site walkthrough"
-                title="See how to navigate UniHub."
-                description="A quick screen recording of browsing listings, shortlisting a place, and reaching out — no account wall in the way."
-                src={walkthroughVideo}
-                poster={walkthroughPoster}
-              />
-              <div className="glass-card p-7 sm:p-9">
+              <Reveal>
+                <VideoPanel
+                  id="walkthrough"
+                  eyebrow="Site walkthrough"
+                  title="See how to navigate UniHub."
+                  description="A quick screen recording of browsing listings, shortlisting a place, and reaching out — no account wall in the way."
+                  src={walkthroughVideo}
+                  poster={walkthroughPoster}
+                />
+              </Reveal>
+              <Reveal className="glass-card p-7 sm:p-9" delay={120}>
                 <p className="eyebrow">Prefer to watch?</p>
                 <h3 className="mt-3 font-display text-2xl font-medium">
                   Same path as the four steps.
@@ -310,14 +314,14 @@ function Index() {
                     ),
                   )}
                 </ul>
-              </div>
+              </Reveal>
             </div>
           </div>
         </section>
 
         <section id="trust" className="section-shell">
           <div className="mx-auto max-w-7xl px-5 md:px-8">
-            <div className="section-heading max-w-3xl">
+            <Reveal className="section-heading max-w-3xl">
               <p className="eyebrow">Why UniHub</p>
               <h2>
                 Designed for students.
@@ -328,10 +332,14 @@ function Index() {
                 Less uncertainty, fewer dead ends, and no signup wall between
                 you and a genuine place to live.
               </p>
-            </div>
+            </Reveal>
             <div className="mt-14 grid gap-5 md:grid-cols-3">
-              {trust.map(({ icon: Icon, title, copy }) => (
-                <article key={title} className="glass-card group p-7 sm:p-9">
+              {trust.map(({ icon: Icon, title, copy }, index) => (
+                <Reveal
+                  key={title}
+                  delay={index * 100}
+                  className="glass-card group p-7 sm:p-9"
+                >
                   <div className="flex size-12 items-center justify-center rounded-2xl border border-border bg-accent transition-colors group-hover:bg-secondary">
                     <Icon className="size-5" strokeWidth={1.7} aria-hidden="true" />
                   </div>
@@ -341,7 +349,7 @@ function Index() {
                   <p className="mt-4 max-w-sm leading-relaxed text-muted-foreground">
                     {copy}
                   </p>
-                </article>
+                </Reveal>
               ))}
             </div>
           </div>
@@ -349,7 +357,7 @@ function Index() {
 
         <section id="residences" className="section-shell">
           <div className="mx-auto max-w-7xl px-5 md:px-8">
-            <div className="section-heading max-w-3xl">
+            <Reveal className="section-heading max-w-3xl">
               <p className="eyebrow">Housing on the ground</p>
               <h2>See student residences, not just listings.</h2>
               <p>
@@ -357,12 +365,12 @@ function Index() {
                 safe, campus-adjacent housing international and local students
                 ask about most.
               </p>
-            </div>
+            </Reveal>
             <div className="mt-12 grid gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
-              <div className="mx-auto w-full max-w-sm overflow-hidden rounded-3xl border border-border bg-card">
+              <Reveal className="mx-auto w-full max-w-sm overflow-hidden rounded-3xl border border-border bg-card">
                 <div className="relative aspect-[9/16] bg-black/60">
                   <PortraitVideo
-                    className="h-full w-full object-cover"
+                    className="h-full w-full"
                     src={documentaryVideo}
                     poster={documentaryPoster}
                     ariaLabel="Qwetu Qejani student residences documentary"
@@ -377,8 +385,8 @@ function Index() {
                     Best student hostels in Kenya · Qwetu Qejani
                   </p>
                 </div>
-              </div>
-              <div className="glass-card p-7 sm:p-10">
+              </Reveal>
+              <Reveal className="glass-card p-7 sm:p-10" delay={120}>
                 <p className="eyebrow">Why this matters</p>
                 <h3 className="mt-3 font-display text-3xl font-medium leading-tight">
                   Trust starts with seeing the place.
@@ -399,14 +407,14 @@ function Index() {
                     <ArrowRight className="size-4" aria-hidden="true" />
                   </a>
                 </div>
-              </div>
+              </Reveal>
             </div>
           </div>
         </section>
 
         <section id="listings" className="section-shell bg-panel">
           <div className="mx-auto max-w-7xl px-5 md:px-8">
-            <div className="flex items-end justify-between gap-6">
+            <Reveal className="flex items-end justify-between gap-6">
               <div className="section-heading">
                 <p className="eyebrow">Freshly verified</p>
                 <h2>Featured near campus</h2>
@@ -414,13 +422,11 @@ function Index() {
               <div className="hidden sm:block">
                 <ArrowLink href="/listings">View all listings</ArrowLink>
               </div>
-            </div>
+            </Reveal>
             <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {listings.map((listing) => (
-                <article
-                  key={listing.title}
-                  className="listing-card group overflow-hidden rounded-3xl border border-border bg-card"
-                >
+              {listings.map((listing, index) => (
+                <Reveal key={listing.title} delay={(index % 3) * 90} className="h-full">
+                  <article className="listing-card group h-full overflow-hidden rounded-3xl border border-border bg-card">
                   <div className="relative aspect-[4/3] overflow-hidden">
                     <img
                       src={listing.image}
@@ -474,6 +480,7 @@ function Index() {
                     </div>
                   </div>
                 </article>
+                </Reveal>
               ))}
             </div>
             <div className="mt-8 sm:hidden">
@@ -484,7 +491,7 @@ function Index() {
 
         <section id="locations" className="section-shell">
           <div className="mx-auto grid max-w-7xl gap-12 px-5 md:px-8 lg:grid-cols-[0.78fr_1.22fr] lg:items-center">
-            <div className="section-heading">
+            <Reveal className="section-heading">
               <p className="eyebrow">Popular areas</p>
               <h2>Housing keyed to campus.</h2>
               <p>
@@ -502,8 +509,8 @@ function Index() {
               <div className="mt-9">
                 <PrimaryLink href="/listings">Explore by location</PrimaryLink>
               </div>
-            </div>
-            <div className="map-card relative min-h-[28rem] overflow-hidden rounded-3xl border border-border bg-card">
+            </Reveal>
+            <Reveal className="map-card relative min-h-[28rem] overflow-hidden rounded-3xl border border-border bg-card" delay={100}>
               <div className="absolute left-[11%] top-[14%] rounded-full border border-border bg-background/85 px-4 py-2 text-xs backdrop-blur-md">
                 Nairobi
               </div>
@@ -535,13 +542,13 @@ function Index() {
                   <MapPin className="size-4" />
                 </div>
               </div>
-            </div>
+            </Reveal>
           </div>
         </section>
 
         <section className="border-y border-border bg-foreground text-background">
           <div className="mx-auto grid max-w-7xl gap-12 px-5 py-20 md:px-8 md:py-28 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
-            <div>
+            <Reveal>
               <p className="font-display text-4xl font-medium leading-tight sm:text-6xl lg:text-7xl">
                 No more housing scams.
               </p>
@@ -550,8 +557,11 @@ function Index() {
                 details and landlord or agent contacts so you can make your
                 next move with more confidence.
               </p>
-            </div>
-            <div className="grid grid-cols-3 gap-3 border-t border-background/15 pt-6 lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0">
+            </Reveal>
+            <Reveal
+              className="grid grid-cols-3 gap-3 border-t border-background/15 pt-6 lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0"
+              delay={100}
+            >
               <div>
                 <ShieldCheck className="size-5" />
                 <p className="mt-4 text-sm font-semibold">Vetted listings</p>
@@ -564,13 +574,13 @@ function Index() {
                 <MessageCircle className="size-5" />
                 <p className="mt-4 text-sm font-semibold">Direct contact</p>
               </div>
-            </div>
+            </Reveal>
           </div>
         </section>
 
         <section className="section-shell bg-panel">
           <div className="mx-auto grid max-w-7xl overflow-hidden rounded-3xl border border-border bg-card lg:grid-cols-2">
-            <div className="min-h-[26rem] overflow-hidden">
+            <Reveal className="min-h-[26rem] overflow-hidden">
               <img
                 src={apartmentImage}
                 alt="Student residence ready to welcome new tenants"
@@ -579,8 +589,8 @@ function Index() {
                 loading="lazy"
                 className="h-full w-full object-cover object-right opacity-75 transition-transform duration-700 hover:scale-[1.03]"
               />
-            </div>
-            <div className="flex flex-col justify-center p-7 sm:p-12 lg:p-16">
+            </Reveal>
+            <Reveal className="flex flex-col justify-center p-7 sm:p-12 lg:p-16" delay={100}>
               <p className="eyebrow">For landlords & agents</p>
               <h2 className="mt-4 font-display text-3xl font-medium leading-tight sm:text-5xl">
                 List property. Reach students ready to move.
@@ -602,7 +612,7 @@ function Index() {
               <div className="mt-9">
                 <PrimaryLink href="/list-property">List your property</PrimaryLink>
               </div>
-            </div>
+            </Reveal>
           </div>
         </section>
 
@@ -611,7 +621,7 @@ function Index() {
             className="cta-orb absolute left-1/2 top-1/2 -z-0 -translate-x-1/2 -translate-y-1/2"
             aria-hidden="true"
           />
-          <div className="relative z-10 mx-auto max-w-4xl">
+          <Reveal className="relative z-10 mx-auto max-w-4xl">
             <Sparkles
               className="mx-auto size-6 text-muted-foreground"
               strokeWidth={1.5}
@@ -635,7 +645,7 @@ function Index() {
               <MessageCircle className="size-4" aria-hidden="true" /> Or chat on
               WhatsApp
             </a>
-          </div>
+          </Reveal>
         </section>
       </main>
 
