@@ -31,7 +31,9 @@ export function LetterReveal({
     return () => observer.disconnect();
   }, []);
 
-  const letters = Array.from(text);
+  const words = text.trim().split(/\s+/);
+
+  let letterIndex = 0;
 
   return (
     <h1
@@ -42,29 +44,31 @@ export function LetterReveal({
       )}
       aria-label={text}
     >
-      <span aria-hidden="true" className="inline">
-        {letters.map((char, index) => {
-          if (char === " ") {
-            return (
-              <span key={`space-${index}`} className="inline-block w-[0.28em]" />
-            );
-          }
-
-          return (
-            <span
-              key={`${char}-${index}`}
-              className={cn(
-                "letter-reveal inline-block",
-                ready || reduced ? "letter-reveal-in" : "letter-reveal-out",
-              )}
-              style={{
-                transitionDelay: `${startDelayMs + index * delayStepMs}ms`,
-              }}
-            >
-              {char}
-            </span>
-          );
-        })}
+      <span aria-hidden="true">
+        {words.map((word, wordIndex) => (
+          <span key={`${word}-${wordIndex}`} className="inline-block whitespace-nowrap">
+            {Array.from(word).map((char) => {
+              const index = letterIndex++;
+              return (
+                <span
+                  key={`${char}-${index}`}
+                  className={cn(
+                    "letter-reveal inline-block",
+                    ready || reduced ? "letter-reveal-in" : "letter-reveal-out",
+                  )}
+                  style={{
+                    transitionDelay: `${startDelayMs + index * delayStepMs}ms`,
+                  }}
+                >
+                  {char}
+                </span>
+              );
+            })}
+            {wordIndex < words.length - 1 ? (
+              <span className="inline-block w-[0.28em]" />
+            ) : null}
+          </span>
+        ))}
       </span>
     </h1>
   );

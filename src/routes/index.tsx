@@ -18,6 +18,11 @@ import {
   usePrefersReducedMotion,
 } from "@/components/VideoPanel";
 import { LetterReveal } from "@/components/LetterReveal";
+import {
+  CoolVideoCard,
+  ResidenceVideoGallery,
+  type ResidenceClip,
+} from "@/components/ResidenceVideoGallery";
 import heroImage from "@/assets/unihub-hero.jpg";
 import heroVideo from "@/assets/unihub-hero.mp4";
 import heroPoster from "@/assets/unihub-hero-poster.jpg";
@@ -31,6 +36,45 @@ import walkthroughVideo from "@/assets/unihub-site-walkthrough.mp4";
 import walkthroughPoster from "@/assets/unihub-walkthrough-poster.jpg";
 import documentaryVideo from "@/assets/unihub-qwetu-documentary.mp4";
 import documentaryPoster from "@/assets/unihub-qwetu-poster.jpg";
+import studentRoomsVideo from "@/assets/listing-video-student-rooms.mp4";
+import studentRoomsPoster from "@/assets/listing-video-student-rooms-poster.jpg";
+import femaleHostelVideo from "@/assets/listing-video-female-hostel.mp4";
+import femaleHostelPoster from "@/assets/listing-video-female-hostel-poster.jpg";
+import maisonVideo from "@/assets/listing-video-maison.mp4";
+import maisonPoster from "@/assets/listing-video-maison-poster.jpg";
+
+const residenceClips: ResidenceClip[] = [
+  {
+    id: "student-rooms",
+    title: "Spacious student rooms",
+    meta: "From KES 15,000",
+    blurb:
+      "Own kitchen and bathroom — even when you share. Free gym, lounges, and more amenities for campus life.",
+    src: studentRoomsVideo,
+    poster: studentRoomsPoster,
+    ariaLabel: "Spacious student rooms tour with kitchen bathroom and gym",
+  },
+  {
+    id: "female-hostel",
+    title: "Female hostel · Kigamboni",
+    meta: "Student-focused",
+    blurb:
+      "Modern women’s hostel near ferry routes — built for students around IFM, CBE, TIA, UTUMISHI, and nearby colleges. Free Wi‑Fi.",
+    src: femaleHostelVideo,
+    poster: femaleHostelPoster,
+    ariaLabel: "Luxury female hostel for students in Kigamboni",
+  },
+  {
+    id: "maison",
+    title: "Maison Bauchart suites",
+    meta: "Premium stays",
+    blurb:
+      "Tailored suites and curated hospitality — a reference for elevated short stays beyond the usual hostel budget.",
+    src: maisonVideo,
+    poster: maisonPoster,
+    ariaLabel: "Maison Bauchart tailored suites hospitality video",
+  },
+];
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -225,12 +269,12 @@ function Index() {
             <div className="max-w-4xl">
               <div className="reveal reveal-1 mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-4 py-2 text-xs font-medium text-secondary-foreground backdrop-blur-xl">
                 <ShieldCheck className="size-4" aria-hidden="true" />
-                Verified student housing across Kenya
+                UniHub · Verified campus housing in Kenya
               </div>
               <LetterReveal text="Find your perfect home." />
               <p className="reveal reveal-3 mt-7 max-w-2xl text-base leading-relaxed text-secondary-foreground sm:text-xl">
-                Verified student hostels, bedsitters, and rentals near campus —
-                without the scams.
+                Browse verified hostels, bedsitters, and rentals near campus.
+                Message landlords on WhatsApp — no account needed to search.
               </p>
               <div className="reveal reveal-4 mt-9 flex flex-wrap items-center gap-5">
                 <PrimaryLink href="/listings">Browse Listings</PrimaryLink>
@@ -238,7 +282,7 @@ function Index() {
                   href="#how-it-works"
                   className="group inline-flex items-center gap-2 text-sm font-medium text-foreground transition-colors hover:text-highlight"
                 >
-                  How it works
+                  How UniHub works
                   <ArrowRight
                     className="size-4 transition-transform duration-300 group-hover:translate-x-1"
                     aria-hidden="true"
@@ -247,23 +291,20 @@ function Index() {
               </div>
               <div className="reveal reveal-4 mt-10 flex flex-wrap gap-x-6 gap-y-3 text-xs text-muted-foreground sm:text-sm">
                 <span className="flex items-center gap-2">
-                  <Check className="size-4 text-foreground" /> Verified
-                  landlords
+                  <Check className="size-4 text-foreground" /> Vetted listings
                 </span>
                 <span className="flex items-center gap-2">
-                  <Check className="size-4 text-foreground" /> No account to
-                  browse
+                  <Check className="size-4 text-foreground" /> Free to browse
                 </span>
                 <span className="flex items-center gap-2">
-                  <Check className="size-4 text-foreground" /> Contact via
-                  WhatsApp
+                  <Check className="size-4 text-foreground" /> WhatsApp with
+                  agents
                 </span>
               </div>
 
-              {/* Signature: campus instrument rail — housing keyed to campus codes */}
               <div className="reveal reveal-4 mt-12 max-w-3xl">
                 <p className="instrument mb-3 text-highlight/80">
-                  Live campus coverage
+                  Search by campus
                 </p>
                 <div className="campus-rail">
                   {campusCodes.map((campus) => (
@@ -388,9 +429,9 @@ function Index() {
               <p className="eyebrow">Housing on the ground</p>
               <h2>See student residences, not just listings.</h2>
               <p>
-                A short documentary on Qwetu Qejani residences — the kind of
-                safe, campus-adjacent housing international and local students
-                ask about most.
+                Student housing footage from residences across the region —
+                rooms, hostels, and premium stays. Full clips loop while you
+                scroll.
               </p>
             </Reveal>
             <div className="mt-12 grid gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
@@ -436,6 +477,7 @@ function Index() {
                 </div>
               </Reveal>
             </div>
+            <ResidenceVideoGallery clips={residenceClips} />
           </div>
         </section>
 
@@ -450,6 +492,32 @@ function Index() {
                 <ArrowLink href="/listings">View all listings</ArrowLink>
               </div>
             </Reveal>
+
+            <div className="mt-10 grid gap-6 md:grid-cols-2">
+              <CoolVideoCard clip={residenceClips[0]!} delay={0} />
+              <Reveal className="glass-card flex flex-col justify-center p-7 sm:p-10" delay={100}>
+                <p className="eyebrow">Watch first, then shortlist</p>
+                <h3 className="mt-3 font-display text-3xl font-medium leading-tight">
+                  Rooms you can almost walk into.
+                </h3>
+                <p className="mt-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
+                  Spacious student rooms from <span className="text-foreground">KES 15,000</span> —
+                  private kitchen and bathroom options, free gym and lounges.
+                  Pair video tours with the listings grid below.
+                </p>
+                <div className="mt-7 flex flex-wrap gap-3">
+                  <PrimaryLink href="/listings">Open listings</PrimaryLink>
+                  <a
+                    href="#residences"
+                    className="inline-flex min-h-12 items-center gap-2 text-sm font-medium text-foreground hover:text-highlight"
+                  >
+                    More residence clips
+                    <ArrowRight className="size-4" aria-hidden="true" />
+                  </a>
+                </div>
+              </Reveal>
+            </div>
+
             <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {listings.map((listing, index) => (
                 <Reveal key={listing.title} delay={(index % 3) * 90} className="h-full">
@@ -571,6 +639,21 @@ function Index() {
               </div>
             </Reveal>
           </div>
+
+          <div className="mx-auto mt-10 grid max-w-7xl gap-6 px-5 md:grid-cols-2 md:px-8">
+            <CoolVideoCard clip={residenceClips[1]!} />
+            <Reveal className="glass-card flex flex-col justify-center p-7 sm:p-9" delay={100}>
+              <p className="eyebrow">Campus corridors</p>
+              <h3 className="mt-3 font-display text-2xl font-medium">
+                Female hostels students actually ask for.
+              </h3>
+              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                Modern hostels with Wi‑Fi for learners around IFM, CBE, TIA,
+                UTUMISHI, and nearby colleges — watch the space before you
+                message an agent.
+              </p>
+            </Reveal>
+          </div>
         </section>
 
         <section className="border-y border-border bg-foreground text-background">
@@ -640,6 +723,9 @@ function Index() {
                 <PrimaryLink href="/list-property">List your property</PrimaryLink>
               </div>
             </Reveal>
+          </div>
+          <div className="mx-auto mt-10 max-w-md">
+            <CoolVideoCard clip={residenceClips[2]!} />
           </div>
         </section>
 
