@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 520" fill="none" font-family="Inter, system-ui, sans-serif">
+  <rect width="720" height="520" fill="#0A0A0A"/>
+  <text x="36" y="36" fill="#fff" font-size="14" font-weight="600">UniHub · Experience funnel</text>
+  <text x="36" y="56" fill="rgba(255,255,255,0.45)" font-size="11">Architecture blueprint</text>
+
+  <rect x="240" y="72" width="240" height="36" rx="8" fill="#121212" stroke="rgba(255,255,255,0.12)"/>
+  <text x="360" y="95" text-anchor="middle" fill="#fff" font-size="12">Visitor → SSR landing</text>
+
+  <line x1="360" y1="108" x2="360" y2="128" stroke="#6EE7B7" stroke-width="1.5"/>
+
+  <g font-size="11" text-anchor="middle">
+    <rect x="200" y="128" width="320" height="28" rx="6" fill="#1a1a1a" stroke="#6EE7B7" stroke-opacity="0.5"/>
+    <text x="360" y="146" fill="#6EE7B7">I Arrive · hero video + headline</text>
+    <rect x="200" y="166" width="320" height="28" rx="6" fill="#1a1a1a" stroke="rgba(255,255,255,0.1)"/>
+    <text x="360" y="184" fill="#fff">II Orient · steps + walkthrough</text>
+    <rect x="200" y="204" width="320" height="28" rx="6" fill="#1a1a1a" stroke="rgba(255,255,255,0.1)"/>
+    <text x="360" y="222" fill="#fff">III Believe · trust pillars</text>
+    <rect x="200" y="242" width="320" height="28" rx="6" fill="#1a1a1a" stroke="rgba(255,255,255,0.1)"/>
+    <text x="360" y="260" fill="#fff">IV Witness · residence film</text>
+    <rect x="200" y="280" width="320" height="28" rx="6" fill="#1a1a1a" stroke="rgba(255,255,255,0.1)"/>
+    <text x="360" y="298" fill="#fff">V Choose · listings + KES</text>
+    <rect x="200" y="318" width="320" height="28" rx="6" fill="#1a1a1a" stroke="rgba(255,255,255,0.1)"/>
+    <text x="360" y="336" fill="#fff">VI Place · campus map</text>
+    <rect x="200" y="356" width="320" height="28" rx="6" fill="#1a1a1a" stroke="rgba(255,255,255,0.1)"/>
+    <text x="360" y="374" fill="#fff">Proof · no housing scams</text>
+    <rect x="200" y="394" width="320" height="28" rx="6" fill="#1a1a1a" stroke="#6EE7B7" stroke-opacity="0.8"/>
+    <text x="360" y="412" fill="#6EE7B7">VII Move · Browse / List property</text>
+  </g>
+
+  <rect x="40" y="448" width="200" height="44" rx="8" fill="#fff"/>
+  <text x="140" y="475" text-anchor="middle" fill="#000" font-size="12" font-weight="600">Browse Listings</text>
+  <rect x="260" y="448" width="160" height="44" rx="8" fill="#121212" stroke="rgba(255,255,255,0.15)"/>
+  <text x="340" y="475" text-anchor="middle" fill="#fff" font-size="12">WhatsApp agent</text>
+  <rect x="440" y="448" width="200" height="44" rx="8" fill="#121212" stroke="rgba(255,255,255,0.15)"/>
+  <text x="540" y="475" text-anchor="middle" fill="#fff" font-size="12">List property</text>
+</svg>
