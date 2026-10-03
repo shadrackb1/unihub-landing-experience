@@ -10,7 +10,7 @@ export function ListingGrid({ listings }: { listings: SampleListing[] }) {
         <Reveal
           key={listing.title}
           delay={(index % 3) * 80}
-          className="listing-card group h-full overflow-hidden rounded-3xl border border-border bg-card"
+          className="listing-card group h-full overflow-hidden rounded-2xl border border-border bg-card"
         >
           <div className="relative aspect-[4/3] overflow-hidden">
             <img
@@ -19,7 +19,7 @@ export function ListingGrid({ listings }: { listings: SampleListing[] }) {
               className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
               loading="lazy"
             />
-            <span className="absolute left-4 top-4 rounded-full border border-border bg-background/80 px-3 py-1.5 text-xs font-medium backdrop-blur-md">
+            <span className="absolute left-4 top-4 rounded-full border border-border bg-background/80 px-3 py-1.5 text-xs font-medium">
               {listing.category}
             </span>
             <span className="absolute right-4 top-4 flex items-center gap-1.5 rounded-full bg-status px-3 py-1.5 text-xs font-semibold text-status-foreground">

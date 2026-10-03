@@ -34,7 +34,7 @@ function ContactPage() {
           </Reveal>
 
           <div className="mt-12 grid gap-6 md:grid-cols-3">
-            <Reveal className="glass-card p-7">
+            <Reveal className="solid-card p-7">
               <MessageCircle className="size-5 text-highlight" aria-hidden="true" />
               <h2 className="mt-6 font-display text-2xl font-medium">WhatsApp</h2>
               <p className="mt-3 text-sm text-muted-foreground">
@@ -49,7 +49,7 @@ function ContactPage() {
                 Open WhatsApp
               </a>
             </Reveal>
-            <Reveal className="glass-card p-7" delay={80}>
+            <Reveal className="solid-card p-7" delay={80}>
               <Mail className="size-5 text-highlight" aria-hidden="true" />
               <h2 className="mt-6 font-display text-2xl font-medium">Email</h2>
               <p className="mt-3 text-sm text-muted-foreground">
@@ -62,7 +62,7 @@ function ContactPage() {
                 hello@unihub.ke
               </a>
             </Reveal>
-            <Reveal className="glass-card p-7" delay={140}>
+            <Reveal className="solid-card p-7" delay={140}>
               <MapPin className="size-5 text-highlight" aria-hidden="true" />
               <h2 className="mt-6 font-display text-2xl font-medium">Coverage</h2>
               <p className="mt-3 text-sm text-muted-foreground">

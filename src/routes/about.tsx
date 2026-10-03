@@ -55,7 +55,7 @@ function AboutPage() {
 
           <div className="mt-12 grid gap-5 md:grid-cols-3">
             {pillars.map(({ icon: Icon, title, copy }, index) => (
-              <Reveal key={title} delay={index * 90} className="glass-card p-7 sm:p-8">
+              <Reveal key={title} delay={index * 90} className="solid-card p-7 sm:p-8">
                 <div className="flex size-12 items-center justify-center rounded-2xl border border-border bg-accent">
                   <Icon className="size-5" strokeWidth={1.7} aria-hidden="true" />
                 </div>
@@ -65,7 +65,7 @@ function AboutPage() {
             ))}
           </div>
 
-          <Reveal className="mt-12 flex flex-col gap-4 rounded-3xl border border-border bg-card p-7 sm:flex-row sm:items-center sm:justify-between">
+          <Reveal className="mt-12 flex flex-col gap-4 rounded-2xl border border-border bg-card p-7 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="font-display text-xl font-medium">Ready to look around?</p>
               <p className="mt-2 text-sm text-muted-foreground">

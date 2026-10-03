@@ -37,7 +37,7 @@ function ListingsPage() {
             </p>
           </Reveal>
 
-          <Reveal className="mt-8 flex flex-col gap-4 rounded-3xl border border-border bg-card p-5 sm:flex-row sm:items-center" delay={80}>
+          <Reveal className="mt-8 flex flex-col gap-4 rounded-xl border border-border bg-card p-5 sm:flex-row sm:items-center" delay={80}>
             <div className="flex min-h-12 flex-1 items-center gap-3 rounded-full border border-border bg-accent/60 px-4">
               <Search className="size-4 text-muted-foreground" aria-hidden="true" />
               <span className="text-sm text-muted-foreground">
@@ -62,7 +62,7 @@ function ListingsPage() {
 
           <ListingGrid listings={sampleListings} />
 
-          <Reveal className="glass-card mt-12 flex flex-col gap-4 p-7 sm:flex-row sm:items-center sm:justify-between">
+          <Reveal className="solid-card mt-12 flex flex-col gap-4 p-7 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="font-display text-xl font-medium">
                 Need a room this semester?

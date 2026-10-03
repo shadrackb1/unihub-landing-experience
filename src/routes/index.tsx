@@ -167,7 +167,7 @@ function PrimaryLink({
   return (
     <Link
       to={href}
-      className="cta-shine inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-glow transition-transform duration-300 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+      className="cta-shine inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-glow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
     >
       <span>{children}</span>
       <ArrowRight className="size-4" aria-hidden="true" />
@@ -218,7 +218,7 @@ function Index() {
           <div className="noise absolute inset-0 opacity-50" aria-hidden="true" />
           <div className="relative z-10 mx-auto w-full max-w-7xl px-5 md:px-8">
             <div className="max-w-4xl">
-              <div className="reveal reveal-1 mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-4 py-2 text-xs font-medium text-secondary-foreground backdrop-blur-xl">
+              <div className="reveal reveal-1 mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-4 py-2 text-xs font-medium text-secondary-foreground">
                 <ShieldCheck className="size-4" aria-hidden="true" />
                 UniHub · Verified campus housing in Kenya
               </div>
@@ -288,7 +288,7 @@ function Index() {
               <p className="eyebrow">The simple way home</p>
               <h2>From campus search to agent chat.</h2>
             </Reveal>
-            <ol className="mt-12 grid gap-px overflow-hidden rounded-3xl border border-border bg-border md:grid-cols-4">
+            <ol className="mt-12 grid gap-px overflow-hidden rounded-xl border border-border bg-border md:grid-cols-4">
               {journey.map(([number, title, copy], index) => (
                 <Reveal
                   key={number}
@@ -320,7 +320,7 @@ function Index() {
                   poster={walkthroughPoster}
                 />
               </Reveal>
-              <Reveal className="glass-card p-7 sm:p-9" delay={120}>
+              <Reveal className="solid-card p-7 sm:p-9" delay={120}>
                 <p className="eyebrow">The path</p>
                 <h3 className="mt-3 font-display text-2xl font-medium">
                   Same path as the four steps.
@@ -358,24 +358,69 @@ function Index() {
                 you and a genuine place to live.
               </p>
             </Reveal>
-            <div className="mt-14 grid gap-5 md:grid-cols-3">
-              {trust.map(({ icon: Icon, title, copy }, index) => (
-                <Reveal
-                  key={title}
-                  delay={index * 100}
-                  className="glass-card group p-7 sm:p-9"
-                >
-                  <div className="flex size-12 items-center justify-center rounded-2xl border border-border bg-accent transition-colors group-hover:bg-secondary">
-                    <Icon className="size-5" strokeWidth={1.7} aria-hidden="true" />
-                  </div>
-                  <h3 className="mt-12 font-display text-2xl font-medium">
-                    {title}
-                  </h3>
-                  <p className="mt-4 max-w-sm leading-relaxed text-muted-foreground">
-                    {copy}
-                  </p>
-                </Reveal>
-              ))}
+            <div className="mt-14 grid gap-5 md:grid-cols-4 md:grid-rows-[1fr_1fr]">
+              <Reveal
+                key="verified"
+                delay={0}
+                className="solid-card group p-7 sm:p-9 md:col-span-2 md:row-span-2"
+              >
+                <div className="flex size-14 items-center justify-center rounded-2xl border border-border bg-accent transition-colors group-hover:bg-secondary">
+                  <ShieldCheck className="size-6" strokeWidth={1.7} aria-hidden="true" />
+                </div>
+                <h3 className="mt-10 font-display text-3xl font-medium leading-tight sm:text-4xl">
+                  Verified Listings
+                </h3>
+                <p className="mt-5 max-w-lg text-base leading-relaxed text-muted-foreground sm:text-lg">
+                  Every listing and landlord is vetted before appearing on
+                  UniHub. We check property details, ownership documents, and
+                  agent contacts so you spend less time sorting scams from real
+                  rooms.
+                </p>
+                <div className="mt-8 flex flex-wrap gap-3 text-sm text-secondary-foreground">
+                  {["Property documents checked", "Landlord identity verified", "Agent contacts confirmed"].map(
+                    (item) => (
+                      <span key={item} className="flex items-center gap-2">
+                        <Check className="size-4 shrink-0 text-highlight" />
+                        {item}
+                      </span>
+                    ),
+                  )}
+                </div>
+              </Reveal>
+
+              <Reveal
+                key="renter"
+                delay={120}
+                className="solid-card group p-7 sm:p-8"
+              >
+                <div className="flex size-12 items-center justify-center rounded-2xl border border-border bg-accent transition-colors group-hover:bg-secondary">
+                  <GraduationCap className="size-5" strokeWidth={1.7} aria-hidden="true" />
+                </div>
+                <h3 className="mt-8 font-display text-xl font-medium">
+                  Renter-Focused
+                </h3>
+                <p className="mt-3 max-w-xs leading-relaxed text-muted-foreground">
+                  Housing selected for student routines, practical budgets, and
+                  short commutes.
+                </p>
+              </Reveal>
+
+              <Reveal
+                key="direct"
+                delay={200}
+                className="solid-card group p-7 sm:p-8"
+              >
+                <div className="flex size-12 items-center justify-center rounded-2xl border border-border bg-accent transition-colors group-hover:bg-secondary">
+                  <MessageCircle className="size-5" strokeWidth={1.7} aria-hidden="true" />
+                </div>
+                <h3 className="mt-8 font-display text-xl font-medium">
+                  Direct Contact
+                </h3>
+                <p className="mt-3 max-w-xs leading-relaxed text-muted-foreground">
+                  Use WhatsApp or email. No account required to find your next
+                  home.
+                </p>
+              </Reveal>
             </div>
           </div>
         </Act>
@@ -391,7 +436,7 @@ function Index() {
               </p>
             </Reveal>
             <div className="mt-12 grid gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
-              <Reveal className="mx-auto w-full max-w-sm overflow-hidden rounded-3xl border border-border bg-card">
+              <Reveal className="mx-auto w-full max-w-sm overflow-hidden rounded-2xl border border-border bg-card">
                 <div className="relative aspect-[9/16] bg-black/60">
                   <PortraitVideo
                     className="h-full w-full"
@@ -410,7 +455,7 @@ function Index() {
                   </p>
                 </div>
               </Reveal>
-              <Reveal className="glass-card p-7 sm:p-10" delay={120}>
+              <Reveal className="solid-card p-7 sm:p-10" delay={120}>
                 <p className="eyebrow">Why this matters</p>
                 <h3 className="mt-3 font-display text-3xl font-medium leading-tight">
                   Trust starts with seeing the place.
@@ -451,7 +496,7 @@ function Index() {
 
             <div className="mt-10 grid gap-6 md:grid-cols-2">
               <CoolVideoCard clip={residenceClips[0]!} delay={0} />
-              <Reveal className="glass-card flex flex-col justify-center p-7 sm:p-10" delay={100}>
+              <Reveal className="solid-card flex flex-col justify-center p-7 sm:p-10" delay={100}>
                 <p className="eyebrow">Featured rooms</p>
                 <h3 className="mt-3 font-display text-3xl font-medium leading-tight">
                   Rooms you can almost walk into.
@@ -477,7 +522,7 @@ function Index() {
             <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {listings.map((listing, index) => (
                 <Reveal key={listing.title} delay={(index % 3) * 90} className="h-full">
-                  <article className="listing-card group h-full overflow-hidden rounded-3xl border border-border bg-card">
+                  <article className="listing-card group h-full overflow-hidden rounded-2xl border border-border bg-card">
                   <div className="relative aspect-[4/3] overflow-hidden">
                     <img
                       src={listing.image}
@@ -568,7 +613,7 @@ function Index() {
 
           <div className="mx-auto mt-10 grid max-w-7xl gap-6 px-5 md:grid-cols-2 md:px-8">
             <CoolVideoCard clip={residenceClips[1]!} />
-            <Reveal className="glass-card flex flex-col justify-center p-7 sm:p-9" delay={100}>
+            <Reveal className="solid-card flex flex-col justify-center p-7 sm:p-9" delay={100}>
               <p className="eyebrow">Campus corridors</p>
               <h3 className="mt-3 font-display text-2xl font-medium">
                 Female hostels students actually ask for.

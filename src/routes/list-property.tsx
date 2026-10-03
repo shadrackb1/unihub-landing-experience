@@ -42,7 +42,7 @@ function ListPropertyPage() {
           </Reveal>
 
           <div className="mt-12 grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-            <Reveal className="glass-card p-7 sm:p-10">
+            <Reveal className="solid-card p-7 sm:p-10">
               <h2 className="font-display text-2xl font-medium">What you get</h2>
               <ul className="mt-6 space-y-4 text-sm text-secondary-foreground">
                 {benefits.map((item) => (
@@ -68,7 +68,7 @@ function ListPropertyPage() {
                 </Link>
               </div>
             </Reveal>
-            <Reveal className="rounded-3xl border border-border bg-card p-7 sm:p-8" delay={100}>
+            <Reveal className="solid-card p-7 sm:p-8" delay={100}>
               <p className="eyebrow">How onboarding works</p>
               <ol className="mt-6 space-y-5 text-sm text-muted-foreground">
                 <li>

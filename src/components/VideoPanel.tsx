@@ -121,7 +121,7 @@ export function VideoPanel({
   const { videoRef, wrapRef } = useAutoplayInView();
 
   return (
-    <div className="video-card group relative overflow-hidden rounded-[1.75rem] border border-border bg-card/80 backdrop-blur-xl">
+    <div className="video-card group relative overflow-hidden rounded-[1.75rem] border border-border bg-card">
       <div ref={wrapRef} className="relative aspect-video bg-black/70">
         <div className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-t from-black/40 via-transparent to-black/20" />
         <video

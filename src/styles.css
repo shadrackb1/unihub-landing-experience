@@ -28,6 +28,9 @@
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
+  --radius-card: var(--radius-xl);
+  --radius-modal: var(--radius-2xl);
+  --radius-section: var(--radius-3xl);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -229,9 +232,9 @@
 
 @utility nav-link { font-size: 0.82rem; font-weight: 500; color: var(--color-muted-foreground); transition: color 250ms ease; border-radius: 0.35rem; &:hover { color: var(--color-foreground); } &:focus-visible { color: var(--color-foreground); } }
 
-@utility glass-card {
-  border-radius: var(--radius); border: 1px solid var(--color-border); background: color-mix(in oklab, var(--color-card) 84%, transparent); backdrop-filter: blur(18px); transition: transform 450ms cubic-bezier(0.16, 1, 0.3, 1), border-color 450ms ease;
-  &:hover { transform: translateY(-5px); border-color: color-mix(in oklab, var(--color-foreground) 22%, transparent); }
+@utility solid-card {
+  border-radius: var(--radius-lg); border: 1px solid var(--color-border); background: var(--color-card); transition: border-color 200ms ease, box-shadow 200ms ease;
+  &:hover { border-color: color-mix(in oklab, var(--color-highlight) 40%, transparent); box-shadow: 0 8px 24px color-mix(in oklab, var(--color-highlight) 8%, transparent); }
 }
 
 @utility campus-chip { display: inline-flex; min-height: 2.5rem; align-items: center; border-radius: 999px; border: 1px solid var(--color-border); background: var(--color-card); padding-inline: 1rem; font-size: 0.78rem; color: var(--color-secondary-foreground); }
@@ -250,7 +253,7 @@
   &:hover::after { left: 125%; }
 }
 
-@utility listing-card { transition: transform 450ms cubic-bezier(0.16, 1, 0.3, 1), border-color 450ms ease; &:hover { transform: translateY(-6px); border-color: color-mix(in oklab, var(--color-foreground) 20%, transparent); } }
+@utility listing-card { transition: border-color 200ms ease, box-shadow 200ms ease; border: 1px solid var(--color-border); border-radius: var(--radius-2xl); background: var(--color-card); &:hover { border-color: color-mix(in oklab, var(--color-highlight) 40%, transparent); box-shadow: 0 8px 24px color-mix(in oklab, var(--color-highlight) 8%, transparent); } }
 
 /* Sequence connector: encodes real order 01→04 on desktop */
 @media (min-width: 768px) {
@@ -334,25 +337,22 @@
 
 .video-card {
   transition:
-    transform 450ms cubic-bezier(0.16, 1, 0.3, 1),
-    border-color 450ms ease,
-    box-shadow 450ms ease;
+    border-color 200ms ease,
+    box-shadow 200ms ease;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-2xl);
+  background: var(--color-card);
 }
 
 .video-card:hover {
-  transform: translateY(-6px);
-  border-color: color-mix(in oklab, var(--color-highlight) 45%, transparent);
+  border-color: color-mix(in oklab, var(--color-highlight) 40%, transparent);
   box-shadow:
     0 0 0 1px color-mix(in oklab, var(--color-highlight) 25%, transparent),
-    0 24px 60px color-mix(in oklab, var(--color-highlight) 12%, transparent);
+    0 12px 32px color-mix(in oklab, var(--color-highlight) 10%, transparent);
 }
 
 .video-card video {
   transition: transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.video-card:hover video {
-  transform: scale(1.03);
 }
 
 /* Immersive experience frame */

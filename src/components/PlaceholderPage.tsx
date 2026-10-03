@@ -27,7 +27,7 @@ export function PlaceholderPage({
         <div className="mt-9">
           <Link
             to={ctaTo}
-            className="cta-shine inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-glow transition-transform hover:-translate-y-0.5"
+            className="cta-shine inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-glow"
           >
             {ctaLabel}
           </Link>

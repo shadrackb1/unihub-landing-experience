@@ -54,7 +54,7 @@ export function SiteHeader() {
         <div className="flex items-center gap-3">
           <Link
             to="/listings"
-            className="hidden min-h-10 items-center rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground shadow-glow transition-transform hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:inline-flex"
+            className="hidden min-h-10 items-center rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground shadow-glow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:inline-flex"
           >
             Browse Listings
           </Link>

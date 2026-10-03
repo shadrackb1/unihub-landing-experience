@@ -22,10 +22,10 @@ export function CoolVideoCard({
   return (
     <Reveal
       delay={delay}
-      className={`video-card group relative overflow-hidden rounded-[1.75rem] border border-border bg-card/80 shadow-[0_0_0_1px_rgba(255,255,255,0.04)] backdrop-blur-xl ${className}`}
+      className={`video-card group relative overflow-hidden rounded-[1.75rem] border border-border bg-card ${className}`}
     >
       <div className="pointer-events-none absolute inset-x-0 top-0 z-20 flex items-start justify-end p-4">
-        <span className="rounded-full border border-highlight/40 bg-highlight/15 px-3 py-1.5 text-[0.68rem] font-semibold tracking-wide text-highlight backdrop-blur-md">
+        <span className="rounded-full border border-highlight/40 bg-highlight/15 px-3 py-1.5 text-[0.68rem] font-semibold tracking-wide text-highlight">
           {clip.meta}
         </span>
       </div>
@@ -40,7 +40,7 @@ export function CoolVideoCard({
         />
       </div>
 
-      <div className="relative z-10 -mt-16 border-t border-white/10 bg-card/90 p-5 backdrop-blur-xl sm:p-6">
+      <div className="relative z-10 -mt-16 border-t border-white/10 bg-card p-5 sm:p-6">
         <h4 className="font-display text-xl font-medium leading-snug text-foreground">
           {clip.title}
         </h4>
