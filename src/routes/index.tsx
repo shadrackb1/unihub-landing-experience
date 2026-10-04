@@ -10,21 +10,21 @@ import {
   ShieldCheck,
   Sparkles,
 } from "lucide-react";
-import { SiteFooter, SiteHeader, WHATSAPP_URL } from "@/components/MarketingChrome";
+import { SiteFooter, SiteHeader, WHATSAPP_URL } from "@/shared/components/MarketingChrome";
 import {
   PortraitVideo,
   Reveal,
   VideoPanel,
   usePrefersReducedMotion,
-} from "@/components/VideoPanel";
-import { Act, JourneyRail, ScrollProgress } from "@/components/Experience";
-import { CampusMap } from "@/components/CampusMap";
-import { LetterReveal } from "@/components/LetterReveal";
+} from "@/shared/components/VideoPanel";
+import { Act, JourneyRail, ScrollProgress } from "@/shared/components/Experience";
+import { CampusMap } from "@/features/campus/components/CampusMap";
+import { LetterReveal } from "@/shared/components/LetterReveal";
 import {
   CoolVideoCard,
   ResidenceVideoGallery,
   type ResidenceClip,
-} from "@/components/ResidenceVideoGallery";
+} from "@/features/residence/components/ResidenceVideoGallery";
 import { sampleListings } from "@/data/listings";
 import apartmentImage from "@/assets/listing-apartment.jpg";
 import heroImage from "@/assets/unihub-hero.jpg";
@@ -46,8 +46,7 @@ const residenceClips: ResidenceClip[] = [
     id: "student-rooms",
     title: "Spacious student rooms",
     meta: "From KES 15,000",
-    blurb:
-      "Own kitchen and bathroom even when you share. Free gym and lounges for campus life.",
+    blurb: "Own kitchen and bathroom even when you share. Free gym and lounges for campus life.",
     src: studentRoomsVideo,
     poster: studentRoomsPoster,
     ariaLabel: "Spacious student rooms tour with kitchen bathroom and gym",
@@ -66,8 +65,7 @@ const residenceClips: ResidenceClip[] = [
     id: "maison",
     title: "Maison Bauchart suites",
     meta: "Premium stays",
-    blurb:
-      "Tailored suites for short stays above typical hostel budgets.",
+    blurb: "Tailored suites for short stays above typical hostel budgets.",
     src: maisonVideo,
     poster: maisonPoster,
     ariaLabel: "Maison Bauchart tailored suites hospitality video",
@@ -224,8 +222,8 @@ function Index() {
               </div>
               <LetterReveal text="Find your perfect home." />
               <p className="reveal reveal-3 mt-7 max-w-2xl text-base leading-relaxed text-secondary-foreground sm:text-xl">
-                Browse verified hostels, bedsitters, and rentals near campus.
-                Message landlords on WhatsApp. No account needed to search.
+                Browse verified hostels, bedsitters, and rentals near campus. Message landlords on
+                WhatsApp. No account needed to search.
               </p>
               <div className="reveal reveal-4 mt-9 flex flex-wrap items-center gap-5">
                 <PrimaryLink href="/listings">Browse Listings</PrimaryLink>
@@ -248,15 +246,12 @@ function Index() {
                   <Check className="size-4 text-foreground" /> Free to browse
                 </span>
                 <span className="flex items-center gap-2">
-                  <Check className="size-4 text-foreground" /> WhatsApp with
-                  agents
+                  <Check className="size-4 text-foreground" /> WhatsApp with agents
                 </span>
               </div>
 
               <div className="reveal reveal-4 mt-12 max-w-3xl">
-                <p className="instrument mb-3 text-highlight/80">
-                  Search by campus
-                </p>
+                <p className="instrument mb-3 text-highlight/80">Search by campus</p>
                 <div className="campus-rail">
                   {campusCodes.map((campus) => (
                     <span key={campus.code} className="campus-code">
@@ -276,13 +271,7 @@ function Index() {
           </div>
         </section>
 
-        <Act
-          id="how-it-works"
-          index="II"
-          title="Orient"
-          tone="panel"
-          className="section-shell"
-        >
+        <Act id="how-it-works" index="II" title="Orient" tone="panel" className="section-shell">
           <div className="mx-auto max-w-7xl px-5 md:px-8">
             <Reveal className="section-heading">
               <p className="eyebrow">The simple way home</p>
@@ -299,9 +288,7 @@ function Index() {
                   <span className="relative z-10 font-display text-sm text-highlight">
                     {number}
                   </span>
-                  <h3 className="relative z-10 mt-16 font-display text-xl font-medium">
-                    {title}
-                  </h3>
+                  <h3 className="relative z-10 mt-16 font-display text-xl font-medium">{title}</h3>
                   <p className="relative z-10 mt-3 text-sm leading-relaxed text-muted-foreground">
                     {copy}
                   </p>
@@ -326,18 +313,18 @@ function Index() {
                   Same path as the four steps.
                 </h3>
                 <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-                  Find a campus area, open verified listings, pick a room, then
-                  message the agent.
+                  Find a campus area, open verified listings, pick a room, then message the agent.
                 </p>
                 <ul className="mt-6 space-y-3 text-sm text-secondary-foreground">
-                  {["Browse without signing up", "Compare price and location", "Contact via WhatsApp"].map(
-                    (item) => (
-                      <li key={item} className="flex gap-3">
-                        <Check className="mt-0.5 size-4 shrink-0 text-highlight" />{" "}
-                        {item}
-                      </li>
-                    ),
-                  )}
+                  {[
+                    "Browse without signing up",
+                    "Compare price and location",
+                    "Contact via WhatsApp",
+                  ].map((item) => (
+                    <li key={item} className="flex gap-3">
+                      <Check className="mt-0.5 size-4 shrink-0 text-highlight" /> {item}
+                    </li>
+                  ))}
                 </ul>
               </Reveal>
             </div>
@@ -354,8 +341,8 @@ function Index() {
                 Built for trust.
               </h2>
               <p>
-                Less uncertainty, fewer dead ends, and no signup wall between
-                you and a genuine place to live.
+                Less uncertainty, fewer dead ends, and no signup wall between you and a genuine
+                place to live.
               </p>
             </Reveal>
             <div className="mt-14 grid gap-5 md:grid-cols-4 md:grid-rows-[1fr_1fr]">
@@ -371,54 +358,41 @@ function Index() {
                   Verified Listings
                 </h3>
                 <p className="mt-5 max-w-lg text-base leading-relaxed text-muted-foreground sm:text-lg">
-                  Every listing and landlord is vetted before appearing on
-                  UniHub. We check property details, ownership documents, and
-                  agent contacts so you spend less time sorting scams from real
-                  rooms.
+                  Every listing and landlord is vetted before appearing on UniHub. We check property
+                  details, ownership documents, and agent contacts so you spend less time sorting
+                  scams from real rooms.
                 </p>
                 <div className="mt-8 flex flex-wrap gap-3 text-sm text-secondary-foreground">
-                  {["Property documents checked", "Landlord identity verified", "Agent contacts confirmed"].map(
-                    (item) => (
-                      <span key={item} className="flex items-center gap-2">
-                        <Check className="size-4 shrink-0 text-highlight" />
-                        {item}
-                      </span>
-                    ),
-                  )}
+                  {[
+                    "Property documents checked",
+                    "Landlord identity verified",
+                    "Agent contacts confirmed",
+                  ].map((item) => (
+                    <span key={item} className="flex items-center gap-2">
+                      <Check className="size-4 shrink-0 text-highlight" />
+                      {item}
+                    </span>
+                  ))}
                 </div>
               </Reveal>
 
-              <Reveal
-                key="renter"
-                delay={120}
-                className="solid-card group p-7 sm:p-8"
-              >
+              <Reveal key="renter" delay={120} className="solid-card group p-7 sm:p-8">
                 <div className="flex size-12 items-center justify-center rounded-2xl border border-border bg-accent transition-colors group-hover:bg-secondary">
                   <GraduationCap className="size-5" strokeWidth={1.7} aria-hidden="true" />
                 </div>
-                <h3 className="mt-8 font-display text-xl font-medium">
-                  Renter-Focused
-                </h3>
+                <h3 className="mt-8 font-display text-xl font-medium">Renter-Focused</h3>
                 <p className="mt-3 max-w-xs leading-relaxed text-muted-foreground">
-                  Housing selected for student routines, practical budgets, and
-                  short commutes.
+                  Housing selected for student routines, practical budgets, and short commutes.
                 </p>
               </Reveal>
 
-              <Reveal
-                key="direct"
-                delay={200}
-                className="solid-card group p-7 sm:p-8"
-              >
+              <Reveal key="direct" delay={200} className="solid-card group p-7 sm:p-8">
                 <div className="flex size-12 items-center justify-center rounded-2xl border border-border bg-accent transition-colors group-hover:bg-secondary">
                   <MessageCircle className="size-5" strokeWidth={1.7} aria-hidden="true" />
                 </div>
-                <h3 className="mt-8 font-display text-xl font-medium">
-                  Direct Contact
-                </h3>
+                <h3 className="mt-8 font-display text-xl font-medium">Direct Contact</h3>
                 <p className="mt-3 max-w-xs leading-relaxed text-muted-foreground">
-                  Use WhatsApp or email. No account required to find your next
-                  home.
+                  Use WhatsApp or email. No account required to find your next home.
                 </p>
               </Reveal>
             </div>
@@ -431,8 +405,8 @@ function Index() {
               <p className="eyebrow">Housing on the ground</p>
               <h2>See the residences behind the listings.</h2>
               <p>
-                Student housing footage from residences across the region:
-                rooms, hostels, and premium stays.
+                Student housing footage from residences across the region: rooms, hostels, and
+                premium stays.
               </p>
             </Reveal>
             <div className="mt-12 grid gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
@@ -447,8 +421,7 @@ function Index() {
                 </div>
                 <div className="p-5">
                   <p className="verified-stamp">
-                    <ShieldCheck className="size-3.5" aria-hidden="true" />{" "}
-                    Campus housing spotlight
+                    <ShieldCheck className="size-3.5" aria-hidden="true" /> Campus housing spotlight
                   </p>
                   <p className="mt-2 text-sm text-muted-foreground">
                     Best student hostels in Kenya · Qwetu Qejani
@@ -461,10 +434,9 @@ function Index() {
                   Trust starts with seeing the place.
                 </h3>
                 <p className="mt-5 text-sm leading-relaxed text-muted-foreground sm:text-base">
-                  Students and parents often ask where it is safe to stay while
-                  visiting or studying in Kenya. Real residence footage helps
-                  you judge space, security, and vibe before you message an
-                  agent.
+                  Students and parents often ask where it is safe to stay while visiting or studying
+                  in Kenya. Real residence footage helps you judge space, security, and vibe before
+                  you message an agent.
                 </p>
                 <div className="mt-8 flex flex-wrap gap-4">
                   <PrimaryLink href="/listings">Browse listings</PrimaryLink>
@@ -502,9 +474,8 @@ function Index() {
                   Rooms you can almost walk into.
                 </h3>
                 <p className="mt-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
-                  Spacious student rooms from{" "}
-                  <span className="text-foreground">KES 15,000</span>. Private
-                  kitchen and bathroom options, free gym and lounges.
+                  Spacious student rooms from <span className="text-foreground">KES 15,000</span>.
+                  Private kitchen and bathroom options, free gym and lounges.
                 </p>
                 <div className="mt-7 flex flex-wrap gap-3">
                   <PrimaryLink href="/listings">Open listings</PrimaryLink>
@@ -523,59 +494,52 @@ function Index() {
               {listings.map((listing, index) => (
                 <Reveal key={listing.title} delay={(index % 3) * 90} className="h-full">
                   <article className="listing-card group h-full overflow-hidden rounded-2xl border border-border bg-card">
-                  <div className="relative aspect-[4/3] overflow-hidden">
-                    <img
-                      src={listing.image}
-                      alt={listing.title}
-                      width={1200}
-                      height={912}
-                      loading="lazy"
-                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
-                    />
-                    <span className="absolute left-4 top-4 rounded-full border border-border bg-background/80 px-3 py-1.5 text-xs font-medium backdrop-blur-md">
-                      {listing.category}
-                    </span>
-                    <span className="absolute right-4 top-4 flex items-center gap-1.5 rounded-full bg-status px-3 py-1.5 text-xs font-semibold text-status-foreground">
-                      <span className="size-1.5 rounded-full bg-status-dot" />{" "}
-                      Available
-                    </span>
-                  </div>
-                  <div className="p-6">
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                        <MapPin className="size-3.5" /> {listing.location}
-                      </div>
-                      <span className="verified-stamp">
-                        <ShieldCheck className="size-3.5" aria-hidden="true" />{" "}
-                        Vetted
+                    <div className="relative aspect-[4/3] overflow-hidden">
+                      <img
+                        src={listing.image}
+                        alt={listing.title}
+                        width={1200}
+                        height={912}
+                        loading="lazy"
+                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+                      />
+                      <span className="absolute left-4 top-4 rounded-full border border-border bg-background/80 px-3 py-1.5 text-xs font-medium backdrop-blur-md">
+                        {listing.category}
+                      </span>
+                      <span className="absolute right-4 top-4 flex items-center gap-1.5 rounded-full bg-status px-3 py-1.5 text-xs font-semibold text-status-foreground">
+                        <span className="size-1.5 rounded-full bg-status-dot" /> Available
                       </span>
                     </div>
-                    <h3 className="mt-3 min-h-14 font-display text-xl font-medium leading-snug">
-                      {listing.title}
-                    </h3>
-                    <div className="mt-6 flex items-end justify-between border-t border-border pt-5">
-                      <div>
-                        <p className="font-display text-xl font-medium">
-                          {listing.price}
-                          <span className="text-sm text-muted-foreground">
-                            {" "}
-                            / month
-                          </span>
-                        </p>
-                        <p className="mt-1 text-xs text-muted-foreground">
-                          {listing.deposit}
-                        </p>
+                    <div className="p-6">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                          <MapPin className="size-3.5" /> {listing.location}
+                        </div>
+                        <span className="verified-stamp">
+                          <ShieldCheck className="size-3.5" aria-hidden="true" /> Vetted
+                        </span>
                       </div>
-                      <Link
-                        to="/listings"
-                        aria-label={`View details for ${listing.title}`}
-                        className="flex size-11 shrink-0 items-center justify-center rounded-full border border-border bg-accent transition-colors hover:bg-primary hover:text-primary-foreground"
-                      >
-                        <ArrowRight className="size-4" aria-hidden="true" />
-                      </Link>
+                      <h3 className="mt-3 min-h-14 font-display text-xl font-medium leading-snug">
+                        {listing.title}
+                      </h3>
+                      <div className="mt-6 flex items-end justify-between border-t border-border pt-5">
+                        <div>
+                          <p className="font-display text-xl font-medium">
+                            {listing.price}
+                            <span className="text-sm text-muted-foreground"> / month</span>
+                          </p>
+                          <p className="mt-1 text-xs text-muted-foreground">{listing.deposit}</p>
+                        </div>
+                        <Link
+                          to="/listings"
+                          aria-label={`View details for ${listing.title}`}
+                          className="flex size-11 shrink-0 items-center justify-center rounded-full border border-border bg-accent transition-colors hover:bg-primary hover:text-primary-foreground"
+                        >
+                          <ArrowRight className="size-4" aria-hidden="true" />
+                        </Link>
+                      </div>
                     </div>
-                  </div>
-                </article>
+                  </article>
                 </Reveal>
               ))}
             </div>
@@ -591,8 +555,8 @@ function Index() {
               <p className="eyebrow">Popular areas</p>
               <h2>Housing keyed to campus.</h2>
               <p>
-                Search by the town you already know (Juja, Kahawa, Kesses),
-                then shortlist places that keep the commute short.
+                Search by the town you already know (Juja, Kahawa, Kesses), then shortlist places
+                that keep the commute short.
               </p>
               <div className="mt-8 flex flex-wrap gap-2">
                 {campusCodes.map((campus) => (
@@ -619,9 +583,8 @@ function Index() {
                 Female hostels students actually ask for.
               </h3>
               <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                Modern hostels with Wi‑Fi for learners around IFM, CBE, TIA,
-                UTUMISHI, and nearby colleges. See the space before you message
-                an agent.
+                Modern hostels with Wi‑Fi for learners around IFM, CBE, TIA, UTUMISHI, and nearby
+                colleges. See the space before you message an agent.
               </p>
             </Reveal>
           </div>
@@ -634,9 +597,8 @@ function Index() {
                 No more housing scams.
               </p>
               <p className="mt-6 max-w-2xl text-base leading-relaxed text-background/65 sm:text-lg">
-                Listings are checked before they go live. We verify property
-                details and landlord or agent contacts so you can make your
-                next move with more confidence.
+                Listings are checked before they go live. We verify property details and landlord or
+                agent contacts so you can make your next move with more confidence.
               </p>
             </Reveal>
             <Reveal
@@ -678,16 +640,16 @@ function Index() {
               </h2>
               <ul className="mt-8 space-y-4 text-sm text-secondary-foreground">
                 <li className="flex gap-3">
-                  <Check className="mt-0.5 size-4 shrink-0" /> Earn a verified
-                  badge students can trust
+                  <Check className="mt-0.5 size-4 shrink-0" /> Earn a verified badge students can
+                  trust
                 </li>
                 <li className="flex gap-3">
-                  <Check className="mt-0.5 size-4 shrink-0" /> Receive direct
-                  WhatsApp and email leads
+                  <Check className="mt-0.5 size-4 shrink-0" /> Receive direct WhatsApp and email
+                  leads
                 </li>
                 <li className="flex gap-3">
-                  <Check className="mt-0.5 size-4 shrink-0" /> Reach renters
-                  searching around your campus area
+                  <Check className="mt-0.5 size-4 shrink-0" /> Reach renters searching around your
+                  campus area
                 </li>
               </ul>
               <div className="mt-9">
@@ -726,8 +688,7 @@ function Index() {
               rel="noreferrer"
               className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-foreground hover:text-highlight"
             >
-              <MessageCircle className="size-4" aria-hidden="true" /> Or chat on
-              WhatsApp
+              <MessageCircle className="size-4" aria-hidden="true" /> Or chat on WhatsApp
             </a>
           </Reveal>
         </section>

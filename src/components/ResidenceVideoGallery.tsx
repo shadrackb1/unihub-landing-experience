@@ -1,4 +1,4 @@
-import { PortraitVideo, Reveal } from "@/components/VideoPanel";
+import { PortraitVideo, Reveal } from "@/shared/components/VideoPanel";
 
 export type ResidenceClip = {
   id: string;
@@ -44,9 +44,7 @@ export function CoolVideoCard({
         <h4 className="font-display text-xl font-medium leading-snug text-foreground">
           {clip.title}
         </h4>
-        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-          {clip.blurb}
-        </p>
+        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{clip.blurb}</p>
       </div>
     </Reveal>
   );

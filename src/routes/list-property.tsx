@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Check } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { MarketingShell, WHATSAPP_URL } from "@/components/MarketingChrome";
-import { Reveal } from "@/components/VideoPanel";
+import { MarketingShell, WHATSAPP_URL } from "@/shared/components/MarketingChrome";
+import { Reveal } from "@/shared/components/VideoPanel";
 
 export const Route = createFileRoute("/list-property")({
   head: () => ({
@@ -36,8 +36,8 @@ function ListPropertyPage() {
               List property. Reach students ready to move.
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-              Put hostels, bedsitters, and rentals in front of students actively
-              searching near campus. Onboarding starts with a short WhatsApp chat.
+              Put hostels, bedsitters, and rentals in front of students actively searching near
+              campus. Onboarding starts with a short WhatsApp chat.
             </p>
           </Reveal>
 
@@ -81,7 +81,9 @@ function ListPropertyPage() {
                 </li>
                 <li>
                   <span className="font-display text-highlight">03</span>
-                  <p className="mt-1 text-foreground">Your listing goes live for campus searchers.</p>
+                  <p className="mt-1 text-foreground">
+                    Your listing goes live for campus searchers.
+                  </p>
                 </li>
               </ol>
             </Reveal>

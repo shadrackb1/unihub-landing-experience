@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { GraduationCap, MessageCircle, ShieldCheck } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { MarketingShell, WHATSAPP_URL } from "@/components/MarketingChrome";
-import { Reveal } from "@/components/VideoPanel";
+import { MarketingShell, WHATSAPP_URL } from "@/shared/components/MarketingChrome";
+import { Reveal } from "@/shared/components/VideoPanel";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -10,8 +10,7 @@ export const Route = createFileRoute("/about")({
       { title: "About · UniHub" },
       {
         name: "description",
-        content:
-          "UniHub makes student housing search simple, safe, and transparent across Kenya.",
+        content: "UniHub makes student housing search simple, safe, and transparent across Kenya.",
       },
     ],
   }),
@@ -47,9 +46,9 @@ function AboutPage() {
               Built for students. Designed for trust.
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-              Finding a safe place near campus in Kenya should not mean endless
-              WhatsApp groups and risky deposits. UniHub connects students with
-              verified hostels, bedsitters, and rentals, then gets out of the way.
+              Finding a safe place near campus in Kenya should not mean endless WhatsApp groups and
+              risky deposits. UniHub connects students with verified hostels, bedsitters, and
+              rentals, then gets out of the way.
             </p>
           </Reveal>
 

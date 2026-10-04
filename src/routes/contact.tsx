@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Mail, MapPin, MessageCircle } from "lucide-react";
-import { MarketingShell, WHATSAPP_URL } from "@/components/MarketingChrome";
-import { Reveal } from "@/components/VideoPanel";
+import { MarketingShell, WHATSAPP_URL } from "@/shared/components/MarketingChrome";
+import { Reveal } from "@/shared/components/VideoPanel";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -9,8 +9,7 @@ export const Route = createFileRoute("/contact")({
       { title: "Contact · UniHub" },
       {
         name: "description",
-        content:
-          "Reach UniHub on WhatsApp or email for student housing support in Kenya.",
+        content: "Reach UniHub on WhatsApp or email for student housing support in Kenya.",
       },
     ],
   }),
@@ -28,8 +27,8 @@ function ContactPage() {
               Talk to UniHub.
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-              Questions about a listing, verification, or listing your property?
-              Message us directly. No account required.
+              Questions about a listing, verification, or listing your property? Message us
+              directly. No account required.
             </p>
           </Reveal>
 
@@ -66,8 +65,7 @@ function ContactPage() {
               <MapPin className="size-5 text-highlight" aria-hidden="true" />
               <h2 className="mt-6 font-display text-2xl font-medium">Coverage</h2>
               <p className="mt-3 text-sm text-muted-foreground">
-                Student towns across Kenya: Nairobi, Juja, Thika, Kahawa,
-                Eldoret, Nakuru, and more.
+                Student towns across Kenya: Nairobi, Juja, Thika, Kahawa, Eldoret, Nakuru, and more.
               </p>
             </Reveal>
           </div>
