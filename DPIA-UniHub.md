@@ -315,7 +315,7 @@ If the controller's view of the transfer question (Risk R2) changes, or if any f
 **Prepared and submitted by:**
 
 _________________________________  
-**Shadrack Biwott** — Founder & Developer, UniHub Kenya  
+**Shadrack Baraka** — Founder & Developer, UniHub Kenya  
 **Date:** 15th January 2026
 
 ---
