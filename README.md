@@ -1,8 +1,12 @@
-# UniHub — Verified Student Housing near Kenyan Campuses
+# UniHub â€” Verified Student Housing near Kenyan Campuses
 
 **UniHub** is a modern, campus-first web application designed to help university students in Kenya discover verified hostels, bedsitters, single rooms, and shared apartments near their campuses. Listings are vetted before publication, eliminating fake photos and deposit scams. Students can search and browse freely without signup barriers, and contact landlords or agents directly via WhatsApp or email.
 
 Live Repository: [github.com/shadrackb1/unihub-landing-experience](https://github.com/shadrackb1/unihub-landing-experience)
+
+## Architecture
+
+<img src="docs/architecture-diagram.png" alt="UniHub architecture diagram" width="100%" />
 
 ---
 
@@ -61,25 +65,25 @@ The application utilizes **TanStack Router** file-based routing (`src/routes/`):
 The homepage (`src/routes/index.tsx`) is structured as a sequential seven-act conversion journey:
 
 ```
-[ Navigation Header: Logo · Journey · Listings · About · Contact · List Property ]
+[ Navigation Header: Logo Â· Journey Â· Listings Â· About Â· Contact Â· List Property ]
 
 ACT I    ARRIVE     Looping hero video, letter-animated headline, campus pill codes
-         ↓
+         â†“
 ACT II   ORIENT     Four-step housing journey + interactive site walkthrough video
-         ↓
+         â†“
 ACT III  BELIEVE    Trust pillars: Verified listings, renter-focused design, direct contact
-         ↓
+         â†“
 ACT IV   WITNESS    Residence video film strip (Qwetu & room tour clips)
-         ↓
+         â†“
 ACT V    CHOOSE     Featured verified listings with KES pricing + embedded video preview
-         ↓
+         â†“
 ACT VI   PLACE      Interactive MapLibre GL campus map with keyless dark/satellite layers
-         ↓
+         â†“
          PROOF      Anti-scam verification statement & trust checkpoint
-         ↓
+         â†“
 ACT VII  MOVE       Landlord/Agent onboarding call-to-action & final browse bar
-         ↓
-[ Navigation Footer: Quick Links · Legal · WhatsApp Agent Button ]
+         â†“
+[ Navigation Footer: Quick Links Â· Legal Â· WhatsApp Agent Button ]
 ```
 
 ### Experience Funnel Diagram
@@ -114,51 +118,51 @@ ACT VII  MOVE       Landlord/Agent onboarding call-to-action & final browse bar
 
 ```
 unihub-landing-experience/
-├── public/                       # Static public assets, logo, favicons, ad materials
-│   ├── logo.svg                  # Brand horizontal lockup
-│   ├── logo-mark.svg             # Monogram mark
-│   └── favicon.svg               # Site favicon
-├── src/                          # Application source code
-│   ├── assets/                   # Local MP4 video clips and listing hero images
-│   ├── components/               # Core UI experience components
-│   │   ├── ui/                   # Reusable UI primitives (buttons, cards, dialogs, etc.)
-│   │   ├── CampusMap.tsx         # MapLibre GL keyless map with university pins
-│   │   ├── Experience.tsx        # Journey timeline & act scroll navigation
-│   │   ├── LetterReveal.tsx      # Staggered typography animations
-│   │   ├── ListingGrid.tsx       # Housing card grid component
-│   │   ├── Logo.tsx              # SVG Logo & Mark components
-│   │   ├── MarketingChrome.tsx   # Header navigation bar & footer chrome
-│   │   ├── ResidenceVideoGallery.tsx # Residence video clip showcase
-│   │   └── VideoPanel.tsx        # Viewport-aware autoplaying video container
-│   ├── data/                     # Data definitions and mock listings
-│   │   └── listings.ts           # Sample verified property listings & types
-│   ├── hooks/                    # Custom React hooks
-│   │   └── use-mobile.tsx        # Responsive viewport detection hook
-│   ├── lib/                      # Utilities and error reporting infrastructure
-│   │   ├── error-capture.ts      # Server-side & browser error interceptor
-│   │   ├── error-page.ts         # Standard error response formatter
-│   │   ├── error-reporting.ts    # Client-side runtime error reporting
-│   │   └── utils.ts              # Tailwind class merging utility (`cn`)
-│   ├── routes/                   # File-based TanStack Router pages
-│   │   ├── __root.tsx            # Root layout shell (HTML, Head, Meta, Body)
-│   │   ├── index.tsx             # Homepage (7-Act experience)
-│   │   ├── listings.tsx          # Browse listings page
-│   │   ├── about.tsx             # About brand page
-│   │   ├── contact.tsx           # Contact & WhatsApp page
-│   │   ├── list-property.tsx     # Landlord onboarding page
-│   │   ├── privacy.tsx           # Privacy policy page
-│   │   └── terms.tsx             # Terms of service page
-│   ├── router.tsx                # TanStack Router instance creation
-│   ├── server.ts                 # Nitro server entrypoint with error recovery
-│   ├── start.ts                  # TanStack Start handler
-│   └── styles.css                # OKLCH design tokens & Tailwind 4 utilities
-├── DESIGN-BLUEPRINT.md           # System design & architecture blueprint specification
-├── OFFLINE-README.md             # Guide for running the offline USB package
-├── vite.config.ts                # Vite & TanStack Start configuration
-├── vercel.json                   # Vercel deployment configuration
-├── eslint.config.js              # Flat ESLint rules
-├── tsconfig.json                 # TypeScript compiler configuration
-└── package.json                  # Dependencies and scripts
+â”œâ”€â”€ public/                       # Static public assets, logo, favicons, ad materials
+â”‚   â”œâ”€â”€ logo.svg                  # Brand horizontal lockup
+â”‚   â”œâ”€â”€ logo-mark.svg             # Monogram mark
+â”‚   â””â”€â”€ favicon.svg               # Site favicon
+â”œâ”€â”€ src/                          # Application source code
+â”‚   â”œâ”€â”€ assets/                   # Local MP4 video clips and listing hero images
+â”‚   â”œâ”€â”€ components/               # Core UI experience components
+â”‚   â”‚   â”œâ”€â”€ ui/                   # Reusable UI primitives (buttons, cards, dialogs, etc.)
+â”‚   â”‚   â”œâ”€â”€ CampusMap.tsx         # MapLibre GL keyless map with university pins
+â”‚   â”‚   â”œâ”€â”€ Experience.tsx        # Journey timeline & act scroll navigation
+â”‚   â”‚   â”œâ”€â”€ LetterReveal.tsx      # Staggered typography animations
+â”‚   â”‚   â”œâ”€â”€ ListingGrid.tsx       # Housing card grid component
+â”‚   â”‚   â”œâ”€â”€ Logo.tsx              # SVG Logo & Mark components
+â”‚   â”‚   â”œâ”€â”€ MarketingChrome.tsx   # Header navigation bar & footer chrome
+â”‚   â”‚   â”œâ”€â”€ ResidenceVideoGallery.tsx # Residence video clip showcase
+â”‚   â”‚   â””â”€â”€ VideoPanel.tsx        # Viewport-aware autoplaying video container
+â”‚   â”œâ”€â”€ data/                     # Data definitions and mock listings
+â”‚   â”‚   â””â”€â”€ listings.ts           # Sample verified property listings & types
+â”‚   â”œâ”€â”€ hooks/                    # Custom React hooks
+â”‚   â”‚   â””â”€â”€ use-mobile.tsx        # Responsive viewport detection hook
+â”‚   â”œâ”€â”€ lib/                      # Utilities and error reporting infrastructure
+â”‚   â”‚   â”œâ”€â”€ error-capture.ts      # Server-side & browser error interceptor
+â”‚   â”‚   â”œâ”€â”€ error-page.ts         # Standard error response formatter
+â”‚   â”‚   â”œâ”€â”€ error-reporting.ts    # Client-side runtime error reporting
+â”‚   â”‚   â””â”€â”€ utils.ts              # Tailwind class merging utility (`cn`)
+â”‚   â”œâ”€â”€ routes/                   # File-based TanStack Router pages
+â”‚   â”‚   â”œâ”€â”€ __root.tsx            # Root layout shell (HTML, Head, Meta, Body)
+â”‚   â”‚   â”œâ”€â”€ index.tsx             # Homepage (7-Act experience)
+â”‚   â”‚   â”œâ”€â”€ listings.tsx          # Browse listings page
+â”‚   â”‚   â”œâ”€â”€ about.tsx             # About brand page
+â”‚   â”‚   â”œâ”€â”€ contact.tsx           # Contact & WhatsApp page
+â”‚   â”‚   â”œâ”€â”€ list-property.tsx     # Landlord onboarding page
+â”‚   â”‚   â”œâ”€â”€ privacy.tsx           # Privacy policy page
+â”‚   â”‚   â””â”€â”€ terms.tsx             # Terms of service page
+â”‚   â”œâ”€â”€ router.tsx                # TanStack Router instance creation
+â”‚   â”œâ”€â”€ server.ts                 # Nitro server entrypoint with error recovery
+â”‚   â”œâ”€â”€ start.ts                  # TanStack Start handler
+â”‚   â””â”€â”€ styles.css                # OKLCH design tokens & Tailwind 4 utilities
+â”œâ”€â”€ DESIGN-BLUEPRINT.md           # System design & architecture blueprint specification
+â”œâ”€â”€ OFFLINE-README.md             # Guide for running the offline USB package
+â”œâ”€â”€ vite.config.ts                # Vite & TanStack Start configuration
+â”œâ”€â”€ vercel.json                   # Vercel deployment configuration
+â”œâ”€â”€ eslint.config.js              # Flat ESLint rules
+â”œâ”€â”€ tsconfig.json                 # TypeScript compiler configuration
+â””â”€â”€ package.json                  # Dependencies and scripts
 ```
 
 ---
@@ -247,9 +251,9 @@ All brand assets are resolution-independent SVG files located in `public/`:
 
 | Asset | Path | Description |
 | --- | --- | --- |
-| **Horizontal Logo** | `public/logo.svg` | Full wordmark with monogram — used in navigation headers |
-| **Logo Mark** | `public/logo-mark.svg` | Monogram-only variant — used for favicon, social cards, app icons |
-| **Favicon** | `public/favicon.svg` | 64×64 rounded square with monogram and verification spark |
+| **Horizontal Logo** | `public/logo.svg` | Full wordmark with monogram â€” used in navigation headers |
+| **Logo Mark** | `public/logo-mark.svg` | Monogram-only variant â€” used for favicon, social cards, app icons |
+| **Favicon** | `public/favicon.svg` | 64Ã—64 rounded square with monogram and verification spark |
 | **Experience Funnel** | `docs/diagrams/experience-funnel.svg` | 7-act conversion funnel visualization |
 | **Technical Architecture** | `docs/diagrams/technical-architecture.svg` | System architecture and data flow diagram |
 
@@ -432,4 +436,4 @@ UniHub includes robust server-side and browser error interceptors (`src/lib/erro
 - **WhatsApp Support**: Configurable via `WHATSAPP_URL` in `src/components/MarketingChrome.tsx`
 - **Email Contact**: `hello@unihub.ke`
 
-*UniHub — Verified student housing near Kenyan campuses.*
+*UniHub â€” Verified student housing near Kenyan campuses.*
