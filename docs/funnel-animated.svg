@@ -1,0 +1,175 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="500" viewBox="0 0 1400 500" font-family="Inter, sans-serif" font-size="14">
+  <defs>
+    <linearGradient id="gradAct" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00F5A0"/>
+      <stop offset="100%" stop-color="#06B6D4"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <marker id="arrowAct" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#00F5A0"/>
+    </marker>
+  </defs>
+  <rect width="1400" height="500" fill="#0A0A0A"/>
+  <rect x="20" y="20" width="1360" height="460" rx="16" fill="#111111" stroke="#1E1E1E"/>
+
+  <!-- Title -->
+  <text x="700" y="60" text-anchor="middle" font-weight="700" font-size="24" fill="#00F5A0">7-Act Funnel — Live Progression</text>
+
+  <!-- Acts -->
+  <g id="act1">
+    <rect x="80" y="120" width="150" height="150" rx="12" fill="#1A1A1A" stroke="#00F5A0" stroke-width="2"/>
+    <text x="155" y="160" text-anchor="middle" font-weight="700" fill="#00F5A0" font-size="14">ACT I</text>
+    <text x="155" y="185" text-anchor="middle" fill="#FFFFFF" font-size="12">ARRIVE</text>
+    <text x="155" y="210" text-anchor="middle" fill="#888888" font-size="11">Hero video</text>
+    <text x="155" y="230" text-anchor="middle" fill="#888888" font-size="11">letter reveal</text>
+    <text x="155" y="250" text-anchor="middle" fill="#888888" font-size="11">campus pills</text>
+    <circle cx="155" cy="80" r="28" fill="none" stroke="#00F5A0" stroke-width="3" stroke-dasharray="176" stroke-dashoffset="176">
+      <animate attributeName="stroke-dashoffset" from="176" to="0" dur="1.5s" begin="0s" fill="freeze"/>
+    </circle>
+  </g>
+
+  <g id="act2">
+    <rect x="270" y="120" width="150" height="150" rx="12" fill="#1A1A1A" stroke="#06B6D4" stroke-width="2"/>
+    <text x="345" y="160" text-anchor="middle" font-weight="700" fill="#06B6D4" font-size="14">ACT II</text>
+    <text x="345" y="185" text-anchor="middle" fill="#FFFFFF" font-size="12">ORIENT</text>
+    <text x="345" y="210" text-anchor="middle" fill="#888888" font-size="11">4-step journey</text>
+    <text x="345" y="230" text-anchor="middle" fill="#888888" font-size="11">walkthrough video</text>
+    <circle cx="345" cy="80" r="28" fill="none" stroke="#06B6D4" stroke-width="3" stroke-dasharray="176" stroke-dashoffset="176">
+      <animate attributeName="stroke-dashoffset" from="176" to="0" dur="1.5s" begin="1s" fill="freeze"/>
+    </circle>
+  </g>
+
+  <g id="act3">
+    <rect x="460" y="120" width="150" height="150" rx="12" fill="#1A1A1A" stroke="#D97706" stroke-width="2"/>
+    <text x="535" y="160" text-anchor="middle" font-weight="700" fill="#D97706" font-size="14">ACT III</text>
+    <text x="535" y="185" text-anchor="middle" fill="#FFFFFF" font-size="12">BELIEVE</text>
+    <text x="535" y="210" text-anchor="middle" fill="#888888" font-size="11">Trust pillars</text>
+    <text x="535" y="230" text-anchor="middle" fill="#888888" font-size="11">Verified listings</text>
+    <text x="535" y="250" text-anchor="middle" fill="#888888" font-size="11">Direct contact</text>
+    <circle cx="535" cy="80" r="28" fill="none" stroke="#D97706" stroke-width="3" stroke-dasharray="176" stroke-dashoffset="176">
+      <animate attributeName="stroke-dashoffset" from="176" to="0" dur="1.5s" begin="2s" fill="freeze"/>
+    </circle>
+  </g>
+
+  <g id="act4">
+    <rect x="650" y="120" width="150" height="150" rx="12" fill="#1A1A1A" stroke="#EC4899" stroke-width="2"/>
+    <text x="725" y="160" text-anchor="middle" font-weight="700" fill="#EC4899" font-size="14">ACT IV</text>
+    <text x="725" y="185" text-anchor="middle" fill="#FFFFFF" font-size="12">WITNESS</text>
+    <text x="725" y="210" text-anchor="middle" fill="#888888" font-size="11">Residence films</text>
+    <text x="725" y="230" text-anchor="middle" fill="#888888" font-size="11">Qwetu, Maison</text>
+    <text x="725" y="250" text-anchor="middle" fill="#888888" font-size="11">Video gallery</text>
+    <circle cx="725" cy="80" r="28" fill="none" stroke="#EC4899" stroke-width="3" stroke-dasharray="176" stroke-dashoffset="176">
+      <animate attributeName="stroke-dashoffset" from="176" to="0" dur="1.5s" begin="3s" fill="freeze"/>
+    </circle>
+  </g>
+
+  <g id="act5">
+    <rect x="840" y="120" width="150" height="150" rx="12" fill="#1A1A1A" stroke="#8B5CF6" stroke-width="2"/>
+    <text x="915" y="160" text-anchor="middle" font-weight="700" fill="#8B5CF6" font-size="14">ACT V</text>
+    <text x="915" y="185" text-anchor="middle" fill="#FFFFFF" font-size="12">CHOOSE</text>
+    <text x="915" y="210" text-anchor="middle" fill="#888888" font-size="11">Featured listings</text>
+    <text x="915" y="230" text-anchor="middle" fill="#888888" font-size="11">KES pricing</text>
+    <text x="915" y="250" text-anchor="middle" fill="#888888" font-size="11">Video preview</text>
+    <circle cx="915" cy="80" r="28" fill="none" stroke="#8B5CF6" stroke-width="3" stroke-dasharray="176" stroke-dashoffset="176">
+      <animate attributeName="stroke-dashoffset" from="176" to="0" dur="1.5s" begin="4s" fill="freeze"/>
+    </circle>
+  </g>
+
+  <g id="act6">
+    <rect x="1030" y="120" width="150" height="150" rx="12" fill="#1A1A1A" stroke="#F97316" stroke-width="2"/>
+    <text x="1105" y="160" text-anchor="middle" font-weight="700" fill="#F97316" font-size="14">ACT VI</text>
+    <text x="1105" y="185" text-anchor="middle" fill="#FFFFFF" font-size="12">PLACE</text>
+    <text x="1105" y="210" text-anchor="middle" fill="#888888" font-size="11">MapLibre GL</text>
+    <text x="1105" y="230" text-anchor="middle" fill="#888888" font-size="11">Dark/satellite</text>
+    <text x="1105" y="250" text-anchor="middle" fill="#888888" font-size="11">Keyless tiles</text>
+    <circle cx="1105" cy="80" r="28" fill="none" stroke="#F97316" stroke-width="3" stroke-dasharray="176" stroke-dashoffset="176">
+      <animate attributeName="stroke-dashoffset" from="176" to="0" dur="1.5s" begin="5s" fill="freeze"/>
+    </circle>
+  </g>
+
+  <g id="act7">
+    <rect x="1220" y="120" width="150" height="150" rx="12" fill="#1A1A1A" stroke="#EF4444" stroke-width="2"/>
+    <text x="1295" y="160" text-anchor="middle" font-weight="700" fill="#EF4444" font-size="14">ACT VII</text>
+    <text x="1295" y="185" text-anchor="middle" fill="#FFFFFF" font-size="12">MOVE</text>
+    <text x="1295" y="210" text-anchor="middle" fill="#888888" font-size="11">Onboarding CTA</text>
+    <text x="1295" y="230" text-anchor="middle" fill="#888888" font-size="11">WhatsApp agent</text>
+    <text x="1295" y="250" text-anchor="middle" fill="#888888" font-size="11">Final browse</text>
+    <circle cx="1295" cy="80" r="28" fill="none" stroke="#EF4444" stroke-width="3" stroke-dasharray="176" stroke-dashoffset="176">
+      <animate attributeName="stroke-dashoffset" from="176" to="0" dur="1.5s" begin="6s" fill="freeze"/>
+    </circle>
+  </g>
+
+  <!-- Connecting arrows with flow animation -->
+  <defs>
+    <marker id="flowArrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#00F5A0"/>
+    </marker>
+  </defs>
+  <line x1="230" y1="195" x2="270" y2="195" stroke="#00F5A0" stroke-width="3" marker-end="url(#flowArrow)" stroke-dasharray="10,5">
+    <animate attributeName="stroke-dashoffset" from="30" to="0" dur="1s" begin="0.5s" repeatCount="indefinite"/>
+  </line>
+  <line x1="420" y1="195" x2="460" y2="195" stroke="#06B6D4" stroke-width="3" marker-end="url(#flowArrow)" stroke-dasharray="10,5">
+    <animate attributeName="stroke-dashoffset" from="30" to="0" dur="1s" begin="1.5s" repeatCount="indefinite"/>
+  </line>
+  <line x1="610" y1="195" x2="650" y2="195" stroke="#D97706" stroke-width="3" marker-end="url(#flowArrow)" stroke-dasharray="10,5">
+    <animate attributeName="stroke-dashoffset" from="30" to="0" dur="1s" begin="2.5s" repeatCount="indefinite"/>
+  </line>
+  <line x1="800" y1="195" x2="840" y2="195" stroke="#EC4899" stroke-width="3" marker-end="url(#flowArrow)" stroke-dasharray="10,5">
+    <animate attributeName="stroke-dashoffset" from="30" to="0" dur="1s" begin="3.5s" repeatCount="indefinite"/>
+  </line>
+  <line x1="990" y1="195" x2="1030" y2="195" stroke="#8B5CF6" stroke-width="3" marker-end="url(#flowArrow)" stroke-dasharray="10,5">
+    <animate attributeName="stroke-dashoffset" from="30" to="0" dur="1s" begin="4.5s" repeatCount="indefinite"/>
+  </line>
+  <line x1="1180" y1="195" x2="1220" y2="195" stroke="#EF4444" stroke-width="3" marker-end="url(#flowArrow)" stroke-dasharray="10,5">
+    <animate attributeName="stroke-dashoffset" from="30" to="0" dur="1s" begin="5.5s" repeatCount="indefinite"/>
+  </line>
+
+  <!-- Pulse indicators on hover -->
+  <g id="act1">
+    <animate attributeName="filter" values="none;url(#glow);none" dur="2s" repeatCount="indefinite" begin="mouseover"/>
+  </g>
+  <g id="act2">
+    <animate attributeName="filter" values="none;url(#glow);none" dur="2s" repeatCount="indefinite" begin="mouseover"/>
+  </g>
+
+  <!-- Floating particles -->
+  <g id="particles">
+    <circle cx="100" cy="400" r="3" fill="#00F5A0" opacity="0.6">
+      <animate attributeName="cy" from="400" to="200" dur="4s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" from="0.6" to="0" dur="4s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="300" cy="420" r="2" fill="#06B6D4" opacity="0.6">
+      <animate attributeName="cy" from="420" to="220" dur="4s" begin="1s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" from="0.6" to="0" dur="4s" begin="1s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="500" cy="400" r="3" fill="#D97706" opacity="0.6">
+      <animate attributeName="cy" from="400" to="200" dur="4s" begin="0.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" from="0.6" to="0" dur="4s" begin="0.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="700" cy="420" r="2" fill="#EC4899" opacity="0.6">
+      <animate attributeName="cy" from="420" to="220" dur="4s" begin="1.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" from="0.6" to="0" dur="4s" begin="1.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="900" cy="400" r="3" fill="#8B5CF6" opacity="0.6">
+      <animate attributeName="cy" from="400" to="200" dur="4s" begin="2s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" from="0.6" to="0" dur="4s" begin="2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="1100" cy="420" r="2" fill="#F97316" opacity="0.6">
+      <animate attributeName="cy" from="420" to="220" dur="4s" begin="2.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" from="0.6" to="0" dur="4s" begin="2.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="1300" cy="400" r="3" fill="#EF4444" opacity="0.6">
+      <animate attributeName="cy" from="400" to="200" dur="4s" begin="3s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" from="0.6" to="0" dur="4s" begin="3s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- Legend -->
+  <text x="700" y="480" text-anchor="middle" fill="#666666" font-size="12">Hover any act for glow • Staggered reveal animates on load • Particles rise continuously</text>
+</svg>
