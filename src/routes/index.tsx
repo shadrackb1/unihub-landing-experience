@@ -25,7 +25,7 @@ import {
   ResidenceVideoGallery,
   type ResidenceClip,
 } from "@/features/residence/components/ResidenceVideoGallery";
-import { sampleListings } from "@/data/listings";
+import { useListings } from "@/features/listings/hooks/useListings";
 import apartmentImage from "@/assets/listing-apartment.jpg";
 import heroImage from "@/assets/unihub-hero.jpg";
 import heroVideo from "@/assets/unihub-hero.mp4";
@@ -95,8 +95,6 @@ export const Route = createFileRoute("/")({
   }),
   component: Index,
 });
-
-const listings = sampleListings;
 
 const journey = [
   ["01", "Find your perfect home", "Start with the campus or area that works for you."],
@@ -174,6 +172,7 @@ function PrimaryLink({
 }
 
 function Index() {
+  const listings = useListings();
   const heroVideoRef = useRef<HTMLVideoElement>(null);
   const reduced = usePrefersReducedMotion();
 
@@ -698,3 +697,5 @@ function Index() {
     </div>
   );
 }
+
+
