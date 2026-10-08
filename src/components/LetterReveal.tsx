@@ -64,9 +64,7 @@ export function LetterReveal({
                 </span>
               );
             })}
-            {wordIndex < words.length - 1 ? (
-              <span className="inline-block w-[0.28em]" />
-            ) : null}
+            {wordIndex < words.length - 1 ? <span className="inline-block w-[0.28em]" /> : null}
           </span>
         ))}
       </span>

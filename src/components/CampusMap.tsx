@@ -11,10 +11,31 @@ export type CampusPin = {
 };
 
 export const campusPins: CampusPin[] = [
-  { id: "uon", code: "UoN", name: "University of Nairobi", town: "Nairobi", lng: 36.814, lat: -1.279 },
-  { id: "jkuat", code: "JKUAT", name: "Jomo Kenyatta University", town: "Juja", lng: 37.015, lat: -1.093 },
+  {
+    id: "uon",
+    code: "UoN",
+    name: "University of Nairobi",
+    town: "Nairobi",
+    lng: 36.814,
+    lat: -1.279,
+  },
+  {
+    id: "jkuat",
+    code: "JKUAT",
+    name: "Jomo Kenyatta University",
+    town: "Juja",
+    lng: 37.015,
+    lat: -1.093,
+  },
   { id: "ku", code: "KU", name: "Kenyatta University", town: "Kahawa", lng: 36.927, lat: -1.174 },
-  { id: "su", code: "SU", name: "Strathmore University", town: "Madaraka", lng: 36.813, lat: -1.31 },
+  {
+    id: "su",
+    code: "SU",
+    name: "Strathmore University",
+    town: "Madaraka",
+    lng: 36.813,
+    lat: -1.31,
+  },
   { id: "thika", code: "THK", name: "Thika student belt", town: "Thika", lng: 37.069, lat: -1.033 },
   { id: "mu", code: "MU", name: "Moi University", town: "Kesses", lng: 35.335, lat: 0.295 },
   { id: "egu", code: "EGU", name: "Egerton University", town: "Njoro", lng: 35.944, lat: -0.366 },
@@ -41,8 +62,7 @@ const BASEMAPS: Record<
   },
   satellite: {
     label: "Satellite",
-    attribution:
-      'Imagery © <a href="https://www.esri.com/">Esri</a>, Maxar, Earthstar Geographics',
+    attribution: 'Imagery © <a href="https://www.esri.com/">Esri</a>, Maxar, Earthstar Geographics',
     style: {
       version: 8,
       name: "Esri World Imagery",
@@ -76,10 +96,21 @@ function markerEl(pin: CampusPin) {
   el.type = "button";
   el.className = "unihub-map-marker";
   el.setAttribute("aria-label", `${pin.name} in ${pin.town}`);
-  el.innerHTML = `
-    <span class="unihub-map-marker__dot" aria-hidden="true"></span>
-    <span class="unihub-map-marker__label">${pin.code}<em>${pin.town}</em></span>
-  `;
+
+  const dot = document.createElement("span");
+  dot.className = "unihub-map-marker__dot";
+  dot.setAttribute("aria-hidden", "true");
+
+  const label = document.createElement("span");
+  label.className = "unihub-map-marker__label";
+  const codeSpan = document.createTextNode(pin.code);
+  const em = document.createElement("em");
+  em.textContent = pin.town;
+  label.appendChild(codeSpan);
+  label.appendChild(em);
+
+  el.appendChild(dot);
+  el.appendChild(label);
   return el;
 }
 
@@ -93,6 +124,9 @@ export function CampusMap({ className = "" }: { className?: string }) {
     if (!container) return;
 
     let cancelled = false;
+    let map: import("maplibre-gl").Map | null = null;
+    const markers: import("maplibre-gl").Marker[] = [];
+    const popups: import("maplibre-gl").Popup[] = [];
 
     void (async () => {
       const maplibregl = (await import("maplibre-gl")).default;
@@ -100,7 +134,7 @@ export function CampusMap({ className = "" }: { className?: string }) {
       if (cancelled || !container) return;
 
       const cfg = BASEMAPS.dark;
-      const map = new maplibregl.Map({
+      map = new maplibregl.Map({
         container,
         style: cfg.style as never,
         center: [36.5, -0.7],
@@ -112,14 +146,8 @@ export function CampusMap({ className = "" }: { className?: string }) {
       });
       mapRef.current = map;
 
-      map.addControl(
-        new maplibregl.NavigationControl({ showCompass: false }),
-        "top-right",
-      );
-      map.addControl(
-        new maplibregl.AttributionControl({ compact: true }),
-        "bottom-right",
-      );
+      map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-right");
+      map.addControl(new maplibregl.AttributionControl({ compact: true }), "bottom-right");
 
       const bounds = new maplibregl.LngLatBounds();
 
@@ -129,18 +157,36 @@ export function CampusMap({ className = "" }: { className?: string }) {
           offset: 18,
           closeButton: true,
           className: "unihub-map-popup",
-        }).setHTML(
-          `<div class="unihub-map-popup__inner">
-            <p class="unihub-map-popup__code">${pin.code}</p>
-            <p class="unihub-map-popup__title">${pin.name}</p>
-            <p class="unihub-map-popup__town">${pin.town}</p>
-          </div>`,
-        );
+        });
+        popups.push(popup);
 
-        new maplibregl.Marker({ element: el, anchor: "bottom" })
+        // Create DOM elements safely instead of using setHTML to prevent XSS
+        const popupDiv = document.createElement("div");
+        popupDiv.className = "unihub-map-popup__inner";
+
+        const codeP = document.createElement("p");
+        codeP.className = "unihub-map-popup__code";
+        codeP.textContent = pin.code;
+
+        const titleP = document.createElement("p");
+        titleP.className = "unihub-map-popup__title";
+        titleP.textContent = pin.name;
+
+        const townP = document.createElement("p");
+        townP.className = "unihub-map-popup__town";
+        townP.textContent = pin.town;
+
+        popupDiv.appendChild(codeP);
+        popupDiv.appendChild(titleP);
+        popupDiv.appendChild(townP);
+
+        popup.setDOMContent(popupDiv);
+
+        const marker = new maplibregl.Marker({ element: el, anchor: "bottom" })
           .setLngLat([pin.lng, pin.lat])
           .setPopup(popup)
           .addTo(map);
+        markers.push(marker);
 
         bounds.extend([pin.lng, pin.lat]);
       });
@@ -156,7 +202,15 @@ export function CampusMap({ className = "" }: { className?: string }) {
 
     return () => {
       cancelled = true;
-      mapRef.current?.remove();
+      // Clean up markers
+      markers.forEach((marker) => marker.remove());
+      // Clean up popups
+      popups.forEach((popup) => popup.remove());
+      // Remove all event listeners
+      map?.off("load");
+      map?.off("style.load");
+      // Remove the map
+      map?.remove();
       mapRef.current = null;
     };
   }, []);
@@ -166,9 +220,14 @@ export function CampusMap({ className = "" }: { className?: string }) {
     if (!map) return;
     const cfg = BASEMAPS[basemap];
     map.setStyle(cfg.style as never);
-    map.once("style.load", () => {
+    const handleStyleLoad = () => {
       map.resize();
-    });
+    };
+    map.once("style.load", handleStyleLoad);
+
+    return () => {
+      map.off("style.load", handleStyleLoad);
+    };
   }, [basemap]);
 
   return (

@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { cn } from "@/lib/utils";
-import { usePrefersReducedMotion } from "@/components/VideoPanel";
+import { usePrefersReducedMotion } from "@/hooks/useReducedMotion";
+import { intersectionObserverSingleton } from "@/hooks/useIntersectionObserver";
 
 export const ACTS = [
   { id: "top", label: "I · Arrive" },
@@ -14,16 +15,40 @@ export const ACTS = [
 
 export function ScrollProgress() {
   const [progress, setProgress] = useState(0);
+  const rafId = useRef<number | null>(null);
+  const lastScrollY = useRef(0);
 
   useEffect(() => {
+    let ticking = false;
+
     const onScroll = () => {
-      const doc = document.documentElement;
-      const max = doc.scrollHeight - window.innerHeight;
-      setProgress(max > 0 ? (window.scrollY / max) * 100 : 0);
+      lastScrollY.current = window.scrollY;
+
+      if (!ticking) {
+        ticking = true;
+        rafId.current = requestAnimationFrame(() => {
+          const doc = document.documentElement;
+          const max = doc.scrollHeight - window.innerHeight;
+          const scrollY = lastScrollY.current;
+          setProgress(max > 0 ? (scrollY / max) * 100 : 0);
+          ticking = false;
+        });
+      }
     };
-    onScroll();
+
+    // Initial calculation
+    const doc = document.documentElement;
+    const max = doc.scrollHeight - window.innerHeight;
+    setProgress(max > 0 ? (window.scrollY / max) * 100 : 0);
+
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (rafId.current !== null) {
+        cancelAnimationFrame(rafId.current);
+      }
+    };
   }, []);
 
   return (
@@ -49,6 +74,11 @@ export function JourneyRail() {
     ) as HTMLElement[];
     if (!nodes.length) return;
 
+    // Use shared singleton IntersectionObserver with same options
+    const rootMargin = "-35% 0px -45% 0px";
+    const threshold = [0.15, 0.35, 0.6];
+
+    // Create a single observer for all nodes with same options
     const observer = new IntersectionObserver(
       (entries) => {
         const visible = entries
@@ -56,11 +86,15 @@ export function JourneyRail() {
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
         if (visible?.target.id) setActive(visible.target.id);
       },
-      { rootMargin: "-35% 0px -45% 0px", threshold: [0.15, 0.35, 0.6] },
+      { rootMargin, threshold },
     );
 
     nodes.forEach((node) => observer.observe(node));
-    return () => observer.disconnect();
+
+    return () => {
+      nodes.forEach((node) => observer.unobserve(node));
+      observer.disconnect();
+    };
   }, []);
 
   return (
@@ -131,10 +165,7 @@ export function Act({
         className,
       )}
     >
-      <div
-        className="pointer-events-none absolute inset-0 overflow-hidden"
-        aria-hidden="true"
-      >
+      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
         <div className="experience-orb" />
         {!reduced ? <div className="noise absolute inset-0 opacity-[0.07]" /> : null}
       </div>

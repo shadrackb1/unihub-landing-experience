@@ -6,6 +6,7 @@ import twinHostelImage from "@/assets/listing-twin-hostel.jpg";
 import sharedImage from "@/assets/listing-shared.jpg";
 
 export type SampleListing = {
+  id: string;
   title: string;
   location: string;
   category: string;
@@ -16,6 +17,7 @@ export type SampleListing = {
 
 export const sampleListings: SampleListing[] = [
   {
+    id: "bedsitter-juja",
     title: "Modern Bedsitter in Juja Town",
     location: "Near JKUAT",
     category: "Bedsitter",
@@ -24,6 +26,7 @@ export const sampleListings: SampleListing[] = [
     image: bedsitterImage,
   },
   {
+    id: "hostel-uon",
     title: "Secure Hostel Room, gendered wing",
     location: "Near University of Nairobi",
     category: "Hostel",
@@ -32,6 +35,7 @@ export const sampleListings: SampleListing[] = [
     image: hostelImage,
   },
   {
+    id: "single-kahawa",
     title: "Spacious Single Room in Kahawa",
     location: "Near Kenyatta University",
     category: "Single room",
@@ -40,6 +44,7 @@ export const sampleListings: SampleListing[] = [
     image: apartmentImage,
   },
   {
+    id: "studio-madaraka",
     title: "Furnished Studio in Madaraka",
     location: "Near Strathmore University",
     category: "Studio",
@@ -48,6 +53,7 @@ export const sampleListings: SampleListing[] = [
     image: studioImage,
   },
   {
+    id: "twin-kesses",
     title: "Twin Hostel Room in Kesses",
     location: "Near Moi University",
     category: "Hostel",
@@ -56,6 +62,7 @@ export const sampleListings: SampleListing[] = [
     image: twinHostelImage,
   },
   {
+    id: "shared-njoro",
     title: "Shared Apartment in Njoro",
     location: "Near Egerton University",
     category: "Shared apartment",

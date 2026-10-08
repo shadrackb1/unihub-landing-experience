@@ -1,19 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
+import { usePrefersReducedMotion } from "@/hooks/useReducedMotion";
+import { useSharedIntersectionObserver } from "@/hooks/useIntersectionObserver";
+import { useIntersectionVideoAutoplay } from "@/hooks/useBatchedVideoAutoplay";
 
-export function usePrefersReducedMotion() {
-  const [reduced, setReduced] = useState(false);
-
-  useEffect(() => {
-    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const sync = () => setReduced(media.matches);
-    sync();
-    media.addEventListener("change", sync);
-    return () => media.removeEventListener("change", sync);
-  }, []);
-
-  return reduced;
-}
+export { usePrefersReducedMotion };
 
 export function useInView<T extends HTMLElement>(options?: {
   rootMargin?: string;
@@ -21,28 +12,11 @@ export function useInView<T extends HTMLElement>(options?: {
   /** When true, only flips to true once and stays (for one-shot text reveals). */
   once?: boolean;
 }) {
-  const ref = useRef<T>(null);
-  const [inView, setInView] = useState(false);
-  const once = options?.once ?? false;
-
-  useEffect(() => {
-    const node = ref.current;
-    if (!node) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        const visible = Boolean(entry?.isIntersecting);
-        setInView((prev) => (once && prev ? true : visible));
-      },
-      {
-        rootMargin: options?.rootMargin ?? "0px 0px -12% 0px",
-        threshold: options?.threshold ?? 0.35,
-      },
-    );
-
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, [options?.rootMargin, options?.threshold, once]);
+  const { ref, inView } = useSharedIntersectionObserver<T>({
+    rootMargin: options?.rootMargin ?? "0px 0px -12% 0px",
+    threshold: options?.threshold ?? 0.35,
+    once: options?.once ?? false,
+  });
 
   return { ref, inView };
 }
@@ -86,38 +60,25 @@ type VideoPanelProps = {
 };
 
 function useAutoplayInView() {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const { ref: wrapRef, inView } = useInView<HTMLDivElement>({
+  const { videoRef, elementRef } = useIntersectionVideoAutoplay({
     threshold: 0.35,
     rootMargin: "15% 0px 15% 0px",
   });
   const reduced = usePrefersReducedMotion();
 
+  // The hook handles play/pause automatically based on intersection
+  // We just need to ensure video is muted
   useEffect(() => {
     const video = videoRef.current;
-    if (!video) return;
-
-    video.muted = true;
-
-    if (!inView || reduced) {
-      video.pause();
-      return;
+    if (video) {
+      video.muted = true;
     }
+  }, []);
 
-    void video.play().catch(() => {});
-  }, [inView, reduced]);
-
-  return { videoRef, wrapRef };
+  return { videoRef, wrapRef: elementRef };
 }
 
-export function VideoPanel({
-  src,
-  poster,
-  title,
-  description,
-  eyebrow,
-  id,
-}: VideoPanelProps) {
+export function VideoPanel({ src, poster, title, description, eyebrow, id }: VideoPanelProps) {
   const { videoRef, wrapRef } = useAutoplayInView();
 
   return (

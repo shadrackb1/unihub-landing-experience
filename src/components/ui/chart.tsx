@@ -68,27 +68,36 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
     return null;
   }
 
-  return (
-    <style
-      dangerouslySetInnerHTML={{
-        __html: Object.entries(THEMES)
-          .map(
-            ([theme, prefix]) => `
-${prefix} [data-chart=${id}] {
-${colorConfig
-  .map(([key, itemConfig]) => {
-    const color = itemConfig.theme?.[theme as keyof typeof itemConfig.theme] || itemConfig.color;
-    return color ? `  --color-${key}: ${color};` : null;
-  })
-  .join("\n")}
-}
-`,
-          )
-          .join("\n"),
-      }}
-    />
-  );
+  // Build CSS safely without dangerouslySetInnerHTML
+  const cssRules = Object.entries(THEMES)
+    .map(([theme, prefix]) => {
+      const rules = colorConfig
+        .map(([key, itemConfig]) => {
+          const color =
+            itemConfig.theme?.[theme as keyof typeof itemConfig.theme] || itemConfig.color;
+          // Validate color value to prevent CSS injection
+          if (!color || !isValidColor(color)) return null;
+          return `  --color-${key}: ${color};`;
+        })
+        .filter(Boolean)
+        .join("\n");
+
+      if (!rules) return null;
+      return `${prefix} [data-chart=${id}] {\n${rules}\n}`;
+    })
+    .filter(Boolean)
+    .join("\n");
+
+  return <style id={`chart-style-${id}`}>{cssRules}</style>;
 };
+
+// Validate color values to prevent CSS injection
+function isValidColor(color: string): boolean {
+  // Allow only safe color formats: hex, rgb/rgba, hsl/hsla, oklch, named colors
+  const safeColorPattern =
+    /^(#[0-9a-fA-F]{3,8}|rgb\(\s*\d+%?\s*,\s*\d+%?\s*,\s*\d+%?\s*\)|rgba\(\s*\d+%?\s*,\s*\d+%?\s*,\s*\d+%?\s*,\s*[\d.]+\s*\)|hsl\(\s*\d+\s*,\s*\d+%?\s*,\s*\d+%?\s*\)|hsla\(\s*\d+\s*,\s*\d+%?\s*,\s*\d+%?\s*,\s*[\d.]+\s*\)|oklch\(\s*[\d.]+\s+\d+%?\s+\d+\s*\)|[a-zA-Z]+)$/;
+  return safeColorPattern.test(color.trim());
+}
 
 const ChartTooltip = RechartsPrimitive.Tooltip;
 

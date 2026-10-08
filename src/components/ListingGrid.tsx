@@ -8,7 +8,7 @@ export function ListingGrid({ listings }: { listings: SampleListing[] }) {
     <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {listings.map((listing, index) => (
         <Reveal
-          key={listing.title}
+          key={listing.id}
           delay={(index % 3) * 80}
           className="listing-card group h-full overflow-hidden rounded-2xl border border-border bg-card"
         >

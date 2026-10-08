@@ -3,10 +3,7 @@ type LovableErrorOptions = {
 };
 
 type LovableEvents = {
-  captureException?: (
-    error: unknown,
-    options?: LovableErrorOptions,
-  ) => void;
+  captureException?: (error: unknown, options?: LovableErrorOptions) => void;
 };
 
 declare global {
