@@ -116,11 +116,39 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
+function CmsTheme() {
+  useEffect(() => {
+    let live = true;
+    import("@/legacy/services/firestore")
+      .then(async (m) => {
+        try {
+          const settings = await m.getSiteSettings();
+          if (!live || !settings?.theme) return;
+          const root = document.documentElement;
+          const theme = settings.theme as any;
+          if (theme.primaryColor) root.style.setProperty("--color-brand-500", theme.primaryColor);
+          if (theme.backgroundColor) root.style.setProperty("--color-surface-900", theme.backgroundColor);
+          if (theme.surfaceColor) root.style.setProperty("--color-surface-800", theme.surfaceColor);
+          if (theme.fontFamily) root.style.setProperty("--CMS-font-family", `"${theme.fontFamily}", sans-serif`);
+          if (theme.borderRadius) root.style.setProperty("--CMS-border-radius", theme.borderRadius);
+        } catch {
+          // offline or no CMS settings Ã¢â‚¬â€ keep default theme
+        }
+      })
+      .catch(() => {});
+    return () => {
+      live = false;
+    };
+  }, []);
+  return null;
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
   return (
     <QueryClientProvider client={queryClient}>
+      <CmsTheme />
       <Outlet />
     </QueryClientProvider>
   );
