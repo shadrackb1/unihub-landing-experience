@@ -1,8 +1,8 @@
 import * as React from "react";
 
-export const LogoMark = () => {
+export const LogoMark = ({ className }: { className?: string }) => {
   return (
-    <span className="inline-flex shrink-0 aria-hidden="true">
+    <span className={`inline-flex shrink-0 ${className ?? ""}`} aria-hidden="true">
       <svg viewBox="0 0 64 64" className="h-full w-full" fill="none">
         <rect width="64" height="64" rx="14" className="fill-card" />
         <path
@@ -38,3 +38,4 @@ export const LogoMark = () => {
     </span>
   );
 };
+
