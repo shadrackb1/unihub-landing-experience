@@ -1,0 +1,137 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="500" viewBox="0 0 1400 500" font-family="Inter, sans-serif" font-size="14">
+  <defs>
+    <linearGradient id="gradMap" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06B6D4"/>
+      <stop offset="100%" stop-color="#00F5A0"/>
+    </linearGradient>
+    <filter id="tileGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <marker id="mapArrow" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,5 L8,2.5 z" fill="#00F5A0"/>
+    </marker>
+  </defs>
+  <rect width="1400" height="500" fill="#0A0A0A"/>
+  <rect x="20" y="20" width="1360" height="460" rx="16" fill="#111111" stroke="#1E1E1E"/>
+
+  <text x="700" y="60" text-anchor="middle" font-weight="700" font-size="24" fill="#06B6D4">Interactive Campus Map — Data Flow</text>
+
+  <!-- Tile Providers -->
+  <rect x="60" y="100" width="300" height="160" rx="12" fill="#1A1A1A" stroke="#06B6D4" stroke-width="2"/>
+  <text x="220" y="135" text-anchor="middle" font-weight="700" fill="#06B6D4">Tile Providers</text>
+  <rect x="80" y="155" width="240" height="40" rx="6" fill="#1A1A1A" stroke="#06B6D4" stroke-dasharray="4,4"/>
+  <text x="180" y="180" text-anchor="middle" fill="#00F5A0" font-size="13">OpenFreeMap (Dark)</text>
+  <text x="180" y="198" text-anchor="middle" fill="#888" font-size="11">vector tiles • keyless</text>
+  <rect x="80" y="210" width="240" height="40" rx="6" fill="#1A1A1A" stroke="#06B6D4" stroke-dasharray="4,4"/>
+  <text x="180" y="235" text-anchor="middle" fill="#F97316" font-size="13">Esri World Imagery</text>
+  <text x="180" y="253" text-anchor="middle" fill="#888" font-size="11">satellite tiles • keyless</text>
+
+  <!-- Campus Pins -->
+  <rect x="400" y="80" width="600" height="340" rx="16" fill="#1A1A1A" stroke="#D97706" stroke-width="2"/>
+  <text x="700" y="125" text-anchor="middle" font-weight="700" fill="#D97706" font-size="18">Kenyan Campus Pins</text>
+
+  <!-- Pin markers -->
+  <g id="pins">
+    <circle cx="480" cy="180" r="8" fill="#00F5A0" filter="url(#tileGlow)">
+      <animate attributeName="r" from="4" to="10" dur="1.5s" repeatCount="indefinite" begin="0s"/>
+    </circle>
+    <text x="480" y="160" text-anchor="middle" fill="#00F5A0" font-size="11" font-weight="600">UoN</text>
+    <text x="480" y="195" text-anchor="middle" fill="#888" font-size="9">Nairobi -1.279,36.814</text>
+
+    <circle cx="580" cy="160" r="8" fill="#00F5A0" filter="url(#tileGlow)">
+      <animate attributeName="r" from="4" to="10" dur="1.5s" repeatCount="indefinite" begin="0.2s"/>
+    </circle>
+    <text x="580" y="140" text-anchor="middle" fill="#00F5A0" font-size="11" font-weight="600">JKUAT</text>
+    <text x="580" y="195" text-anchor="middle" fill="#888" font-size="9">Juja -1.093,37.015</text>
+
+    <circle cx="680" cy="180" r="8" fill="#00F5A0" filter="url(#tileGlow)">
+      <animate attributeName="r" from="4" to="10" dur="1.5s" repeatCount="indefinite" begin="0.4s"/>
+    </circle>
+    <text x="680" y="160" text-anchor="middle" fill="#00F5A0" font-size="11" font-weight="600">KU</text>
+    <text x="680" y="195" text-anchor="middle" fill="#888" font-size="9">Kahawa -1.174,36.927</text>
+
+    <circle cx="780" cy="210" r="8" fill="#00F5A0" filter="url(#tileGlow)">
+      <animate attributeName="r" from="4" to="10" dur="1.5s" repeatCount="indefinite" begin="0.6s"/>
+    </circle>
+    <text x="780" y="190" text-anchor="middle" fill="#00F5A0" font-size="11" font-weight="600">SU</text>
+    <text x="780" y="225" text-anchor="middle" fill="#888" font-size="9">Madaraka -1.310,36.813</text>
+
+    <circle cx="880" cy="240" r="8" fill="#00F5A0" filter="url(#tileGlow)">
+      <animate attributeName="r" from="4" to="10" dur="1.5s" repeatCount="indefinite" begin="0.8s"/>
+    </circle>
+    <text x="880" y="220" text-anchor="middle" fill="#00F5A0" font-size="11" font-weight="600">THK</text>
+    <text x="880" y="255" text-anchor="middle" fill="#888" font-size="9">Thika -1.033,37.069</text>
+
+    <circle cx="980" cy="260" r="8" fill="#00F5A0" filter="url(#tileGlow)">
+      <animate attributeName="r" from="4" to="10" dur="1.5s" repeatCount="indefinite" begin="1s"/>
+    </circle>
+    <text x="980" y="240" text-anchor="middle" fill="#00F5A0" font-size="11" font-weight="600">MU</text>
+    <text x="980" y="255" text-anchor="middle" fill="#888" font-size="9">Kesses 0.295,35.335</text>
+
+    <circle cx="1080" cy="290" r="8" fill="#00F5A0" filter="url(#tileGlow)">
+      <animate attributeName="r" from="4" to="10" dur="1.5s" repeatCount="indefinite" begin="1.2s"/>
+    </circle>
+    <text x="1080" y="270" text-anchor="middle" fill="#00F5A0" font-size="11" font-weight="600">EGU</text>
+    <text x="1080" y="285" text-anchor="middle" fill="#888" font-size="9">Njoro -0.366,35.944</text>
+
+    <circle cx="1180" cy="310" r="8" fill="#00F5A0" filter="url(#tileGlow)">
+      <animate attributeName="r" from="4" to="10" dur="1.5s" repeatCount="indefinite" begin="1.4s"/>
+    </circle>
+    <text x="1180" y="290" text-anchor="middle" fill="#00F5A0" font-size="11" font-weight="600">NKU</text>
+    <text x="1180" y="305" text-anchor="middle" fill="#888" font-size="9">Nakuru -0.303,36.080</text>
+  </g>
+
+  <!-- Map tiles visualization -->
+  <rect x="400" y="100" width="500" height="280" rx="8" fill="#080808" stroke="#333" stroke-dasharray="8,4">
+    <animate attributeName="stroke-dashoffset" from="24" to="0" dur="2s" repeatCount="indefinite"/>
+  </rect>
+  <text x="700" y="300" text-anchor="middle" fill="#666" font-size="14">MapLibre GL Canvas (WebGL)</text>
+  <text x="700" y="325" text-anchor="middle" fill="#555" font-size="11">OpenFreeMap dark vector • Esri satellite • Keyless</text>
+
+  <!-- Data flow arrows -->
+  <defs>
+    <marker id="dataArrow" markerWidth="8" markerHeight="8" refX="7" refY="2.5" orient="auto">
+      <path d="M0,0 L0,5 L8,2.5 z" fill="#00F5A0"/>
+    </marker>
+  </defs>
+
+  <!-- Tile provider → map -->
+  <line x1="360" y1="180" x2="400" y2="180" stroke="#00F5A0" stroke-width="2" marker-end="url(#flowArrow)" stroke-dasharray="8,4">
+    <animate attributeName="stroke-dashoffset" from="20" to="0" dur="1s" repeatCount="indefinite"/>
+  </line>
+  <line x1="360" y1="230" x2="400" y2="230" stroke="#F97316" stroke-width="2" marker-end="url(#flowArrow)" stroke-dasharray="8,4">
+    <animate attributeName="stroke-dashoffset" from="20" to="0" dur="1s" begin="0.5s" repeatCount="indefinite"/>
+  </line>
+
+  <!-- Map → pins -->
+  <line x1="1000" y1="250" x2="990" y2="250" stroke="#00F5A0" stroke-width="2" marker-end="url(#flowArrow)" stroke-dasharray="8,4">
+    <animate attributeName="stroke-dashoffset" from="20" to="0" dur="1s" begin="0.3s" repeatCount="indefinite"/>
+  </line>
+  <line x1="1000" y1="290" x2="990" y2="290" stroke="#00F5A0" stroke-width="2" marker-end="url(#flowArrow)" stroke-dasharray="8,4">
+    <animate attributeName="stroke-dashoffset" from="20" to="0" dur="1s" begin="0.2s" repeatCount="indefinite"/>
+  </line>
+
+  <!-- Pin → data layer -->
+  <line x1="900" y1="180" x2="1080" y2="200" stroke="#D97706" stroke-width="2" marker-end="url(#flowArrow)" stroke-dasharray="8,4">
+    <animate attributeName="stroke-dashoffset" from="30" to="0" dur="1.5s" repeatCount="indefinite"/>
+  </line>
+
+  <!-- Legend -->
+  <rect x="1120" y="380" width="260" height="100" rx="8" fill="#1A1A1A" stroke="#333"/>
+  <text x="1250" y="405" text-anchor="middle" font-weight="600" fill="#888" font-size="12">MapLibre GL</text>
+  <text x="1250" y="425" text-anchor="middle" fill="#888" font-size="11">WebGL canvas</text>
+  <text x="1250" y="445" text-anchor="middle" fill="#888" font-size="11">Vector + raster layers</text>
+  <text x="1250" y="465" text-anchor="middle" fill="#00F5A0" font-size="11">Zero API keys</text>
+
+  <defs>
+    <marker id="flowArrow" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L0,5 L8,2.5 z" fill="#00F5A0"/>
+    </marker>
+  </defs>
+
+  <text x="700" y="490" text-anchor="middle" fill="#555" font-size="11">Pins pulse on load • Tile requests animate • Hover pins for details</text>
+</svg>

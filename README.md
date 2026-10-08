@@ -11,10 +11,13 @@
 </p>
 
 <p align=center>
-  <a href=https://docs.anthropic.com/en/docs/claude-code><img src=https://img.shields.io/badge/Claude_Code-D97757?style=flat&logo=claude&logoColor=white alt=Claude Code /></a>
-  <a href=https://github.com/features/copilot><img src=https://img.shields.io/badge/GitHub_Copilot-000000?style=flat&logo=github&logoColor=white alt=GitHub Copilot /></a>
-  <a href=https://cursor.sh><img src=https://img.shields.io/badge/Cursor-000000?style=flat&logo=cursor&logoColor=white alt=Cursor /></a>
-  <a href=https://github.com/shadrackb1/unihub-landing-experience><img src=https://img.shields.io/badge/GitHub-shadrackb1/unihub--landing--experience-181717?style=flat&logo=github alt=GitHub /></a>
+  <img src=https://img.shields.io/badge/Node.js-20.x-339933?style=flat&logo=node.js&logoColor=white alt="Node.js" />
+  <img src=https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=typescript&logoColor=white alt="TypeScript" />
+  <img src=https://img.shields.io/badge/React-19-61DAFB?style=flat&logo=react&logoColor=white alt="React" />
+  <img src=https://img.shields.io/badge/Tailwind_CSS-v4-06B6D4?style=flat&logo=tailwindcss&logoColor=white alt="Tailwind CSS" />
+  <img src=https://img.shields.io/badge/Vite-8-646CFF?style=flat&logo=vite&logoColor=white alt="Vite" />
+  <img src=https://img.shields.io/badge/TanStack_Start-1.168-000000?style=flat&logo=tanstack&logoColor=white alt="TanStack Start" />
+  <img src=https://img.shields.io/badge/Vercel-000000?style=flat&logo=vercel&logoColor=white alt="Vercel" />
 </p>
 
 <p align=center>
@@ -38,6 +41,18 @@
 ### Legacy SPA Internals
 
 <img src=docs/legacy-spa-architecture.svg alt=Legacy SPA architecture width=100% />
+
+### 7-Act Funnel — Animated
+
+<img src=docs/funnel-animated.svg alt="7-Act Funnel animated" width="100%" />
+
+### Interactive Campus Map — Data Flow
+
+<img src=docs/map-dataflow-animated.svg alt="Interactive Campus Map data flow" width="100%" />
+
+### Video Panel — Viewport-Aware Autoplay
+
+<img src=docs/video-panel-animated.svg alt="VideoPanel viewport-aware autoplay" width="100%" />
 
 ---
 
