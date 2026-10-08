@@ -11,12 +11,17 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as HostelsRouteImport } from './routes/hostels'
 import { Route as ListPropertyRouteImport } from './routes/list-property'
 import { Route as ListingsRouteImport } from './routes/listings'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as AdminSplatRouteImport } from './routes/admin.$'
+import { Route as HostelsIdRouteImport } from './routes/hostels.$id'
+import { Route as PropertiesIdRouteImport } from './routes/properties.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -28,6 +33,11 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppRoute = AppRouteImport.update({
   id: '/app',
   path: '/app',
@@ -36,6 +46,11 @@ const AppRoute = AppRouteImport.update({
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HostelsRoute = HostelsRouteImport.update({
+  id: '/hostels',
+  path: '/hostels',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ListPropertyRoute = ListPropertyRouteImport.update({
@@ -58,80 +73,128 @@ const TermsRoute = TermsRouteImport.update({
   path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminSplatRoute = AdminSplatRouteImport.update({
+  id: '/$',
+  path: '/$',
+  getParentRoute: () => AdminRoute,
+} as any)
+const HostelsIdRoute = HostelsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => HostelsRoute,
+} as any)
+const PropertiesIdRoute = PropertiesIdRouteImport.update({
+  id: '/properties/$id',
+  path: '/properties/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/admin': typeof AdminRouteWithChildren
   '/app': typeof AppRoute
   '/contact': typeof ContactRoute
+  '/hostels': typeof HostelsRouteWithChildren
   '/list-property': typeof ListPropertyRoute
   '/listings': typeof ListingsRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
+  '/admin/$': typeof AdminSplatRoute
+  '/hostels/$id': typeof HostelsIdRoute
+  '/properties/$id': typeof PropertiesIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/admin': typeof AdminRouteWithChildren
   '/app': typeof AppRoute
   '/contact': typeof ContactRoute
+  '/hostels': typeof HostelsRouteWithChildren
   '/list-property': typeof ListPropertyRoute
   '/listings': typeof ListingsRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
+  '/admin/$': typeof AdminSplatRoute
+  '/hostels/$id': typeof HostelsIdRoute
+  '/properties/$id': typeof PropertiesIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/admin': typeof AdminRouteWithChildren
   '/app': typeof AppRoute
   '/contact': typeof ContactRoute
+  '/hostels': typeof HostelsRouteWithChildren
   '/list-property': typeof ListPropertyRoute
   '/listings': typeof ListingsRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
+  '/admin/$': typeof AdminSplatRoute
+  '/hostels/$id': typeof HostelsIdRoute
+  '/properties/$id': typeof PropertiesIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/about'
+    | '/admin'
     | '/app'
     | '/contact'
+    | '/hostels'
     | '/list-property'
     | '/listings'
     | '/privacy'
     | '/terms'
+    | '/admin/$'
+    | '/hostels/$id'
+    | '/properties/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
+    | '/admin'
     | '/app'
     | '/contact'
+    | '/hostels'
     | '/list-property'
     | '/listings'
     | '/privacy'
     | '/terms'
+    | '/admin/$'
+    | '/hostels/$id'
+    | '/properties/$id'
   id:
     | '__root__'
     | '/'
     | '/about'
+    | '/admin'
     | '/app'
     | '/contact'
+    | '/hostels'
     | '/list-property'
     | '/listings'
     | '/privacy'
     | '/terms'
+    | '/admin/$'
+    | '/hostels/$id'
+    | '/properties/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  AdminRoute: typeof AdminRouteWithChildren
   AppRoute: typeof AppRoute
   ContactRoute: typeof ContactRoute
+  HostelsRoute: typeof HostelsRouteWithChildren
   ListPropertyRoute: typeof ListPropertyRoute
   ListingsRoute: typeof ListingsRoute
   PrivacyRoute: typeof PrivacyRoute
   TermsRoute: typeof TermsRoute
+  PropertiesIdRoute: typeof PropertiesIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -150,6 +213,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/app': {
       id: '/app'
       path: '/app'
@@ -162,6 +232,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/hostels': {
+      id: '/hostels'
+      path: '/hostels'
+      fullPath: '/hostels'
+      preLoaderRoute: typeof HostelsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/list-property': {
@@ -192,18 +269,63 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/$': {
+      id: '/admin/$'
+      path: '/$'
+      fullPath: '/admin/$'
+      preLoaderRoute: typeof AdminSplatRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/hostels/$id': {
+      id: '/hostels/$id'
+      path: '/$id'
+      fullPath: '/hostels/$id'
+      preLoaderRoute: typeof HostelsIdRouteImport
+      parentRoute: typeof HostelsRoute
+    }
+    '/properties/$id': {
+      id: '/properties/$id'
+      path: '/properties/$id'
+      fullPath: '/properties/$id'
+      preLoaderRoute: typeof PropertiesIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
+
+interface AdminRouteChildren {
+  AdminSplatRoute: typeof AdminSplatRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminSplatRoute: AdminSplatRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
+interface HostelsRouteChildren {
+  HostelsIdRoute: typeof HostelsIdRoute
+}
+
+const HostelsRouteChildren: HostelsRouteChildren = {
+  HostelsIdRoute: HostelsIdRoute,
+}
+
+const HostelsRouteWithChildren =
+  HostelsRoute._addFileChildren(HostelsRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  AdminRoute: AdminRouteWithChildren,
   AppRoute: AppRoute,
   ContactRoute: ContactRoute,
+  HostelsRoute: HostelsRouteWithChildren,
   ListPropertyRoute: ListPropertyRoute,
   ListingsRoute: ListingsRoute,
   PrivacyRoute: PrivacyRoute,
   TermsRoute: TermsRoute,
+  PropertiesIdRoute: PropertiesIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
