@@ -3,7 +3,7 @@ import { Check, Search } from "lucide-react";
 import { MarketingShell } from "@/shared/components/MarketingChrome";
 import { ListingGrid } from "@/features/listings/components/ListingGrid";
 import { Reveal } from "@/shared/components/VideoPanel";
-import { sampleListings } from "@/data/listings";
+import { useListings } from "@/features/listings/hooks/useListings";
 
 export const Route = createFileRoute("/listings")({
   head: () => ({
@@ -22,6 +22,7 @@ export const Route = createFileRoute("/listings")({
 const filters = ["All", "Hostel", "Bedsitter", "Single room", "Studio", "Shared apartment"];
 
 function ListingsPage() {
+  const listings = useListings();
   return (
     <MarketingShell>
       <section className="section-shell">
@@ -63,7 +64,7 @@ function ListingsPage() {
             </div>
           </Reveal>
 
-          <ListingGrid listings={sampleListings} />
+          <ListingGrid listings={listings} />
 
           <Reveal className="solid-card mt-12 flex flex-col gap-4 p-7 sm:flex-row sm:items-center sm:justify-between">
             <div>
@@ -85,3 +86,5 @@ function ListingsPage() {
     </MarketingShell>
   );
 }
+
+
