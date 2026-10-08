@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="700" viewBox="0 0 1400 700" font-family="Inter, sans-serif" font-size="14">
+  <rect width="1400" height="700" fill="#f5f3ff"/>
+  <rect x="40" y="50" width="1320" height="600" rx="10" fill="#ffffff" stroke="#e2e8f0"/>
+  <text x="60" y="85" font-weight="600">Legacy SPA (src/legacy)</text>
+
+  <rect x="80" y="120" width="380" height="500" rx="8" fill="#dcfce7" stroke="#16a34a"/>
+  <text x="100" y="150" font-weight="600">Public</text>
+  <rect x="110" y="170" width="320" height="52" rx="6" fill="#ffffff" stroke="#16a34a"/>
+  <text x="130" y="195">HomePage — hero search + stats</text>
+  <text x="130" y="212" fill="#475569" font-size="12">HeroSearch, MapLibre, Map</text>
+  <rect x="110" y="240" width="320" height="52" rx="6" fill="#ffffff" stroke="#16a34a"/>
+  <text x="130" y="265">ListingsPage / HostelsPage</text>
+  <text x="130" y="282" fill="#475569" font-size="12">ListingCard, filters, supercluster</text>
+  <rect x="110" y="310" width="320" height="52" rx="6" fill="#ffffff" stroke="#16a34a"/>
+  <text x="130" y="335">Property/Hostel details</text>
+  <text x="130" y="352" fill="#475569" font-size="12">media gallery, optimizeMedia</text>
+  <rect x="110" y="380" width="320" height="52" rx="6" fill="#ffffff" stroke="#16a34a"/>
+  <text x="130" y="405">About / Contact / Legal</text>
+
+  <rect x="520" y="120" width="380" height="500" rx="8" fill="#fef3c7" stroke="#d97706"/>
+  <text x="540" y="150" font-weight="600">Admin workspace</text>
+  <rect x="550" y="170" width="320" height="52" rx="6" fill="#ffffff" stroke="#d97706"/>
+  <text x="570" y="195">AdminLayout + ProtectedRoute</text>
+  <text x="570" y="212" fill="#475569" font-size="12">Firebase Auth email/password</text>
+  <rect x="550" y="240" width="320" height="52" rx="6" fill="#ffffff" stroke="#d97706"/>
+  <text x="570" y="265">Properties / Hostels / Rooms</text>
+  <text x="570" y="282" fill="#475569" font-size="12">CRUD forms via firestore.ts</text>
+  <rect x="550" y="310" width="320" height="52" rx="6" fill="#ffffff" stroke="#d97706"/>
+  <text x="570" y="335">Universities / Agents / Categories</text>
+  <text x="570" y="352" fill="#475569" font-size="12">management pages</text>
+  <rect x="550" y="380" width="320" height="52" rx="6" fill="#ffffff" stroke="#d97706"/>
+  <text x="570" y="405">AdminCMSPage</text>
+  <text x="570" y="422" fill="#475569" font-size="12">theme / site settings editor</text>
+
+  <rect x="960" y="120" width="360" height="500" rx="8" fill="#ffe4e6" stroke="#e11d48"/>
+  <text x="980" y="150" font-weight="600">Backend services</text>
+  <rect x="990" y="170" width="300" height="62" rx="6" fill="#ffffff" stroke="#e11d48"/>
+  <text x="1010" y="195">firestore.ts</text>
+  <text x="1010" y="212" fill="#475569" font-size="12">Firestore CRUD + seedData</text>
+  <text x="1010" y="228" fill="#475569" font-size="12">+ pushMockListingsLive</text>
+  <rect x="990" y="250" width="300" height="56" rx="6" fill="#ffffff" stroke="#e11d48"/>
+  <text x="1010" y="275">firebase.ts</text>
+  <text x="1010" y="292" fill="#475569" font-size="12">init app/auth/db/storage</text>
+  <rect x="990" y="325" width="300" height="56" rx="6" fill="#ffffff" stroke="#e11d48"/>
+  <text x="1010" y="350">storage.ts / cloudinary.ts</text>
+  <text x="1010" y="367" fill="#475569" font-size="12">uploads via Cloudinary</text>
+  <rect x="990" y="400" width="300" height="56" rx="6" fill="#ffffff" stroke="#e11d48"/>
+  <text x="1010" y="425">optimizeMedia.ts</text>
+  <text x="1010" y="442" fill="#475569" font-size="12">browser-image-compression</text>
+  <rect x="990" y="475" width="300" height="56" rx="6" fill="#ffffff" stroke="#e11d48"/>
+  <text x="1010" y="500">AuthContext.tsx</text>
+  <text x="1010" y="517" fill="#475569" font-size="12">user session, login/logout</text>
+
+  <line x1="430" y1="196" x2="520" y2="196" stroke="#334155" stroke-dasharray="4 4"/>
+  <line x1="430" y1="580" x2="520" y2="580" stroke="#334155" stroke-dasharray="4 4"/>
+  <line x1="900" y1="196" x2="960" y2="196" stroke="#334155" stroke-dasharray="4 4"/>
+  <line x1="900" y1="580" x2="960" y2="580" stroke="#334155" stroke-dasharray="4 4"/>
+</svg>
