@@ -34,7 +34,7 @@ function NotFoundComponent() {
   );
 }
 
-function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
+function ErrorComponent({ error, reset }: { error: any; reset: () => void }) {
   console.error(error);
   const router = useRouter();
   useEffect(() => {
@@ -54,7 +54,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
           <button
             onClick={() => {
               router.invalidate();
-              reset();
+              reset?.();
             }}
             className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
@@ -132,7 +132,7 @@ function CmsTheme() {
           if (theme.fontFamily) root.style.setProperty("--CMS-font-family", `"${theme.fontFamily}", sans-serif`);
           if (theme.borderRadius) root.style.setProperty("--CMS-border-radius", theme.borderRadius);
         } catch {
-          // offline or no CMS settings Ã¢â‚¬â€ keep default theme
+          // offline or no CMS settings ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â keep default theme
         }
       })
       .catch(() => {});
