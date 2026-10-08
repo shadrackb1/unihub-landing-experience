@@ -15,6 +15,7 @@ export function useListings(): SampleListing[] {
           ]);
           const mapped: SampleListing[] = [
             ...properties.map((p: any) => ({
+              id: p.id,
               title: p.title,
               location: p.location,
               category: p.categoryId ?? "Room",
@@ -28,14 +29,14 @@ export function useListings(): SampleListing[] {
               title: h.name,
               location: h.location,
               category: h.hostel_type === "girls" ? "Girls hostel" : h.hostel_type === "boys" ? "Boys hostel" : "Hostel",
-              price: "KES —",
+              price: "KES â€”",
               deposit: "Shared facilities",
               image: h.images?.[0]?.secure_url ?? sampleListings[1]!.image,
             })),
           ];
           if (live && mapped.length > 0) setListings(mapped);
         } catch {
-          // offline or empty — keep sample listings
+          // offline or empty â€” keep sample listings
         }
       })
       .catch(() => {});
