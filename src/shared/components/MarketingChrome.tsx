@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Mail, Menu, MessageCircle, X } from "lucide-react";
 import { Logo } from "@/shared/components/Logo";
@@ -62,7 +63,7 @@ export function SiteHeader() {
               className="inline-flex size-10 items-center justify-center rounded-full border border-border bg-card text-foreground transition-colors hover:bg-accent md:hidden"
               aria-label={open ? "Close menu" : "Open menu"}
               aria-expanded={open}
-              onClick={() => setOpen((value) => !value)}
+              onClick={() => setOpen((value: boolean) => !value)}
             >
               {open ? (
                 <X className="size-4" aria-hidden="true" />
@@ -169,7 +170,7 @@ export function SiteFooter() {
           />
         </div>
         <div className="mt-14 flex flex-col gap-3 border-t border-border pt-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-          <p>© 2026 UniHub · Student housing in Kenya</p>
+          <p>Â© 2026 UniHub Â· Student housing in Kenya</p>
           <p className="flex items-center gap-2">
             <Mail className="size-3.5" /> hello@unihub.ke
           </p>

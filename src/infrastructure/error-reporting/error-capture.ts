@@ -1,4 +1,3 @@
-import type { Result } from '@/domain/types/common';
 
 let lastError: Error | null = null;
 
