@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import { Link } from "@tanstack/react-router";
-import { Mail, Menu, MessageCircle, X } from "lucide-react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { Mail, Menu, MessageCircle, X, LogIn, UserCircle2 } from "lucide-react";
 import { Logo } from "@/shared/components/Logo";
+import { useAuth } from "@/shared/context/AuthContext";
 
 export const WHATSAPP_URL =
   "https://wa.me/254700000000?text=Hi%20UniHub%2C%20I%27d%20like%20help%20finding%20verified%20student%20housing";
@@ -20,6 +20,8 @@ function Wordmark() {
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
+  const { user, login } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -27,6 +29,10 @@ export function SiteHeader() {
       document.body.style.overflow = "";
     };
   }, [open]);
+
+  const handleLoginClick = () => {
+    navigate("/admin/login");
+  };
 
   return (
     <>
@@ -52,6 +58,24 @@ export function SiteHeader() {
           </div>
 
           <div className="flex items-center gap-3">
+            {user ? (
+              <Link
+                to="/admin"
+                className="inline-flex items-center gap-2 min-h-10 rounded-full bg-primary/10 px-4 text-sm font-medium text-primary hover:bg-primary/20 transition-colors"
+              >
+                <LogIn className="size-4" aria-hidden="true" />
+                <span>Admin</span>
+              </Link>
+            ) : (
+              <button
+                type="button"
+                onClick={handleLoginClick}
+                className="inline-flex items-center gap-2 min-h-10 rounded-full bg-primary px-4 text-sm font-semibold text-primary-foreground shadow-glow hover:bg-primary/90 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              >
+                <LogIn className="size-4" aria-hidden="true" />
+                <span>CMS Login</span>
+              </button>
+            )}
             <Link
               to="/listings"
               className="hidden min-h-10 items-center rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground shadow-glow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:inline-flex"
@@ -87,6 +111,28 @@ export function SiteHeader() {
                   {link.label}
                 </Link>
               ))}
+              {user ? (
+                <Link
+                  to="/admin"
+                  className="mt-3 inline-flex items-center justify-center gap-2 min-h-12 rounded-full bg-primary/10 px-5 text-sm font-semibold text-primary hover:bg-primary/20 transition-colors"
+                  onClick={() => setOpen(false)}
+                >
+                  <LogIn className="size-4" aria-hidden="true" />
+                  Admin
+                </Link>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => {
+                    handleLoginClick();
+                    setOpen(false);
+                  }}
+                  className="mt-3 inline-flex items-center justify-center gap-2 min-h-12 rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground shadow-glow"
+                >
+                  <LogIn className="size-4" aria-hidden="true" />
+                  CMS Login
+                </button>
+              )}
               <Link
                 to="/listings"
                 className="mt-3 inline-flex min-h-12 items-center justify-center rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground shadow-glow"
@@ -171,9 +217,14 @@ export function SiteFooter() {
         </div>
         <div className="mt-14 flex flex-col gap-3 border-t border-border pt-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
           <p>Â© 2026 UniHub Â· Student housing in Kenya</p>
-          <p className="flex items-center gap-2">
-            <Mail className="size-3.5" /> hello@unihub.ke
-          </p>
+          <div className="flex items-center gap-4">
+            <Link to="/admin" className="text-muted-foreground hover:text-foreground transition-colors" title="Admin Portal" aria-label="Admin Portal">
+              <UserCircle2 className="size-4" />
+            </Link>
+            <p className="flex items-center gap-2">
+              <Mail className="size-3.5" /> hello@unihub.ke
+            </p>
+          </div>
         </div>
       </div>
     </footer>
