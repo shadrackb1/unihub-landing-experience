@@ -6,7 +6,7 @@ import twinHostelImage from "@/assets/listing-twin-hostel.jpg";
 import sharedImage from "@/assets/listing-shared.jpg";
 
 export type SampleListing = {
-  id: string;
+  id?: string;
   title: string;
   location: string;
   category: string;
@@ -71,3 +71,4 @@ export const sampleListings: SampleListing[] = [
     image: sharedImage,
   },
 ];
+

@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Check } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { MarketingShell, WHATSAPP_URL } from "@/components/MarketingChrome";
-import { Reveal } from "@/components/VideoPanel";
+import { MarketingShell, WHATSAPP_URL } from "@/shared/components/MarketingChrome";
+import { Reveal } from "@/shared/components/VideoPanel";
 
 export const Route = createFileRoute("/list-property")({
   head: () => ({

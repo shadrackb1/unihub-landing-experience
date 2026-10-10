@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="760" viewBox="0 0 1400 760" font-family="Inter, sans-serif" font-size="14">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#334155"/>
+    </marker>
+  </defs>
+  <rect width="1400" height="760" fill="#f5f3ff"/>
+
+  <rect x="40" y="60" width="420" height="640" rx="8" fill="#ffffff" stroke="#e2e8f0"/>
+  <text x="56" y="90" font-weight="600">TanStack Start routes (SSR)</text>
+
+  <rect x="70" y="120" width="360" height="52" rx="6" fill="#dbeafe" stroke="#2563eb"/>
+  <text x="90" y="140">/  -> index.tsx (7-act funnel)</text>
+  <text x="90" y="160" fill="#475569" font-size="12">listings via useListings(), CampusMap</text>
+
+  <rect x="70" y="190" width="360" height="52" rx="6" fill="#dbeafe" stroke="#2563eb"/>
+  <text x="90" y="210">/listings  -> listings.tsx</text>
+  <text x="90" y="230" fill="#475569" font-size="12">ListingGrid, live Firestore data</text>
+
+  <rect x="70" y="260" width="360" height="52" rx="6" fill="#dcfce7" stroke="#16a34a"/>
+  <text x="90" y="280">/about /contact /list-property</text>
+  <text x="90" y="300" fill="#475569" font-size="12">marketing pages, MarketingShell</text>
+
+  <rect x="70" y="330" width="360" height="52" rx="6" fill="#fef3c7" stroke="#d97706"/>
+  <text x="90" y="350">/hostels /hostels/:id /properties/:id</text>
+  <text x="90" y="370" fill="#475569" font-size="12">redirect -> /app#/...</text>
+
+  <rect x="70" y="400" width="360" height="52" rx="6" fill="#fef3c7" stroke="#d97706"/>
+  <text x="90" y="420">/admin /admin/*</text>
+  <text x="90" y="440" fill="#475569" font-size="12">redirect -> /app#/admin/*</text>
+
+  <rect x="70" y="470" width="360" height="52" rx="6" fill="#ede9fe" stroke="#7c3aed"/>
+  <text x="90" y="490">/app  -> app.tsx</text>
+  <text x="90" y="510" fill="#475569" font-size="12">legacy SPA mount (client-only)</text>
+
+  <rect x="70" y="540" width="360" height="52" rx="6" fill="#dbeafe" stroke="#2563eb"/>
+  <text x="90" y="560">/privacy /terms</text>
+  <text x="90" y="580" fill="#475569" font-size="12">legal pages</text>
+
+  <rect x="70" y="610" width="360" height="52" rx="6" fill="#ffe4e6" stroke="#e11d48"/>
+  <text x="90" y="630">__root.tsx</text>
+  <text x="90" y="650" fill="#475569" font-size="12">CmsTheme + error capture + QueryClient</text>
+
+  <rect x="560" y="60" width="380" height="640" rx="8" fill="#ffffff" stroke="#e2e8f0"/>
+  <text x="576" y="90" font-weight="600">Legacy SPA routes [/app]</text>
+
+  <rect x="590" y="120" width="320" height="44" rx="6" fill="#dcfce7" stroke="#16a34a"/>
+  <text x="610" y="147">/ -> HomePage</text>
+  <rect x="590" y="180" width="320" height="44" rx="6" fill="#dcfce7" stroke="#16a34a"/>
+  <text x="610" y="207">/listings -> ListingsPage</text>
+  <rect x="590" y="240" width="320" height="44" rx="6" fill="#dcfce7" stroke="#16a34a"/>
+  <text x="610" y="267">/properties/:id -> details</text>
+  <rect x="590" y="300" width="320" height="44" rx="6" fill="#dcfce7" stroke="#16a34a"/>
+  <text x="610" y="327">/hostels /hostels/:id</text>
+  <rect x="590" y="360" width="320" height="44" rx="6" fill="#dcfce7" stroke="#16a34a"/>
+  <text x="610" y="387">/about /contact /privacy /terms</text>
+  <rect x="590" y="440" width="320" height="44" rx="6" fill="#fef3c7" stroke="#d97706"/>
+  <text x="610" y="467">/admin/login -> AdminLoginPage</text>
+  <rect x="590" y="500" width="320" height="44" rx="6" fill="#fef3c7" stroke="#d97706"/>
+  <text x="610" y="527">/admin -> AdminLayout (protected)</text>
+  <rect x="590" y="560" width="320" height="44" rx="6" fill="#fef3c7" stroke="#d97706"/>
+  <text x="610" y="587">/admin/properties|hostels|rooms|…</text>
+
+  <rect x="1040" y="60" width="320" height="640" rx="8" fill="#ffffff" stroke="#e2e8f0"/>
+  <text x="1056" y="90" font-weight="600">Infrastructure</text>
+  <rect x="1070" y="120" width="260" height="52" rx="6" fill="#ffe4e6" stroke="#e11d48"/>
+  <text x="1090" y="145">server.ts / start.ts</text>
+  <text x="1090" y="162" fill="#475569" font-size="12">SSR entry, error capture</text>
+  <rect x="1070" y="200" width="260" height="52" rx="6" fill="#ffe4e6" stroke="#e11d48"/>
+  <text x="1090" y="225">error-reporting/</text>
+  <text x="1090" y="242" fill="#475569" font-size="12">error-capture, error-page</text>
+  <rect x="1070" y="280" width="260" height="52" rx="6" fill="#e0e7ff" stroke="#4f46e5"/>
+  <text x="1090" y="305">styles.css</text>
+  <text x="1090" y="322" fill="#475569" font-size="12">Tailwind v4 + design tokens</text>
+  <rect x="1070" y="360" width="260" height="52" rx="6" fill="#e0e7ff" stroke="#4f46e5"/>
+  <text x="1090" y="385">routeTree.gen.ts</text>
+  <text x="1090" y="402" fill="#475569" font-size="12">auto-generated route map</text>
+  <rect x="1070" y="440" width="260" height="52" rx="6" fill="#e0e7ff" stroke="#4f46e5"/>
+  <text x="1090" y="465">vite.config.ts</text>
+  <text x="1090" y="482" fill="#475569" font-size="12">TanStack Start plugin + nitro</text>
+
+  <line x1="430" y1="496" x2="1070" y2="146" stroke="#334155" marker-end="url(#arrow)"/>
+  <line x1="430" y1="636" x2="590" y2="142" stroke="#334155" marker-end="url(#arrow)"/>
+  <text x="470" y="630" font-size="12">mounts</text>
+  <line x1="910" y1="584" x2="1070" y2="386" stroke="#334155" marker-end="url(#arrow)"/>
+
+  <text x="1056" y="740" fill="#64748b" font-size="12">gitdiagram.com/shadrackb1/unihub-landing-experience</text>
+</svg>
