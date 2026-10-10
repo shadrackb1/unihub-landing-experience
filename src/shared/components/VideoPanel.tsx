@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/shared/utils/cn";
+import { usePrefersReducedMotion } from "@/hooks/useReducedMotion";
+import { useSharedIntersectionObserver } from "@/hooks/useIntersectionObserver";
+import { useIntersectionVideoAutoplay } from "@/hooks/useBatchedVideoAutoplay";
 
 export { usePrefersReducedMotion };
 
