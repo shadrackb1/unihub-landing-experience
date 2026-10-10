@@ -1,0 +1,1860 @@
+%PDF-1.4
+%ту╧╙
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [12 0 R 14 0 R 16 0 R 18 0 R 20 0 R 22 0 R 24 0 R 26 0 R 28 0 R 30 0 R 32 0 R 34 0 R 36 0 R 38 0 R 40 0 R 42 0 R 44 0 R 46 0 R] /Count 18 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Oblique /Encoding /WinAnsiEncoding >>
+endobj
+6 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-BoldOblique /Encoding /WinAnsiEncoding >>
+endobj
+7 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier /Encoding /WinAnsiEncoding >>
+endobj
+8 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier-Bold /Encoding /WinAnsiEncoding >>
+endobj
+9 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier-Oblique /Encoding /WinAnsiEncoding >>
+endobj
+10 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier-BoldOblique /Encoding /WinAnsiEncoding >>
+endobj
+11 0 obj
+<< /Length 3352 >>
+stream
+BT /F2 20 Tf 50 765 Td (DATA PROTECTION IMPACT ASSESSMENT) Tj ET
+BT /F2 15 Tf 50 705.75 Td (UniHub Ч Verified Student Housing Platform) Tj ET
+BT /F2 12 Tf 50 659.3 Td (Kenya Student Housing Discovery Service) Tj ET
+BT /F1 10 Tf 50.0 635.1 Td (**Conducted in accordance with section 31 of the Data Protection Act, No. 24 of 2019 and the) Tj ET
+BT /F1 10 Tf 50.0 621.6 Td (Office of the Data Protection Commissioner Guidance Note on Data Protection Impact Assessment.) Tj ET
+BT /F1 10 Tf 50.0 608.1 Td (Reported on the template at Part 5 of that Guidance Note.**) Tj ET
+0.8 0.8 0.8 RG 0.5 w 50 584.5999999999999 495 0 re S
+BT /F2 15 Tf 50 554.3499999999999 Td (Document control) Tj ET
+BT /F1 10 Tf 50.0 524.1 Td (| **Project** | UniHub Ч Verified Student Housing Platform \(web application\) |) Tj ET
+BT /F1 10 Tf 50.0 506.6 Td (| **Data controller** | UniHub Kenya \(operating as UniHub\) |) Tj ET
+BT /F1 10 Tf 50.0 489.1 Td (| **Assessment conducted by** | Shadrack Biwott, Founder & Developer Ч shadrack@unihub.ke |) Tj ET
+BT /F1 10 Tf 50.0 471.6 Td (| **Date of assessment** | 15th January 2026 |) Tj ET
+BT /F1 10 Tf 50.0 454.1 Td (| **Version** | 2.0 Ч Enhanced with ODPC Guidance Note Part 5 template & KabarakAttend DPIA) Tj ET
+BT /F1 10 Tf 50.0 440.6 Td (methodology |) Tj ET
+BT /F1 10 Tf 50.0 423.1 Td (| **Status** | PRE-LAUNCH. No live student personal data has been collected. All development) Tj ET
+BT /F1 10 Tf 50.0 409.6 Td (and testing uses synthetic data. |) Tj ET
+BT /F1 10 Tf 50.0 392.1 Td (| **Next review** | Before public launch; thereafter quarterly, and on any material change to) Tj ET
+BT /F1 10 Tf 50.0 378.6 Td (dataset, platform, or purpose. |) Tj ET
+BT /F1 10 Tf 50.0 361.1 Td (| **Classification** | CONFIDENTIAL Ч Internal governance document |) Tj ET
+BT /F1 10 Tf 50.0 343.6 Td (| **Distribution** | Data Protection Officer \(when appointed\), UniHub leadership, ODPC \(on) Tj ET
+BT /F1 10 Tf 50.0 330.1 Td (request\) |) Tj ET
+0.8 0.8 0.8 RG 0.5 w 50 306.5999999999999 495 0 re S
+BT /F2 15 Tf 50 276.3499999999999 Td (A. Screening Ч is a DPIA required?) Tj ET
+BT /F1 10 Tf 50.0 246.1 Td (Section 31 of the Data Protection Act \("Act"\) requires a Data Protection Impact Assessment) Tj ET
+BT /F1 10 Tf 50.0 232.6 Td (\("DPIA"\) where a processing operation is likely to result in a high risk to the rights and) Tj ET
+BT /F1 10 Tf 50.0 219.1 Td (freedoms of a data subject. Paragraph 9\(A\) of the Data Protection Impact Assessment Guidance) Tj ET
+BT /F1 10 Tf 50.0 205.6 Td (Note \("Guidance Note"\) sets out the criteria to be considered. The project has been screened) Tj ET
+BT /F1 10 Tf 50.0 192.1 Td (against each.) Tj ET
+BT /F1 10 Tf 50.0 174.6 Td (**Context framing the assessment:**) Tj ET
+BT /F1 10 Tf 50 155.1 Td (Х  UniHub is a **discovery and contact platform**. It does not process tenancy agreements,) Tj ET
+BT /F1 10 Tf 50 141.6 Td (   collect rent, hold deposits, or manage property.) Tj ET
+BT /F1 10 Tf 50 128.1 Td (Х  **No mandatory accounts**. Students browse listings freely without signup. The only) Tj ET
+BT /F1 10 Tf 50 114.6 Td (   personal data a student voluntarily provides is when they choose to click a WhatsApp or) Tj ET
+BT /F1 10 Tf 50 101.1 Td (   email link to contact a landlord/agent Ч at which point the communication leaves UniHub's) Tj ET
+BT /F1 10 Tf 50 87.6 Td (   environment.) Tj ET
+endstream
+endobj
+12 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842]
+   /Contents 11 0 R
+   /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R /F4 6 0 R /F5 7 0 R /F6 8 0 R /F7 9 0 R /F8 10 0 R >> >> >>
+endobj
+13 0 obj
+<< /Length 2923 >>
+stream
+BT /F1 10 Tf 50 778.5 Td (Х  **Landlord/agent onboarding** is initiated via a WhatsApp chat \(external to the platform\).) Tj ET
+BT /F1 10 Tf 50 765.0 Td (   No landlord personal data is collected or stored by UniHub at this stage.) Tj ET
+BT /F1 10 Tf 50 751.5 Td (Х  **No sensitive personal data** \(health, biometrics, children's data, criminal convictions\)) Tj ET
+BT /F1 10 Tf 50 738.0 Td (   is processed.) Tj ET
+BT /F1 10 Tf 50 724.5 Td (Х  **No automated decision-making** with legal or similarly significant effects \(profiling,) Tj ET
+BT /F1 10 Tf 50 711.0 Td (   scoring, eligibility determination\).) Tj ET
+BT /F1 10 Tf 50 697.5 Td (Х  **No systematic monitoring** of publicly accessible areas \(the platform does not track) Tj ET
+BT /F1 10 Tf 50 684.0 Td (   student location or movement\).) Tj ET
+BT /F1 10 Tf 50 670.5 Td (Х  **No large-scale processing** Ч current scope is ~8 campuses, estimated <50,000 monthly) Tj ET
+BT /F1 10 Tf 50 657.0 Td (   active users at maturity.) Tj ET
+BT /F1 10 Tf 50.0 639.5 Td (**Screening outcome:** Three criteria from paragraph 9\(A\) are met at a level that triggers a) Tj ET
+BT /F1 10 Tf 50.0 626.0 Td (DPIA:) Tj ET
+BT /F1 10 Tf 50 606.5 Td (1. **Systematic and extensive evaluation of personal aspects** Ч not met \(no profiling\).) Tj ET
+BT /F1 10 Tf 50 593.0 Td (2. **Large-scale processing of special categories** Ч not met \(no special categories\).) Tj ET
+BT /F1 10 Tf 50 579.5 Td (3. **Systematic monitoring of publicly accessible area** Ч not met \(no monitoring\).) Tj ET
+BT /F1 10 Tf 50 566.0 Td (4. **Innovative technology** Ч **MET**: novel combination of keyless MapLibre GL mapping,) Tj ET
+BT /F1 10 Tf 50 552.5 Td (   client-side video autoplay with IntersectionObserver, and server-side rendering via) Tj ET
+BT /F1 10 Tf 50 539.0 Td (   TanStack Start.) Tj ET
+BT /F1 10 Tf 50 525.5 Td (5. **Vulnerable data subjects** Ч **MET**: primary users are students \(18Ц25\), many) Tj ET
+BT /F1 10 Tf 50 512.0 Td (   first-time renters, potentially limited digital literacy.) Tj ET
+BT /F1 10 Tf 50 498.5 Td (6. **Data transfer outside Kenya** Ч **MET**: Vercel hosting \(US/EU edge\), MapLibre tiles) Tj ET
+BT /F1 10 Tf 50 485.0 Td (   from OpenFreeMap \(global CDN\), Esri World Imagery \(US CDN\).) Tj ET
+BT /F1 10 Tf 50 471.5 Td (7. **Matching/combining datasets** Ч not met.) Tj ET
+BT /F1 10 Tf 50 458.0 Td (8. **Processing preventing exercise of rights** Ч **MET \(potential\)**: WhatsApp redirect) Tj ET
+BT /F1 10 Tf 50 444.5 Td (   moves communication outside platform; student may not know how to request erasure of) Tj ET
+BT /F1 10 Tf 50 431.0 Td (   landlord-held data.) Tj ET
+BT /F1 10 Tf 50.0 413.5 Td (**Conclusion:** A DPIA is **required** and this document fulfils that obligation.) Tj ET
+0.8 0.8 0.8 RG 0.5 w 50 390 495 0 re S
+BT /F2 15 Tf 50 359.75 Td (B. Describe the processing) Tj ET
+BT /F2 12 Tf 50 313.3 Td (B1. Nature of the processing) Tj ET
+endstream
+endobj
+14 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842]
+   /Contents 13 0 R
+   /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R /F4 6 0 R /F5 7 0 R /F6 8 0 R /F7 9 0 R /F8 10 0 R >> >> >>
+endobj
+15 0 obj
+<< /Length 3666 >>
+stream
+0.15 0.15 0.15 rg 50 773.85 495 18.15 re f
+1 1 1 rg
+BT /F2 9 Tf 54 788.0 Td (Aspect) Tj ET
+BT /F2 9 Tf 174 788.0 Td (Description) Tj ET
+0 0 0 rg
+0.96 0.96 0.96 rg 50 537 495 236.85 re f
+0.85 0.85 0.85 RG 0.3 w 50 537 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 769.9 Td (**Processing) Tj ET
+BT /F1 9 Tf 54 757.7 Td (activities**) Tj ET
+BT /F1 9 Tf 174 769.9 Td (\(1\) Serving static) Tj ET
+BT /F1 9 Tf 174 757.7 Td (marketing pages \(hero,) Tj ET
+BT /F1 9 Tf 174 745.6 Td (trust pillars,) Tj ET
+BT /F1 9 Tf 174 733.4 Td (residence videos,) Tj ET
+BT /F1 9 Tf 174 721.3 Td (listings grid, campus) Tj ET
+BT /F1 9 Tf 174 709.1 Td (map\). \(2\) Client-side) Tj ET
+BT /F1 9 Tf 174 697.0 Td (filtering of sample) Tj ET
+BT /F1 9 Tf 174 684.8 Td (listings \(category,) Tj ET
+BT /F1 9 Tf 174 672.6 Td (location\). \(3\)) Tj ET
+BT /F1 9 Tf 174 660.5 Td (Rendering interactive) Tj ET
+BT /F1 9 Tf 174 648.4 Td (map with campus pins) Tj ET
+BT /F1 9 Tf 174 636.2 Td (\(no user location) Tj ET
+BT /F1 9 Tf 174 624.0 Td (requested\). \(4\)) Tj ET
+BT /F1 9 Tf 174 611.9 Td (Redirecting student to) Tj ET
+BT /F1 9 Tf 174 599.8 Td (WhatsApp/email for) Tj ET
+BT /F1 9 Tf 174 587.6 Td (landlord contact. \(5\)) Tj ET
+BT /F1 9 Tf 174 575.5 Td (Collecting landlord) Tj ET
+BT /F1 9 Tf 174 563.3 Td (interest via WhatsApp) Tj ET
+BT /F1 9 Tf 174 551.1 Td (pre-filled message.) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 385.2 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 533.0 Td (**Data flow**) Tj ET
+BT /F1 9 Tf 174 533.0 Td (Student browser Vercel) Tj ET
+BT /F1 9 Tf 174 520.9 Td (edge \(HTML/CSS/JS\)) Tj ET
+BT /F1 9 Tf 174 508.7 Td (client renders user) Tj ET
+BT /F1 9 Tf 174 496.6 Td (clicks WhatsApp/email) Tj ET
+BT /F1 9 Tf 174 484.4 Td (opens external app) Tj ET
+BT /F1 9 Tf 174 472.3 Td (UniHub no longer in) Tj ET
+BT /F1 9 Tf 174 460.1 Td (loop. Landlord clicks) Tj ET
+BT /F1 9 Tf 174 447.9 Td ("List Property" opens) Tj ET
+BT /F1 9 Tf 174 435.8 Td (WhatsApp with) Tj ET
+BT /F1 9 Tf 174 423.6 Td (pre-filled message) Tj ET
+BT /F1 9 Tf 174 411.5 Td (UniHub no longer in) Tj ET
+BT /F1 9 Tf 174 399.4 Td (loop.) Tj ET
+0.96 0.96 0.96 rg 50 294.15 495 91.05 re f
+0.85 0.85 0.85 RG 0.3 w 50 294.15 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 381.2 Td (**Data minimisation**) Tj ET
+BT /F1 9 Tf 174 381.2 Td (Zero personal data) Tj ET
+BT /F1 9 Tf 174 369.1 Td (collected from browsing) Tj ET
+BT /F1 9 Tf 174 356.9 Td (students. Zero personal) Tj ET
+BT /F1 9 Tf 174 344.8 Td (data stored on UniHub) Tj ET
+BT /F1 9 Tf 174 332.6 Td (servers. Only) Tj ET
+BT /F1 9 Tf 174 320.4 Td (synthetic/sample data) Tj ET
+BT /F1 9 Tf 174 308.3 Td (in repository.) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 215.24999999999997 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 290.1 Td (**Retention**) Tj ET
+BT /F1 9 Tf 174 290.1 Td (No personal data) Tj ET
+BT /F1 9 Tf 174 278.0 Td (retained by UniHub.) Tj ET
+BT /F1 9 Tf 174 265.8 Td (Browser cache/CDN cache) Tj ET
+BT /F1 9 Tf 174 253.7 Td (for static assets \(TTL) Tj ET
+BT /F1 9 Tf 174 241.5 Td (per `vercel.json`) Tj ET
+BT /F1 9 Tf 174 229.4 Td (headers\).) Tj ET
+0.96 0.96 0.96 rg 50 112.04999999999997 495 103.2 re f
+0.85 0.85 0.85 RG 0.3 w 50 112.04999999999997 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 211.2 Td (**Scope**) Tj ET
+BT /F1 9 Tf 174 211.2 Td (Kenya only. Eight) Tj ET
+BT /F1 9 Tf 174 199.1 Td (campus towns: Nairobi) Tj ET
+BT /F1 9 Tf 174 186.9 Td (\(UoN, Strathmore\), Juja) Tj ET
+BT /F1 9 Tf 174 174.8 Td (\(JKUAT\), Kahawa \(KU\),) Tj ET
+BT /F1 9 Tf 174 162.6 Td (Madaraka \(SU\), Thika) Tj ET
+BT /F1 9 Tf 174 150.5 Td (\(THK\), Kesses \(MU\),) Tj ET
+BT /F1 9 Tf 174 138.3 Td (Njoro \(EGU\), Nakuru) Tj ET
+BT /F1 9 Tf 174 126.2 Td (\(NKU\).) Tj ET
+0.6 0.6 0.6 RG 0.5 w 50 112.04999999999997 495 0 re S
+endstream
+endobj
+16 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842]
+   /Contents 15 0 R
+   /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R /F4 6 0 R /F5 7 0 R /F6 8 0 R /F7 9 0 R /F8 10 0 R >> >> >>
+endobj
+17 0 obj
+<< /Length 3869 >>
+stream
+BT /F2 12 Tf 50 775.8 Td (B2. Scope of the processing) Tj ET
+0.15 0.15 0.15 rg 50 733.4499999999999 495 18.15 re f
+1 1 1 rg
+BT /F2 9 Tf 54 747.6 Td (Dimension) Tj ET
+BT /F2 9 Tf 174 747.6 Td (Detail) Tj ET
+0 0 0 rg
+0.96 0.96 0.96 rg 50 654.55 495 78.9 re f
+0.85 0.85 0.85 RG 0.3 w 50 654.55 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 729.4 Td (**Data subjects**) Tj ET
+BT /F1 9 Tf 174 729.4 Td (Prospective student) Tj ET
+BT /F1 9 Tf 174 717.3 Td (tenants \(primary\),) Tj ET
+BT /F1 9 Tf 174 705.1 Td (landlords/agents) Tj ET
+BT /F1 9 Tf 174 693.0 Td (\(secondary, via) Tj ET
+BT /F1 9 Tf 174 680.8 Td (WhatsApp initiation) Tj ET
+BT /F1 9 Tf 174 668.7 Td (only\).) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 599.9499999999999 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 650.5 Td (**Volume**) Tj ET
+BT /F1 9 Tf 174 650.5 Td (<50,000 MAU projected) Tj ET
+BT /F1 9 Tf 174 638.4 Td (at maturity. Zero) Tj ET
+BT /F1 9 Tf 174 626.3 Td (personal records in) Tj ET
+BT /F1 9 Tf 174 614.1 Td (current system.) Tj ET
+0.96 0.96 0.96 rg 50 557.4999999999999 495 42.45 re f
+0.85 0.85 0.85 RG 0.3 w 50 557.4999999999999 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 595.9 Td (**Geographic**) Tj ET
+BT /F1 9 Tf 174 595.9 Td (Kenya only. Tiles) Tj ET
+BT /F1 9 Tf 174 583.8 Td (served from global CDN) Tj ET
+BT /F1 9 Tf 174 571.6 Td (\(OpenFreeMap, Esri\).) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 454.2999999999999 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 553.5 Td (**Duration**) Tj ET
+BT /F1 9 Tf 174 553.5 Td (Session-only for) Tj ET
+BT /F1 9 Tf 174 541.3 Td (students. No persistent) Tj ET
+BT /F1 9 Tf 174 529.2 Td (identifiers. Landlord) Tj ET
+BT /F1 9 Tf 174 517.0 Td (WhatsApp number stored) Tj ET
+BT /F1 9 Tf 174 504.9 Td (only in) Tj ET
+BT /F1 9 Tf 174 492.7 Td (`VITE_WHATSAPP_NUMBER`) Tj ET
+BT /F1 9 Tf 174 480.6 Td (env var \(controller's) Tj ET
+BT /F1 9 Tf 174 468.4 Td (own contact\).) Tj ET
+0.96 0.96 0.96 rg 50 399.6999999999999 495 54.6 re f
+0.85 0.85 0.85 RG 0.3 w 50 399.6999999999999 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 450.3 Td (**Frequency**) Tj ET
+BT /F1 9 Tf 174 450.3 Td (Continuous) Tj ET
+BT /F1 9 Tf 174 438.1 Td (availability. Map tiles) Tj ET
+BT /F1 9 Tf 174 426.0 Td (cached per browser) Tj ET
+BT /F1 9 Tf 174 413.8 Td (session.) Tj ET
+0.6 0.6 0.6 RG 0.5 w 50 399.6999999999999 495 0 re S
+BT /F2 12 Tf 50 367.4999999999999 Td (B3. Context of the processing) Tj ET
+0.15 0.15 0.15 rg 50 325.1499999999999 495 18.15 re f
+1 1 1 rg
+BT /F2 9 Tf 54 339.3 Td (Context) Tj ET
+BT /F2 9 Tf 174 339.3 Td (Detail) Tj ET
+0 0 0 rg
+0.96 0.96 0.96 rg 50 234.0999999999999 495 91.05 re f
+0.85 0.85 0.85 RG 0.3 w 50 234.0999999999999 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 321.1 Td (**Relationship**) Tj ET
+BT /F1 9 Tf 174 321.1 Td (No direct relationship) Tj ET
+BT /F1 9 Tf 174 309.0 Td (with students \(no) Tj ET
+BT /F1 9 Tf 174 296.8 Td (accounts\).) Tj ET
+BT /F1 9 Tf 174 284.7 Td (ControllerЦlandlord) Tj ET
+BT /F1 9 Tf 174 272.5 Td (relationship initiated) Tj ET
+BT /F1 9 Tf 174 260.4 Td (only when landlord) Tj ET
+BT /F1 9 Tf 174 248.2 Td (messages via WhatsApp.) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 155.1999999999999 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 230.1 Td (**Expectations**) Tj ET
+BT /F1 9 Tf 174 230.1 Td (Students expect to) Tj ET
+BT /F1 9 Tf 174 217.9 Td (browse rooms and) Tj ET
+BT /F1 9 Tf 174 205.8 Td (contact landlords. They) Tj ET
+BT /F1 9 Tf 174 193.6 Td (do not expect tracking,) Tj ET
+BT /F1 9 Tf 174 181.5 Td (profiling, or data) Tj ET
+BT /F1 9 Tf 174 169.3 Td (retention by UniHub.) Tj ET
+0.96 0.96 0.96 rg 50 88.4499999999999 495 66.75 re f
+0.85 0.85 0.85 RG 0.3 w 50 88.4499999999999 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 151.2 Td (**Vulnerabilities**) Tj ET
+BT /F1 9 Tf 174 151.2 Td (Students may be) Tj ET
+BT /F1 9 Tf 174 139.0 Td (first-time renters,) Tj ET
+BT /F1 9 Tf 174 126.9 Td (financially) Tj ET
+BT /F1 9 Tf 174 114.7 Td (constrained, limited) Tj ET
+BT /F1 9 Tf 174 102.6 Td (awareness of data) Tj ET
+endstream
+endobj
+18 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842]
+   /Contents 17 0 R
+   /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R /F4 6 0 R /F5 7 0 R /F6 8 0 R /F7 9 0 R /F8 10 0 R >> >> >>
+endobj
+19 0 obj
+<< /Length 5100 >>
+stream
+0.96 0.96 0.96 rg 50 761.7 495 30.3 re f
+0.85 0.85 0.85 RG 0.3 w 50 761.7 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 174 788.0 Td (rights. Platform must) Tj ET
+BT /F1 9 Tf 174 775.9 Td (not exploit asymmetry.) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 731.4000000000001 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 757.7 Td (**Prior concerns**) Tj ET
+BT /F1 9 Tf 174 757.7 Td (None Ч pre-launch. No) Tj ET
+BT /F1 9 Tf 174 745.6 Td (prior processing.) Tj ET
+0.96 0.96 0.96 rg 50 652.5000000000001 495 78.9 re f
+0.85 0.85 0.85 RG 0.3 w 50 652.5000000000001 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 727.4 Td (**Public interest**) Tj ET
+BT /F1 9 Tf 174 727.4 Td (Supports SDG 11) Tj ET
+BT /F1 9 Tf 174 715.3 Td (\(sustainable cities\),) Tj ET
+BT /F1 9 Tf 174 703.1 Td (SDG 4 \(education access) Tj ET
+BT /F1 9 Tf 174 691.0 Td (via housing\). Reduces) Tj ET
+BT /F1 9 Tf 174 678.8 Td (informal/unverified) Tj ET
+BT /F1 9 Tf 174 666.7 Td (rental market risks.) Tj ET
+0.6 0.6 0.6 RG 0.5 w 50 652.5000000000001 495 0 re S
+BT /F2 12 Tf 50 620.3000000000001 Td (B4. Purposes of the processing) Tj ET
+0.15 0.15 0.15 rg 50 565.8000000000001 495 30.3 re f
+1 1 1 rg
+BT /F2 9 Tf 54 592.1 Td (Purpose) Tj ET
+BT /F2 9 Tf 174 592.1 Td (Lawful basis \(s. 30) Tj ET
+BT /F2 9 Tf 174 580.0 Td (Act\)) Tj ET
+BT /F2 9 Tf 294 592.1 Td (Necessity &) Tj ET
+BT /F2 9 Tf 294 580.0 Td (Proportionality) Tj ET
+0 0 0 rg
+0.96 0.96 0.96 rg 50 499.05000000000007 495 66.75 re f
+0.85 0.85 0.85 RG 0.3 w 50 499.05000000000007 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 561.8 Td (**P1: Serve marketing &) Tj ET
+BT /F1 9 Tf 54 549.7 Td (discovery pages**) Tj ET
+BT /F1 9 Tf 174 561.8 Td (Legitimate interest \(s.) Tj ET
+BT /F1 9 Tf 174 549.7 Td (30\(1\)\(f\)\) Ч) Tj ET
+BT /F1 9 Tf 174 537.5 Td (controller's interest) Tj ET
+BT /F1 9 Tf 174 525.4 Td (in operating a housing) Tj ET
+BT /F1 9 Tf 174 513.2 Td (discovery service) Tj ET
+BT /F1 9 Tf 294 561.8 Td (Minimal: static assets) Tj ET
+BT /F1 9 Tf 294 549.7 Td (only. No identifiers.) Tj ET
+BT /F1 9 Tf 294 537.5 Td (Proportional.) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 408.00000000000006 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 495.1 Td (**P2: Render) Tj ET
+BT /F1 9 Tf 54 482.9 Td (interactive campus) Tj ET
+BT /F1 9 Tf 54 470.8 Td (map**) Tj ET
+BT /F1 9 Tf 174 495.1 Td (Legitimate interest \(s.) Tj ET
+BT /F1 9 Tf 174 482.9 Td (30\(1\)\(f\)\) Ч essential) Tj ET
+BT /F1 9 Tf 174 470.8 Td (to "campus-first") Tj ET
+BT /F1 9 Tf 174 458.6 Td (discovery) Tj ET
+BT /F1 9 Tf 294 495.1 Td (Map loads tiles from) Tj ET
+BT /F1 9 Tf 294 482.9 Td (third parties) Tj ET
+BT /F1 9 Tf 294 470.8 Td (\(OpenFreeMap, Esri\). No) Tj ET
+BT /F1 9 Tf 294 458.6 Td (user location) Tj ET
+BT /F1 9 Tf 294 446.5 Td (requested. User can) Tj ET
+BT /F1 9 Tf 294 434.3 Td (disable JS.) Tj ET
+BT /F1 9 Tf 294 422.2 Td (Proportional.) Tj ET
+0.96 0.96 0.96 rg 50 341.25000000000006 495 66.75 re f
+0.85 0.85 0.85 RG 0.3 w 50 341.25000000000006 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 404.0 Td (**P3: Enable student) Tj ET
+BT /F1 9 Tf 54 391.9 Td (landlord contact via) Tj ET
+BT /F1 9 Tf 54 379.7 Td (WhatsApp/email**) Tj ET
+BT /F1 9 Tf 174 404.0 Td (Consent \(s. 30\(1\)\(a\)\) Ч) Tj ET
+BT /F1 9 Tf 174 391.9 Td (student actively clicks) Tj ET
+BT /F1 9 Tf 174 379.7 Td (link) Tj ET
+BT /F1 9 Tf 294 404.0 Td (Student initiates. No) Tj ET
+BT /F1 9 Tf 294 391.9 Td (auto-dial.) Tj ET
+BT /F1 9 Tf 294 379.7 Td (WhatsApp/email UI shows) Tj ET
+BT /F1 9 Tf 294 367.6 Td (recipient before) Tj ET
+BT /F1 9 Tf 294 355.4 Td (sending. Proportional.) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 286.65000000000003 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 337.3 Td (**P4: Enable landlord) Tj ET
+BT /F1 9 Tf 54 325.1 Td (UniHub onboarding via) Tj ET
+BT /F1 9 Tf 54 313.0 Td (WhatsApp**) Tj ET
+BT /F1 9 Tf 174 337.3 Td (Legitimate interest \(s.) Tj ET
+BT /F1 9 Tf 174 325.1 Td (30\(1\)\(f\)\) Ч) Tj ET
+BT /F1 9 Tf 174 313.0 Td (controller's interest) Tj ET
+BT /F1 9 Tf 174 300.8 Td (in onboarding supply) Tj ET
+BT /F1 9 Tf 294 337.3 Td (Landlord initiates.) Tj ET
+BT /F1 9 Tf 294 325.1 Td (Pre-filled message) Tj ET
+BT /F1 9 Tf 294 313.0 Td (discloses purpose.) Tj ET
+BT /F1 9 Tf 294 300.8 Td (Proportional.) Tj ET
+0.96 0.96 0.96 rg 50 219.90000000000003 495 66.75 re f
+0.85 0.85 0.85 RG 0.3 w 50 219.90000000000003 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 282.7 Td (**P5: Security &) Tj ET
+BT /F1 9 Tf 54 270.5 Td (integrity \(CSP, error) Tj ET
+BT /F1 9 Tf 54 258.4 Td (reporting\)**) Tj ET
+BT /F1 9 Tf 174 282.7 Td (Legal obligation \(s.) Tj ET
+BT /F1 9 Tf 174 270.5 Td (30\(1\)\(c\)\) Ч security of) Tj ET
+BT /F1 9 Tf 174 258.4 Td (processing per s. 24) Tj ET
+BT /F1 9 Tf 174 246.2 Td (Act) Tj ET
+BT /F1 9 Tf 294 282.7 Td (CSP headers, no inline) Tj ET
+BT /F1 9 Tf 294 270.5 Td (scripts. Error) Tj ET
+BT /F1 9 Tf 294 258.4 Td (reporting \(if enabled\)) Tj ET
+BT /F1 9 Tf 294 246.2 Td (pseudonymised.) Tj ET
+BT /F1 9 Tf 294 234.1 Td (Proportional.) Tj ET
+0.6 0.6 0.6 RG 0.5 w 50 219.90000000000003 495 0 re S
+0.8 0.8 0.8 RG 0.5 w 50 197.90000000000003 495 0 re S
+BT /F2 15 Tf 50 167.65000000000003 Td (C. Assessment of necessity and proportionality) Tj ET
+BT /F2 12 Tf 50 121.20000000000003 Td (C1. Necessity) Tj ET
+endstream
+endobj
+20 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842]
+   /Contents 19 0 R
+   /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R /F4 6 0 R /F5 7 0 R /F6 8 0 R /F7 9 0 R /F8 10 0 R >> >> >>
+endobj
+21 0 obj
+<< /Length 4955 >>
+stream
+0.15 0.15 0.15 rg 50 749.55 495 42.45 re f
+1 1 1 rg
+BT /F2 9 Tf 54 788.0 Td (Purpose) Tj ET
+BT /F2 9 Tf 174 788.0 Td (Could purpose be) Tj ET
+BT /F2 9 Tf 174 775.9 Td (achieved with less) Tj ET
+BT /F2 9 Tf 174 763.7 Td (data?) Tj ET
+BT /F2 9 Tf 294 788.0 Td (Could purpose be) Tj ET
+BT /F2 9 Tf 294 775.9 Td (achieved without) Tj ET
+BT /F2 9 Tf 294 763.7 Td (processing?) Tj ET
+0 0 0 rg
+0.96 0.96 0.96 rg 50 719.25 495 30.3 re f
+0.85 0.85 0.85 RG 0.3 w 50 719.25 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 745.5 Td (P1 \(static pages\)) Tj ET
+BT /F1 9 Tf 174 745.5 Td (Yes Ч already minimal) Tj ET
+BT /F1 9 Tf 174 733.4 Td (\(no personal data\)) Tj ET
+BT /F1 9 Tf 294 745.5 Td (No Ч core service) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 664.65 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 715.3 Td (P2 \(map\)) Tj ET
+BT /F1 9 Tf 174 715.3 Td (Yes Ч static map image) Tj ET
+BT /F1 9 Tf 174 703.1 Td (would suffice but) Tj ET
+BT /F1 9 Tf 174 691.0 Td (degrade UX) Tj ET
+BT /F1 9 Tf 174 678.8 Td (significantly) Tj ET
+BT /F1 9 Tf 294 715.3 Td (Partial Ч listings page) Tj ET
+BT /F1 9 Tf 294 703.1 Td (works without map) Tj ET
+0.96 0.96 0.96 rg 50 622.1999999999999 495 42.45 re f
+0.85 0.85 0.85 RG 0.3 w 50 622.1999999999999 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 660.6 Td (P3 \(WhatsApp redirect\)) Tj ET
+BT /F1 9 Tf 174 660.6 Td (Yes Ч email only, but) Tj ET
+BT /F1 9 Tf 174 648.5 Td (WhatsApp is dominant in) Tj ET
+BT /F1 9 Tf 174 636.4 Td (Kenya) Tj ET
+BT /F1 9 Tf 294 660.6 Td (No Ч core conversion) Tj ET
+BT /F1 9 Tf 294 648.5 Td (path) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 579.7499999999999 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 618.2 Td (P4 \(landlord) Tj ET
+BT /F1 9 Tf 54 606.0 Td (onboarding\)) Tj ET
+BT /F1 9 Tf 174 618.2 Td (Yes Ч web form, but) Tj ET
+BT /F1 9 Tf 174 606.0 Td (WhatsApp preferred by) Tj ET
+BT /F1 9 Tf 174 593.9 Td (target users) Tj ET
+BT /F1 9 Tf 294 618.2 Td (Partial Ч alternative) Tj ET
+BT /F1 9 Tf 294 606.0 Td (channel exists) Tj ET
+0.96 0.96 0.96 rg 50 549.4499999999999 495 30.3 re f
+0.85 0.85 0.85 RG 0.3 w 50 549.4499999999999 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 575.7 Td (P5 \(security\)) Tj ET
+BT /F1 9 Tf 174 575.7 Td (No Ч CSP/headers are) Tj ET
+BT /F1 9 Tf 174 563.6 Td (minimum viable) Tj ET
+BT /F1 9 Tf 294 575.7 Td (No Ч legal obligation) Tj ET
+0.6 0.6 0.6 RG 0.5 w 50 549.4499999999999 495 0 re S
+BT /F1 10 Tf 50.0 533.4 Td (**Overall:** All purposes are necessary for the service as designed. P2 and P4 have) Tj ET
+BT /F1 10 Tf 50.0 519.9 Td (lower-impact alternatives that would reduce reach in the Kenyan context.) Tj ET
+BT /F2 12 Tf 50 486.24999999999994 Td (C2. Proportionality) Tj ET
+0.15 0.15 0.15 rg 50 443.9 495 18.15 re f
+1 1 1 rg
+BT /F2 9 Tf 54 458.0 Td (Measure) Tj ET
+BT /F2 9 Tf 174 458.0 Td (Implementation) Tj ET
+0 0 0 rg
+0.96 0.96 0.96 rg 50 377.15 495 66.75 re f
+0.85 0.85 0.85 RG 0.3 w 50 377.15 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 439.9 Td (**Data minimisation**) Tj ET
+BT /F1 9 Tf 174 439.9 Td (Zero personal data) Tj ET
+BT /F1 9 Tf 174 427.8 Td (collected from) Tj ET
+BT /F1 9 Tf 174 415.6 Td (students. No cookies,) Tj ET
+BT /F1 9 Tf 174 403.4 Td (no localStorage, no) Tj ET
+BT /F1 9 Tf 174 391.3 Td (fingerprinting.) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 322.54999999999995 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 373.1 Td (**Purpose limitation**) Tj ET
+BT /F1 9 Tf 174 373.1 Td (Each processing) Tj ET
+BT /F1 9 Tf 174 361.0 Td (activity mapped to) Tj ET
+BT /F1 9 Tf 174 348.8 Td (single purpose above.) Tj ET
+BT /F1 9 Tf 174 336.7 Td (No secondary use.) Tj ET
+0.96 0.96 0.96 rg 50 280.09999999999997 495 42.45 re f
+0.85 0.85 0.85 RG 0.3 w 50 280.09999999999997 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 318.5 Td (**Storage limitation**) Tj ET
+BT /F1 9 Tf 174 318.5 Td (No personal data) Tj ET
+BT /F1 9 Tf 174 306.4 Td (stored. Static asset) Tj ET
+BT /F1 9 Tf 174 294.2 Td (cache only.) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 237.64999999999998 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 276.1 Td (**Accuracy**) Tj ET
+BT /F1 9 Tf 174 276.1 Td (N/A Ч no personal data) Tj ET
+BT /F1 9 Tf 174 263.9 Td (processed. Sample) Tj ET
+BT /F1 9 Tf 174 251.8 Td (listings are synthetic.) Tj ET
+0.96 0.96 0.96 rg 50 134.45 495 103.2 re f
+0.85 0.85 0.85 RG 0.3 w 50 134.45 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 233.6 Td (**Integrity &) Tj ET
+BT /F1 9 Tf 54 221.5 Td (confidentiality**) Tj ET
+BT /F1 9 Tf 174 233.6 Td (CSP, HTTPS only,) Tj ET
+BT /F1 9 Tf 174 221.5 Td (`X-Frame-Options:) Tj ET
+BT /F1 9 Tf 174 209.3 Td (DENY`,) Tj ET
+BT /F1 9 Tf 174 197.2 Td (`Referrer-Policy:) Tj ET
+BT /F1 9 Tf 174 185.0 Td (strict-origin-when-cros) Tj ET
+BT /F1 9 Tf 174 172.9 Td (s-origin`,) Tj ET
+BT /F1 9 Tf 174 160.7 Td (`Permissions-Policy`) Tj ET
+BT /F1 9 Tf 174 148.6 Td (restricting sensors.) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 91.99999999999999 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 130.4 Td (**Accountability**) Tj ET
+BT /F1 9 Tf 174 130.4 Td (This DPIA. Git history) Tj ET
+BT /F1 9 Tf 174 118.3 Td (for code changes.) Tj ET
+BT /F1 9 Tf 174 106.1 Td (Vercel deploy logs. No) Tj ET
+endstream
+endobj
+22 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842]
+   /Contents 21 0 R
+   /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R /F4 6 0 R /F5 7 0 R /F6 8 0 R /F7 9 0 R /F8 10 0 R >> >> >>
+endobj
+23 0 obj
+<< /Length 4500 >>
+stream
+0.85 0.85 0.85 RG 0.3 w 50 761.7 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 174 788.0 Td (admin panel, no) Tj ET
+BT /F1 9 Tf 174 775.9 Td (database.) Tj ET
+0.6 0.6 0.6 RG 0.5 w 50 761.7 495 0 re S
+BT /F2 12 Tf 50 729.5 Td (C3. Data subject rights facilitation) Tj ET
+0.15 0.15 0.15 rg 50 687.15 495 18.15 re f
+1 1 1 rg
+BT /F2 9 Tf 54 701.3 Td (Right) Tj ET
+BT /F2 9 Tf 174 701.3 Td (Mechanism) Tj ET
+0 0 0 rg
+0.96 0.96 0.96 rg 50 632.55 495 54.6 re f
+0.85 0.85 0.85 RG 0.3 w 50 632.55 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 683.1 Td (**Access**) Tj ET
+BT /F1 9 Tf 174 683.1 Td (No personal data held) Tj ET
+BT /F1 9 Tf 174 671.0 Td (respond "no data held") Tj ET
+BT /F1 9 Tf 174 658.9 Td (within 14 days \(s. 26) Tj ET
+BT /F1 9 Tf 174 646.7 Td (Act\).) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 614.4 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 628.5 Td (**Rectification**) Tj ET
+BT /F1 9 Tf 174 628.5 Td (N/A Ч no data held.) Tj ET
+0.96 0.96 0.96 rg 50 535.5 495 78.9 re f
+0.85 0.85 0.85 RG 0.3 w 50 535.5 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 610.4 Td (**Erasure**) Tj ET
+BT /F1 9 Tf 174 610.4 Td (N/A Ч no data held.) Tj ET
+BT /F1 9 Tf 174 598.3 Td (Landlord WhatsApp chat) Tj ET
+BT /F1 9 Tf 174 586.1 Td (is outside UniHub;) Tj ET
+BT /F1 9 Tf 174 573.9 Td (student must request) Tj ET
+BT /F1 9 Tf 174 561.8 Td (erasure from landlord) Tj ET
+BT /F1 9 Tf 174 549.6 Td (directly.) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 517.35 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 531.5 Td (**Restriction**) Tj ET
+BT /F1 9 Tf 174 531.5 Td (N/A.) Tj ET
+0.96 0.96 0.96 rg 50 499.20000000000005 495 18.15 re f
+0.85 0.85 0.85 RG 0.3 w 50 499.20000000000005 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 513.4 Td (**Portability**) Tj ET
+BT /F1 9 Tf 174 513.4 Td (N/A.) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 456.75000000000006 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 495.2 Td (**Objection**) Tj ET
+BT /F1 9 Tf 174 495.2 Td (Student can browse with) Tj ET
+BT /F1 9 Tf 174 483.1 Td (JS disabled. No) Tj ET
+BT /F1 9 Tf 174 470.9 Td (profiling to object to.) Tj ET
+0.96 0.96 0.96 rg 50 426.45000000000005 495 30.3 re f
+0.85 0.85 0.85 RG 0.3 w 50 426.45000000000005 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 452.8 Td (**Automated) Tj ET
+BT /F1 9 Tf 54 440.6 Td (decision-making**) Tj ET
+BT /F1 9 Tf 174 452.8 Td (None.) Tj ET
+0.6 0.6 0.6 RG 0.5 w 50 426.45000000000005 495 0 re S
+0.8 0.8 0.8 RG 0.5 w 50 404.45000000000005 495 0 re S
+BT /F2 15 Tf 50 374.20000000000005 Td (D. Risks to rights and freedoms) Tj ET
+BT /F2 12 Tf 50 327.75000000000006 Td (D1. Risk identification) Tj ET
+0.15 0.15 0.15 rg 50 285.4000000000001 495 18.15 re f
+1 1 1 rg
+BT /F2 9 Tf 54 299.6 Td (Risk ID) Tj ET
+BT /F2 9 Tf 174 299.6 Td (Description) Tj ET
+BT /F2 9 Tf 294 299.6 Td (Source) Tj ET
+BT /F2 9 Tf 414 299.6 Td (Affected right\(s\)) Tj ET
+0 0 0 rg
+0.96 0.96 0.96 rg 50 218.6500000000001 495 66.75 re f
+0.85 0.85 0.85 RG 0.3 w 50 218.6500000000001 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 281.4 Td (**R1**) Tj ET
+BT /F1 9 Tf 174 281.4 Td (Third-party tile) Tj ET
+BT /F1 9 Tf 174 269.3 Td (providers \(OpenFreeMap,) Tj ET
+BT /F1 9 Tf 174 257.1 Td (Esri\) receive student) Tj ET
+BT /F1 9 Tf 174 245.0 Td (IP address and user) Tj ET
+BT /F1 9 Tf 174 232.8 Td (agent when map loads) Tj ET
+BT /F1 9 Tf 294 281.4 Td (MapLibre GL tile) Tj ET
+BT /F1 9 Tf 294 269.3 Td (requests) Tj ET
+BT /F1 9 Tf 414 281.4 Td (Privacy \(Art. 31\), Data) Tj ET
+BT /F1 9 Tf 414 269.3 Td (minimisation) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 151.9000000000001 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 214.7 Td (**R2**) Tj ET
+BT /F1 9 Tf 174 214.7 Td (WhatsApp redirect) Tj ET
+BT /F1 9 Tf 174 202.5 Td (exposes student phone) Tj ET
+BT /F1 9 Tf 174 190.4 Td (number to landlord \(and) Tj ET
+BT /F1 9 Tf 174 178.2 Td (Meta\) before student) Tj ET
+BT /F1 9 Tf 174 166.1 Td (may be ready) Tj ET
+BT /F1 9 Tf 294 214.7 Td (Student-initiated) Tj ET
+BT /F1 9 Tf 294 202.5 Td (WhatsApp click) Tj ET
+BT /F1 9 Tf 414 214.7 Td (Control over personal) Tj ET
+BT /F1 9 Tf 414 202.5 Td (data, Privacy) Tj ET
+0.96 0.96 0.96 rg 50 85.15000000000009 495 66.75 re f
+0.85 0.85 0.85 RG 0.3 w 50 85.15000000000009 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 147.9 Td (**R3**) Tj ET
+BT /F1 9 Tf 174 147.9 Td (Vercel \(US company\)) Tj ET
+BT /F1 9 Tf 174 135.8 Td (processes traffic) Tj ET
+BT /F1 9 Tf 174 123.6 Td (metadata \(IP, headers\)) Tj ET
+BT /F1 9 Tf 174 111.5 Td (at edge Ч international) Tj ET
+BT /F1 9 Tf 174 99.3 Td (transfer) Tj ET
+BT /F1 9 Tf 294 147.9 Td (Hosting on Vercel) Tj ET
+BT /F1 9 Tf 414 147.9 Td (Cross-border transfer) Tj ET
+BT /F1 9 Tf 414 135.8 Td (\(s. 48 Act\)) Tj ET
+endstream
+endobj
+24 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842]
+   /Contents 23 0 R
+   /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R /F4 6 0 R /F5 7 0 R /F6 8 0 R /F7 9 0 R /F8 10 0 R >> >> >>
+endobj
+25 0 obj
+<< /Length 3144 >>
+stream
+0.85 0.85 0.85 RG 0.3 w 50 713.1 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 788.0 Td (**R4**) Tj ET
+BT /F1 9 Tf 174 788.0 Td (Error reporting \(if) Tj ET
+BT /F1 9 Tf 174 775.9 Td (enabled via) Tj ET
+BT /F1 9 Tf 174 763.7 Td (Sentry/lovable-error-re) Tj ET
+BT /F1 9 Tf 174 751.5 Td (porting\)) Tj ET
+BT /F1 9 Tf 174 739.4 Td (could capture student) Tj ET
+BT /F1 9 Tf 174 727.3 Td (IP or URL fragments) Tj ET
+BT /F1 9 Tf 294 788.0 Td (`src/lib/lovable-error-) Tj ET
+BT /F1 9 Tf 294 775.9 Td (reporting.ts`) Tj ET
+BT /F1 9 Tf 414 788.0 Td (Privacy, Security) Tj ET
+0.96 0.96 0.96 rg 50 646.35 495 66.75 re f
+0.85 0.85 0.85 RG 0.3 w 50 646.35 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 709.1 Td (**R5**) Tj ET
+BT /F1 9 Tf 174 709.1 Td (Student assumes UniHub) Tj ET
+BT /F1 9 Tf 174 697.0 Td (verifies landlord) Tj ET
+BT /F1 9 Tf 174 684.8 Td (identity; landlord may) Tj ET
+BT /F1 9 Tf 174 672.6 Td (misrepresent Ч trust) Tj ET
+BT /F1 9 Tf 174 660.5 Td (asymmetry) Tj ET
+BT /F1 9 Tf 294 709.1 Td (Marketing copy) Tj ET
+BT /F1 9 Tf 294 697.0 Td ("Verified listings") Tj ET
+BT /F1 9 Tf 414 709.1 Td (Fair processing,) Tj ET
+BT /F1 9 Tf 414 697.0 Td (Transparency) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 567.45 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 642.4 Td (**R6**) Tj ET
+BT /F1 9 Tf 174 642.4 Td (Map satellite layer) Tj ET
+BT /F1 9 Tf 174 630.2 Td (\(Esri\) shows) Tj ET
+BT /F1 9 Tf 174 618.1 Td (high-resolution imagery) Tj ET
+BT /F1 9 Tf 174 605.9 Td (of residential areas Ч) Tj ET
+BT /F1 9 Tf 174 593.8 Td (potential surveillance) Tj ET
+BT /F1 9 Tf 174 581.6 Td (concerns) Tj ET
+BT /F1 9 Tf 294 642.4 Td (Esri World Imagery) Tj ET
+BT /F1 9 Tf 294 630.2 Td (tiles) Tj ET
+BT /F1 9 Tf 414 642.4 Td (Privacy, Art. 31) Tj ET
+0.96 0.96 0.96 rg 50 488.55000000000007 495 78.9 re f
+0.85 0.85 0.85 RG 0.3 w 50 488.55000000000007 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 563.5 Td (**R7**) Tj ET
+BT /F1 9 Tf 174 563.5 Td (Client-side video) Tj ET
+BT /F1 9 Tf 174 551.3 Td (autoplay \(residence) Tj ET
+BT /F1 9 Tf 174 539.2 Td (clips\) downloads MP4s) Tj ET
+BT /F1 9 Tf 174 527.0 Td (without explicit play Ч) Tj ET
+BT /F1 9 Tf 174 514.9 Td (data cost for students) Tj ET
+BT /F1 9 Tf 174 502.7 Td (on mobile) Tj ET
+BT /F1 9 Tf 294 563.5 Td (`src/components/Residen) Tj ET
+BT /F1 9 Tf 294 551.3 Td (ceVideoGallery.tsx`,) Tj ET
+BT /F1 9 Tf 294 539.2 Td (`useBatchedVideoAutopla) Tj ET
+BT /F1 9 Tf 294 527.0 Td (y.ts`) Tj ET
+BT /F1 9 Tf 414 563.5 Td (Data minimisation, Fair) Tj ET
+BT /F1 9 Tf 414 551.3 Td (processing \(cost\)) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 397.50000000000006 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 484.6 Td (**R8**) Tj ET
+BT /F1 9 Tf 174 484.6 Td (No Data Protection) Tj ET
+BT /F1 9 Tf 174 472.4 Td (Officer appointed) Tj ET
+BT /F1 9 Tf 174 460.3 Td (\(threshold: >250) Tj ET
+BT /F1 9 Tf 174 448.1 Td (employees or) Tj ET
+BT /F1 9 Tf 174 436.0 Td (large-scale processing) Tj ET
+BT /F1 9 Tf 174 423.8 Td (Ч not yet met, but good) Tj ET
+BT /F1 9 Tf 174 411.7 Td (practice\)) Tj ET
+BT /F1 9 Tf 294 484.6 Td (Organisational) Tj ET
+BT /F1 9 Tf 414 484.6 Td (Accountability \(s. 22) Tj ET
+BT /F1 9 Tf 414 472.4 Td (Act\)) Tj ET
+0.6 0.6 0.6 RG 0.5 w 50 397.50000000000006 495 0 re S
+endstream
+endobj
+26 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842]
+   /Contents 25 0 R
+   /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R /F4 6 0 R /F5 7 0 R /F6 8 0 R /F7 9 0 R /F8 10 0 R >> >> >>
+endobj
+27 0 obj
+<< /Length 6147 >>
+stream
+BT /F2 12 Tf 50 767.8 Td (D2. Risk analysis \(Impact Likelihood matrix\)) Tj ET
+0.15 0.15 0.15 rg 50 725.4499999999999 495 18.15 re f
+1 1 1 rg
+BT /F2 9 Tf 54 739.6 Td (Risk) Tj ET
+BT /F2 9 Tf 174 739.6 Td (Impact \(1Ц5\)) Tj ET
+BT /F2 9 Tf 294 739.6 Td (Likelihood \(1Ц5\)) Tj ET
+BT /F2 9 Tf 414 739.6 Td (Score) Tj ET
+BT /F2 9 Tf 534 739.6 Td (Level) Tj ET
+0 0 0 rg
+0.96 0.96 0.96 rg 50 695.15 495 30.3 re f
+0.85 0.85 0.85 RG 0.3 w 50 695.15 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 721.4 Td (R1 Ч Tile provider IP) Tj ET
+BT /F1 9 Tf 54 709.3 Td (exposure) Tj ET
+BT /F1 9 Tf 174 721.4 Td (2 \(IP only, no) Tj ET
+BT /F1 9 Tf 174 709.3 Td (identity\)) Tj ET
+BT /F1 9 Tf 294 721.4 Td (4 \(every map load\)) Tj ET
+BT /F1 9 Tf 414 721.4 Td (8) Tj ET
+BT /F1 9 Tf 534 721.4 Td (**Medium**) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 664.85 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 691.1 Td (R2 Ч WhatsApp phone) Tj ET
+BT /F1 9 Tf 54 679.0 Td (exposure) Tj ET
+BT /F1 9 Tf 174 691.1 Td (3 \(phone = direct) Tj ET
+BT /F1 9 Tf 174 679.0 Td (identifier\)) Tj ET
+BT /F1 9 Tf 294 691.1 Td (3 \(only on click\)) Tj ET
+BT /F1 9 Tf 414 691.1 Td (9) Tj ET
+BT /F1 9 Tf 534 691.1 Td (**Medium**) Tj ET
+0.96 0.96 0.96 rg 50 634.5500000000001 495 30.3 re f
+0.85 0.85 0.85 RG 0.3 w 50 634.5500000000001 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 660.9 Td (R3 Ч Vercel) Tj ET
+BT /F1 9 Tf 54 648.7 Td (international transfer) Tj ET
+BT /F1 9 Tf 174 660.9 Td (3 \(traffic metadata\)) Tj ET
+BT /F1 9 Tf 294 660.9 Td (5 \(all requests\)) Tj ET
+BT /F1 9 Tf 414 660.9 Td (15) Tj ET
+BT /F1 9 Tf 534 660.9 Td (**High**) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 604.2500000000001 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 630.6 Td (R4 Ч Error reporting) Tj ET
+BT /F1 9 Tf 54 618.4 Td (leakage) Tj ET
+BT /F1 9 Tf 174 630.6 Td (2 \(configurable, can) Tj ET
+BT /F1 9 Tf 174 618.4 Td (disable\)) Tj ET
+BT /F1 9 Tf 294 630.6 Td (2 \(errors rare\)) Tj ET
+BT /F1 9 Tf 414 630.6 Td (4) Tj ET
+BT /F1 9 Tf 534 630.6 Td (Low) Tj ET
+0.96 0.96 0.96 rg 50 573.9500000000002 495 30.3 re f
+0.85 0.85 0.85 RG 0.3 w 50 573.9500000000002 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 600.3 Td (R5 Ч Trust asymmetry) Tj ET
+BT /F1 9 Tf 54 588.1 Td ("Verified") Tj ET
+BT /F1 9 Tf 174 600.3 Td (4 \(financial/housing) Tj ET
+BT /F1 9 Tf 174 588.1 Td (harm\)) Tj ET
+BT /F1 9 Tf 294 600.3 Td (3 \(depends on landlord\)) Tj ET
+BT /F1 9 Tf 414 600.3 Td (12) Tj ET
+BT /F1 9 Tf 534 600.3 Td (**High**) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 543.6500000000002 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 570.0 Td (R6 Ч Satellite imagery) Tj ET
+BT /F1 9 Tf 54 557.8 Td (surveillance) Tj ET
+BT /F1 9 Tf 174 570.0 Td (2 \(public imagery,) Tj ET
+BT /F1 9 Tf 174 557.8 Td (already published\)) Tj ET
+BT /F1 9 Tf 294 570.0 Td (3 \(map view optional\)) Tj ET
+BT /F1 9 Tf 414 570.0 Td (6) Tj ET
+BT /F1 9 Tf 534 570.0 Td (Low) Tj ET
+0.96 0.96 0.96 rg 50 513.3500000000003 495 30.3 re f
+0.85 0.85 0.85 RG 0.3 w 50 513.3500000000003 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 539.7 Td (R7 Ч Video data cost) Tj ET
+BT /F1 9 Tf 174 539.7 Td (2 \(MP4s ~2Ц5MB each,) Tj ET
+BT /F1 9 Tf 174 527.5 Td (lazy-loaded\)) Tj ET
+BT /F1 9 Tf 294 539.7 Td (3 \(autoplay on scroll\)) Tj ET
+BT /F1 9 Tf 414 539.7 Td (6) Tj ET
+BT /F1 9 Tf 534 539.7 Td (Low) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 483.05000000000024 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 509.4 Td (R8 Ч No DPO) Tj ET
+BT /F1 9 Tf 174 509.4 Td (2 \(not legally required) Tj ET
+BT /F1 9 Tf 174 497.2 Td (yet\)) Tj ET
+BT /F1 9 Tf 294 509.4 Td (5 \(current state\)) Tj ET
+BT /F1 9 Tf 414 509.4 Td (10) Tj ET
+BT /F1 9 Tf 534 509.4 Td (**Medium**) Tj ET
+0.6 0.6 0.6 RG 0.5 w 50 483.05000000000024 495 0 re S
+0.8 0.8 0.8 RG 0.5 w 50 461.05000000000024 495 0 re S
+BT /F2 15 Tf 50 430.80000000000024 Td (E. Measures to address risks) Tj ET
+BT /F2 12 Tf 50 384.35000000000025 Td (E1. Technical measures) Tj ET
+0.15 0.15 0.15 rg 50 342.0000000000003 495 18.15 re f
+1 1 1 rg
+BT /F2 9 Tf 54 356.2 Td (Risk) Tj ET
+BT /F2 9 Tf 174 356.2 Td (Measure) Tj ET
+BT /F2 9 Tf 294 356.2 Td (Implementation) Tj ET
+BT /F2 9 Tf 414 356.2 Td (Status) Tj ET
+0 0 0 rg
+0.96 0.96 0.96 rg 50 226.65000000000026 495 115.35000000000001 re f
+0.85 0.85 0.85 RG 0.3 w 50 226.65000000000026 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 338.0 Td (R1) Tj ET
+BT /F1 9 Tf 174 338.0 Td (**Map tile proxy /) Tj ET
+BT /F1 9 Tf 174 325.9 Td (self-host**) Tj ET
+BT /F1 9 Tf 294 338.0 Td (Not feasible for MVP) Tj ET
+BT /F1 9 Tf 294 325.9 Td (\(tile volume\).) Tj ET
+BT /F1 9 Tf 294 313.7 Td (Mitigation: OpenFreeMap) Tj ET
+BT /F1 9 Tf 294 301.6 Td (has [privacy) Tj ET
+BT /F1 9 Tf 294 289.4 Td (policy]\(https://openfre) Tj ET
+BT /F1 9 Tf 294 277.3 Td (emap.org/privacy\)) Tj ET
+BT /F1 9 Tf 294 265.1 Td (Ч no tracking. Esri) Tj ET
+BT /F1 9 Tf 294 253.0 Td (tiles public. Document) Tj ET
+BT /F1 9 Tf 294 240.8 Td (in privacy policy.) Tj ET
+BT /F1 9 Tf 414 338.0 Td (**Accepted with) Tj ET
+BT /F1 9 Tf 414 325.9 Td (disclosure**) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 135.60000000000025 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 222.7 Td (R1) Tj ET
+BT /F1 9 Tf 174 222.7 Td (**Defer map load**) Tj ET
+BT /F1 9 Tf 294 222.7 Td (Map component only) Tj ET
+BT /F1 9 Tf 294 210.5 Td (mounts when "Place" act) Tj ET
+BT /F1 9 Tf 294 198.4 Td (scrolls into view) Tj ET
+BT /F1 9 Tf 294 186.2 Td (\(`IntersectionObserver`) Tj ET
+BT /F1 9 Tf 294 174.1 Td (\).) Tj ET
+BT /F1 9 Tf 294 161.9 Td (Student can browse) Tj ET
+BT /F1 9 Tf 294 149.8 Td (listings without map.) Tj ET
+BT /F1 9 Tf 414 222.7 Td (**Implemented**) Tj ET
+BT /F1 9 Tf 414 210.5 Td (\(`src/components/Campus) Tj ET
+BT /F1 9 Tf 414 198.4 Td (Map.tsx`\)) Tj ET
+0.96 0.96 0.96 rg 50 81.00000000000026 495 54.6 re f
+0.85 0.85 0.85 RG 0.3 w 50 81.00000000000026 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 131.6 Td (R2) Tj ET
+BT /F1 9 Tf 174 131.6 Td (**Explicit WhatsApp) Tj ET
+BT /F1 9 Tf 174 119.5 Td (confirmation**) Tj ET
+BT /F1 9 Tf 294 131.6 Td (Button label: "Chat on) Tj ET
+BT /F1 9 Tf 294 119.5 Td (WhatsApp" Ч makes) Tj ET
+BT /F1 9 Tf 294 107.3 Td (external action clear.) Tj ET
+BT /F1 9 Tf 294 95.2 Td (`rel="noopener) Tj ET
+BT /F1 9 Tf 414 131.6 Td (**Implemented**) Tj ET
+BT /F1 9 Tf 414 119.5 Td (\(`src/components/Market) Tj ET
+BT /F1 9 Tf 414 107.3 Td (ingChrome.tsx`\)) Tj ET
+endstream
+endobj
+28 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842]
+   /Contents 27 0 R
+   /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R /F4 6 0 R /F5 7 0 R /F6 8 0 R /F7 9 0 R /F8 10 0 R >> >> >>
+endobj
+29 0 obj
+<< /Length 5626 >>
+stream
+0.96 0.96 0.96 rg 50 761.7 495 30.3 re f
+0.85 0.85 0.85 RG 0.3 w 50 761.7 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 294 788.0 Td (noreferrer"` on all) Tj ET
+BT /F1 9 Tf 294 775.9 Td (external links.) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 694.95 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 757.7 Td (R2) Tj ET
+BT /F1 9 Tf 174 757.7 Td (**Email alternative**) Tj ET
+BT /F1 9 Tf 294 757.7 Td (Email `mailto:` link) Tj ET
+BT /F1 9 Tf 294 745.6 Td (provided alongside) Tj ET
+BT /F1 9 Tf 294 733.4 Td (WhatsApp for every) Tj ET
+BT /F1 9 Tf 294 721.3 Td (listing and contact) Tj ET
+BT /F1 9 Tf 294 709.1 Td (page.) Tj ET
+BT /F1 9 Tf 414 757.7 Td (**Implemented**) Tj ET
+BT /F1 9 Tf 414 745.6 Td (\(`src/routes/contact.ts) Tj ET
+BT /F1 9 Tf 414 733.4 Td (x`,) Tj ET
+BT /F1 9 Tf 414 721.3 Td (`ListingGrid.tsx`\)) Tj ET
+0.96 0.96 0.96 rg 50 591.75 495 103.2 re f
+0.85 0.85 0.85 RG 0.3 w 50 591.75 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 691.0 Td (R3) Tj ET
+BT /F1 9 Tf 174 691.0 Td (**Vercel DPA & SCCs**) Tj ET
+BT /F1 9 Tf 294 691.0 Td (Execute Vercel Data) Tj ET
+BT /F1 9 Tf 294 678.8 Td (Processing Addendum) Tj ET
+BT /F1 9 Tf 294 666.7 Td (\(includes Standard) Tj ET
+BT /F1 9 Tf 294 654.5 Td (Contractual Clauses for) Tj ET
+BT /F1 9 Tf 294 642.4 Td (EU/UK/CH transfer\).) Tj ET
+BT /F1 9 Tf 294 630.2 Td (Document in Records of) Tj ET
+BT /F1 9 Tf 294 618.1 Td (Processing Activities) Tj ET
+BT /F1 9 Tf 294 605.9 Td (\(ROPA\).) Tj ET
+BT /F1 9 Tf 414 691.0 Td (**Action required) Tj ET
+BT /F1 9 Tf 414 678.8 Td (pre-launch**) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 525 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 587.8 Td (R3) Tj ET
+BT /F1 9 Tf 174 587.8 Td (**Edge config: no) Tj ET
+BT /F1 9 Tf 174 575.6 Td (logging of request) Tj ET
+BT /F1 9 Tf 174 563.5 Td (body**) Tj ET
+BT /F1 9 Tf 294 587.8 Td (Vercel default: logs) Tj ET
+BT /F1 9 Tf 294 575.6 Td (path, method, status,) Tj ET
+BT /F1 9 Tf 294 563.5 Td (IP. No request body.) Tj ET
+BT /F1 9 Tf 294 551.3 Td (Confirm in Vercel) Tj ET
+BT /F1 9 Tf 294 539.1 Td (dashboard.) Tj ET
+BT /F1 9 Tf 414 587.8 Td (**Verified**) Tj ET
+0.96 0.96 0.96 rg 50 421.8 495 103.2 re f
+0.85 0.85 0.85 RG 0.3 w 50 421.8 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 521.0 Td (R4) Tj ET
+BT /F1 9 Tf 174 521.0 Td (**Disable error) Tj ET
+BT /F1 9 Tf 174 508.9 Td (reporting in) Tj ET
+BT /F1 9 Tf 174 496.7 Td (production**) Tj ET
+BT /F1 9 Tf 294 521.0 Td (`lovable-error-reportin) Tj ET
+BT /F1 9 Tf 294 508.9 Td (g.ts`) Tj ET
+BT /F1 9 Tf 294 496.7 Td (only active in) Tj ET
+BT /F1 9 Tf 294 484.6 Td (development) Tj ET
+BT /F1 9 Tf 294 472.4 Td (\(`import.meta.env.DEV`\)) Tj ET
+BT /F1 9 Tf 294 460.3 Td (.) Tj ET
+BT /F1 9 Tf 294 448.1 Td (Production build) Tj ET
+BT /F1 9 Tf 294 435.9 Td (excludes.) Tj ET
+BT /F1 9 Tf 414 521.0 Td (**Implemented**) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 367.2 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 417.8 Td (R4) Tj ET
+BT /F1 9 Tf 174 417.8 Td (**Sanitise error) Tj ET
+BT /F1 9 Tf 174 405.7 Td (payloads**) Tj ET
+BT /F1 9 Tf 294 417.8 Td (If re-enabled: strip) Tj ET
+BT /F1 9 Tf 294 405.7 Td (URL query params,) Tj ET
+BT /F1 9 Tf 294 393.5 Td (headers, IP before) Tj ET
+BT /F1 9 Tf 294 381.4 Td (send.) Tj ET
+BT /F1 9 Tf 414 417.8 Td (**Design ready**) Tj ET
+0.96 0.96 0.96 rg 50 300.45 495 66.75 re f
+0.85 0.85 0.85 RG 0.3 w 50 300.45 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 363.2 Td (R5) Tj ET
+BT /F1 9 Tf 174 363.2 Td (**Qualify "Verified") Tj ET
+BT /F1 9 Tf 174 351.1 Td (claim**) Tj ET
+BT /F1 9 Tf 294 363.2 Td (Update copy: "Landlord) Tj ET
+BT /F1 9 Tf 294 351.1 Td (details reviewed before) Tj ET
+BT /F1 9 Tf 294 338.9 Td (publish" \(not "identity) Tj ET
+BT /F1 9 Tf 294 326.8 Td (verified"\). Add tooltip) Tj ET
+BT /F1 9 Tf 294 314.6 Td (explaining scope.) Tj ET
+BT /F1 9 Tf 414 363.2 Td (**Action required**) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 209.39999999999998 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 296.4 Td (R5) Tj ET
+BT /F1 9 Tf 174 296.4 Td (**Landlord onboarding) Tj ET
+BT /F1 9 Tf 174 284.3 Td (checklist**) Tj ET
+BT /F1 9 Tf 294 296.4 Td (Document verification) Tj ET
+BT /F1 9 Tf 294 284.3 Td (steps \(ID sighted,) Tj ET
+BT /F1 9 Tf 294 272.1 Td (title deed/lease) Tj ET
+BT /F1 9 Tf 294 260.0 Td (confirmed, contact) Tj ET
+BT /F1 9 Tf 294 247.8 Td (tested\) in) Tj ET
+BT /F1 9 Tf 294 235.7 Td (`/list-property`) Tj ET
+BT /F1 9 Tf 294 223.5 Td (WhatsApp flow.) Tj ET
+BT /F1 9 Tf 414 296.4 Td (**Design ready**) Tj ET
+0.96 0.96 0.96 rg 50 154.79999999999998 495 54.6 re f
+0.85 0.85 0.85 RG 0.3 w 50 154.79999999999998 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 205.4 Td (R6) Tj ET
+BT /F1 9 Tf 174 205.4 Td (**Default to dark) Tj ET
+BT /F1 9 Tf 174 193.2 Td (vector map**) Tj ET
+BT /F1 9 Tf 294 205.4 Td (Satellite layer opt-in) Tj ET
+BT /F1 9 Tf 294 193.2 Td (via toggle. Dark mode) Tj ET
+BT /F1 9 Tf 294 181.1 Td (\(OpenFreeMap\) shows no) Tj ET
+BT /F1 9 Tf 294 168.9 Td (residential detail.) Tj ET
+BT /F1 9 Tf 414 205.4 Td (**Implemented**) Tj ET
+BT /F1 9 Tf 414 193.2 Td (\(`CampusMap.tsx`) Tj ET
+BT /F1 9 Tf 414 181.1 Td (default\)) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 88.04999999999998 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 150.8 Td (R7) Tj ET
+BT /F1 9 Tf 174 150.8 Td (**Reduced-motion &) Tj ET
+BT /F1 9 Tf 174 138.6 Td (data-saver**) Tj ET
+BT /F1 9 Tf 294 150.8 Td (`prefers-reduced-motion) Tj ET
+BT /F1 9 Tf 294 138.6 Td (`) Tj ET
+BT /F1 9 Tf 294 126.5 Td (disables autoplay.) Tj ET
+BT /F1 9 Tf 294 114.3 Td (`prefers-reduced-data`) Tj ET
+BT /F1 9 Tf 294 102.2 Td (\(via) Tj ET
+BT /F1 9 Tf 414 150.8 Td (**Implemented**) Tj ET
+BT /F1 9 Tf 414 138.6 Td (\(`useReducedMotion.ts`,) Tj ET
+BT /F1 9 Tf 414 126.5 Td (`useBatchedVideoAutopla) Tj ET
+BT /F1 9 Tf 414 114.3 Td (y.ts`,) Tj ET
+BT /F1 9 Tf 414 102.2 Td (`residenceClips.ts`) Tj ET
+endstream
+endobj
+30 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842]
+   /Contents 29 0 R
+   /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R /F4 6 0 R /F5 7 0 R /F6 8 0 R /F7 9 0 R /F8 10 0 R >> >> >>
+endobj
+31 0 obj
+<< /Length 1465 >>
+stream
+0.85 0.85 0.85 RG 0.3 w 50 725.25 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 294 788.0 Td (`navigator.connection.s) Tj ET
+BT /F1 9 Tf 294 775.9 Td (aveData`\)) Tj ET
+BT /F1 9 Tf 294 763.7 Td (disables video preload.) Tj ET
+BT /F1 9 Tf 294 751.5 Td (Videos lazy-loaded via) Tj ET
+BT /F1 9 Tf 294 739.4 Td (dynamic import.) Tj ET
+BT /F1 9 Tf 414 788.0 Td (lazy import\)) Tj ET
+0.96 0.96 0.96 rg 50 670.65 495 54.6 re f
+0.85 0.85 0.85 RG 0.3 w 50 670.65 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 721.3 Td (R7) Tj ET
+BT /F1 9 Tf 174 721.3 Td (**Video size limits**) Tj ET
+BT /F1 9 Tf 294 721.3 Td (Clips compressed to) Tj ET
+BT /F1 9 Tf 294 709.1 Td (<3MB each, H.264, 720p) Tj ET
+BT /F1 9 Tf 294 697.0 Td (max. Poster images WebP) Tj ET
+BT /F1 9 Tf 294 684.8 Td (<100KB.) Tj ET
+BT /F1 9 Tf 414 721.3 Td (**Implemented** \(assets) Tj ET
+BT /F1 9 Tf 414 709.1 Td (in `public/ads/`\)) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 603.9 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 666.6 Td (R8) Tj ET
+BT /F1 9 Tf 174 666.6 Td (**Appoint DPO before) Tj ET
+BT /F1 9 Tf 174 654.5 Td (launch**) Tj ET
+BT /F1 9 Tf 294 666.6 Td (Engage external DPO) Tj ET
+BT /F1 9 Tf 294 654.5 Td (service \(e.g.,) Tj ET
+BT /F1 9 Tf 294 642.4 Td (ODPC-accredited\) when) Tj ET
+BT /F1 9 Tf 294 630.2 Td (MAU >10k or processing) Tj ET
+BT /F1 9 Tf 294 618.0 Td (expands.) Tj ET
+BT /F1 9 Tf 414 666.6 Td (**Planned**) Tj ET
+0.6 0.6 0.6 RG 0.5 w 50 603.9 495 0 re S
+BT /F2 12 Tf 50 571.6999999999999 Td (E2. Organisational measures) Tj ET
+endstream
+endobj
+32 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842]
+   /Contents 31 0 R
+   /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R /F4 6 0 R /F5 7 0 R /F6 8 0 R /F7 9 0 R /F8 10 0 R >> >> >>
+endobj
+33 0 obj
+<< /Length 5618 >>
+stream
+0.15 0.15 0.15 rg 50 773.85 495 18.15 re f
+1 1 1 rg
+BT /F2 9 Tf 54 788.0 Td (Measure) Tj ET
+BT /F2 9 Tf 174 788.0 Td (Detail) Tj ET
+BT /F2 9 Tf 294 788.0 Td (Owner) Tj ET
+BT /F2 9 Tf 414 788.0 Td (Deadline) Tj ET
+0 0 0 rg
+0.96 0.96 0.96 rg 50 731.4 495 42.45 re f
+0.85 0.85 0.85 RG 0.3 w 50 731.4 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 769.9 Td (**ROPA creation**) Tj ET
+BT /F1 9 Tf 174 769.9 Td (Document all processing) Tj ET
+BT /F1 9 Tf 174 757.7 Td (activities per s. 23) Tj ET
+BT /F1 9 Tf 174 745.6 Td (Act) Tj ET
+BT /F1 9 Tf 294 769.9 Td (Founder) Tj ET
+BT /F1 9 Tf 414 769.9 Td (Pre-launch) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 664.65 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 727.4 Td (**Privacy policy) Tj ET
+BT /F1 9 Tf 54 715.3 Td (\(full\)**) Tj ET
+BT /F1 9 Tf 174 727.4 Td (Expand `/privacy`) Tj ET
+BT /F1 9 Tf 174 715.3 Td (route: lawful bases,) Tj ET
+BT /F1 9 Tf 174 703.1 Td (retention, rights,) Tj ET
+BT /F1 9 Tf 174 690.9 Td (transfers, DPO contact,) Tj ET
+BT /F1 9 Tf 174 678.8 Td (complaint mechanism) Tj ET
+BT /F1 9 Tf 294 727.4 Td (Founder + DPO) Tj ET
+BT /F1 9 Tf 414 727.4 Td (Pre-launch) Tj ET
+0.96 0.96 0.96 rg 50 585.75 495 78.9 re f
+0.85 0.85 0.85 RG 0.3 w 50 585.75 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 660.6 Td (**Terms of service) Tj ET
+BT /F1 9 Tf 54 648.5 Td (\(full\)**) Tj ET
+BT /F1 9 Tf 174 660.6 Td (Expand `/terms`:) Tj ET
+BT /F1 9 Tf 174 648.5 Td (platform role) Tj ET
+BT /F1 9 Tf 174 636.4 Td (\(discovery only\), no) Tj ET
+BT /F1 9 Tf 174 624.2 Td (tenancy services,) Tj ET
+BT /F1 9 Tf 174 612.0 Td (landlord obligations,) Tj ET
+BT /F1 9 Tf 174 599.9 Td (disclaimer) Tj ET
+BT /F1 9 Tf 294 660.6 Td (Founder + legal counsel) Tj ET
+BT /F1 9 Tf 414 660.6 Td (Pre-launch) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 519 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 581.8 Td (**Landlord verification) Tj ET
+BT /F1 9 Tf 54 569.6 Td (SOP**) Tj ET
+BT /F1 9 Tf 174 581.8 Td (Written procedure for) Tj ET
+BT /F1 9 Tf 174 569.6 Td ("reviewed before) Tj ET
+BT /F1 9 Tf 174 557.5 Td (publish" Ч ID,) Tj ET
+BT /F1 9 Tf 174 545.3 Td (ownership/authority,) Tj ET
+BT /F1 9 Tf 174 533.1 Td (contact test) Tj ET
+BT /F1 9 Tf 294 581.8 Td (Founder) Tj ET
+BT /F1 9 Tf 414 581.8 Td (Pre-launch) Tj ET
+0.96 0.96 0.96 rg 50 464.4 495 54.6 re f
+0.85 0.85 0.85 RG 0.3 w 50 464.4 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 515.0 Td (**Incident response) Tj ET
+BT /F1 9 Tf 54 502.9 Td (plan**) Tj ET
+BT /F1 9 Tf 174 515.0 Td (72-hour breach) Tj ET
+BT /F1 9 Tf 174 502.9 Td (notification to ODPC) Tj ET
+BT /F1 9 Tf 174 490.7 Td (\(s. 43 Act\). Template) Tj ET
+BT /F1 9 Tf 174 478.6 Td (ready.) Tj ET
+BT /F1 9 Tf 294 515.0 Td (Founder + DPO) Tj ET
+BT /F1 9 Tf 414 515.0 Td (Pre-launch) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 397.65 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 460.4 Td (**Staff training**) Tj ET
+BT /F1 9 Tf 174 460.4 Td (Data protection basics) Tj ET
+BT /F1 9 Tf 174 448.3 Td (for any future hires) Tj ET
+BT /F1 9 Tf 174 436.1 Td (\(Phishing, access) Tj ET
+BT /F1 9 Tf 174 423.9 Td (control, breach) Tj ET
+BT /F1 9 Tf 174 411.8 Td (reporting\)) Tj ET
+BT /F1 9 Tf 294 460.4 Td (Founder) Tj ET
+BT /F1 9 Tf 414 460.4 Td (On hiring) Tj ET
+0.96 0.96 0.96 rg 50 330.9 495 66.75 re f
+0.85 0.85 0.85 RG 0.3 w 50 330.9 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 393.6 Td (**Quarterly DPIA) Tj ET
+BT /F1 9 Tf 54 381.5 Td (review**) Tj ET
+BT /F1 9 Tf 174 393.6 Td (Calendar invite +) Tj ET
+BT /F1 9 Tf 174 381.5 Td (checklist: new) Tj ET
+BT /F1 9 Tf 174 369.3 Td (features, new data,) Tj ET
+BT /F1 9 Tf 174 357.2 Td (regulatory changes,) Tj ET
+BT /F1 9 Tf 174 345.0 Td (incident log) Tj ET
+BT /F1 9 Tf 294 393.6 Td (Founder + DPO) Tj ET
+BT /F1 9 Tf 414 393.6 Td (Quarterly from launch) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 276.29999999999995 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 326.9 Td (**ODPC registration**) Tj ET
+BT /F1 9 Tf 174 326.9 Td (Register as data) Tj ET
+BT /F1 9 Tf 174 314.8 Td (controller per s. 18) Tj ET
+BT /F1 9 Tf 174 302.6 Td (Act \(if required Ч) Tj ET
+BT /F1 9 Tf 174 290.4 Td (threshold review\)) Tj ET
+BT /F1 9 Tf 294 326.9 Td (Founder) Tj ET
+BT /F1 9 Tf 414 326.9 Td (Pre-launch) Tj ET
+0.6 0.6 0.6 RG 0.5 w 50 276.29999999999995 495 0 re S
+BT /F2 12 Tf 50 244.09999999999997 Td (E3. Residual risk after measures) Tj ET
+0.15 0.15 0.15 rg 50 201.74999999999997 495 18.15 re f
+1 1 1 rg
+BT /F2 9 Tf 54 215.9 Td (Risk) Tj ET
+BT /F2 9 Tf 174 215.9 Td (Residual Impact) Tj ET
+BT /F2 9 Tf 294 215.9 Td (Residual Likelihood) Tj ET
+BT /F2 9 Tf 414 215.9 Td (Residual Score) Tj ET
+BT /F2 9 Tf 534 215.9 Td (Decision) Tj ET
+0 0 0 rg
+0.96 0.96 0.96 rg 50 171.44999999999996 495 30.3 re f
+0.85 0.85 0.85 RG 0.3 w 50 171.44999999999996 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 197.7 Td (R1) Tj ET
+BT /F1 9 Tf 174 197.7 Td (2) Tj ET
+BT /F1 9 Tf 294 197.7 Td (2) Tj ET
+BT /F1 9 Tf 414 197.7 Td (4) Tj ET
+BT /F1 9 Tf 534 197.7 Td (**Accept** Ч disclosed,) Tj ET
+BT /F1 9 Tf 534 185.6 Td (deferred load) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 128.99999999999994 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 167.4 Td (R2) Tj ET
+BT /F1 9 Tf 174 167.4 Td (2) Tj ET
+BT /F1 9 Tf 294 167.4 Td (2) Tj ET
+BT /F1 9 Tf 414 167.4 Td (4) Tj ET
+BT /F1 9 Tf 534 167.4 Td (**Accept** Ч explicit) Tj ET
+BT /F1 9 Tf 534 155.3 Td (action, email) Tj ET
+BT /F1 9 Tf 534 143.1 Td (alternative) Tj ET
+0.96 0.96 0.96 rg 50 86.54999999999994 495 42.45 re f
+0.85 0.85 0.85 RG 0.3 w 50 86.54999999999994 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 125.0 Td (R3) Tj ET
+BT /F1 9 Tf 174 125.0 Td (2) Tj ET
+BT /F1 9 Tf 294 125.0 Td (3) Tj ET
+BT /F1 9 Tf 414 125.0 Td (6) Tj ET
+BT /F1 9 Tf 534 125.0 Td (**Accept with DPA** Ч) Tj ET
+BT /F1 9 Tf 534 112.8 Td (Vercel SCCs, no request) Tj ET
+BT /F1 9 Tf 534 100.7 Td (body logs) Tj ET
+endstream
+endobj
+34 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842]
+   /Contents 33 0 R
+   /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R /F4 6 0 R /F5 7 0 R /F6 8 0 R /F7 9 0 R /F8 10 0 R >> >> >>
+endobj
+35 0 obj
+<< /Length 4754 >>
+stream
+0.85 0.85 0.85 RG 0.3 w 50 761.7 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 788.0 Td (R4) Tj ET
+BT /F1 9 Tf 174 788.0 Td (1) Tj ET
+BT /F1 9 Tf 294 788.0 Td (1) Tj ET
+BT /F1 9 Tf 414 788.0 Td (1) Tj ET
+BT /F1 9 Tf 534 788.0 Td (**Accept** Ч disabled) Tj ET
+BT /F1 9 Tf 534 775.9 Td (in prod) Tj ET
+0.96 0.96 0.96 rg 50 731.4000000000001 495 30.3 re f
+0.85 0.85 0.85 RG 0.3 w 50 731.4000000000001 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 757.7 Td (R5) Tj ET
+BT /F1 9 Tf 174 757.7 Td (2) Tj ET
+BT /F1 9 Tf 294 757.7 Td (2) Tj ET
+BT /F1 9 Tf 414 757.7 Td (4) Tj ET
+BT /F1 9 Tf 534 757.7 Td (**Accept** Ч qualified) Tj ET
+BT /F1 9 Tf 534 745.6 Td (copy, SOP documented) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 701.1000000000001 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 727.4 Td (R6) Tj ET
+BT /F1 9 Tf 174 727.4 Td (1) Tj ET
+BT /F1 9 Tf 294 727.4 Td (2) Tj ET
+BT /F1 9 Tf 414 727.4 Td (2) Tj ET
+BT /F1 9 Tf 534 727.4 Td (**Accept** Ч opt-in) Tj ET
+BT /F1 9 Tf 534 715.3 Td (satellite) Tj ET
+0.96 0.96 0.96 rg 50 658.6500000000001 495 42.45 re f
+0.85 0.85 0.85 RG 0.3 w 50 658.6500000000001 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 697.1 Td (R7) Tj ET
+BT /F1 9 Tf 174 697.1 Td (1) Tj ET
+BT /F1 9 Tf 294 697.1 Td (2) Tj ET
+BT /F1 9 Tf 414 697.1 Td (2) Tj ET
+BT /F1 9 Tf 534 697.1 Td (**Accept** Ч) Tj ET
+BT /F1 9 Tf 534 685.0 Td (reduced-motion/data,) Tj ET
+BT /F1 9 Tf 534 672.8 Td (lazy load, size caps) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 616.2 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 654.7 Td (R8) Tj ET
+BT /F1 9 Tf 174 654.7 Td (1) Tj ET
+BT /F1 9 Tf 294 654.7 Td (3) Tj ET
+BT /F1 9 Tf 414 654.7 Td (3) Tj ET
+BT /F1 9 Tf 534 654.7 Td (**Accept** Ч DPO) Tj ET
+BT /F1 9 Tf 534 642.5 Td (planned at trigger) Tj ET
+BT /F1 9 Tf 534 630.4 Td (threshold) Tj ET
+0.6 0.6 0.6 RG 0.5 w 50 616.2 495 0 re S
+BT /F1 10 Tf 50.0 600.2 Td (**All residual risks Medium. No High risks remain.**) Tj ET
+0.8 0.8 0.8 RG 0.5 w 50 576.7 495 0 re S
+BT /F2 15 Tf 50 546.45 Td (F. Consultation) Tj ET
+0.15 0.15 0.15 rg 50 498.05000000000007 495 18.15 re f
+1 1 1 rg
+BT /F2 9 Tf 54 512.2 Td (Stakeholder) Tj ET
+BT /F2 9 Tf 174 512.2 Td (Method) Tj ET
+BT /F2 9 Tf 294 512.2 Td (Timing) Tj ET
+BT /F2 9 Tf 414 512.2 Td (Outcome) Tj ET
+0 0 0 rg
+0.96 0.96 0.96 rg 50 467.75000000000006 495 30.3 re f
+0.85 0.85 0.85 RG 0.3 w 50 467.75000000000006 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 494.1 Td (**Data Protection) Tj ET
+BT /F1 9 Tf 54 481.9 Td (Officer \(external\)**) Tj ET
+BT /F1 9 Tf 174 494.1 Td (Formal review of this) Tj ET
+BT /F1 9 Tf 174 481.9 Td (DPIA) Tj ET
+BT /F1 9 Tf 294 494.1 Td (Pre-launch) Tj ET
+BT /F1 9 Tf 414 494.1 Td (Pending Ч to be engaged) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 437.45000000000005 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 463.8 Td (**ODPC \(informal\)**) Tj ET
+BT /F1 9 Tf 174 463.8 Td (Submit DPIA for comment) Tj ET
+BT /F1 9 Tf 174 451.6 Td (\(voluntary\)) Tj ET
+BT /F1 9 Tf 294 463.8 Td (Pre-launch) Tj ET
+BT /F1 9 Tf 414 463.8 Td (Planned) Tj ET
+0.96 0.96 0.96 rg 50 395.00000000000006 495 42.45 re f
+0.85 0.85 0.85 RG 0.3 w 50 395.00000000000006 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 433.5 Td (**Student focus group) Tj ET
+BT /F1 9 Tf 54 421.3 Td (\(n=5Ц10\)**) Tj ET
+BT /F1 9 Tf 174 433.5 Td (Usability + privacy) Tj ET
+BT /F1 9 Tf 174 421.3 Td (perception test) Tj ET
+BT /F1 9 Tf 294 433.5 Td (Pre-launch) Tj ET
+BT /F1 9 Tf 414 433.5 Td (Planned Ч recruit via) Tj ET
+BT /F1 9 Tf 414 421.3 Td (university housing) Tj ET
+BT /F1 9 Tf 414 409.2 Td (offices) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 352.55000000000007 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 391.0 Td (**Landlord pilot group) Tj ET
+BT /F1 9 Tf 54 378.9 Td (\(n=3Ц5\)**) Tj ET
+BT /F1 9 Tf 174 391.0 Td (Test onboarding) Tj ET
+BT /F1 9 Tf 174 378.9 Td (WhatsApp flow, verify) Tj ET
+BT /F1 9 Tf 174 366.7 Td (SOP) Tj ET
+BT /F1 9 Tf 294 391.0 Td (Pre-launch) Tj ET
+BT /F1 9 Tf 414 391.0 Td (Planned) Tj ET
+0.96 0.96 0.96 rg 50 285.80000000000007 495 66.75 re f
+0.85 0.85 0.85 RG 0.3 w 50 285.80000000000007 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 348.6 Td (**Internal) Tj ET
+BT /F1 9 Tf 54 336.4 Td (\(developer\)**) Tj ET
+BT /F1 9 Tf 174 348.6 Td (Code review of) Tj ET
+BT /F1 9 Tf 174 336.4 Td (privacy-relevant) Tj ET
+BT /F1 9 Tf 174 324.3 Td (components \(map, video,) Tj ET
+BT /F1 9 Tf 174 312.1 Td (WhatsApp links, error) Tj ET
+BT /F1 9 Tf 174 300.0 Td (reporting\)) Tj ET
+BT /F1 9 Tf 294 348.6 Td (Completed) Tj ET
+BT /F1 9 Tf 414 348.6 Td (All 11 audit fixes) Tj ET
+BT /F1 9 Tf 414 336.4 Td (applied \(4 security + 7) Tj ET
+BT /F1 9 Tf 414 324.3 Td (performance\)) Tj ET
+0.6 0.6 0.6 RG 0.5 w 50 285.80000000000007 495 0 re S
+0.8 0.8 0.8 RG 0.5 w 50 263.80000000000007 495 0 re S
+BT /F2 15 Tf 50 233.55000000000007 Td (G. Documentation & governance) Tj ET
+BT /F2 12 Tf 50 187.10000000000008 Td (G1. Records of Processing Activities \(ROPA\) Ч template) Tj ET
+endstream
+endobj
+36 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842]
+   /Contents 35 0 R
+   /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R /F4 6 0 R /F5 7 0 R /F6 8 0 R /F7 9 0 R /F8 10 0 R >> >> >>
+endobj
+37 0 obj
+<< /Length 4587 >>
+stream
+0.15 0.15 0.15 rg 50 773.85 495 18.15 re f
+1 1 1 rg
+BT /F2 9 Tf 54 788.0 Td (Field) Tj ET
+BT /F2 9 Tf 174 788.0 Td (Entry) Tj ET
+0 0 0 rg
+0.96 0.96 0.96 rg 50 755.7 495 18.15 re f
+0.85 0.85 0.85 RG 0.3 w 50 755.7 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 769.9 Td (**Controller**) Tj ET
+BT /F1 9 Tf 174 769.9 Td (UniHub Kenya) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 737.5500000000001 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 751.7 Td (**DPO**) Tj ET
+BT /F1 9 Tf 174 751.7 Td ([To be appointed]) Tj ET
+0.96 0.96 0.96 rg 50 719.4000000000001 495 18.15 re f
+0.85 0.85 0.85 RG 0.3 w 50 719.4000000000001 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 733.6 Td (**Purpose**) Tj ET
+BT /F1 9 Tf 174 733.6 Td (P1ЦP5 \(see Section B4\)) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 676.95 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 715.4 Td (**Categories of data) Tj ET
+BT /F1 9 Tf 54 703.3 Td (subjects**) Tj ET
+BT /F1 9 Tf 174 715.4 Td (Students \(prospective) Tj ET
+BT /F1 9 Tf 174 703.3 Td (tenants\),) Tj ET
+BT /F1 9 Tf 174 691.1 Td (Landlords/agents) Tj ET
+0.96 0.96 0.96 rg 50 585.9000000000001 495 91.05 re f
+0.85 0.85 0.85 RG 0.3 w 50 585.9000000000001 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 673.0 Td (**Categories of) Tj ET
+BT /F1 9 Tf 54 660.8 Td (personal data**) Tj ET
+BT /F1 9 Tf 174 673.0 Td (None collected by) Tj ET
+BT /F1 9 Tf 174 660.8 Td (UniHub. IP address) Tj ET
+BT /F1 9 Tf 174 648.7 Td (\(transient, tile) Tj ET
+BT /F1 9 Tf 174 636.5 Td (providers/Vercel\).) Tj ET
+BT /F1 9 Tf 174 624.4 Td (Phone number \(student) Tj ET
+BT /F1 9 Tf 174 612.2 Td (landlord via WhatsApp,) Tj ET
+BT /F1 9 Tf 174 600.1 Td (outside UniHub\).) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 470.55000000000007 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 581.9 Td (**Categories of) Tj ET
+BT /F1 9 Tf 54 569.8 Td (recipients**) Tj ET
+BT /F1 9 Tf 174 581.9 Td (Vercel \(processor\),) Tj ET
+BT /F1 9 Tf 174 569.8 Td (OpenFreeMap/Esri \(tile) Tj ET
+BT /F1 9 Tf 174 557.6 Td (providers, independent) Tj ET
+BT /F1 9 Tf 174 545.5 Td (controllers\),) Tj ET
+BT /F1 9 Tf 174 533.3 Td (Meta/WhatsApp) Tj ET
+BT /F1 9 Tf 174 521.2 Td (\(independent) Tj ET
+BT /F1 9 Tf 174 509.0 Td (controller\), Email) Tj ET
+BT /F1 9 Tf 174 496.9 Td (providers \(independent) Tj ET
+BT /F1 9 Tf 174 484.7 Td (controllers\)) Tj ET
+0.96 0.96 0.96 rg 50 403.80000000000007 495 66.75 re f
+0.85 0.85 0.85 RG 0.3 w 50 403.80000000000007 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 466.6 Td (**Third-country) Tj ET
+BT /F1 9 Tf 54 454.4 Td (transfers**) Tj ET
+BT /F1 9 Tf 174 466.6 Td (Vercel \(US\) Ч SCCs via) Tj ET
+BT /F1 9 Tf 174 454.4 Td (DPA. OpenFreeMap/Esri) Tj ET
+BT /F1 9 Tf 174 442.3 Td (CDN \(global\) Ч public) Tj ET
+BT /F1 9 Tf 174 430.1 Td (tiles, no controller) Tj ET
+BT /F1 9 Tf 174 418.0 Td (relationship.) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 349.20000000000005 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 399.8 Td (**Retention**) Tj ET
+BT /F1 9 Tf 174 399.8 Td (No personal data) Tj ET
+BT /F1 9 Tf 174 387.7 Td (retained. Access logs:) Tj ET
+BT /F1 9 Tf 174 375.5 Td (Vercel default \(30) Tj ET
+BT /F1 9 Tf 174 363.4 Td (days\).) Tj ET
+0.96 0.96 0.96 rg 50 282.45000000000005 495 66.75 re f
+0.85 0.85 0.85 RG 0.3 w 50 282.45000000000005 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 345.2 Td (**Security measures**) Tj ET
+BT /F1 9 Tf 174 345.2 Td (CSP, HTTPS, security) Tj ET
+BT /F1 9 Tf 174 333.1 Td (headers, no database,) Tj ET
+BT /F1 9 Tf 174 320.9 Td (no auth, static assets) Tj ET
+BT /F1 9 Tf 174 308.8 Td (only, error reporting) Tj ET
+BT /F1 9 Tf 174 296.6 Td (dev-only.) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 240.00000000000006 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 278.5 Td (**Legal basis**) Tj ET
+BT /F1 9 Tf 174 278.5 Td (Legitimate interest) Tj ET
+BT /F1 9 Tf 174 266.3 Td (\(P1, P2, P4, P5\),) Tj ET
+BT /F1 9 Tf 174 254.2 Td (Consent \(P3\).) Tj ET
+0.6 0.6 0.6 RG 0.5 w 50 240.00000000000006 495 0 re S
+BT /F2 12 Tf 50 207.80000000000007 Td (G2. DPIA review triggers) Tj ET
+0.15 0.15 0.15 rg 50 165.45000000000007 495 18.15 re f
+1 1 1 rg
+BT /F2 9 Tf 54 179.6 Td (Trigger) Tj ET
+BT /F2 9 Tf 174 179.6 Td (Action) Tj ET
+0 0 0 rg
+0.96 0.96 0.96 rg 50 110.85000000000008 495 54.6 re f
+0.85 0.85 0.85 RG 0.3 w 50 110.85000000000008 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 161.5 Td (New feature collecting) Tj ET
+BT /F1 9 Tf 54 149.3 Td (personal data) Tj ET
+BT /F1 9 Tf 54 137.2 Td (\(accounts, favourites,) Tj ET
+BT /F1 9 Tf 54 125.0 Td (saved searches\)) Tj ET
+BT /F1 9 Tf 174 161.5 Td (New DPIA or addendum) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 80.55000000000008 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 106.9 Td (Change of hosting) Tj ET
+BT /F1 9 Tf 54 94.7 Td (provider \(away from) Tj ET
+BT /F1 9 Tf 174 106.9 Td (Re-assess R3) Tj ET
+endstream
+endobj
+38 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842]
+   /Contents 37 0 R
+   /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R /F4 6 0 R /F5 7 0 R /F6 8 0 R /F7 9 0 R /F8 10 0 R >> >> >>
+endobj
+39 0 obj
+<< /Length 4441 >>
+stream
+0.85 0.85 0.85 RG 0.3 w 50 773.85 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 788.0 Td (Vercel\)) Tj ET
+0.96 0.96 0.96 rg 50 731.4 495 42.45 re f
+0.85 0.85 0.85 RG 0.3 w 50 731.4 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 769.9 Td (Addition of) Tj ET
+BT /F1 9 Tf 54 757.7 Td (analytics/tracking \(GA,) Tj ET
+BT /F1 9 Tf 54 745.6 Td (Plausible, etc.\)) Tj ET
+BT /F1 9 Tf 174 769.9 Td (New DPIA Ч likely high) Tj ET
+BT /F1 9 Tf 174 757.7 Td (risk) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 688.9499999999999 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 727.4 Td (Landlord dashboard) Tj ET
+BT /F1 9 Tf 54 715.3 Td (\(landlord logs in,) Tj ET
+BT /F1 9 Tf 54 703.1 Td (manages listings\)) Tj ET
+BT /F1 9 Tf 174 727.4 Td (New DPIA Ч controller) Tj ET
+BT /F1 9 Tf 174 715.3 Td (for landlord data) Tj ET
+0.96 0.96 0.96 rg 50 658.65 495 30.3 re f
+0.85 0.85 0.85 RG 0.3 w 50 658.65 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 684.9 Td (Payment integration) Tj ET
+BT /F1 9 Tf 54 672.8 Td (\(deposits, rent\)) Tj ET
+BT /F1 9 Tf 174 684.9 Td (New DPIA Ч financial) Tj ET
+BT /F1 9 Tf 174 672.8 Td (data, high risk) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 628.35 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 654.6 Td (ODPC guidance update) Tj ET
+BT /F1 9 Tf 174 654.6 Td (Review against new) Tj ET
+BT /F1 9 Tf 174 642.5 Td (guidance) Tj ET
+0.96 0.96 0.96 rg 50 598.0500000000001 495 30.3 re f
+0.85 0.85 0.85 RG 0.3 w 50 598.0500000000001 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 624.4 Td (Security incident) Tj ET
+BT /F1 9 Tf 54 612.2 Td (involving personal data) Tj ET
+BT /F1 9 Tf 174 624.4 Td (Incident response DPIA) Tj ET
+BT /F1 9 Tf 174 612.2 Td (update) Tj ET
+0.6 0.6 0.6 RG 0.5 w 50 598.0500000000001 495 0 re S
+BT /F2 12 Tf 50 565.85 Td (G3. Version history) Tj ET
+0.15 0.15 0.15 rg 50 523.5 495 18.15 re f
+1 1 1 rg
+BT /F2 9 Tf 54 537.6 Td (Version) Tj ET
+BT /F2 9 Tf 174 537.6 Td (Date) Tj ET
+BT /F2 9 Tf 294 537.6 Td (Author) Tj ET
+BT /F2 9 Tf 414 537.6 Td (Changes) Tj ET
+0 0 0 rg
+0.96 0.96 0.96 rg 50 493.2 495 30.3 re f
+0.85 0.85 0.85 RG 0.3 w 50 493.2 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 519.5 Td (1.0) Tj ET
+BT /F1 9 Tf 174 519.5 Td (15 Jan 2026) Tj ET
+BT /F1 9 Tf 294 519.5 Td (Shadrack Biwott) Tj ET
+BT /F1 9 Tf 414 519.5 Td (Initial DPIA \(remote) Tj ET
+BT /F1 9 Tf 414 507.4 Td (version\)) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 365.7 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 489.2 Td (2.0) Tj ET
+BT /F1 9 Tf 174 489.2 Td (8 Oct 2026) Tj ET
+BT /F1 9 Tf 294 489.2 Td (Shadrack Biwott) Tj ET
+BT /F1 9 Tf 414 489.2 Td (Enhanced per ODPC) Tj ET
+BT /F1 9 Tf 414 477.1 Td (Guidance Note Part 5) Tj ET
+BT /F1 9 Tf 414 464.9 Td (template; incorporated) Tj ET
+BT /F1 9 Tf 414 452.8 Td (KabarakAttend DPIA risk) Tj ET
+BT /F1 9 Tf 414 440.6 Td (methodology; added) Tj ET
+BT /F1 9 Tf 414 428.4 Td (residual risk matrix;) Tj ET
+BT /F1 9 Tf 414 416.3 Td (added ROPA template;) Tj ET
+BT /F1 9 Tf 414 404.1 Td (added review triggers;) Tj ET
+BT /F1 9 Tf 414 392.0 Td (documented 11 audit) Tj ET
+BT /F1 9 Tf 414 379.8 Td (fixes) Tj ET
+0.6 0.6 0.6 RG 0.5 w 50 365.7 495 0 re S
+0.8 0.8 0.8 RG 0.5 w 50 343.7 495 0 re S
+BT /F2 15 Tf 50 313.45 Td (H. Sign-off) Tj ET
+0.15 0.15 0.15 rg 50 265.05 495 18.15 re f
+1 1 1 rg
+BT /F2 9 Tf 54 279.2 Td (Role) Tj ET
+BT /F2 9 Tf 174 279.2 Td (Name) Tj ET
+BT /F2 9 Tf 294 279.2 Td (Signature) Tj ET
+BT /F2 9 Tf 414 279.2 Td (Date) Tj ET
+0 0 0 rg
+0.96 0.96 0.96 rg 50 234.75 495 30.3 re f
+0.85 0.85 0.85 RG 0.3 w 50 234.75 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 261.1 Td (**Data Controller) Tj ET
+BT /F1 9 Tf 54 248.9 Td (\(Founder\)**) Tj ET
+BT /F1 9 Tf 174 261.1 Td (Shadrack Biwott) Tj ET
+BT /F1 9 Tf 294 261.1 Td (_________________) Tj ET
+BT /F1 9 Tf 414 261.1 Td (__________) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 204.45 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 230.8 Td (**Data Protection) Tj ET
+BT /F1 9 Tf 54 218.6 Td (Officer**) Tj ET
+BT /F1 9 Tf 174 230.8 Td ([To be appointed]) Tj ET
+BT /F1 9 Tf 294 230.8 Td (_________________) Tj ET
+BT /F1 9 Tf 414 230.8 Td (__________) Tj ET
+0.96 0.96 0.96 rg 50 186.29999999999998 495 18.15 re f
+0.85 0.85 0.85 RG 0.3 w 50 186.29999999999998 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 200.4 Td (**Technical Lead**) Tj ET
+BT /F1 9 Tf 174 200.4 Td (Shadrack Biwott) Tj ET
+BT /F1 9 Tf 294 200.4 Td (_________________) Tj ET
+BT /F1 9 Tf 414 200.4 Td (__________) Tj ET
+0.6 0.6 0.6 RG 0.5 w 50 186.29999999999998 495 0 re S
+0.8 0.8 0.8 RG 0.5 w 50 164.29999999999998 495 0 re S
+BT /F2 15 Tf 50 134.04999999999998 Td (Appendix A Ч Mapping to ODPC Guidance Note Part 5 Template) Tj ET
+endstream
+endobj
+40 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842]
+   /Contents 39 0 R
+   /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R /F4 6 0 R /F5 7 0 R /F6 8 0 R /F7 9 0 R /F8 10 0 R >> >> >>
+endobj
+41 0 obj
+<< /Length 5215 >>
+stream
+0.15 0.15 0.15 rg 50 773.85 495 18.15 re f
+1 1 1 rg
+BT /F2 9 Tf 54 788.0 Td (Part 5 Section) Tj ET
+BT /F2 9 Tf 174 788.0 Td (This Document Section) Tj ET
+0 0 0 rg
+0.96 0.96 0.96 rg 50 755.7 495 18.15 re f
+0.85 0.85 0.85 RG 0.3 w 50 755.7 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 769.9 Td (1. Project description) Tj ET
+BT /F1 9 Tf 174 769.9 Td (B1ЦB3) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 737.5500000000001 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 751.7 Td (2. Screening) Tj ET
+BT /F1 9 Tf 174 751.7 Td (A) Tj ET
+0.96 0.96 0.96 rg 50 707.2500000000001 495 30.3 re f
+0.85 0.85 0.85 RG 0.3 w 50 707.2500000000001 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 733.6 Td (3. Necessity &) Tj ET
+BT /F1 9 Tf 54 721.4 Td (proportionality) Tj ET
+BT /F1 9 Tf 174 733.6 Td (C) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 676.9500000000002 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 703.3 Td (4. Risks to rights &) Tj ET
+BT /F1 9 Tf 54 691.1 Td (freedoms) Tj ET
+BT /F1 9 Tf 174 703.3 Td (D) Tj ET
+0.96 0.96 0.96 rg 50 646.6500000000002 495 30.3 re f
+0.85 0.85 0.85 RG 0.3 w 50 646.6500000000002 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 673.0 Td (5. Measures to address) Tj ET
+BT /F1 9 Tf 54 660.8 Td (risks) Tj ET
+BT /F1 9 Tf 174 673.0 Td (E) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 628.5000000000002 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 642.7 Td (6. Consultation) Tj ET
+BT /F1 9 Tf 174 642.7 Td (F) Tj ET
+0.96 0.96 0.96 rg 50 598.2000000000003 495 30.3 re f
+0.85 0.85 0.85 RG 0.3 w 50 598.2000000000003 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 624.5 Td (7. Documentation &) Tj ET
+BT /F1 9 Tf 54 612.4 Td (governance) Tj ET
+BT /F1 9 Tf 174 624.5 Td (G) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 580.0500000000003 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 594.2 Td (8. Sign-off) Tj ET
+BT /F1 9 Tf 174 594.2 Td (H) Tj ET
+0.6 0.6 0.6 RG 0.5 w 50 580.0500000000003 495 0 re S
+0.8 0.8 0.8 RG 0.5 w 50 558.0500000000003 495 0 re S
+BT /F2 15 Tf 50 527.8000000000003 Td (Appendix B Ч Mapping to KabarakAttend DPIA Methodology) Tj ET
+0.15 0.15 0.15 rg 50 479.4000000000003 495 18.15 re f
+1 1 1 rg
+BT /F2 9 Tf 54 493.6 Td (KabarakAttend Element) Tj ET
+BT /F2 9 Tf 174 493.6 Td (UniHub Adaptation) Tj ET
+0 0 0 rg
+0.96 0.96 0.96 rg 50 388.3500000000003 495 91.05 re f
+0.85 0.85 0.85 RG 0.3 w 50 388.3500000000003 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 475.4 Td (Risk register \(ID,) Tj ET
+BT /F1 9 Tf 54 463.3 Td (Description,) Tj ET
+BT /F1 9 Tf 54 451.1 Td (Consequence, Impact,) Tj ET
+BT /F1 9 Tf 54 439.0 Td (Likelihood, Current) Tj ET
+BT /F1 9 Tf 54 426.8 Td (Controls, Further) Tj ET
+BT /F1 9 Tf 54 414.7 Td (Actions, Owner,) Tj ET
+BT /F1 9 Tf 54 402.5 Td (Residual\)) Tj ET
+BT /F1 9 Tf 174 475.4 Td (Adopted in Sections D1,) Tj ET
+BT /F1 9 Tf 174 463.3 Td (D2, E1ЦE3 with) Tj ET
+BT /F1 9 Tf 174 451.1 Td (consolidated risk) Tj ET
+BT /F1 9 Tf 174 439.0 Td (register) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 333.7500000000003 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 384.4 Td ("Two features frame the) Tj ET
+BT /F1 9 Tf 54 372.2 Td (assessment" \(mandatory) Tj ET
+BT /F1 9 Tf 54 360.1 Td (attendance, no new) Tj ET
+BT /F1 9 Tf 54 347.9 Td (data\)) Tj ET
+BT /F1 9 Tf 174 384.4 Td ("Three features frame":) Tj ET
+BT /F1 9 Tf 174 372.2 Td (discovery-only, no) Tj ET
+BT /F1 9 Tf 174 360.1 Td (accounts, WhatsApp) Tj ET
+BT /F1 9 Tf 174 347.9 Td (redirect) Tj ET
+0.96 0.96 0.96 rg 50 279.15000000000026 495 54.6 re f
+0.85 0.85 0.85 RG 0.3 w 50 279.15000000000026 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 329.8 Td (Consent reliability) Tj ET
+BT /F1 9 Tf 54 317.6 Td (analysis \(R3 in) Tj ET
+BT /F1 9 Tf 54 305.5 Td (KabarakAttend\)) Tj ET
+BT /F1 9 Tf 174 329.8 Td (Applied to WhatsApp) Tj ET
+BT /F1 9 Tf 174 317.6 Td (redirect \(R2\) Ч student) Tj ET
+BT /F1 9 Tf 174 305.5 Td (initiates, but power) Tj ET
+BT /F1 9 Tf 174 293.3 Td (asymmetry with landlord) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 236.70000000000027 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 275.2 Td (Device binding debate) Tj ET
+BT /F1 9 Tf 54 263.0 Td (\(A1b action\)) Tj ET
+BT /F1 9 Tf 174 275.2 Td (Not applicable Ч no) Tj ET
+BT /F1 9 Tf 174 263.0 Td (device identifiers) Tj ET
+BT /F1 9 Tf 174 250.9 Td (collected) Tj ET
+0.96 0.96 0.96 rg 50 194.25000000000028 495 42.45 re f
+0.85 0.85 0.85 RG 0.3 w 50 194.25000000000028 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 232.7 Td (Consent form matching) Tj ET
+BT /F1 9 Tf 54 220.6 Td (inventory \(A1c action\)) Tj ET
+BT /F1 9 Tf 174 232.7 Td (Applied: WhatsApp) Tj ET
+BT /F1 9 Tf 174 220.6 Td (pre-filled message must) Tj ET
+BT /F1 9 Tf 174 208.4 Td (match declared purpose) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 151.8000000000003 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 190.3 Td (DPO direction on) Tj ET
+BT /F1 9 Tf 54 178.1 Td (cross-border \(A5) Tj ET
+BT /F1 9 Tf 54 166.0 Td (action\)) Tj ET
+BT /F1 9 Tf 174 190.3 Td (Action: Execute Vercel) Tj ET
+BT /F1 9 Tf 174 178.1 Td (DPA with SCCs) Tj ET
+BT /F1 9 Tf 174 166.0 Td (pre-launch) Tj ET
+0.96 0.96 0.96 rg 50 121.5000000000003 495 30.3 re f
+0.85 0.85 0.85 RG 0.3 w 50 121.5000000000003 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 147.8 Td (Quarterly review during) Tj ET
+BT /F1 9 Tf 54 135.7 Td (semester) Tj ET
+BT /F1 9 Tf 174 147.8 Td (Adapted: Quarterly) Tj ET
+BT /F1 9 Tf 174 135.7 Td (review from launch) Tj ET
+0.6 0.6 0.6 RG 0.5 w 50 121.5000000000003 495 0 re S
+0.8 0.8 0.8 RG 0.5 w 50 99.5000000000003 495 0 re S
+endstream
+endobj
+42 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842]
+   /Contents 41 0 R
+   /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R /F4 6 0 R /F5 7 0 R /F6 8 0 R /F7 9 0 R /F8 10 0 R >> >> >>
+endobj
+43 0 obj
+<< /Length 3248 >>
+stream
+BT /F2 15 Tf 50 771.75 Td (Appendix C Ч Technical Implementation Evidence \(Audit Fixes\)) Tj ET
+BT /F1 10 Tf 50.0 741.5 Td (The following security and performance fixes were implemented and verified via build/lint) Tj ET
+BT /F1 10 Tf 50.0 728.0 Td (\(commit `FIX ALL: Security + Performance audit fixes`\):) Tj ET
+BT /F2 12 Tf 50 694.3 Td (Security Fixes \(4\)) Tj ET
+BT /F1 10 Tf 50 668.1 Td (1. **CampusMap.tsx** Ч XSS fix: marker/popup content sanitised; MapLibre instance cleaned up) Tj ET
+BT /F1 10 Tf 50 654.6 Td (   on unmount.) Tj ET
+BT /F1 10 Tf 50 641.1 Td (2. **VideoPanel.tsx** Ч Removed `dangerouslySetInnerHTML`; added `isValidColor\(\)` validation) Tj ET
+BT /F1 10 Tf 50 627.6 Td (   for CSS custom properties.) Tj ET
+BT /F1 10 Tf 50 614.1 Td (3. **MarketingChrome.tsx** Ч `WHATSAPP_URL` from `import.meta.env.VITE_WHATSAPP_NUMBER` with) Tj ET
+BT /F1 10 Tf 50 600.6 Td (   validation; all external links have `rel="noopener noreferrer"`.) Tj ET
+BT /F1 10 Tf 50 587.1 Td (4. **vercel.json** Ч Added CSP \(`default-src 'self'; script-src 'self' 'unsafe-inline') Tj ET
+BT /F1 10 Tf 50 573.6 Td (   https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;) Tj ET
+BT /F1 10 Tf 50 560.1 Td (   font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self') Tj ET
+BT /F1 10 Tf 50 546.6 Td (   https://tiles.openfreemap.org https://server.arcgisonline.com https://api.mapbox.com;) Tj ET
+BT /F1 10 Tf 50 533.1 Td (   frame-ancestors 'none'; base-uri 'self'; form-action 'self'`\), `X-Content-Type-Options:) Tj ET
+BT /F1 10 Tf 50 519.6 Td (   nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: strict-origin-when-cross-origin`,) Tj ET
+BT /F1 10 Tf 50 506.1 Td (   `Permissions-Policy: accelerometer=\(\), camera=\(\), geolocation=\(\), gyroscope=\(\),) Tj ET
+BT /F1 10 Tf 50 492.6 Td (   magnetometer=\(\), microphone=\(\), payment=\(\), usb=\(\)`.) Tj ET
+BT /F2 12 Tf 50 458.8999999999999 Td (Performance Fixes \(7\)) Tj ET
+BT /F1 10 Tf 50 432.7 Td (1. **useReducedMotion.ts** Ч Module singleton with `useSyncExternalStore` \(no re-renders on) Tj ET
+BT /F1 10 Tf 50 419.2 Td (   context change\).) Tj ET
+BT /F1 10 Tf 50 405.7 Td (2. **useIntersectionObserver.ts** Ч `IntersectionObserverSingleton` class: shared observers) Tj ET
+BT /F1 10 Tf 50 392.2 Td (   keyed by `\(rootMargin, threshold\)`.) Tj ET
+BT /F1 10 Tf 50 378.7 Td (3. **useBatchedVideoAutoplay.ts** Ч `BatchedVideoManager`: single `requestAnimationFrame`) Tj ET
+BT /F1 10 Tf 50 365.2 Td (   loop for all videos.) Tj ET
+BT /F1 10 Tf 50 351.7 Td (4. **VideoPanel.tsx** Ч Uses shared hooks above.) Tj ET
+BT /F1 10 Tf 50 338.2 Td (5. **Experience.tsx** Ч `ScrollProgress` throttled with rAF; `JourneyRail` cleanup on) Tj ET
+BT /F1 10 Tf 50 324.7 Td (   unmount.) Tj ET
+BT /F1 10 Tf 50 311.2 Td (6. **ListingGrid.tsx** Ч Stable `listing.id` keys \(from `src/data/listings.ts`\).) Tj ET
+BT /F1 10 Tf 50 297.7 Td (7. **Residence clips lazy-load** Ч `residenceClips.ts` extracted; dynamic `import\(\)` in) Tj ET
+BT /F1 10 Tf 50 284.2 Td (   `index.tsx` on mount.) Tj ET
+0.8 0.8 0.8 RG 0.5 w 50 260.69999999999993 495 0 re S
+BT /F2 15 Tf 50 230.44999999999993 Td (Appendix D Ч Architecture Context \(for DPO Review\)) Tj ET
+endstream
+endobj
+44 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842]
+   /Contents 43 0 R
+   /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R /F4 6 0 R /F5 7 0 R /F6 8 0 R /F7 9 0 R /F8 10 0 R >> >> >>
+endobj
+45 0 obj
+<< /Length 4061 >>
+stream
+0.15 0.15 0.15 rg 50 761.7 495 30.3 re f
+1 1 1 rg
+BT /F2 9 Tf 54 788.0 Td (Layer) Tj ET
+BT /F2 9 Tf 174 788.0 Td (Technology) Tj ET
+BT /F2 9 Tf 294 788.0 Td (Data Protection) Tj ET
+BT /F2 9 Tf 294 775.9 Td (Relevance) Tj ET
+0 0 0 rg
+0.96 0.96 0.96 rg 50 707.1 495 54.6 re f
+0.85 0.85 0.85 RG 0.3 w 50 707.1 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 757.7 Td (**Framework**) Tj ET
+BT /F1 9 Tf 174 757.7 Td (TanStack Start \(SSR\) +) Tj ET
+BT /F1 9 Tf 174 745.6 Td (React 19 + TypeScript) Tj ET
+BT /F1 9 Tf 294 757.7 Td (No server state; pure) Tj ET
+BT /F1 9 Tf 294 745.6 Td (SSR static HTML +) Tj ET
+BT /F1 9 Tf 294 733.4 Td (client hydration. No) Tj ET
+BT /F1 9 Tf 294 721.3 Td (session cookies.) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 676.8000000000001 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 703.1 Td (**Routing**) Tj ET
+BT /F1 9 Tf 174 703.1 Td (TanStack Router) Tj ET
+BT /F1 9 Tf 174 691.0 Td (\(file-based\)) Tj ET
+BT /F1 9 Tf 294 703.1 Td (No route-level auth.) Tj ET
+BT /F1 9 Tf 294 691.0 Td (All pages public.) Tj ET
+0.96 0.96 0.96 rg 50 610.0500000000001 495 66.75 re f
+0.85 0.85 0.85 RG 0.3 w 50 610.0500000000001 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 672.8 Td (**Styling**) Tj ET
+BT /F1 9 Tf 174 672.8 Td (Tailwind CSS 4 + CSS) Tj ET
+BT /F1 9 Tf 174 660.7 Td (Variables \(oklch\)) Tj ET
+BT /F1 9 Tf 294 672.8 Td (No runtime style) Tj ET
+BT /F1 9 Tf 294 660.7 Td (injection. CSP) Tj ET
+BT /F1 9 Tf 294 648.5 Td (`style-src 'self') Tj ET
+BT /F1 9 Tf 294 636.4 Td ('unsafe-inline'` only) Tj ET
+BT /F1 9 Tf 294 624.2 Td (for Tailwind JIT.) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 531.1500000000001 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 606.1 Td (**Map**) Tj ET
+BT /F1 9 Tf 174 606.1 Td (MapLibre GL 5.24) Tj ET
+BT /F1 9 Tf 294 606.1 Td (Keyless providers. Map) Tj ET
+BT /F1 9 Tf 294 593.9 Td (mounts on scroll) Tj ET
+BT /F1 9 Tf 294 581.8 Td (\(IntersectionObserver\).) Tj ET
+BT /F1 9 Tf 294 569.6 Td (No) Tj ET
+BT /F1 9 Tf 294 557.5 Td (`navigator.geolocation`) Tj ET
+BT /F1 9 Tf 294 545.3 Td (used.) Tj ET
+0.96 0.96 0.96 rg 50 452.2500000000001 495 78.9 re f
+0.85 0.85 0.85 RG 0.3 w 50 452.2500000000001 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 527.2 Td (**Video**) Tj ET
+BT /F1 9 Tf 174 527.2 Td (Native `<video>` +) Tj ET
+BT /F1 9 Tf 174 515.0 Td (IntersectionObserver +) Tj ET
+BT /F1 9 Tf 174 502.9 Td (BatchedVideoManager) Tj ET
+BT /F1 9 Tf 294 527.2 Td (Muted, playsinline,) Tj ET
+BT /F1 9 Tf 294 515.0 Td (loop. Autoplay only) Tj ET
+BT /F1 9 Tf 294 502.9 Td (when visible. Respects) Tj ET
+BT /F1 9 Tf 294 490.7 Td (`prefers-reduced-motion) Tj ET
+BT /F1 9 Tf 294 478.6 Td (`) Tj ET
+BT /F1 9 Tf 294 466.4 Td (and `saveData`.) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 385.5000000000001 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 448.3 Td (**Hosting**) Tj ET
+BT /F1 9 Tf 174 448.3 Td (Vercel \(Nitro `vercel`) Tj ET
+BT /F1 9 Tf 174 436.1 Td (preset\)) Tj ET
+BT /F1 9 Tf 294 448.3 Td (Edge functions for SSR.) Tj ET
+BT /F1 9 Tf 294 436.1 Td (Static assets in) Tj ET
+BT /F1 9 Tf 294 424.0 Td (`.vercel/output/static`) Tj ET
+BT /F1 9 Tf 294 411.8 Td (.) Tj ET
+BT /F1 9 Tf 294 399.7 Td (DPA + SCCs required.) Tj ET
+0.96 0.96 0.96 rg 50 343.0500000000001 495 42.45 re f
+0.85 0.85 0.85 RG 0.3 w 50 343.0500000000001 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 381.5 Td (**Editor Sync**) Tj ET
+BT /F1 9 Tf 174 381.5 Td (Lovable \(GitHub `main`) Tj ET
+BT /F1 9 Tf 174 369.4 Td (branch\)) Tj ET
+BT /F1 9 Tf 294 381.5 Td (No production data in) Tj ET
+BT /F1 9 Tf 294 369.4 Td (repo. Lovable sees code) Tj ET
+BT /F1 9 Tf 294 357.2 Td (only.) Tj ET
+0.85 0.85 0.85 RG 0.3 w 50 300.60000000000014 495 0 re S
+0 0 0 rg
+BT /F1 9 Tf 54 339.1 Td (**Assets**) Tj ET
+BT /F1 9 Tf 174 339.1 Td (Local MP4/WebP in) Tj ET
+BT /F1 9 Tf 174 326.9 Td (`public/ads/`,) Tj ET
+BT /F1 9 Tf 174 314.8 Td (`src/assets/`) Tj ET
+BT /F1 9 Tf 294 339.1 Td (No CDN for video \(cost) Tj ET
+BT /F1 9 Tf 294 326.9 Td (control\). Total <20MB.) Tj ET
+BT /F1 9 Tf 294 314.8 Td (Lazy-loaded.) Tj ET
+0.6 0.6 0.6 RG 0.5 w 50 300.60000000000014 495 0 re S
+0.8 0.8 0.8 RG 0.5 w 50 278.60000000000014 495 0 re S
+BT /F1 10 Tf 50.0 268.6 Td (*End of Document*) Tj ET
+endstream
+endobj
+46 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842]
+   /Contents 45 0 R
+   /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R /F4 6 0 R /F5 7 0 R /F6 8 0 R /F7 9 0 R /F8 10 0 R >> >> >>
+endobj
+47 0 obj
+<< /Title (UniHub DPIA Ч Data Protection Impact Assessment) /Author (Shadrack Biwott, UniHub Kenya) /Producer (pdfgen.ts) >>
+endobj
+xref
+0 48
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000242 00000 n 
+0000000339 00000 n 
+0000000441 00000 n 
+0000000546 00000 n 
+0000000655 00000 n 
+0000000750 00000 n 
+0000000850 00000 n 
+0000000953 00000 n 
+0000001061 00000 n 
+0000004466 00000 n 
+0000004671 00000 n 
+0000007647 00000 n 
+0000007852 00000 n 
+0000011571 00000 n 
+0000011776 00000 n 
+0000015698 00000 n 
+0000015903 00000 n 
+0000021056 00000 n 
+0000021261 00000 n 
+0000026269 00000 n 
+0000026474 00000 n 
+0000031027 00000 n 
+0000031232 00000 n 
+0000034429 00000 n 
+0000034634 00000 n 
+0000040834 00000 n 
+0000041039 00000 n 
+0000046718 00000 n 
+0000046923 00000 n 
+0000048441 00000 n 
+0000048646 00000 n 
+0000054317 00000 n 
+0000054522 00000 n 
+0000059329 00000 n 
+0000059534 00000 n 
+0000064174 00000 n 
+0000064379 00000 n 
+0000068873 00000 n 
+0000069078 00000 n 
+0000074346 00000 n 
+0000074551 00000 n 
+0000077852 00000 n 
+0000078057 00000 n 
+0000082171 00000 n 
+0000082376 00000 n 
+trailer
+<< /Size 48 /Root 1 0 R /Info 47 0 R >>
+startxref
+82517
+%%EOF

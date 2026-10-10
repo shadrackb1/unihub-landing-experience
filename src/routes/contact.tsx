@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Mail, MapPin, MessageCircle } from "lucide-react";
-import { MarketingShell, WHATSAPP_URL } from "@/components/MarketingChrome";
-import { Reveal } from "@/components/VideoPanel";
+import { MarketingShell, WHATSAPP_URL } from "@/shared/components/MarketingChrome";
+import { Reveal } from "@/shared/components/VideoPanel";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({

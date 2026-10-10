@@ -1,4 +1,4 @@
-import { PortraitVideo, Reveal } from "@/components/VideoPanel";
+import { PortraitVideo, Reveal } from "@/shared/components/VideoPanel";
 
 export type ResidenceClip = {
   id: string;

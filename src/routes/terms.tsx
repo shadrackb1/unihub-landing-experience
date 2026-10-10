@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
-import { MarketingShell } from "@/components/MarketingChrome";
-import { Reveal } from "@/components/VideoPanel";
+import { MarketingShell } from "@/shared/components/MarketingChrome";
+import { Reveal } from "@/shared/components/VideoPanel";
 
 export const Route = createFileRoute("/terms")({
   head: () => ({

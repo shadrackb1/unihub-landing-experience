@@ -10,7 +10,7 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
-import { reportLovableError } from "../lib/lovable-error-reporting";
+import { reportError } from "@/infrastructure/error-reporting";
 
 function NotFoundComponent() {
   return (
@@ -34,11 +34,11 @@ function NotFoundComponent() {
   );
 }
 
-function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
+function ErrorComponent({ error, reset }: { error: any; reset: () => void }) {
   console.error(error);
   const router = useRouter();
   useEffect(() => {
-    reportLovableError(error, { boundary: "tanstack_root_error_component" });
+    reportError(error, { boundary: "tanstack_root_error_component" });
   }, [error]);
 
   return (
@@ -54,7 +54,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
           <button
             onClick={() => {
               router.invalidate();
-              reset();
+              reset?.();
             }}
             className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
@@ -116,11 +116,39 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
+function CmsTheme() {
+  useEffect(() => {
+    let live = true;
+    import("@/legacy/services/firestore")
+      .then(async (m) => {
+        try {
+          const settings = await m.getSiteSettings();
+          if (!live || !settings?.theme) return;
+          const root = document.documentElement;
+          const theme = settings.theme as any;
+          if (theme.primaryColor) root.style.setProperty("--color-brand-500", theme.primaryColor);
+          if (theme.backgroundColor) root.style.setProperty("--color-surface-900", theme.backgroundColor);
+          if (theme.surfaceColor) root.style.setProperty("--color-surface-800", theme.surfaceColor);
+          if (theme.fontFamily) root.style.setProperty("--CMS-font-family", `"${theme.fontFamily}", sans-serif`);
+          if (theme.borderRadius) root.style.setProperty("--CMS-border-radius", theme.borderRadius);
+        } catch {
+          // offline or no CMS settings ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â keep default theme
+        }
+      })
+      .catch(() => {});
+    return () => {
+      live = false;
+    };
+  }, []);
+  return null;
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
   return (
     <QueryClientProvider client={queryClient}>
+      <CmsTheme />
       <Outlet />
     </QueryClientProvider>
   );

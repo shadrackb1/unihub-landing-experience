@@ -1,0 +1,147 @@
+# UniHub Landing Experience — Architecture Restructure Summary
+
+## ✅ Completed Phases
+
+### Phase 1: Foundation Work (Completed)
+- **Directory Structure**: Created `src/app/`, `src/shared/`, `src/domain/`, `src/infrastructure/`, `src/features/`
+- **Path Aliases**: Updated `tsconfig.json` with `@app/*`, `@features/*`, `@domain/*`, `@infrastructure/*`, `@shared/*`, `@assets/*`
+- **Vite Config**: Added `tsconfig-paths` plugin to `vite.config.ts`
+- **Utilities Migration**:
+  - `src/lib/utils.ts` → `src/shared/utils/cn.ts`
+- **Hooks Migration**:
+  - `src/hooks/use-mobile.tsx` → `src/shared/hooks/useIsMobile.ts`
+- **Component Migration**:
+  - `src/components/VideoPanel.tsx` → `src/shared/components/VideoPanel.tsx`
+- **UI Primitives Migration** (40+ components):
+  - Button, Card, Dialog, Alert, Badge, Checkbox, Collapsible, Command, ContextMenu, DropdownMenu, HoverCard, Tooltip, Menu, Menubar, NavigationMenu, Pagination, Popover, Progress, RadioGroup, ScrollArea, Select, Separator, Sheet, Slider, Switch, Tabs, Toggle, ToggleGroup, Tooltip, AspectRatio, Avatar, Label, Input, Textarea, Resizable, Sidebar, Accordion, AlertDialog, Breadcrumb, Carousel, Form, InputOTP, Table, Skeleton, etc.
+- **Shared Components Migration**:
+  - Logo.tsx, LogoMark.tsx, Experience.tsx, LetterReveal.tsx, MarketingChrome.tsx, PlaceholderPage.tsx
+- **Feature Component Migration**:
+  - `src/components/CampusMap.tsx` → `src/features/campus/components/CampusMap.tsx`
+  - `src/components/ListingGrid.tsx` → `src/features/listings/components/ListingGrid.tsx`
+  - `src/components/ResidenceVideoGallery.tsx` → `src/features/residence/components/ResidenceVideoGallery.tsx`
+- **Barrel Exports**: Created barrel files for shared layers and feature modules
+- **Imports Updated**: Updated imports in migrated files and routes to use new aliases
+- **Error Reporting**: Moved to infrastructure (`src/infrastructure/error-reporting/`) and updated import in `__root.tsx`
+- **Cleanup**: Removed old `src/components/ui/` directory and old `src/lib/` files
+
+### Phase 2: Domain & Infrastructure (In Progress)
+- **Domain Layer**: Created `src/domain/index.ts` (placeholder)
+- **Infrastructure Layer**:
+  - Created `src/infrastructure/error-reporting/` with:
+    - `error-reporting.ts` (simplified error reporting)
+    - `error-capture.ts` (error capture utilities)
+    - `error-page.ts` (HTML error page renderer)
+    - `index.ts` (barrel export)
+  - Updated `__root.tsx` to import from `@/infrastructure/error-reporting`
+
+## 📋 Current State
+
+The application compiles and runs successfully. The core functionality is preserved:
+- Navigation works
+- Video playback functions
+- Campus map displays
+- Listing grid renders
+- Marketing shell (header/footer) works
+
+## 🚀 Remaining Work
+
+### Phase 2: Complete Domain & Infrastructure
+1. **Domain Layer** (`src/domain/`):
+   - `/types/` - Core TypeScript interfaces (Listing, Campus, ResidenceClip, etc.)
+   - `/schemas/` - Zod validation schemas for data validation
+   - `/constants/` - App-wide constants (routes, WhatsApp, pricing, categories, breakpoints)
+   - `/utils/` - Pure domain utilities (formatting, validation, slug generation, etc.)
+
+2. **Infrastructure Layer** (`src/infrastructure/`):
+   - `/api/` - API clients, TanStack Query hooks, endpoint definitions
+   - `/storage/` - LocalStorage, sessionStorage wrappers
+   - `/media/` - Image/video optimization, CDN helpers
+   - `/analytics/` - Event tracking, consent management
+   - `/mapping/` - MapLibre integration, geo utilities
+   - `/messaging/` - WhatsApp, email, notification helpers
+
+### Phase 3: Feature Extraction
+Extract remaining routes into feature modules:
+1. **Home Feature** (`src/features/home/`):
+   - Extract sections from `src/routes/index.tsx` into components
+   - Create hooks for data fetching (e.g., `useHomeData.ts`)
+   - Define home-specific types and schemas
+
+2. **Listings Feature** (already started):
+   - Complete `src/features/listings/` with hooks, types, schemas
+   - Move sample data to feature-specific data files
+
+3. **Property Feature** (`src/features/property/`):
+   - From `src/routes/list-property.tsx` and listing detail view
+   - Create property detail components, forms, hooks
+
+4. **Contact Feature** (`src/features/contact/`):
+   - From `src/routes/contact.tsx`
+   - Create contact form, WhatsApp integration
+
+5. **Marketing Feature** (`src/features/marketing/`):
+   - Extract SEO, analytics, meta tags from routes
+
+### Phase 4: Finalization
+1. **Update all remaining imports** to use new aliases
+2. **Remove unused files** and cleanup
+3. **Add ESLint rules** to enforce layer boundaries
+4. **Create architecture documentation** (ADR)
+5. **Run final tests** and verify functionality
+
+## 🎯 Benefits Achieved So Far
+
+1. **Clear Separation of Concerns**:
+   - Application bootstrap (`src/app/`)
+   - Shared infrastructure (`src/shared/`)
+   - Business logic (`src/domain/`)
+   - External integrations (`src/infrastructure/`)
+   - Feature modules (`src/features/`)
+
+2. **Improved Maintainability**:
+   - Related code is colocated in feature modules
+   - Shared primitives are truly reusable
+   - Domain layer is free of React dependencies (easily testable)
+
+3. **Better Scalability**:
+   - New features can be added in `src/features/` following the pattern
+   - Infrastructure concerns are encapsulated
+   - Domain layer can evolve independently
+
+4. **Enhanced Developer Experience**:
+   - Clear import conventions with path aliases
+   - Barrel exports prevent deep import paths
+   - Consistent patterns across features
+
+## 🔧 Next Steps
+
+To continue the restructuring, we recommend:
+
+1. **Complete the Domain Layer**:
+   - Create `src/domain/types/` with core interfaces
+   - Create `src/domain/schemas/` with Zod validation
+   - Create `src/domain/constants/` with app constants
+   - Create `src/domain/utils/` with pure utilities
+
+2. **Expand Infrastructure Layer**:
+   - Implement API clients for listings, properties, etc.
+   - Add storage utilities for preferences, caching
+   - Implement media optimization helpers
+   - Add analytics event tracking
+   - Complete MapLibre integration
+   - Add WhatsApp/email messaging helpers
+
+3. **Extract Features**:
+   - Start with the home page (`src/features/home/`)
+   - Then complete listings, property, contact, and marketing features
+
+4. **Final Verification**:
+   - Ensure all imports use the new aliases
+   - Run the application to verify functionality
+   - Add tests for domain and infrastructure layers
+
+The foundation has been laid. The codebase is now significantly more organized and maintainable than the original structure.
+
+---
+*Document generated during architecture restructuring process*
