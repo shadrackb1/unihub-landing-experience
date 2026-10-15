@@ -11,6 +11,20 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
+// Render-safe signed-out default for contexts without a mounted AuthProvider
+// (public marketing routes keep Firebase lazy and render logged-out chrome).
+// Actions still fail loudly so missing providers are caught at call time.
+const SIGNED_OUT: AuthContextType = {
+  user: null,
+  loading: false,
+  logout: async () => {
+    throw new Error('useAuth: no AuthProvider mounted');
+  },
+  login: async () => {
+    throw new Error('useAuth: no AuthProvider mounted');
+  },
+};
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
@@ -46,7 +60,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    return SIGNED_OUT;
   }
   return context;
 };
