@@ -31,7 +31,7 @@ export const routeOptions = {
 export function AdminPropertyForm() {
   const { property, categories, agents } = (useLoaderData({ strict: false }) as any);
   const navigate = useNavigate();
-  const params = useParams();
+  const params = useParams({ strict: false }) as any;
   const isNew = params.id === 'new';
   
   const [isSaving, setIsSaving] = useState(false);

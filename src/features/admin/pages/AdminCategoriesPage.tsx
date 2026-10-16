@@ -1,7 +1,7 @@
 import { useLoaderData } from '@tanstack/react-router';
 import { Loader2, Plus, Search, Tag } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
-import { getCategoriesList, deleteCategory } from '@/shared/services/firestore';
+import { getCategories, deleteCategory } from '@/shared/services/firestore';
 import { useState } from 'react';
 
 export const routeOptions = {

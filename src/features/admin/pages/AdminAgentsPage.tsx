@@ -1,7 +1,7 @@
 import { useLoaderData } from '@tanstack/react-router';
 import { Loader2, Plus, Search, Users } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
-import { getAgentsList, deleteAgent } from '@/shared/services/firestore';
+import { getAgents, deleteAgent } from '@/shared/services/firestore';
 import { useState } from 'react';
 
 export const routeOptions = {
