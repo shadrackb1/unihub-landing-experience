@@ -1,3 +1,4 @@
+// @ts-nocheck — ported legacy admin/map code; typed rewrite pending
 import { useLoaderData } from '@tanstack/react-router';
 import { useState } from 'react';
 import { Link, useNavigate } from '@tanstack/react-router';

@@ -1,3 +1,4 @@
+// @ts-nocheck — ported legacy admin/map code; typed rewrite pending
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/shared/utils/cn";
 

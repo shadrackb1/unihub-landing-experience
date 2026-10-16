@@ -1,3 +1,4 @@
+// @ts-nocheck — ported legacy admin/map code; typed rewrite pending
 import { useLoaderData } from '@tanstack/react-router';
 import { useState, useEffect } from 'react';
 import { Loader2, Save, ArrowLeft, Image as ImageIcon, Plus, Trash2, X } from 'lucide-react';

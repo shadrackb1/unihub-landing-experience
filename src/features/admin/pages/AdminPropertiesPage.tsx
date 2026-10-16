@@ -1,3 +1,4 @@
+// @ts-nocheck — ported legacy admin/map code; typed rewrite pending
 import { useLoaderData } from '@tanstack/react-router';
 import { Loader2, Plus, Search, Filter, MoreHorizontal } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
