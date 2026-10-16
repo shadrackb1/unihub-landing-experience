@@ -47,7 +47,7 @@ class BatchedVideoManager {
       return () => this.unregister(video);
     }
 
-    this.entries.set(video, { video, element, options });
+    this.entries.set(video, options ? { video, element, options } : { video, element });
 
     if (!this.observer) {
       this.observer = new IntersectionObserver(

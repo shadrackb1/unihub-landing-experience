@@ -29,7 +29,7 @@ export async function uploadMultipleMedia(files: File[]): Promise<MediaItem[]> {
 
 function extractPublicId(url: string): string {
   const match = url.match(/\/upload\/(?:v\d+\/)?(.+)\.[a-z]+$/);
-  return match ? match[1] : '';
+  return match?.[1] ?? '';
 }
 
 export function getOptimizedUrl(url: string, options?: { width?: number; height?: number; quality?: string }): string {
