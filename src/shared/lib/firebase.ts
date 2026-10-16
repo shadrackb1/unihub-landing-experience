@@ -1,6 +1,6 @@
 import { initializeApp, getApps } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { initializeFirestore, memoryLocalCache } from "firebase/firestore";
+import { initializeFirestore, getFirestore, memoryLocalCache, type Firestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import fallbackConfig from "../../../firebase-applet-config.json";
 
@@ -20,8 +20,20 @@ export const app = getApps()[0] ?? initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const storage = getStorage(app);
 
-export const db = initializeFirestore(
-  app,
-  { experimentalForceLongPolling: true, localCache: memoryLocalCache() },
-  (env["VITE_FIREBASE_FIRESTORE_DATABASE_ID"] as string | undefined) || fallback["firestoreDatabaseId"] || undefined,
-);
+const databaseId =
+  (env["VITE_FIREBASE_FIRESTORE_DATABASE_ID"] as string | undefined) || fallback["firestoreDatabaseId"] || undefined;
+
+function createDb(): Firestore {
+  try {
+    return initializeFirestore(
+      app,
+      { experimentalForceLongPolling: true, localCache: memoryLocalCache() },
+      databaseId,
+    );
+  } catch {
+    // Already initialized (hot reload / second import) — reuse it.
+    return databaseId ? getFirestore(app, databaseId) : getFirestore(app);
+  }
+}
+
+export const db = createDb();
