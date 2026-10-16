@@ -163,7 +163,7 @@ export function useIntersectionVideoAutoplay(options?: {
   threshold?: number;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const elementRef = useRef<HTMLElement>(null);
+  const elementRef = useRef<HTMLDivElement>(null);
   const reduced = usePrefersReducedMotion();
 
   useEffect(() => {
