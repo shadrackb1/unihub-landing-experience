@@ -2,7 +2,7 @@
 import { Loader2, Plus, Search, Settings, Save } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { getSiteSettingsData, updateSiteSettingsData } from '@/shared/services/firestore';
-import { cn } from '@/shared/lib/utils';
+import { cn } from '@/shared/utils/cn';
 import { motion } from 'motion/react';
 
 export const routeOptions = {

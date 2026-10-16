@@ -5,6 +5,7 @@ import { ProtectedRoute } from "@/features/admin/components/ProtectedRoute";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "UniHub Admin" }, { name: "robots", content: "noindex" }] }),
+  ssr: false,
   component: AdminRoot,
 });
 

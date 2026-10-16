@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { AdminPropertiesPage } from '@/features/admin/pages/AdminPropertiesPage';
+import { AdminPropertiesPage, routeOptions } from '@/features/admin/pages/AdminPropertiesPage';
 
 export const Route = createFileRoute('/admin/properties')({
+  loader: routeOptions.loader as any,
   component: AdminPropertiesPage,
 });
