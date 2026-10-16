@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { Mail, Menu, MessageCircle, X, LogIn, UserCircle2 } from "lucide-react";
+import { useState } from "react";
 import { Logo } from "@/shared/components/Logo";
 import { useAuth } from "@/shared/context/AuthContext";
 
