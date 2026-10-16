@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as HostelsRouteImport } from './routes/hostels'
@@ -19,7 +20,6 @@ import { Route as ListingsRouteImport } from './routes/listings'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
-import { Route as AdminLayoutRouteImport } from './routes/admin/_layout'
 import { Route as AdminAgentsRouteImport } from './routes/admin/agents'
 import { Route as AdminCategoriesRouteImport } from './routes/admin/categories'
 import { Route as AdminHostelsRouteImport } from './routes/admin/hostels'
@@ -41,6 +41,11 @@ const IndexRoute = IndexRouteImport.update({
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppRoute = AppRouteImport.update({
@@ -79,49 +84,44 @@ const TermsRoute = TermsRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
-  id: '/admin/',
-  path: '/admin/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminLayoutRoute = AdminLayoutRouteImport.update({
-  id: '/admin/_layout',
-  path: '/admin',
-  getParentRoute: () => rootRouteImport,
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
 } as any)
 const AdminAgentsRoute = AdminAgentsRouteImport.update({
-  id: '/admin/agents',
-  path: '/admin/agents',
-  getParentRoute: () => rootRouteImport,
+  id: '/agents',
+  path: '/agents',
+  getParentRoute: () => AdminRoute,
 } as any)
 const AdminCategoriesRoute = AdminCategoriesRouteImport.update({
-  id: '/admin/categories',
-  path: '/admin/categories',
-  getParentRoute: () => rootRouteImport,
+  id: '/categories',
+  path: '/categories',
+  getParentRoute: () => AdminRoute,
 } as any)
 const AdminHostelsRoute = AdminHostelsRouteImport.update({
-  id: '/admin/hostels',
-  path: '/admin/hostels',
-  getParentRoute: () => rootRouteImport,
+  id: '/hostels',
+  path: '/hostels',
+  getParentRoute: () => AdminRoute,
 } as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
-  id: '/admin/login',
-  path: '/admin/login',
-  getParentRoute: () => rootRouteImport,
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => AdminRoute,
 } as any)
 const AdminPropertiesRoute = AdminPropertiesRouteImport.update({
-  id: '/admin/properties',
-  path: '/admin/properties',
-  getParentRoute: () => rootRouteImport,
+  id: '/properties',
+  path: '/properties',
+  getParentRoute: () => AdminRoute,
 } as any)
 const AdminSettingsRoute = AdminSettingsRouteImport.update({
-  id: '/admin/settings',
-  path: '/admin/settings',
-  getParentRoute: () => rootRouteImport,
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AdminRoute,
 } as any)
 const AdminUniversitiesRoute = AdminUniversitiesRouteImport.update({
-  id: '/admin/universities',
-  path: '/admin/universities',
-  getParentRoute: () => rootRouteImport,
+  id: '/universities',
+  path: '/universities',
+  getParentRoute: () => AdminRoute,
 } as any)
 const HostelsIdRoute = HostelsIdRouteImport.update({
   id: '/$id',
@@ -152,6 +152,7 @@ const AdminPropertiesNewRoute = AdminPropertiesNewRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/admin': typeof AdminRouteWithChildren
   '/app': typeof AppRoute
   '/contact': typeof ContactRoute
   '/hostels': typeof HostelsRouteWithChildren
@@ -159,7 +160,6 @@ export interface FileRoutesByFullPath {
   '/listings': typeof ListingsRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
-  '/admin': typeof AdminLayoutRoute
   '/admin/agents': typeof AdminAgentsRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/hostels': typeof AdminHostelsRouteWithChildren
@@ -184,7 +184,6 @@ export interface FileRoutesByTo {
   '/listings': typeof ListingsRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
-  '/admin': typeof AdminIndexRoute
   '/admin/agents': typeof AdminAgentsRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/hostels': typeof AdminHostelsRouteWithChildren
@@ -194,6 +193,7 @@ export interface FileRoutesByTo {
   '/admin/universities': typeof AdminUniversitiesRoute
   '/hostels/$id': typeof HostelsIdRoute
   '/properties/$id': typeof PropertiesIdRoute
+  '/admin': typeof AdminIndexRoute
   '/admin/hostels/new': typeof AdminHostelsNewRoute
   '/admin/properties/$id': typeof AdminPropertiesIdRoute
   '/admin/properties/new': typeof AdminPropertiesNewRoute
@@ -202,6 +202,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/admin': typeof AdminRouteWithChildren
   '/app': typeof AppRoute
   '/contact': typeof ContactRoute
   '/hostels': typeof HostelsRouteWithChildren
@@ -209,7 +210,6 @@ export interface FileRoutesById {
   '/listings': typeof ListingsRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
-  '/admin/_layout': typeof AdminLayoutRoute
   '/admin/agents': typeof AdminAgentsRoute
   '/admin/categories': typeof AdminCategoriesRoute
   '/admin/hostels': typeof AdminHostelsRouteWithChildren
@@ -229,6 +229,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/admin'
     | '/app'
     | '/contact'
     | '/hostels'
@@ -236,7 +237,6 @@ export interface FileRouteTypes {
     | '/listings'
     | '/privacy'
     | '/terms'
-    | '/admin'
     | '/admin/agents'
     | '/admin/categories'
     | '/admin/hostels'
@@ -261,7 +261,6 @@ export interface FileRouteTypes {
     | '/listings'
     | '/privacy'
     | '/terms'
-    | '/admin'
     | '/admin/agents'
     | '/admin/categories'
     | '/admin/hostels'
@@ -271,6 +270,7 @@ export interface FileRouteTypes {
     | '/admin/universities'
     | '/hostels/$id'
     | '/properties/$id'
+    | '/admin'
     | '/admin/hostels/new'
     | '/admin/properties/$id'
     | '/admin/properties/new'
@@ -278,6 +278,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/about'
+    | '/admin'
     | '/app'
     | '/contact'
     | '/hostels'
@@ -285,7 +286,6 @@ export interface FileRouteTypes {
     | '/listings'
     | '/privacy'
     | '/terms'
-    | '/admin/_layout'
     | '/admin/agents'
     | '/admin/categories'
     | '/admin/hostels'
@@ -304,6 +304,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  AdminRoute: typeof AdminRouteWithChildren
   AppRoute: typeof AppRoute
   ContactRoute: typeof ContactRoute
   HostelsRoute: typeof HostelsRouteWithChildren
@@ -311,16 +312,7 @@ export interface RootRouteChildren {
   ListingsRoute: typeof ListingsRoute
   PrivacyRoute: typeof PrivacyRoute
   TermsRoute: typeof TermsRoute
-  AdminLayoutRoute: typeof AdminLayoutRoute
-  AdminAgentsRoute: typeof AdminAgentsRoute
-  AdminCategoriesRoute: typeof AdminCategoriesRoute
-  AdminHostelsRoute: typeof AdminHostelsRouteWithChildren
-  AdminLoginRoute: typeof AdminLoginRoute
-  AdminPropertiesRoute: typeof AdminPropertiesRouteWithChildren
-  AdminSettingsRoute: typeof AdminSettingsRoute
-  AdminUniversitiesRoute: typeof AdminUniversitiesRoute
   PropertiesIdRoute: typeof PropertiesIdRoute
-  AdminIndexRoute: typeof AdminIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -337,6 +329,13 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/app': {
@@ -390,66 +389,59 @@ declare module '@tanstack/react-router' {
     }
     '/admin/': {
       id: '/admin/'
-      path: '/admin'
+      path: '/'
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin/_layout': {
-      id: '/admin/_layout'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AdminLayoutRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/admin/agents': {
       id: '/admin/agents'
-      path: '/admin/agents'
+      path: '/agents'
       fullPath: '/admin/agents'
       preLoaderRoute: typeof AdminAgentsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/admin/categories': {
       id: '/admin/categories'
-      path: '/admin/categories'
+      path: '/categories'
       fullPath: '/admin/categories'
       preLoaderRoute: typeof AdminCategoriesRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/admin/hostels': {
       id: '/admin/hostels'
-      path: '/admin/hostels'
+      path: '/hostels'
       fullPath: '/admin/hostels'
       preLoaderRoute: typeof AdminHostelsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/admin/login': {
       id: '/admin/login'
-      path: '/admin/login'
+      path: '/login'
       fullPath: '/admin/login'
       preLoaderRoute: typeof AdminLoginRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/admin/properties': {
       id: '/admin/properties'
-      path: '/admin/properties'
+      path: '/properties'
       fullPath: '/admin/properties'
       preLoaderRoute: typeof AdminPropertiesRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/admin/settings': {
       id: '/admin/settings'
-      path: '/admin/settings'
+      path: '/settings'
       fullPath: '/admin/settings'
       preLoaderRoute: typeof AdminSettingsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/admin/universities': {
       id: '/admin/universities'
-      path: '/admin/universities'
+      path: '/universities'
       fullPath: '/admin/universities'
       preLoaderRoute: typeof AdminUniversitiesRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/hostels/$id': {
       id: '/hostels/$id'
@@ -489,17 +481,6 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface HostelsRouteChildren {
-  HostelsIdRoute: typeof HostelsIdRoute
-}
-
-const HostelsRouteChildren: HostelsRouteChildren = {
-  HostelsIdRoute: HostelsIdRoute,
-}
-
-const HostelsRouteWithChildren =
-  HostelsRoute._addFileChildren(HostelsRouteChildren)
-
 interface AdminHostelsRouteChildren {
   AdminHostelsNewRoute: typeof AdminHostelsNewRoute
 }
@@ -526,17 +507,18 @@ const AdminPropertiesRouteWithChildren = AdminPropertiesRoute._addFileChildren(
   AdminPropertiesRouteChildren,
 )
 
-const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  AboutRoute: AboutRoute,
-  AppRoute: AppRoute,
-  ContactRoute: ContactRoute,
-  HostelsRoute: HostelsRouteWithChildren,
-  ListPropertyRoute: ListPropertyRoute,
-  ListingsRoute: ListingsRoute,
-  PrivacyRoute: PrivacyRoute,
-  TermsRoute: TermsRoute,
-  AdminLayoutRoute: AdminLayoutRoute,
+interface AdminRouteChildren {
+  AdminAgentsRoute: typeof AdminAgentsRoute
+  AdminCategoriesRoute: typeof AdminCategoriesRoute
+  AdminHostelsRoute: typeof AdminHostelsRouteWithChildren
+  AdminLoginRoute: typeof AdminLoginRoute
+  AdminPropertiesRoute: typeof AdminPropertiesRouteWithChildren
+  AdminSettingsRoute: typeof AdminSettingsRoute
+  AdminUniversitiesRoute: typeof AdminUniversitiesRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
   AdminAgentsRoute: AdminAgentsRoute,
   AdminCategoriesRoute: AdminCategoriesRoute,
   AdminHostelsRoute: AdminHostelsRouteWithChildren,
@@ -544,8 +526,34 @@ const rootRouteChildren: RootRouteChildren = {
   AdminPropertiesRoute: AdminPropertiesRouteWithChildren,
   AdminSettingsRoute: AdminSettingsRoute,
   AdminUniversitiesRoute: AdminUniversitiesRoute,
-  PropertiesIdRoute: PropertiesIdRoute,
   AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
+interface HostelsRouteChildren {
+  HostelsIdRoute: typeof HostelsIdRoute
+}
+
+const HostelsRouteChildren: HostelsRouteChildren = {
+  HostelsIdRoute: HostelsIdRoute,
+}
+
+const HostelsRouteWithChildren =
+  HostelsRoute._addFileChildren(HostelsRouteChildren)
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  AdminRoute: AdminRouteWithChildren,
+  AppRoute: AppRoute,
+  ContactRoute: ContactRoute,
+  HostelsRoute: HostelsRouteWithChildren,
+  ListPropertyRoute: ListPropertyRoute,
+  ListingsRoute: ListingsRoute,
+  PrivacyRoute: PrivacyRoute,
+  TermsRoute: TermsRoute,
+  PropertiesIdRoute: PropertiesIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

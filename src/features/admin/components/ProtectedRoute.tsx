@@ -1,7 +1,8 @@
 import React from 'react';
-import { Navigate, Outlet } from '@tanstack/react-router';
+import { Navigate } from '@tanstack/react-router';
 import { useAuth } from '@/shared/context/AuthContext';
 import { Loader2 } from 'lucide-react';
+import { AdminLayout } from './AdminLayout';
 
 export const ProtectedRoute = () => {
   const { user, loading } = useAuth();
@@ -18,5 +19,5 @@ export const ProtectedRoute = () => {
     return <Navigate to="/admin/login" replace />;
   }
 
-  return <Outlet />;
+  return <AdminLayout />;
 };
