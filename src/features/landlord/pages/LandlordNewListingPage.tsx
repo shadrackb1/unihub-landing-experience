@@ -358,7 +358,7 @@ export const LandlordNewListingPage = () => {
                               </div>
                             )}
                           </div>
-                        )
+                        </div>
                       )}
                     </div>
                     
@@ -385,7 +385,7 @@ export const LandlordNewListingPage = () => {
                   </>
                 )}
               </form>
-            </>
+            </div>
           )}
         </main>
       </div>

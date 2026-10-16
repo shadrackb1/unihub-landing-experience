@@ -163,7 +163,8 @@ export const LandlordAdsPage = () => {
                                 </p>
                               </div>
                             </div>
-                          
+                          </div>
+                        
                             {/* Right side - stats and actions */}
                             <div className="flex items-center space-x-3">
                               <div className="flex items-center space-x-2">
@@ -203,7 +204,6 @@ export const LandlordAdsPage = () => {
                       ))}
                     </div>
                   )}
-                )}
               </div>
               
               <div className="mt-8">
@@ -252,7 +252,7 @@ export const LandlordAdsPage = () => {
                   </div>
                 </div>
               </div>
-            </>
+            </div>
           )}
         </main>
       </div>

@@ -191,7 +191,7 @@ export const LandlordListingsPage = () => {
                     <p className="text-sm text-gray-500">
                       You haven't listed any properties yet. Click above to add your first listing!
                     </p>
-                  )
+                  </div>
                 ) : (
                   <div className="space-y-4">
                     {listings.map((listing) => (
@@ -323,7 +323,7 @@ export const LandlordListingsPage = () => {
                   </div>
                 )}
               </div>
-            </>
+            </div>
           )}
         </main>
       </div>

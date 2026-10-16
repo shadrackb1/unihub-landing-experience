@@ -244,8 +244,8 @@ export const LandlordNewAdsPage = () => {
                             </p>
                           </div>
                         </div>
+                      </>
                       )}
-                    </div>
                     
                     {formData.paymentMethod === 'bank' && (
                       <>
@@ -279,8 +279,8 @@ export const LandlordNewAdsPage = () => {
                             </p>
                           </div>
                         </div>
+                      </>
                       )}
-                    </div>
                     
                     <div className="flex items-center justify-between">
                       <button
@@ -305,7 +305,7 @@ export const LandlordNewAdsPage = () => {
                   </>
                 )}
               </form>
-            </>
+            </div>
           )}
         </main>
       </div>

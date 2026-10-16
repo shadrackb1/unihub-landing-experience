@@ -377,10 +377,10 @@ export const LandlordDashboard = () => {
                         No active campaigns yet. Boost a listing to get started!
                       </p>
                     </div>
-                  </>
+                  </div>
                 </>
               )}
-            </>
+            </div>
           )}
         </main>
       </div>
