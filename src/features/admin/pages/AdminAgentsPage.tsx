@@ -1,19 +1,18 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { useLoaderData } from '@tanstack/react-router';
 import { Loader2, Plus, Search, Users } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
 import { getAgentsList, deleteAgent } from '@/shared/services/firestore';
 import { useState } from 'react';
 
-export const Route = createFileRoute('/admin/agents')({
+export const routeOptions = {
   loader: async () => {
-    const agents = await getAgentsList();
+    const agents = await getAgents();
     return { agents };
   },
-  component: AdminAgentsPage,
-});
+};
 
 export function AdminAgentsPage() {
-  const { agents } = Route.useLoaderData();
+  const { agents } = (useLoaderData({ strict: false }) as any);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('all');
   const [deletingId, setDeletingId] = useState<string | null>(null);

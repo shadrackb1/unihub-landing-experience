@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { useLoaderData } from '@tanstack/react-router';
 import { useState, useEffect } from 'react';
 import { Loader2, Save, ArrowLeft, Image as ImageIcon, Plus, Trash2, X } from 'lucide-react';
 import { Link, useNavigate, useParams } from '@tanstack/react-router';
@@ -8,26 +8,25 @@ import { uploadMedia } from '@/shared/lib/storage';
 import { cn } from '@/shared/lib/utils';
 import { motion } from 'motion/react';
 
-export const Route = createFileRoute('/admin/properties/$id')({
+export const routeOptions = {
   loader: async ({ params }) => {
     const { id } = params;
     if (id === 'new') return { property: null, categories: [], agents: [] };
     
     const [property, categories, agents] = await Promise.all([
       getProperty(id),
-      getCategoriesList(),
-      getAgentsList(),
+      getCategories(),
+      getAgents(),
     ]);
     
     if (!property) throw new Error('Property not found');
     
     return { property, categories, agents };
   },
-  component: AdminPropertyForm,
-});
+};
 
 export function AdminPropertyForm() {
-  const { property, categories, agents } = Route.useLoaderData();
+  const { property, categories, agents } = (useLoaderData({ strict: false }) as any);
   const navigate = useNavigate();
   const params = useParams();
   const isNew = params.id === 'new';
@@ -122,7 +121,7 @@ export function AdminPropertyForm() {
       } else {
         await updateProperty(params.id, data);
       }
-      navigate('/admin/properties');
+      navigate({ to: '/admin/properties' });
     } catch (error) {
       console.error('Save failed:', error);
       alert('Failed to save property');

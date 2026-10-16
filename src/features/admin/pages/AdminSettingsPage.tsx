@@ -1,20 +1,19 @@
-﻿import { createFileRoute } from '@tanstack/react-router';
+﻿import { useLoaderData } from '@tanstack/react-router';
 import { Loader2, Plus, Search, Settings, Save } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { getSiteSettingsData, updateSiteSettingsData } from '@/shared/services/firestore';
 import { cn } from '@/shared/lib/utils';
 import { motion } from 'motion/react';
 
-export const Route = createFileRoute('/admin/settings')({
+export const routeOptions = {
   loader: async () => {
     const settings = await getSiteSettingsData();
     return { settings };
   },
-  component: AdminSettingsPage,
-});
+};
 
 export function AdminSettingsPage() {
-  const { settings } = Route.useLoaderData();
+  const { settings } = (useLoaderData({ strict: false }) as any);
   const [isSaving, setIsSaving] = useState(false);
   const [activeTab, setActiveTab] = useState<'general' | 'features' | 'advanced'>('general');
   const [formData, setFormData] = useState({

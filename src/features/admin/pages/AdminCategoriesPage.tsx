@@ -1,19 +1,18 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { useLoaderData } from '@tanstack/react-router';
 import { Loader2, Plus, Search, Tag } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
 import { getCategoriesList, deleteCategory } from '@/shared/services/firestore';
 import { useState } from 'react';
 
-export const Route = createFileRoute('/admin/categories')({
+export const routeOptions = {
   loader: async () => {
-    const categories = await getCategoriesList();
+    const categories = await getCategories();
     return { categories };
   },
-  component: AdminCategoriesPage,
-});
+};
 
 export function AdminCategoriesPage() {
-  const { categories } = Route.useLoaderData();
+  const { categories } = (useLoaderData({ strict: false }) as any);
   const [searchTerm, setSearchTerm] = useState('');
   const [deletingId, setDeletingId] = useState<string | null>(null);
 

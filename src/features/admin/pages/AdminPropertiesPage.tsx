@@ -1,19 +1,18 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { useLoaderData } from '@tanstack/react-router';
 import { Loader2, Plus, Search, Filter, MoreHorizontal } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
 import { getProperties, deleteProperty } from '@/shared/services/firestore';
 import { useState } from 'react';
 
-export const Route = createFileRoute('/admin/properties')({
+export const routeOptions = {
   loader: async () => {
     const properties = await getProperties();
     return { properties };
   },
-  component: AdminPropertiesPage,
-});
+};
 
 export function AdminPropertiesPage() {
-  const { properties } = Route.useLoaderData();
+  const { properties } = (useLoaderData({ strict: false }) as any);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'available' | 'occupied' | 'hidden'>('all');
   const [deletingId, setDeletingId] = useState<string | null>(null);
