@@ -32,7 +32,7 @@ export function SiteHeader() {
   }, [open]);
 
   const handleLoginClick = () => {
-    navigate("/admin/login");
+    navigate({ to: "/admin/login" });
   };
 
   return (

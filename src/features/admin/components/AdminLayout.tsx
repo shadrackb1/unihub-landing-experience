@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import { Outlet, NavLink, useNavigate } from '@tanstack/react-router';
+import { Outlet, Link, useNavigate, useRouterState } from '@tanstack/react-router';
 import { 
   LayoutDashboard, Home, Users, Tag, Settings, LogOut, Menu, X, Monitor, School, Building, Palette, Layout, MousePointerClick, Users as UsersIcon 
 } from 'lucide-react';
 import { useAuth } from '@/shared/context/AuthContext';
-import { cn } from '@/shared/lib/utils';
 
 export const AdminLayout = () => {
   const { logout } = useAuth();
   const navigate = useNavigate();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navItems = [
@@ -16,16 +16,14 @@ export const AdminLayout = () => {
     { to: '/admin/properties', icon: Home, label: 'Properties' },
     { to: '/admin/universities', icon: Building, label: 'Universities' },
     { to: '/admin/hostels', icon: Building, label: 'Hostels' },
-    { to: '/admin/cms', icon: Monitor, label: 'Site Builder' },
     { to: '/admin/agents', icon: Users, label: 'Agents' },
     { to: '/admin/categories', icon: Tag, label: 'Categories' },
     { to: '/admin/settings', icon: Settings, label: 'Settings' },
   ];
 
   const handleLogout = async () => {
-    // This would need the actual logout function from auth
-    // For now, just navigate to login
-    navigate('/admin/login');
+    try { await logout(); } catch {}
+    navigate({ to: '/admin/login' });
   };
 
   return (
@@ -53,15 +51,12 @@ export const AdminLayout = () => {
             <a
               key={item.to}
               href={item.to}
-              end={item.end}
               onClick={() => setMobileMenuOpen(false)}
-              className={({ isActive }) =>
-                `flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors ${
-                  item.to === window.location.pathname
-                    ? 'bg-zinc-800 text-white'
-                    : 'text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-200'
-                }`
-              }
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors ${
+                (item.end ? pathname.replace(/\/$/, '') === item.to : pathname.startsWith(item.to))
+                  ? 'bg-zinc-800 text-white'
+                  : 'text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-200'
+              }`}
             >
               <item.icon className="w-5 h-5" />
               {item.label}
@@ -98,7 +93,3 @@ export const AdminLayout = () => {
   );
 };
 
-function handleLogout() {
-  // This will be replaced by the actual logout function
-  window.location.href = '/admin/login';
-}

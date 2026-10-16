@@ -47,7 +47,7 @@ class BatchedVideoManager {
       return () => this.unregister(video);
     }
 
-    this.entries.set(video, { video, element, options });
+    this.entries.set(video, options ? { video, element, options } : { video, element });
 
     if (!this.observer) {
       this.observer = new IntersectionObserver(
@@ -163,7 +163,7 @@ export function useIntersectionVideoAutoplay(options?: {
   threshold?: number;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const elementRef = useRef<HTMLElement>(null);
+  const elementRef = useRef<HTMLDivElement>(null);
   const reduced = usePrefersReducedMotion();
 
   useEffect(() => {

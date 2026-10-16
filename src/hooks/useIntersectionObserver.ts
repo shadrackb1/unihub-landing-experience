@@ -95,7 +95,7 @@ const intersectionObserverSingleton = new IntersectionObserverSingleton();
  * Hook for using the shared IntersectionObserver
  * Multiple components with same options share a single observer instance
  */
-export function useSharedIntersectionObserver(
+export function useSharedIntersectionObserver<T extends HTMLElement = HTMLElement>(
   options: {
     rootMargin?: string;
     threshold?: number;
@@ -103,7 +103,7 @@ export function useSharedIntersectionObserver(
     once?: boolean;
   } = {},
 ) {
-  const ref = useRef<HTMLElement | null>(null);
+  const ref = useRef<T | null>(null);
   const [inView, setInView] = useState(false);
   const once = options?.once ?? false;
 

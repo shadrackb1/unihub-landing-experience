@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { AdminPropertyForm } from '@/features/admin/pages/AdminPropertyForm';
 
-export const Route = createFileRoute('/admin/hostels/new')({
+export const Route = createFileRoute('/admin/hostels_/new')({
   component: () => <div className="p-8 text-center text-zinc-400">Hostel form coming soon...</div>,
 });
