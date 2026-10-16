@@ -13,6 +13,7 @@ const NAV_LINKS = [
   { label: "About", to: "/about" },
   { label: "Contact", to: "/contact" },
   { label: "List property", to: "/list-property" },
+  { label: "Landlord Portal", to: "/landlord" },
 ] as const;
 
 function Wordmark() {
@@ -197,6 +198,7 @@ export function SiteFooter() {
               ["Hostels", "/listings"],
               ["Map", "/#locations"],
               ["Residences", "/#residences"],
+              ["Landlord Portal", "/landlord"],
             ]}
           />
           <FooterColumn
