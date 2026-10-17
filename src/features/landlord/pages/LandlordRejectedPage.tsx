@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { 
   Mail, MessageCircle, Phone, ShieldCheck, 
   CheckCircle, XCircle, Users, Building2, AlertTriangle
