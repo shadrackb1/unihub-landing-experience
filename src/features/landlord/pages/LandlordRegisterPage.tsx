@@ -383,7 +383,7 @@ export const LandlordRegisterPage = () => {
           <p className="text-sm text-gray-500">
             Already have an account?{' '}
             <Link 
-              to="/login/landlord" 
+              to="/landlord/login" 
               className="text-indigo-600 hover:text-indigo-500 font-medium"
             >
               Sign In

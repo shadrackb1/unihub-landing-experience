@@ -126,7 +126,7 @@ export const LandlordDashboard = () => {
           
           <nav className="mt-6 space-y-2 px-4">
             <Link 
-              to="/landlord/dashboard" 
+              to="/landlord" 
               className={cn(
                 'w-full flex items-center justify-start px-3 py-2 rounded-lg text-left text-sm font-medium',
                 activeTab === 'overview' ? 'bg-indigo-50 text-indigo-600' : 'hover:bg-zinc-50'
@@ -302,10 +302,10 @@ export const LandlordDashboard = () => {
                         >
                           <div className="flex items-center justify-between">
                             <div className="flex items-center space-x-3">
-                              <MapPin className="h-5 w-5" 
-                                className={listing.status === 'published' ? 'text-green-500' : 
+                              <MapPin
+                                className={'h-5 w-5 ' + (listing.status === 'published' ? 'text-green-500' : 
                                           listing.status === 'featured' ? 'text-indigo-500' : 
-                                          listing.status === 'pending' ? 'text-yellow-500' : 'text-gray-500'}
+                                          listing.status === 'pending' ? 'text-yellow-500' : 'text-gray-500')}
                               />
                               <div>
                                 <h3 className="font-medium text-gray-800">{listing.title}</h3>
