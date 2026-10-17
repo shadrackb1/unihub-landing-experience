@@ -27,7 +27,7 @@ export const draftListingDescription = createServerFn({ method: "POST" })
       ["Title", data.title], ["Type", data.type], ["Near campus", data.campus],
       ["Location", data.location], ["Rent (KES/month)", data.price],
       ["Deposit (KES)", data.deposit], ["Amenities", data.amenities], ["Landlord notes", data.notes],
-    ].filter(([, v]) => v.trim()).map(([k, v]) => `${k}: ${v}`).join("\n");
+    ].filter(([, v]) => (v ?? "").trim()).map(([k, v]) => `${k}: ${v}`).join("\n");
     if (!facts) return { text: "", error: "Add a few property details first." };
     try {
       const res = await generateResponse({
