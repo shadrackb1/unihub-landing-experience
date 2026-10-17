@@ -1,0 +1,24 @@
+// @ts-nocheck
+import { useLoaderData } from '@tanstack/react-router';
+import { 
+  Settings, Save, RefreshCw, Eye, Code, Layout, 
+  Palette, Type as FontSizes, TextCursorInput, 
+  CheckCircle, XCircle, AlertTriangle 
+} from 'lucide-react';
+import { useState } from 'react';
+export const routeOptions = {
+  loader: async () => {
+    const settings = await getSiteSettingsData();
+    return { settings };
+  },
+};
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};

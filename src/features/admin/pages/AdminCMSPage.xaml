@@ -1,0 +1,8 @@
+
+export const routeOptions = {
+  loader: async () => {
+    const settings = await getSiteSettingsData();
+    return { settings };
+  },
+};
+

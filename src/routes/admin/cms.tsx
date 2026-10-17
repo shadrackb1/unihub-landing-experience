@@ -1,11 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { AdminCMSPage, routeOptions } from '@/features/admin/pages/AdminCMSPage';
-import { requireAdmin } from '@/features/admin/requireAdmin';
+import { AdminCMSPage } from '@/features/admin/pages/AdminCMSPage';
 
 export const Route = createFileRoute('/admin/cms')({
-  loader: async () => {
-    await requireAdmin();
-    return routeOptions.loader?.();
-  },
+  head: () => ({ meta: [{ title: 'Site builder — UniHub Admin' }, { name: 'robots', content: 'noindex' }] }),
   component: AdminCMSPage,
 });
