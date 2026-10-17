@@ -4,7 +4,8 @@ import {
   getDoc, 
   getDocs, 
   addDoc, 
-  updateDoc, 
+  updateDoc,
+  setDoc,
   deleteDoc, 
   query, 
   where, 
@@ -410,7 +411,8 @@ export async function getSiteSettingsData(): Promise<any | null> {
 export async function updateSiteSettingsData(data: any): Promise<void> {
   try {
     const docRef = doc(db, COLLECTIONS.siteSettings, 'global');
-    await updateDoc(docRef, { ...data, updatedAt: serverTimestamp() });
+    // setDoc + merge: works even when the siteSettings/global doc does not exist yet
+    await setDoc(docRef, { ...data, updatedAt: serverTimestamp() }, { merge: true });
   } catch (error) {
     console.error('Error updating site settings:', error);
     throw error;

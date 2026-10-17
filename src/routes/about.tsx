@@ -3,6 +3,7 @@ import { GraduationCap, MessageCircle, ShieldCheck } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { MarketingShell, WHATSAPP_URL } from "@/shared/components/MarketingChrome";
 import { Reveal } from "@/shared/components/VideoPanel";
+import { useSiteSettings } from "@/shared/hooks/useSiteSettings";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -36,6 +37,8 @@ const pillars = [
 ];
 
 function AboutPage() {
+  const siteSettings = useSiteSettings();
+  const teamMembers: { name: string; role: string; photoUrl: string }[] = siteSettings?.teamMembers || [];
   return (
     <MarketingShell>
       <section className="section-shell">
@@ -63,6 +66,34 @@ function AboutPage() {
               </Reveal>
             ))}
           </div>
+
+          {teamMembers.length > 0 && (
+            <Reveal className="mt-12">
+              <p className="eyebrow">The people behind it</p>
+              <h2 className="mt-3 font-display text-3xl font-medium leading-tight sm:text-4xl">Meet the team</h2>
+              <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                {teamMembers.map((member, index) => (
+                  <div key={`${member.name}-${index}`} className="solid-card flex items-center gap-4 p-6">
+                    {member.photoUrl ? (
+                      <img
+                        src={member.photoUrl}
+                        alt={member.name}
+                        className="size-16 shrink-0 rounded-2xl object-cover border border-border"
+                      />
+                    ) : (
+                      <div className="flex size-16 shrink-0 items-center justify-center rounded-2xl border border-border bg-accent font-display text-xl">
+                        {member.name.charAt(0)}
+                      </div>
+                    )}
+                    <div>
+                      <p className="font-display text-lg font-medium">{member.name}</p>
+                      <p className="text-sm text-muted-foreground">{member.role}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Reveal>
+          )}
 
           <Reveal className="mt-12 flex flex-col gap-4 rounded-2xl border border-border bg-card p-7 sm:flex-row sm:items-center sm:justify-between">
             <div>

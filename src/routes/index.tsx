@@ -20,6 +20,7 @@ import {
 import { Act, JourneyRail, ScrollProgress } from "@/shared/components/Experience";
 import { CampusMap } from "@/features/campus/components/CampusMap";
 import { LetterReveal } from "@/shared/components/LetterReveal";
+import { useSiteSettings } from "@/shared/hooks/useSiteSettings";
 import {
   CoolVideoCard,
   ResidenceVideoGallery,
@@ -173,6 +174,7 @@ function PrimaryLink({
 
 function Index() {
   const listings = useListings();
+  const siteSettings = useSiteSettings();
   const heroVideoRef = useRef<HTMLVideoElement>(null);
   const reduced = usePrefersReducedMotion();
   const [residenceClips, setResidenceClips] = useState<ResidenceClip[] | null>(null);
@@ -214,7 +216,7 @@ function Index() {
             loop
             playsInline
             preload="auto"
-            poster={heroPoster || heroImage}
+            poster={siteSettings?.heroImage || heroPoster || heroImage}
             aria-hidden="true"
           >
             <source src={heroVideo} type="video/mp4" />
@@ -227,13 +229,16 @@ function Index() {
                 <ShieldCheck className="size-4" aria-hidden="true" />
                 UniHub · Verified campus housing in Kenya
               </div>
-              <LetterReveal text="Find your perfect home." />
+              <LetterReveal
+                key={siteSettings?.heroTitle || "default-hero"}
+                text={siteSettings?.heroTitle || "Find your perfect home."}
+              />
               <p className="reveal reveal-3 mt-7 max-w-2xl text-base leading-relaxed text-secondary-foreground sm:text-xl">
-                Browse verified hostels, bedsitters, and rentals near campus. Message landlords on
-                WhatsApp. No account needed to search.
+                {siteSettings?.heroSubtitle ||
+                  "Browse verified hostels, bedsitters, and rentals near campus. Message landlords on WhatsApp. No account needed to search."}
               </p>
               <div className="reveal reveal-4 mt-9 flex flex-wrap items-center gap-5">
-                <PrimaryLink href="/listings">Browse Listings</PrimaryLink>
+                <PrimaryLink href="/listings">{siteSettings?.ctaText || "Browse Listings"}</PrimaryLink>
                 <a
                   href="#how-it-works"
                   className="group inline-flex items-center gap-2 text-sm font-medium text-foreground transition-colors hover:text-highlight"

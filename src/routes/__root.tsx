@@ -119,7 +119,7 @@ function RootShell({ children }: { children: ReactNode }) {
 function CmsTheme() {
   useEffect(() => {
     let live = true;
-    import("@/legacy/services/firestore")
+    import("@/shared/services/firestore")
       .then(async (m) => {
         try {
           const settings = await m.getSiteSettings();
