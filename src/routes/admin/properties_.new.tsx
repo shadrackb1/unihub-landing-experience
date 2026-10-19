@@ -1,11 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { AdminPropertyForm, routeOptions } from '@/features/admin/pages/AdminPropertyForm';
-import { requireAdmin } from '@/features/admin/requireAdmin';
+import { guardedLoader } from '@/features/admin/requireAdmin';
 
 export const Route = createFileRoute('/admin/properties_/new')({
-  loader: async () => {
-    await requireAdmin();
-    return routeOptions.loader({ params: {} });
-  },
+  loader: () =>
+    guardedLoader(() => routeOptions.loader({ params: {} }), { property: null, categories: [], agents: [] }),
   component: AdminPropertyForm,
 });

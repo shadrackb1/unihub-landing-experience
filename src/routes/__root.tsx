@@ -11,6 +11,9 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportError } from "@/infrastructure/error-reporting";
+import { useOnlineRefresh } from "@/shared/hooks/useOnlineRefresh";
+import PwaBridge from "@/shared/components/PwaBridge";
+import InstallAppButton from "@/shared/components/InstallAppButton";
 
 function NotFoundComponent() {
   return (
@@ -77,6 +80,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "theme-color", content: "#0A0A0A" },
       { name: "author", content: "UniHub" },
       { property: "og:site_name", content: "UniHub" },
       { property: "og:type", content: "website" },
@@ -94,6 +98,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap",
       },
       { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
+      {
+        rel: "apple-touch-icon",
+        href: "/pwa/apple-touch-icon.png",
+        sizes: "180x180",
+      },
+      { rel: "manifest", href: "/manifest.webmanifest" },
     ],
   }),
   shellComponent: RootShell,
@@ -117,6 +127,7 @@ function RootShell({ children }: { children: ReactNode }) {
 }
 
 function CmsTheme() {
+  const onlineTick = useOnlineRefresh();
   useEffect(() => {
     let live = true;
     import("@/shared/services/firestore")
@@ -132,14 +143,14 @@ function CmsTheme() {
           if (theme.fontFamily) root.style.setProperty("--CMS-font-family", `"${theme.fontFamily}", sans-serif`);
           if (theme.borderRadius) root.style.setProperty("--CMS-border-radius", theme.borderRadius);
         } catch {
-          // offline or no CMS settings ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â keep default theme
+          // offline or no CMS settings — keep default theme
         }
       })
       .catch(() => {});
     return () => {
       live = false;
     };
-  }, []);
+  }, [onlineTick]);
   return null;
 }
 
@@ -149,6 +160,8 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <CmsTheme />
+      <PwaBridge />
+      <InstallAppButton />
       <Outlet />
     </QueryClientProvider>
   );

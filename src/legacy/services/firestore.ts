@@ -2,9 +2,11 @@
 import { collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, addDoc, query, where, orderBy, writeBatch, serverTimestamp, Timestamp } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { Property, Agent, Category, SiteSettings } from '../types';
+import { cachedRead } from '@/shared/lib/offlineCache';
 
 // Properties
 export async function getProperties(status?: string): Promise<Property[]> {
+  return (await cachedRead(`properties:${status ?? 'all'}`, async (): Promise<Property[]> => {
   const propertiesRef = collection(db, 'properties');
   let q = query(propertiesRef, orderBy('createdAt', 'desc'));
   
@@ -19,6 +21,7 @@ export async function getProperties(status?: string): Promise<Property[]> {
     props = props.sort((a, b) => b.createdAt.toMillis() - a.createdAt.toMillis());
   }
   return props;
+  }, { isEmpty: (r) => !r || r.length === 0 })) ?? [];
 }
 
 export async function getProperty(id: string): Promise<Property | null> {
@@ -105,12 +108,14 @@ export async function deleteCategory(id: string) {
 
 // Settings
 export async function getSiteSettings(): Promise<SiteSettings | null> {
+  return cachedRead('settings:general', async (): Promise<SiteSettings | null> => {
   const docRef = doc(db, 'settings', 'general');
   const snapshot = await getDoc(docRef);
   if (snapshot.exists()) {
     return snapshot.data() as SiteSettings;
   }
   return null;
+  });
 }
 
 export async function updateSiteSettings(data: SiteSettings) {
@@ -275,6 +280,7 @@ export async function deleteUniversity(id: string) {
 }
 
 export async function getHostels(universityId?: string): Promise<Hostel[]> {
+  return (await cachedRead(`hostels:${universityId ?? 'all'}`, async (): Promise<Hostel[]> => {
   let qVar = query(collection(db, 'hostels'), orderBy('createdAt', 'desc'));
   if (universityId) {
     qVar = query(collection(db, 'hostels'), where('universityId', '==', universityId));
@@ -283,6 +289,7 @@ export async function getHostels(universityId?: string): Promise<Hostel[]> {
   let res = snap.docs.map(d => ({ id: d.id, ...d.data() } as Hostel));
   if (universityId) res = res.sort((a,b) => (b.createdAt?.toMillis()||0) - (a.createdAt?.toMillis()||0));
   return res;
+  }, { isEmpty: (r) => !r || r.length === 0 })) ?? [];
 }
 
 export async function getHostel(id: string): Promise<Hostel | null> {

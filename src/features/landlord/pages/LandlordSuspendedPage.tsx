@@ -3,6 +3,7 @@ import {
   CheckCircle, XCircle, Users, Building2, AlertTriangle
 } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
+import { waLink, formatWhatsAppNumber } from '@/shared/contact';
 
 export const LandlordSuspendedPage = () => {
   return (
@@ -32,10 +33,10 @@ export const LandlordSuspendedPage = () => {
             <p className="text-sm text-gray-500">
               To appeal this suspension or get specific details, please contact us via WhatsApp: {' '}
               <a 
-                href="https://wa.me/254700000000?text=Hi%20UniHub%2C%20my%20landlord%20account%20was%20suspended%20and%20I%27d%20like%20to%20understand%20the%20reason%20and%20appeal%20if%20possible"
+                href={waLink("Hi UniHub, my landlord account was suspended and I'd like to understand the reason and appeal if possible")}
                 className="text-indigo-600 hover:text-indigo-500"
               >
-                +254 700 000 000
+                {formatWhatsAppNumber()}
               </a>
             </p>
           </div>

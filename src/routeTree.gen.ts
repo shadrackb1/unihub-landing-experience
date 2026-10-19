@@ -15,6 +15,7 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as HostelsRouteImport } from './routes/hostels'
+import { Route as LandlordRouteImport } from './routes/landlord'
 import { Route as ListPropertyRouteImport } from './routes/list-property'
 import { Route as ListingsRouteImport } from './routes/listings'
 import { Route as PrivacyRouteImport } from './routes/privacy'
@@ -76,6 +77,11 @@ const ContactRoute = ContactRouteImport.update({
 const HostelsRoute = HostelsRouteImport.update({
   id: '/hostels',
   path: '/hostels',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LandlordRoute = LandlordRouteImport.update({
+  id: '/landlord',
+  path: '/landlord',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ListPropertyRoute = ListPropertyRouteImport.update({
@@ -164,44 +170,44 @@ const HostelsIdRoute = HostelsIdRouteImport.update({
   getParentRoute: () => HostelsRoute,
 } as any)
 const LandlordIndexRoute = LandlordIndexRouteImport.update({
-  id: '/landlord/',
-  path: '/landlord/',
-  getParentRoute: () => rootRouteImport,
+  id: '/',
+  path: '/',
+  getParentRoute: () => LandlordRoute,
 } as any)
 const LandlordAdsRoute = LandlordAdsRouteImport.update({
-  id: '/landlord/ads',
-  path: '/landlord/ads',
-  getParentRoute: () => rootRouteImport,
+  id: '/ads',
+  path: '/ads',
+  getParentRoute: () => LandlordRoute,
 } as any)
 const LandlordListingsRoute = LandlordListingsRouteImport.update({
-  id: '/landlord/listings',
-  path: '/landlord/listings',
-  getParentRoute: () => rootRouteImport,
+  id: '/listings',
+  path: '/listings',
+  getParentRoute: () => LandlordRoute,
 } as any)
 const LandlordLoginRoute = LandlordLoginRouteImport.update({
-  id: '/landlord/login',
-  path: '/landlord/login',
-  getParentRoute: () => rootRouteImport,
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => LandlordRoute,
 } as any)
 const LandlordPendingRoute = LandlordPendingRouteImport.update({
-  id: '/landlord/pending',
-  path: '/landlord/pending',
-  getParentRoute: () => rootRouteImport,
+  id: '/pending',
+  path: '/pending',
+  getParentRoute: () => LandlordRoute,
 } as any)
 const LandlordRegisterRoute = LandlordRegisterRouteImport.update({
-  id: '/landlord/register',
-  path: '/landlord/register',
-  getParentRoute: () => rootRouteImport,
+  id: '/register',
+  path: '/register',
+  getParentRoute: () => LandlordRoute,
 } as any)
 const LandlordRejectedRoute = LandlordRejectedRouteImport.update({
-  id: '/landlord/rejected',
-  path: '/landlord/rejected',
-  getParentRoute: () => rootRouteImport,
+  id: '/rejected',
+  path: '/rejected',
+  getParentRoute: () => LandlordRoute,
 } as any)
 const LandlordSuspendedRoute = LandlordSuspendedRouteImport.update({
-  id: '/landlord/suspended',
-  path: '/landlord/suspended',
-  getParentRoute: () => rootRouteImport,
+  id: '/suspended',
+  path: '/suspended',
+  getParentRoute: () => LandlordRoute,
 } as any)
 const PropertiesIdRoute = PropertiesIdRouteImport.update({
   id: '/properties/$id',
@@ -229,14 +235,14 @@ const AdminPropertiesNewRoute = AdminPropertiesNewRouteImport.update({
   getParentRoute: () => AdminRoute,
 } as any)
 const LandlordAdsNewRoute = LandlordAdsNewRouteImport.update({
-  id: '/landlord/ads_/new',
-  path: '/landlord/ads/new',
-  getParentRoute: () => rootRouteImport,
+  id: '/ads_/new',
+  path: '/ads/new',
+  getParentRoute: () => LandlordRoute,
 } as any)
 const LandlordListingsNewRoute = LandlordListingsNewRouteImport.update({
-  id: '/landlord/listings_/new',
-  path: '/landlord/listings/new',
-  getParentRoute: () => rootRouteImport,
+  id: '/listings_/new',
+  path: '/listings/new',
+  getParentRoute: () => LandlordRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -246,6 +252,7 @@ export interface FileRoutesByFullPath {
   '/app': typeof AppRoute
   '/contact': typeof ContactRoute
   '/hostels': typeof HostelsRouteWithChildren
+  '/landlord': typeof LandlordRouteWithChildren
   '/list-property': typeof ListPropertyRoute
   '/listings': typeof ListingsRoute
   '/privacy': typeof PrivacyRoute
@@ -326,6 +333,7 @@ export interface FileRoutesById {
   '/app': typeof AppRoute
   '/contact': typeof ContactRoute
   '/hostels': typeof HostelsRouteWithChildren
+  '/landlord': typeof LandlordRouteWithChildren
   '/list-property': typeof ListPropertyRoute
   '/listings': typeof ListingsRoute
   '/privacy': typeof PrivacyRoute
@@ -368,6 +376,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/contact'
     | '/hostels'
+    | '/landlord'
     | '/list-property'
     | '/listings'
     | '/privacy'
@@ -447,6 +456,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/contact'
     | '/hostels'
+    | '/landlord'
     | '/list-property'
     | '/listings'
     | '/privacy'
@@ -488,22 +498,13 @@ export interface RootRouteChildren {
   AppRoute: typeof AppRoute
   ContactRoute: typeof ContactRoute
   HostelsRoute: typeof HostelsRouteWithChildren
+  LandlordRoute: typeof LandlordRouteWithChildren
   ListPropertyRoute: typeof ListPropertyRoute
   ListingsRoute: typeof ListingsRoute
   PrivacyRoute: typeof PrivacyRoute
   TermsRoute: typeof TermsRoute
-  LandlordAdsRoute: typeof LandlordAdsRoute
-  LandlordListingsRoute: typeof LandlordListingsRoute
-  LandlordLoginRoute: typeof LandlordLoginRoute
-  LandlordPendingRoute: typeof LandlordPendingRoute
-  LandlordRegisterRoute: typeof LandlordRegisterRoute
-  LandlordRejectedRoute: typeof LandlordRejectedRoute
-  LandlordSuspendedRoute: typeof LandlordSuspendedRoute
   PropertiesIdRoute: typeof PropertiesIdRoute
   PublicLandlordRegisterRoute: typeof PublicLandlordRegisterRoute
-  LandlordIndexRoute: typeof LandlordIndexRoute
-  LandlordAdsNewRoute: typeof LandlordAdsNewRoute
-  LandlordListingsNewRoute: typeof LandlordListingsNewRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -548,6 +549,13 @@ declare module '@tanstack/react-router' {
       path: '/hostels'
       fullPath: '/hostels'
       preLoaderRoute: typeof HostelsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/landlord': {
+      id: '/landlord'
+      path: '/landlord'
+      fullPath: '/landlord'
+      preLoaderRoute: typeof LandlordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/list-property': {
@@ -671,59 +679,59 @@ declare module '@tanstack/react-router' {
     }
     '/landlord/': {
       id: '/landlord/'
-      path: '/landlord'
+      path: '/'
       fullPath: '/landlord/'
       preLoaderRoute: typeof LandlordIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof LandlordRoute
     }
     '/landlord/ads': {
       id: '/landlord/ads'
-      path: '/landlord/ads'
+      path: '/ads'
       fullPath: '/landlord/ads'
       preLoaderRoute: typeof LandlordAdsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof LandlordRoute
     }
     '/landlord/listings': {
       id: '/landlord/listings'
-      path: '/landlord/listings'
+      path: '/listings'
       fullPath: '/landlord/listings'
       preLoaderRoute: typeof LandlordListingsRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof LandlordRoute
     }
     '/landlord/login': {
       id: '/landlord/login'
-      path: '/landlord/login'
+      path: '/login'
       fullPath: '/landlord/login'
       preLoaderRoute: typeof LandlordLoginRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof LandlordRoute
     }
     '/landlord/pending': {
       id: '/landlord/pending'
-      path: '/landlord/pending'
+      path: '/pending'
       fullPath: '/landlord/pending'
       preLoaderRoute: typeof LandlordPendingRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof LandlordRoute
     }
     '/landlord/register': {
       id: '/landlord/register'
-      path: '/landlord/register'
+      path: '/register'
       fullPath: '/landlord/register'
       preLoaderRoute: typeof LandlordRegisterRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof LandlordRoute
     }
     '/landlord/rejected': {
       id: '/landlord/rejected'
-      path: '/landlord/rejected'
+      path: '/rejected'
       fullPath: '/landlord/rejected'
       preLoaderRoute: typeof LandlordRejectedRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof LandlordRoute
     }
     '/landlord/suspended': {
       id: '/landlord/suspended'
-      path: '/landlord/suspended'
+      path: '/suspended'
       fullPath: '/landlord/suspended'
       preLoaderRoute: typeof LandlordSuspendedRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof LandlordRoute
     }
     '/properties/$id': {
       id: '/properties/$id'
@@ -762,17 +770,17 @@ declare module '@tanstack/react-router' {
     }
     '/landlord/ads_/new': {
       id: '/landlord/ads_/new'
-      path: '/landlord/ads/new'
+      path: '/ads/new'
       fullPath: '/landlord/ads/new'
       preLoaderRoute: typeof LandlordAdsNewRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof LandlordRoute
     }
     '/landlord/listings_/new': {
       id: '/landlord/listings_/new'
-      path: '/landlord/listings/new'
+      path: '/listings/new'
       fullPath: '/landlord/listings/new'
       preLoaderRoute: typeof LandlordListingsNewRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof LandlordRoute
     }
   }
 }
@@ -826,17 +834,20 @@ const HostelsRouteChildren: HostelsRouteChildren = {
 const HostelsRouteWithChildren =
   HostelsRoute._addFileChildren(HostelsRouteChildren)
 
-const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  AboutRoute: AboutRoute,
-  AdminRoute: AdminRouteWithChildren,
-  AppRoute: AppRoute,
-  ContactRoute: ContactRoute,
-  HostelsRoute: HostelsRouteWithChildren,
-  ListPropertyRoute: ListPropertyRoute,
-  ListingsRoute: ListingsRoute,
-  PrivacyRoute: PrivacyRoute,
-  TermsRoute: TermsRoute,
+interface LandlordRouteChildren {
+  LandlordAdsRoute: typeof LandlordAdsRoute
+  LandlordListingsRoute: typeof LandlordListingsRoute
+  LandlordLoginRoute: typeof LandlordLoginRoute
+  LandlordPendingRoute: typeof LandlordPendingRoute
+  LandlordRegisterRoute: typeof LandlordRegisterRoute
+  LandlordRejectedRoute: typeof LandlordRejectedRoute
+  LandlordSuspendedRoute: typeof LandlordSuspendedRoute
+  LandlordIndexRoute: typeof LandlordIndexRoute
+  LandlordAdsNewRoute: typeof LandlordAdsNewRoute
+  LandlordListingsNewRoute: typeof LandlordListingsNewRoute
+}
+
+const LandlordRouteChildren: LandlordRouteChildren = {
   LandlordAdsRoute: LandlordAdsRoute,
   LandlordListingsRoute: LandlordListingsRoute,
   LandlordLoginRoute: LandlordLoginRoute,
@@ -844,11 +855,29 @@ const rootRouteChildren: RootRouteChildren = {
   LandlordRegisterRoute: LandlordRegisterRoute,
   LandlordRejectedRoute: LandlordRejectedRoute,
   LandlordSuspendedRoute: LandlordSuspendedRoute,
-  PropertiesIdRoute: PropertiesIdRoute,
-  PublicLandlordRegisterRoute: PublicLandlordRegisterRoute,
   LandlordIndexRoute: LandlordIndexRoute,
   LandlordAdsNewRoute: LandlordAdsNewRoute,
   LandlordListingsNewRoute: LandlordListingsNewRoute,
+}
+
+const LandlordRouteWithChildren = LandlordRoute._addFileChildren(
+  LandlordRouteChildren,
+)
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  AdminRoute: AdminRouteWithChildren,
+  AppRoute: AppRoute,
+  ContactRoute: ContactRoute,
+  HostelsRoute: HostelsRouteWithChildren,
+  LandlordRoute: LandlordRouteWithChildren,
+  ListPropertyRoute: ListPropertyRoute,
+  ListingsRoute: ListingsRoute,
+  PrivacyRoute: PrivacyRoute,
+  TermsRoute: TermsRoute,
+  PropertiesIdRoute: PropertiesIdRoute,
+  PublicLandlordRegisterRoute: PublicLandlordRegisterRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -5,10 +5,7 @@ import {
   CheckCircle, XCircle, LogIn, Users, Building2
 } from 'lucide-react';
 import { Link, useNavigate } from '@tanstack/react-router';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '@/shared/lib/firebase';
-import { doc, getDoc } from 'firebase/firestore';
-import { db } from '@/shared/lib/firebase';
+import { signInLandlord, homeForStatus } from '@/features/landlord/services/landlordService';
 import { cn } from '@/shared/lib/utils';
 
 export const LandlordLoginPage = () => {
@@ -17,6 +14,7 @@ export const LandlordLoginPage = () => {
     password: ''
   });
   
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [showError, setShowError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -35,34 +33,16 @@ export const LandlordLoginPage = () => {
     setShowError(false);
     
     try {
-      // Sign in with Firebase Auth
-      const userCredential = await signInWithEmailAndPassword(
-        auth, 
-        formData.email, 
-        formData.password
-      );
-      
-      // Check landlord profile status
-      const landlordDoc = await getDoc(doc(db, 'landlords', userCredential.user.uid));
-      
-      if (!landlordDoc.exists()) {
-        throw new Error('Landlord profile not found. Please contact support.');
+      const { profile } = await signInLandlord(formData.email, formData.password);
+
+      if (profile.state === 'missing') {
+        throw new Error('No landlord profile found for this account. Please register as a landlord first.');
       }
-      
-      const landlordData = landlordDoc.data();
-      
-      // Redirect based on status
-      if (landlordData.status === 'pending') {
-        window.location.href = '/landlord/pending';
-      } else if (landlordData.status === 'approved') {
-        window.location.href = '/landlord/dashboard';
-      } else if (landlordData.status === 'rejected') {
-        window.location.href = '/landlord/rejected';
-      } else if (landlordData.status === 'suspended') {
-        window.location.href = '/landlord/suspended';
-      } else {
-        window.location.href = '/landlord/dashboard';
+      if (profile.state === 'unavailable') {
+        throw new Error(profile.message);
       }
+
+      void navigate({ to: homeForStatus(profile.status), replace: true });
     } catch (error) {
       console.error('Login failed:', error);
       setShowError(true);
@@ -122,7 +102,7 @@ export const LandlordLoginPage = () => {
           
           <div className="flex items-center justify-between">
             <Link 
-              to="/register/landlord" 
+              to="/landlord/register" 
               className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
             >
               Don't have an account? Register

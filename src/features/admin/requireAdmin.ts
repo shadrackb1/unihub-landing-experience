@@ -12,6 +12,8 @@ import { auth } from '@/shared/lib/firebase';
  */
 
 const AUTH_WAIT_MS = 8000;
+/** Max time a guarded data fetch may take before we serve the empty fallback. */
+const DATA_WAIT_MS = 6000;
 
 function waitForUser(): Promise<User | null> {
   return new Promise((resolve) => {
@@ -62,3 +64,42 @@ export const requireAdmin = async () => {
 
   return { user };
 };
+
+/** Firestore rejects in ms; a hung promise never will. */
+async function withTimeout<A>(promise: Promise<A>, ms: number, what: string): Promise<A> {
+  let timer: ReturnType<typeof setTimeout>;
+  try {
+    return await Promise.race([
+      promise,
+      new Promise<never>((_, reject) => {
+        timer = setTimeout(() => reject(new Error(`${what} timed out after ${ms}ms`)), ms);
+      }),
+    ]);
+  } finally {
+    clearTimeout(timer!);
+  }
+}
+
+/**
+ * Run a route's data loader behind requireAdmin().
+ *
+ * requireAdmin() runs first and its redirect is thrown outside the try, so
+ * auth redirects are never swallowed. If the data fetch itself fails or hangs
+ * (e.g. Firestore unreachable — its "database not found" state hangs reads
+ * forever), the route receives its empty fallback after DATA_WAIT_MS and the
+ * screen degrades to an empty state instead of the root error page.
+ */
+export async function guardedLoader<T>(
+  loader: (() => Promise<T>) | undefined,
+  fallback: T,
+): Promise<T> {
+  await requireAdmin();
+  if (!loader) return fallback;
+  try {
+    const data = await withTimeout(loader(), DATA_WAIT_MS, 'Admin route loader');
+    return (data ?? fallback) as T;
+  } catch (error) {
+    console.error('Admin route loader failed; serving empty fallback:', error);
+    return fallback;
+  }
+}

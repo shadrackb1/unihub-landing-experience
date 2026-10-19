@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
 import { sampleListings, type SampleListing } from "@/data/listings";
+import { useOnlineRefresh } from "@/shared/hooks/useOnlineRefresh";
 
 export function useListings(): SampleListing[] {
   const [listings, setListings] = useState<SampleListing[]>(sampleListings);
+  // Bumped by the browser's `online` event so listings re-fetch (and the
+  // offline cache re-populates) as soon as connectivity returns.
+  const onlineTick = useOnlineRefresh();
 
   useEffect(() => {
     let live = true;
@@ -29,21 +33,21 @@ export function useListings(): SampleListing[] {
               title: h.name,
               location: h.location,
               category: h.hostel_type === "girls" ? "Girls hostel" : h.hostel_type === "boys" ? "Boys hostel" : "Hostel",
-              price: "KES â€”",
+              price: "KES —",
               deposit: "Shared facilities",
               image: h.images?.[0]?.secure_url ?? sampleListings[1]!.image,
             })),
           ];
           if (live && mapped.length > 0) setListings(mapped);
         } catch {
-          // offline or empty â€” keep sample listings
+          // offline or empty — keep sample listings
         }
       })
       .catch(() => {});
     return () => {
       live = false;
     };
-  }, []);
+  }, [onlineTick]);
 
   return listings;
 }

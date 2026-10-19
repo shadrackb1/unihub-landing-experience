@@ -3,12 +3,12 @@
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 import tsconfigPaths from "vite-tsconfig-paths";
 
+const previewPreset = process.env["UNIHUB_PREVIEW_PRESET"];
+
 export default defineConfig({
   tanstackStart: {
     server: { entry: "server" },
   },
-  nitro: {
-    preset: "vercel",
-  },
+  nitro: previewPreset ? { preset: previewPreset } : { preset: "vercel" },
   plugins: [tsconfigPaths()],
 });

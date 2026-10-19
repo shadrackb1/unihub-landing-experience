@@ -17,6 +17,7 @@ import {
   serverTimestamp 
 } from 'firebase/firestore';
 import { db } from '@/shared/lib/firebase';
+import { cachedRead } from '@/shared/lib/offlineCache';
 import type { 
   University, 
   Hostel, 
@@ -82,17 +83,19 @@ function dateToTimestamp(data: any): any {
 
 // Site Settings
 export async function getSiteSettings(): Promise<any | null> {
-  try {
-    const docRef = doc(db, COLLECTIONS.siteSettings, 'global');
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      return timestampToDate(docSnap.data());
+  return cachedRead('svc:settings:global', async (): Promise<any | null> => {
+    try {
+      const docRef = doc(db, COLLECTIONS.siteSettings, 'global');
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        return timestampToDate(docSnap.data());
+      }
+      return null;
+    } catch (error) {
+      console.error('Error getting site settings:', error);
+      throw error;
     }
-    return null;
-  } catch (error) {
-    console.error('Error getting site settings:', error);
-    throw error;
-  }
+  });
 }
 
 export async function updateSiteSettings(data: any): Promise<void> {
@@ -110,9 +113,12 @@ export async function updateSiteSettings(data: any): Promise<void> {
 
 // Universities
 export async function getUniversities(): Promise<University[]> {
-  const q = query(collection(db, COLLECTIONS.universities), orderBy('name'));
-  const snapshot = await getDocs(q);
-  return snapshot.docs.map(doc => ({ id: doc.id, ...timestampToDate(doc.data()) } as University));
+  const result = await cachedRead('svc:universities', async (): Promise<University[] | null> => {
+    const q = query(collection(db, COLLECTIONS.universities), orderBy('name'));
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({ id: doc.id, ...timestampToDate(doc.data()) } as University));
+  }, { isEmpty: (r: any) => !r || r.length === 0 });
+  return result ?? [];
 }
 
 export async function getUniversity(id: string): Promise<University | null> {
@@ -146,12 +152,15 @@ export async function deleteUniversity(id: string): Promise<void> {
 
 // Hostels
 export async function getHostels(universityId?: string): Promise<Hostel[]> {
-  let q = query(collection(db, COLLECTIONS.hostels), orderBy('name'));
-  if (universityId) {
-    q = query(collection(db, COLLECTIONS.hostels), where('universityId', '==', universityId), orderBy('name'));
-  }
-  const snapshot = await getDocs(q);
-  return snapshot.docs.map(doc => ({ id: doc.id, ...timestampToDate(doc.data()) } as Hostel));
+  const result = await cachedRead(`svc:hostels:${universityId ?? 'all'}`, async (): Promise<Hostel[] | null> => {
+    let q = query(collection(db, COLLECTIONS.hostels), orderBy('name'));
+    if (universityId) {
+      q = query(collection(db, COLLECTIONS.hostels), where('universityId', '==', universityId), orderBy('name'));
+    }
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({ id: doc.id, ...timestampToDate(doc.data()) } as Hostel));
+  }, { isEmpty: (r: any) => !r || r.length === 0 });
+  return result ?? [];
 }
 
 export async function getHostel(id: string): Promise<Hostel | null> {

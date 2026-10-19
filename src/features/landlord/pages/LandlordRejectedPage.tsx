@@ -4,6 +4,7 @@ import {
   CheckCircle, XCircle, Users, Building2, AlertTriangle
 } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
+import { waLink, formatWhatsAppNumber } from '@/shared/contact';
 
 export const LandlordRejectedPage = () => {
   return (
@@ -34,10 +35,10 @@ export const LandlordRejectedPage = () => {
             <p className="text-sm text-gray-500">
               To reapply or get specific feedback, please contact us via WhatsApp: {' '}
               <a 
-                href="https://wa.me/254700000000?text=Hi%20UniHub%2C%20I%20received%20a%20rejection%20notice%20for%20my%20landlord%20application%20and%20would%20like%20specific%20feedback"
+                href={waLink("Hi UniHub, I received a rejection notice for my landlord application and would like specific feedback")}
                 className="text-indigo-600 hover:text-indigo-500"
               >
-                +254 700 000 000
+                {formatWhatsAppNumber()}
               </a>
             </p>
           </div>

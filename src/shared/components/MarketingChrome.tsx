@@ -4,8 +4,8 @@ import { Mail, Menu, MessageCircle, X, LogIn, UserCircle2 } from "lucide-react";
 import { Logo } from "@/shared/components/Logo";
 import { useAuth } from "@/shared/context/AuthContext";
 
-export const WHATSAPP_URL =
-  "https://wa.me/254700000000?text=Hi%20UniHub%2C%20I%27d%20like%20help%20finding%20verified%20student%20housing";
+import { WHATSAPP_URL, waLink, WHATSAPP_NUMBER, formatWhatsAppNumber } from "@/shared/contact";
+export { WHATSAPP_URL, waLink, WHATSAPP_NUMBER, formatWhatsAppNumber };
 
 const NAV_LINKS = [
   { label: "Journey", to: "/" },
@@ -219,7 +219,7 @@ export function SiteFooter() {
           />
         </div>
         <div className="mt-14 flex flex-col gap-3 border-t border-border pt-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-          <p>Â© 2026 UniHub Â· Student housing in Kenya</p>
+          <p>© 2026 UniHub · Student housing in Kenya</p>
           <div className="flex items-center gap-4">
             <Link to="/admin" className="text-muted-foreground hover:text-foreground transition-colors" title="Admin Portal" aria-label="Admin Portal">
               <UserCircle2 className="size-4" />

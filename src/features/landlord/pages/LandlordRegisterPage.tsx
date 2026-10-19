@@ -6,10 +6,7 @@ import {
   Users, MapPin, BookOpen, Calendar, CreditCard
 } from 'lucide-react';
 import { Link, useNavigate } from '@tanstack/react-router';
-import { doc, setDoc } from 'firebase/firestore';
-import { auth } from '@/shared/lib/firebase';
-import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { db } from '@/shared/lib/firebase';
+import { registerLandlord } from '@/features/landlord/services/landlordService';
 import { cn } from '@/shared/lib/utils';
 
 export const LandlordRegisterPage = () => {
@@ -28,6 +25,8 @@ export const LandlordRegisterPage = () => {
     status: 'pending'
   });
   
+  const navigate = useNavigate();
+  const [consent, setConsent] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [step, setStep] = useState(1);
   const [showSuccess, setShowSuccess] = useState(false);
@@ -44,50 +43,43 @@ export const LandlordRegisterPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
     setShowError(false);
-    
-    try {
-      // Validate passwords match
-      if (formData.password !== formData.confirmPassword) {
-        throw new Error('Passwords do not match');
+
+    // Steps 1 and 2 only advance; the account is created on the final step.
+    if (step < 3) {
+      if (step === 1 && formData.password !== formData.confirmPassword) {
+        setShowError(true);
+        setErrorMessage('Passwords do not match');
+        return;
       }
+      setStep(step + 1);
+      return;
+    }
 
-      // Create Firebase Auth user
-      const userCredential = await createUserWithEmailAndPassword(
-        auth, 
-        formData.email, 
-        formData.password
-      );
-      
-      // Update profile with display name
-      await updateProfile(auth.currentUser!, {
-        displayName: formData.fullName
-      });
+    if (!consent) {
+      setShowError(true);
+      setErrorMessage('Please consent to storing your information to continue.');
+      return;
+    }
 
-      // Create landlord profile in Firestore
-      await setDoc(doc(db, 'landlords', userCredential.user.uid), {
-        uid: userCredential.user.uid,
+    setIsLoading(true);
+    try {
+      await registerLandlord({
         email: formData.email,
+        password: formData.password,
         fullName: formData.fullName,
         businessName: formData.businessName,
         phone: formData.phone,
         whatsappNumber: formData.whatsappNumber,
         nationalId: formData.nationalId,
-        targetCampuses: formData.targetCampuses.split(',').map(c => c.trim()),
+        targetCampuses: formData.targetCampuses.split(',').map((c) => c.trim()).filter(Boolean),
         estimatedProperties: parseInt(formData.estimatedProperties) || 0,
-        status: 'pending',
-        reviewNote: '',
-        createdAt: new Date(),
-        updatedAt: new Date()
+        reviewNote: formData.reviewNote,
       });
 
       setShowSuccess(true);
-      // Auto-login after successful registration
       setTimeout(() => {
-        // Navigate to landlord dashboard
-        // In a real app, we'd redirect here
-        window.location.href = '/landlord';
+        void navigate({ to: '/landlord/pending', replace: true });
       }, 2000);
     } catch (error) {
       console.error('Registration failed:', error);
@@ -349,9 +341,21 @@ export const LandlordRegisterPage = () => {
               </div>
               
               <div className="space-y-4">
+                <label className="flex items-start gap-2 text-sm text-gray-600">
+                  <input
+                    type="checkbox"
+                    checked={consent}
+                    onChange={(e) => setConsent(e.target.checked)}
+                    className="mt-0.5 h-4 w-4 text-indigo-600"
+                  />
+                  <span>
+                    I consent to UniHub storing this information to verify my landlord
+                    application, and I confirm the details provided are accurate.
+                  </span>
+                </label>
                 <p className="text-sm text-gray-500">
-                  By registering, you agree to provide accurate information and 
-                  undergo verification to ensure student safety.
+                  Verification keeps students safe. You can ask us to delete your
+                  data at any time via WhatsApp.
                 </p>
               </div>
               

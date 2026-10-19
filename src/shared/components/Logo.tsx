@@ -16,7 +16,7 @@ export const Logo = ({ className = "", showTagline = true }: { className?: strin
         </span>
         {showTagline ? (
           <span className="instrument hidden text-[0.58rem] opacity-80 sm:block">
-            Campus housing Â· Kenya
+            Campus housing · Kenya
           </span>
         ) : null}
       </span>

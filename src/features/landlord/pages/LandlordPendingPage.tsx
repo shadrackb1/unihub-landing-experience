@@ -3,6 +3,7 @@ import {
   CheckCircle, XCircle, Users, Building2, Clock
 } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
+import { waLink, formatWhatsAppNumber } from '@/shared/contact';
 
 export const LandlordPendingPage = () => {
   return (
@@ -34,10 +35,10 @@ export const LandlordPendingPage = () => {
             <p className="text-sm text-gray-500">
               Need help? Message us on WhatsApp: {' '}
               <a 
-                href="https://wa.me/254700000000?text=Hi%20UniHub%2C%20I%27d%20like%20help%20with%20my%20landlord%20application"
+                href={waLink("Hi UniHub, I'd like help with my landlord application")}
                 className="text-indigo-600 hover:text-indigo-500"
               >
-                +254 700 000 000
+                {formatWhatsAppNumber()}
               </a>
             </p>
           </div>
