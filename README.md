@@ -28,9 +28,9 @@
 
 ## Architecture
 
-![Architecture](https://gitdiagram.com/shadrackb1/unihub-landing-experience)
+![Architecture](docs/architecture-diagram.png)
 
-> **System Overview** — The diagram above visualizes the UniHub codebase architecture generated from the live repository.
+> **System Overview** — The diagram above visualizes the UniHub codebase architecture.
 
 ### Landlord Portal
 - **Landlord accounts** — `landlordService.ts` handles landlord registration, verification workflows, and profile management
