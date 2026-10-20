@@ -1,37 +1,60 @@
-import { useEffect, useState } from 'react';
 import { Navigate } from '@tanstack/react-router';
-import { Loader2 } from 'lucide-react';
+import { Loader2, ShieldAlert } from 'lucide-react';
 import { useAuth } from '@/shared/context/AuthContext';
-import { isAdminUser } from '@/features/marketplace/services';
+import { isAdminEmail } from '../requireAdmin';
 import { AdminLayout } from './AdminLayout';
 
+/**
+ * Admin subtree guard.
+ *
+ * Rendered by the `/admin` route for every path except `/admin/login`.
+ * It must render `<AdminLayout />`, which owns the admin chrome and the
+ * `<Outlet />` for child routes.
+ *
+ * The admin check is synchronous (allowlist of emails from VITE_ADMIN_EMAILS)
+ * and shares `isAdminEmail` with the route loaders, so the navigation a loader
+ * permits and the navigation the layout permits can never disagree.
+ */
 export const ProtectedRoute = () => {
   const { user, loading, logout } = useAuth();
-  const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
+  const isAdmin = user ? isAdminEmail(user.email) : false;
 
-  useEffect(() => {
-    if (!user) { setIsAdmin(null); return; }
-    let live = true;
-    isAdminUser(user.uid, user.email).then((ok) => live && setIsAdmin(ok));
-    return () => { live = false; };
-  }, [user]);
-
-  if (loading || (user && isAdmin === null)) {
+  if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-background">
+      <div className="flex min-h-screen items-center justify-center bg-background" role="status" aria-label="Checking admin access">
         <Loader2 className="h-8 w-8 animate-spin text-foreground" />
       </div>
     );
   }
+
   if (!user) return <Navigate to="/admin/login" replace />;
+
   if (!isAdmin) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-background p-6 text-center text-foreground">
+        <ShieldAlert className="h-8 w-8 text-muted-foreground" aria-hidden="true" />
         <h1 className="font-display text-2xl font-medium">Admins only</h1>
-        <p className="max-w-sm text-sm text-muted-foreground">This account doesn't have admin access. Landlords can manage listings from their own dashboard.</p>
-        <button onClick={() => logout().catch(() => {})} className="rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground">Sign out</button>
+        <p className="max-w-sm text-sm text-muted-foreground">
+          This account doesn&apos;t have admin access. Landlords can manage their listings from the
+          landlord dashboard.
+        </p>
+        <div className="flex flex-wrap items-center justify-center gap-3">
+          <button
+            onClick={() => logout().catch(() => {})}
+            className="rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground"
+          >
+            Sign out
+          </button>
+          <a
+            href="/landlord"
+            className="rounded-full border border-border px-5 py-2.5 text-sm font-semibold text-foreground hover:bg-accent"
+          >
+            Go to landlord portal
+          </a>
+        </div>
       </div>
     );
   }
+
   return <AdminLayout />;
 };

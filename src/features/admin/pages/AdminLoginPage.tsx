@@ -1,121 +1,190 @@
-// @ts-nocheck — ported legacy admin/map code; typed rewrite pending
-import { useLoaderData } from '@tanstack/react-router';
-import { useState } from 'react';
-import { Link, useNavigate } from '@tanstack/react-router';
-import { useAuth } from '@/shared/context/AuthContext';
-import { Mail, Lock, Loader2, Eye, EyeOff, Building } from 'lucide-react';
+import { useState } from "react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { Mail, Lock, Loader2, Eye, EyeOff, ArrowRight, ShieldCheck } from "lucide-react";
+import { useAuth } from "@/shared/context/AuthContext";
+import { isAdminEmail } from "@/features/admin/requireAdmin";
+import { SupportLink } from "@/shared/components/SupportLink";
 
-export const routeOptions = {
-};
+const inputBase =
+  "w-full rounded-xl border border-input bg-background py-3 pl-11 pr-4 text-sm text-foreground placeholder:text-muted-foreground focus:border-transparent focus:outline-none focus:ring-2 focus:ring-ring transition-shadow";
 
 export function AdminLoginPage() {
-  const { login } = useAuth();
+  const { login, logout } = useAuth();
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
     setIsLoading(true);
     try {
       await login(email, password);
-      navigate({ to: '/admin' });
-    } catch (err: any) {
-      setError(err.message || 'Invalid credentials');
+      // Signing in is not the same as being an admin. Check the allowlist
+      // before routing so a non-admin never lands on the "Admins only" wall
+      // with an active session they did not want.
+      if (!isAdminEmail(email)) {
+        await logout().catch(() => {});
+        setError(
+          "This account does not have admin access. Use the landlord portal, or ask support for access.",
+        );
+        return;
+      }
+      navigate({ to: "/admin" });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "";
+      setError(
+        /invalid|credential|password|email/i.test(message) || !message
+          ? "That email and password did not match. Try again."
+          : message,
+      );
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-zinc-950 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        <div className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-8 shadow-2xl backdrop-blur-xl">
-          <div className="text-center mb-8">
-            <Link to="/admin" className="inline-flex items-center gap-2 mb-6">
-              <Building className="w-8 h-8 text-brand-400" />
-              <span className="text-2xl font-display font-medium tracking-tight text-white">UniHub Admin</span>
-            </Link>
-            <h1 className="text-2xl font-display font-medium text-white mb-2">Welcome Back</h1>
-            <p className="text-zinc-400">Sign in to manage your platform</p>
+    <div className="flex min-h-screen flex-col bg-background text-foreground">
+      <div className="flex flex-1 items-center justify-center px-5 py-12">
+        <div className="w-full max-w-md">
+          <div className="mb-6">
+            <p className="eyebrow">UniHub · Admin</p>
+            <h1 className="mt-2 font-display text-3xl font-medium leading-tight">
+              Sign in to the console
+            </h1>
+            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+              Review landlords and listings, publish site content, and manage boosts.
+            </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {error && (
-              <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm" role="alert">
+          <div className="rounded-2xl border border-border bg-card p-6 sm:p-8">
+            {error ? (
+              <div
+                id="admin-sign-in-error"
+                role="alert"
+                className="mb-5 rounded-xl border border-destructive/30 bg-destructive/5 p-3 text-sm text-destructive"
+              >
                 {error}
               </div>
-            )}
+            ) : null}
 
-            <div className="space-y-2">
-              <label htmlFor="email" className="block text-sm font-medium text-zinc-300">Email</label>
-              <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500" />
-                <input
-                  id="email"
-                  type="email"
-                  name="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  autoComplete="email"
-                  className="w-full pl-12 pr-4 py-3 bg-zinc-950 border border-zinc-800 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-brand-500"
-                  placeholder="admin@unihub.ke"
-                />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <label htmlFor="password" className="block text-sm font-medium text-zinc-300">Password</label>
-              <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500" />
-                <input
-                  id="password"
-                  type={showPassword ? 'text' : 'password'}
-                  name="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  autoComplete="current-password"
-                  className="w-full pl-12 pr-12 py-3 bg-zinc-950 border border-zinc-800 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-brand-500"
-                  placeholder="••••••••"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white"
-                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label
+                  htmlFor="admin-email"
+                  className="mb-1.5 block text-sm font-medium text-secondary-foreground"
                 >
-                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                </button>
+                  Admin email
+                </label>
+                <div className="relative">
+                  <Mail
+                    className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+                    aria-hidden="true"
+                  />
+                  <input
+                    id="admin-email"
+                    type="email"
+                    name="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    autoComplete="email"
+                    aria-describedby={error ? "admin-sign-in-error" : undefined}
+                    className={inputBase}
+                    placeholder="name@unihub.ke"
+                  />
+                </div>
               </div>
-            </div>
 
-            <div className="flex items-center justify-between">
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" className="w-4 h-4 accent-brand-500 rounded" />
-                <span className="text-sm text-zinc-400">Remember me</span>
-              </label>
-              <a href="#" className="text-sm text-brand-400 hover:text-brand-300 font-medium">Forgot password?</a>
-            </div>
+              <div>
+                <label
+                  htmlFor="admin-password"
+                  className="mb-1.5 block text-sm font-medium text-secondary-foreground"
+                >
+                  Password
+                </label>
+                <div className="relative">
+                  <Lock
+                    className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+                    aria-hidden="true"
+                  />
+                  <input
+                    id="admin-password"
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    autoComplete="current-password"
+                    aria-describedby={error ? "admin-sign-in-error" : undefined}
+                    className={`${inputBase} pr-12`}
+                    placeholder="••••••••"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((value) => !value)}
+                    className="absolute right-2 top-1/2 inline-flex size-9 -translate-y-1/2 items-center justify-center rounded-lg text-muted-foreground hover:text-foreground"
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                  >
+                    {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+                  </button>
+                </div>
+              </div>
 
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="w-full py-3 px-6 rounded-xl bg-brand-500 text-black font-medium hover:bg-white hover:scale-105 transition-all font-display shadow-[0_0_20px_var(--color-brand-500)] disabled:opacity-50 disabled:hover:scale-100"
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="mt-2 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-primary px-6 text-sm font-semibold text-primary-foreground shadow-glow transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 className="size-4 animate-spin" aria-hidden="true" />
+                    Signing in…
+                  </>
+                ) : (
+                  <>
+                    Sign in
+                    <ArrowRight className="size-4" aria-hidden="true" />
+                  </>
+                )}
+              </button>
+            </form>
+
+            <div className="mt-5 space-y-2 border-t border-border pt-4 text-xs leading-relaxed text-muted-foreground">
+              <p className="flex items-start gap-2">
+                <ShieldCheck
+                  className="mt-0.5 size-3.5 shrink-0 text-highlight"
+                  aria-hidden="true"
+                />
+                <span>
+                  Admin access is invite-only. Only allowlisted emails can open the console.
+                </span>
+              </p>
+              <p>
+                Need access or a password reset?{" "}
+                <SupportLink
+                  message="Hi UniHub, I need admin access to the console"
+                  className="font-medium text-foreground underline underline-offset-4"
+                >
+                  Contact support
+                </SupportLink>
+              </p>
+            </div>
+          </div>
+
+          <p className="mt-5 text-center text-xs text-muted-foreground">
+            <Link to="/" className="underline underline-offset-4 hover:text-foreground">
+              Back to UniHub
+            </Link>
+            <span aria-hidden="true"> · </span>
+            <Link
+              to="/landlord/login"
+              className="underline underline-offset-4 hover:text-foreground"
             >
-              {isLoading ? <Loader2 className="w-5 h-5 animate-spin mx-auto" /> : 'Sign In'}
-            </button>
-          </form>
-
-          <p className="mt-6 text-center text-sm text-zinc-500">
-            Don&apos;t have an account?{' '}
-            <Link to="/admin/register" className="text-brand-400 hover:text-brand-300 font-medium">
-              Contact admin
+              Landlord sign in
             </Link>
           </p>
         </div>

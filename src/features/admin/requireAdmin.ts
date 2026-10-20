@@ -32,12 +32,26 @@ function waitForUser(): Promise<User | null> {
   });
 }
 
-function getAdminEmails(): string[] {
+export function getAdminEmails(): string[] {
   const raw = (import.meta.env['VITE_ADMIN_EMAILS'] ?? '') as string;
   return raw
     .split(',')
     .map((email: string) => email.trim().toLowerCase())
     .filter((email: string) => email.length > 0);
+}
+
+/**
+ * Single source of truth for "is this account an admin?".
+ * Used by both the route loaders (requireAdmin) and the admin layout guard
+ * so the sidebar cannot be rendered for an account the loaders would reject.
+ *
+ * With no VITE_ADMIN_EMAILS configured we allow any signed-in account in
+ * development (matching requireAdmin) and log a warning.
+ */
+export function isAdminEmail(email: string | null | undefined): boolean {
+  const adminEmails = getAdminEmails();
+  if (adminEmails.length === 0) return true;
+  return adminEmails.includes((email ?? '').toLowerCase());
 }
 
 export const requireAdmin = async () => {

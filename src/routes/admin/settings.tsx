@@ -3,6 +3,7 @@ import { AdminSettingsPage, routeOptions } from '@/features/admin/pages/AdminSet
 import { guardedLoader } from '@/features/admin/requireAdmin';
 
 export const Route = createFileRoute('/admin/settings')({
+  head: () => ({ meta: [{ title: "Settings · UniHub Admin" }, { name: "robots", content: "noindex" }] }),
   loader: () => guardedLoader(routeOptions.loader, { settings: null }),
   component: AdminSettingsPage,
 });

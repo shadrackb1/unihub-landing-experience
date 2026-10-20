@@ -107,17 +107,18 @@ export function AdminLandlordsPage() {
 const LISTING_TABS = ["pending", "published", "rejected", "hidden"] as const;
 
 function ListingRow({ l, children }: { l: MarketListing; children: React.ReactNode }) {
+  const cover = l.images?.[0];
   return (
     <article className="glass-card flex flex-col gap-4 rounded-3xl border border-border p-4 sm:flex-row">
-      {l.images[0] ? <img src={l.images[0]} alt="" className="h-32 w-full rounded-2xl object-cover sm:w-44" loading="lazy" />
+      {cover ? <img src={cover} alt="" className="h-32 w-full rounded-2xl object-cover sm:w-44" loading="lazy" />
         : <div className="h-32 w-full rounded-2xl bg-muted sm:w-44" />}
       <div className="min-w-0 flex-1">
         <div className="flex flex-wrap items-start justify-between gap-2">
-          <h2 className="font-display text-lg font-medium">{l.title}</h2>
-          <div className="flex gap-2"><StatusBadge status={l.status} />{isAdLive(l) && <StatusBadge status="active" label="Featured" />}</div>
+          <h2 className="font-display text-lg font-medium">{l.title ?? "Untitled listing"}</h2>
+          <div className="flex gap-2"><StatusBadge status={l.status ?? "pending"} />{isAdLive(l) && <StatusBadge status="active" label="Featured" />}</div>
         </div>
-        <p className="mt-1 text-sm text-muted-foreground">{l.category} · {l.location}{l.campus ? ` · Near ${l.campus}` : ""} · by {l.landlordName}</p>
-        <p className="mt-1 text-sm">{formatKes(l.price)}/month{l.deposit ? ` · Deposit ${formatKes(l.deposit)}` : ""}</p>
+        <p className="mt-1 text-sm text-muted-foreground">{l.category ?? l.type ?? "—"} · {l.location ?? "—"}{l.campus ? ` · Near ${l.campus}` : ""} · by {l.landlordName ?? "Unknown landlord"}</p>
+        <p className="mt-1 text-sm">{typeof l.price === "number" ? formatKes(l.price) : "—"}/month{l.deposit ? ` · Deposit ${formatKes(l.deposit)}` : ""}</p>
         <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{l.description}</p>
         <div className="mt-4 flex flex-wrap gap-2">{children}</div>
       </div>
@@ -211,7 +212,7 @@ export function AdminAdsPage() {
               <div className="grid gap-4">
                 {live.map((l) => (
                   <ListingRow key={l.id} l={l}>
-                    <span className="self-center text-sm text-muted-foreground">{l.adExpiresAt ? `Ends ${new Date(l.adExpiresAt).toLocaleDateString()}` : "No end date"}</span>
+                    <span className="self-center text-sm text-muted-foreground">{l.adExpiresAt instanceof Date ? `Ends ${l.adExpiresAt.toLocaleDateString()}` : "No end date"}</span>
                     <button disabled={busy === l.id} className={btnGhost} onClick={() => run(l.id, () => setFeatured(l.id, false))}>End boost</button>
                   </ListingRow>
                 ))}
