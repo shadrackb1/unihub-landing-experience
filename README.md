@@ -28,9 +28,62 @@
 
 ## Architecture
 
-![Architecture](docs/architecture-diagram.png)
+![Architecture](https://gitdiagram.com/shadrackb1/unihub-landing-experience)
 
-### Route Map
+> **System Overview** — The diagram above visualizes the UniHub codebase architecture generated from the live repository.
+
+### Landlord Portal
+- **Landlord accounts** — `landlordService.ts` handles landlord registration, verification workflows, and profile management
+- **Listing management** — `services.ts` provides CRUD for property listings, availability, and media
+
+### Data & Identity
+- **Site settings** — `useSiteSettings.ts` for global configuration
+- **Firestore data access** — `firestore.ts` (legacy, retained for migration reference)
+- **Authentication** — `AuthContext.tsx` with Better Auth (email/password, admin plugin, Prisma adapter)
+- **Firebase services** — `firebase.ts` (legacy, being phased out)
+- **Offline support** — `offlineCache.ts` for field demos
+
+### Platform Operations
+- **Admin console** — Full admin dashboard at `/admin`
+- **Listing & landlord vetting** — `services.ts` for approval workflows
+
+### Student Discovery
+- **Home experience** — `index.tsx` (7-Act funnel)
+- **Browse listings** — `listings.tsx` with filtering
+- **Listing data** — `listings.tsx` data layer
+- **Campus map** — `CampusMap.tsx` with MapLibre GL
+- **Residence gallery** — Visual showcase
+- **Listing details** — `listings_.$id.tsx` deep-dive pages
+- **Direct contact** — `contact.tsx` with WhatsApp/email
+
+### Shared Experience
+- **Marketing navigation** — Global header/footer
+- **Viewport-aware video** — `VideoPanel.tsx` autoplay logic
+- **Reduced-motion handling** — Respects `prefers-reduced-motion`
+
+### Map Tile Providers
+- OpenFreeMap (default)
+- Esri World Imagery
+
+---
+
+## Test Accounts
+
+| Role | Email | Password | Access |
+|------|-------|----------|--------|
+| **Admin** | `admin@unihub.ke` | `TestAdmin2024!` | `/admin` (requires `VITE_ADMIN_EMAILS=admin@unihub.ke` in `.env`) |
+| **Landlord (Pending)** | `landlord.pending@unihub.ke` | `TestLandlord2024!` | `/landlord` (pending verification) |
+| **Landlord (Approved)** | `landlord.approved@unihub.ke` | `TestLandlord2024!` | `/landlord` (full dashboard) |
+| **Landlord (Rejected)** | `landlord.rejected@unihub.ke` | `TestLandlord2024!` | `/landlord` (rejected state) |
+| **Landlord (Suspended)** | `landlord.suspended@unihub.ke` | `TestLandlord2024!` | `/landlord` (suspended state) |
+| **Student / Tenant** | `student@unihub.ke` | `TestStudent2024!` | Browse listings, favorites |
+| **University Admin** | `university@unihub.ke` | `TestUniversity2024!` | University dashboard |
+
+> ⚠️ **IMPORTANT**: Change passwords after first login!
+
+---
+
+## Project Structure
 
 <img src=docs/routes-architecture.svg alt=Route map width=100% />
 
@@ -92,7 +145,7 @@ npm install
 npm run dev
 ```
 
-The development server starts at `http://localhost:3000`.
+The development server starts at `http://localhost:5173`.
 
 ---
 
@@ -100,56 +153,106 @@ The development server starts at `http://localhost:3000`.
 
 ```
 unihub-landing-experience/
-””” public/                       # Static assets (logo, favicon, ad materials)
-”‚   ””” logo.svg                  # Horizontal wordmark with monogram
-”‚   ””” logo-mark.svg             # Monogram-only variant
-”‚   ”””” favicon.svg               # 6464 rounded square with monogram
-””” src/
-”‚   ””” assets/                   # Local MP4 videos and listing images
-”‚   ””” components/               # Core UI experience components
-”‚   ”‚   ””” ui/                   # Reusable UI primitives (buttons, cards, dialogs)
-”‚   ”‚   ””” CampusMap.tsx         # MapLibre GL keyless map with university pins
-”‚   ”‚   ””” Experience.tsx        # Journey timeline and act scroll navigation
-”‚   ”‚   ””” LetterReveal.tsx      # Staggered typography animations
-”‚   ”‚   ””” ListingGrid.tsx       # Housing card grid component
-”‚   ”‚   ””” Logo.tsx              # SVG Logo and Mark components
-”‚   ”‚   ””” MarketingChrome.tsx   # Header navigation and footer chrome
-”‚   ”‚   ””” ResidenceVideoGallery.tsx  # Residence video clip showcase
-”‚   ”‚   ”””” VideoPanel.tsx        # Viewport-aware autoplay video container
-”‚   ””” data/                     # Data definitions and mock listings
-”‚   ”‚   ”””” listings.ts           # Sample verified property listings and types
-”‚   ””” hooks/                    # Custom React hooks
-”‚   ”‚   ”””” use-mobile.tsx        # Responsive viewport detection hook
-”‚   ””” lib/                      # Utilities and error reporting
-”‚   ”‚   ””” error-capture.ts      # Server-side and browser error interceptor
-”‚   ”‚   ””” error-page.ts         # Standard error response formatter
-”‚   ”‚   ””” error-reporting.ts    # Client-side runtime error reporting
-”‚   ”‚   ”””” utils.ts              # Tailwind class merging utility (cn)
-”‚   ””” routes/                   # File-based TanStack Router pages
-”‚   ”‚   ””” __root.tsx            # Root layout shell (HTML, Head, Meta, Body)
-”‚   ”‚   ””” index.tsx             # Homepage (7-Act experience)
-”‚   ”‚   ””” listings.tsx          # Browse listings page
-”‚   ”‚   ””” about.tsx             # About brand page
-”‚   ”‚   ””” contact.tsx           # Contact and WhatsApp page
-”‚   ”‚   ””” list-property.tsx     # Landlord onboarding page
-”‚   ”‚   ””” privacy.tsx           # Privacy policy page
-”‚   ”‚   ”””” terms.tsx             # Terms of service page
-”‚   ””” router.tsx                # TanStack Router instance creation
-”‚   ””” server.ts                 # Nitro server entrypoint with error recovery
-”‚   ””” start.ts                  # TanStack Start handler
-”‚   ”””” styles.css                # OKLCH design tokens and Tailwind v4 utilities
-””” docs/                         # Documentation and architecture diagrams
-”‚   ””” architecture-diagram.png
-”‚   ””” routes-architecture.svg
-”‚   ””” backend-architecture.svg
-”‚   ”””” legacy-spa-architecture.svg
-””” DESIGN-BLUEPRINT.md           # System design and architecture specification
-””” OFFLINE-README.md             # Offline USB presentation guide
-””” package.json
-””” tsconfig.json
-””” vite.config.ts
-””” vercel.json
-”””” eslint.config.js
+├── public/                       # Static assets (logo, favicon, ad materials)
+│   ├── logo.svg                  # Horizontal wordmark with monogram
+│   ├── logo-mark.svg             # Monogram-only variant
+│   └── favicon.svg               # 64×64 rounded square with monogram
+├── src/
+│   ├── assets/                   # Local MP4 videos and listing images
+│   ├── components/               # Core UI experience components
+│   │   ├── ui/                   # Reusable UI primitives (buttons, cards, dialogs)
+│   │   ├── CampusMap.tsx         # MapLibre GL keyless map with university pins
+│   │   ├── Experience.tsx        # Journey timeline and act scroll navigation
+│   │   ├── LetterReveal.tsx      # Staggered typography animations
+│   │   ├── ListingGrid.tsx       # Housing card grid component
+│   │   ├── Logo.tsx              # SVG Logo and Mark components
+│   │   ├── MarketingChrome.tsx   # Header navigation and footer chrome
+│   │   ├── ResidenceVideoGallery.tsx  # Residence video clip showcase
+│   │   └── VideoPanel.tsx        # Viewport-aware autoplay video container
+│   ├── context/                  # React context providers
+│   │   ├── AuthContext.tsx       # Better Auth state & methods
+│   │   └── LandlordContext.tsx   # Landlord profile & status
+│   ├── features/                 # Feature-based modules (new structure)
+│   │   ├── admin/
+│   │   │   ├── components/
+│   │   │   ├── hooks/
+│   │   │   ├── routes/
+│   │   │   ├── services/
+│   │   │   └── types/
+│   │   ├── auth/
+│   │   │   ├── components/
+│   │   │   ├── hooks/
+│   │   │   ├── routes/
+│   │   │   └── types/
+│   │   ├── landlord/
+│   │   │   ├── components/
+│   │   │   ├── hooks/
+│   │   │   ├── routes/
+│   │   │   ├── services/
+│   │   │   └── types/
+│   │   ├── listings/
+│   │   │   ├── components/
+│   │   │   ├── hooks/
+│   │   │   ├── routes/
+│   │   │   ├── services/
+│   │   │   └── types/
+│   │   ├── marketplace/
+│   │   │   ├── components/
+│   │   │   ├── hooks/
+│   │   │   ├── routes/
+│   │   │   ├── services/
+│   │   │   └── types/
+│   │   └── residence/
+│   │       ├── components/
+│   │       ├── hooks/
+│   │       ├── routes/
+│   │       ├── services/
+│   │       └── types/
+│   ├── hooks/                    # Custom React hooks
+│   │   └── use-mobile.tsx        # Responsive viewport detection hook
+│   ├── lib/                      # Utilities and error reporting
+│   │   ├── auth/                 # Better Auth configuration
+│   │   │   └── index.ts
+│   │   ├── auth-client.ts        # Better Auth React client
+│   │   ├── error-capture.ts      # Server-side and browser error interceptor
+│   │   ├── error-page.ts         # Standard error response formatter
+│   │   ├── error-reporting.ts    # Client-side runtime error reporting
+│   │   └── utils.ts              # Tailwind class merging utility (cn)
+│   ├── routes/                   # File-based TanStack Router pages (legacy paths)
+│   │   ├── __root.tsx            # Root layout shell (HTML, Head, Meta, Body)
+│   │   ├── index.tsx             # Homepage (7-Act experience)
+│   │   ├── listings.tsx          # Browse listings page
+│   │   ├── about.tsx             # About brand page
+│   │   ├── contact.tsx           # Contact and WhatsApp page
+│   │   ├── list-property.tsx     # Landlord onboarding page
+│   │   ├── privacy.tsx           # Privacy policy page
+│   │   └── terms.tsx             # Terms of service page
+│   ├── router.tsx                # TanStack Router instance creation
+│   ├── server.ts                 # Nitro server entrypoint with error recovery
+│   ├── start.ts                  # TanStack Start handler
+│   └── styles.css                # OKLCH design tokens and Tailwind v4 utilities
+├── prisma/
+│   ├── schema.prisma             # Prisma data model (SQLite)
+│   ├── migrations/               # Migration history
+│   ├── seed.ts                   # TypeScript database seeder
+│   └── generated/                # Generated Prisma client (internal)
+├── scripts/
+│   └── seed-test-accounts.cjs    # CommonJS seed script (legacy)
+├── docs/                         # Documentation and architecture diagrams
+│   ├── architecture-diagram.png
+│   ├── routes-architecture.svg
+│   ├── backend-architecture.svg
+│   ├── legacy-spa-architecture.svg
+│   ├── funnel-animated.svg
+│   ├── map-dataflow-animated.svg
+│   └── video-panel-animated.svg
+├── DESIGN-BLUEPRINT.md           # System design and architecture specification
+├── OFFLINE-README.md             # Offline USB presentation guide
+├── package.json
+├── tsconfig.json
+├── vite.config.ts
+├── vercel.json
+└── eslint.config.js
 ```
 
 ---
@@ -167,6 +270,14 @@ unihub-landing-experience/
 | MapLibre GL | Interactive campus map (no API keys) |
 | Radix UI | Accessible UI primitives |
 | Lucide Icons | Icon system |
+
+### Authentication & Database
+
+| Technology | Purpose |
+|---|---|
+| Better Auth | Modern auth (email/password, admin plugin) |
+| Prisma ORM | Type-safe database access (SQLite) |
+| @prisma/adapter-libsql | Driver adapter for SQLite |
 
 ### Build & Infrastructure
 
