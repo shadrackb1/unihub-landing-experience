@@ -1,7 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Mail, MapPin, MessageCircle } from "lucide-react";
-import { MarketingShell, WHATSAPP_URL } from "@/shared/components/MarketingChrome";
+import { Clock, Mail, MapPin, MessageCircle } from "lucide-react";
+import { MarketingShell } from "@/shared/components/MarketingChrome";
+import { SupportLink } from "@/shared/components/SupportLink";
 import { Reveal } from "@/shared/components/VideoPanel";
+import { WHATSAPP_CONFIGURED, SUPPORT_EMAIL } from "@/shared/contact";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -9,7 +11,8 @@ export const Route = createFileRoute("/contact")({
       { title: "Contact · UniHub" },
       {
         name: "description",
-        content: "Reach UniHub on WhatsApp or email for student housing support in Kenya.",
+        content:
+          "Reach the UniHub team about a listing, verification, or listing your property in Kenya.",
       },
     ],
   }),
@@ -33,35 +36,44 @@ function ContactPage() {
           </Reveal>
 
           <div className="mt-12 grid gap-6 md:grid-cols-3">
-            <Reveal className="solid-card p-7">
-              <MessageCircle className="size-5 text-highlight" aria-hidden="true" />
-              <h2 className="mt-6 font-display text-2xl font-medium">WhatsApp</h2>
-              <p className="mt-3 text-sm text-muted-foreground">
-                Fastest for listing questions and campus recommendations.
-              </p>
-              <a
-                href={WHATSAPP_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-6 inline-flex min-h-12 items-center rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground shadow-glow"
-              >
-                Open WhatsApp
-              </a>
-            </Reveal>
-            <Reveal className="solid-card p-7" delay={80}>
+            <Reveal className="solid-card flex flex-col p-7">
               <Mail className="size-5 text-highlight" aria-hidden="true" />
               <h2 className="mt-6 font-display text-2xl font-medium">Email</h2>
               <p className="mt-3 text-sm text-muted-foreground">
-                Partnerships, media, and longer requests.
+                Listing questions, verification, partnerships, and data requests.
               </p>
               <a
-                href="mailto:hello@unihub.ke"
-                className="mt-6 inline-flex min-h-12 items-center rounded-full border border-border bg-accent px-5 text-sm font-semibold"
+                href={`mailto:${SUPPORT_EMAIL}`}
+                className="mt-auto inline-flex min-h-12 w-fit items-center self-start rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground shadow-glow"
               >
-                hello@unihub.ke
+                {SUPPORT_EMAIL}
               </a>
             </Reveal>
-            <Reveal className="solid-card p-7" delay={140}>
+            {WHATSAPP_CONFIGURED ? (
+              <Reveal className="solid-card flex flex-col p-7" delay={80}>
+                <MessageCircle className="size-5 text-highlight" aria-hidden="true" />
+                <h2 className="mt-6 font-display text-2xl font-medium">WhatsApp</h2>
+                <p className="mt-3 text-sm text-muted-foreground">
+                  Fastest for listing questions and campus recommendations.
+                </p>
+                <SupportLink
+                  message="Hi UniHub, I'd like help finding verified student housing"
+                  className="mt-auto inline-flex min-h-12 w-fit items-center rounded-full border border-border bg-accent px-5 text-sm font-semibold"
+                >
+                  Open WhatsApp
+                </SupportLink>
+              </Reveal>
+            ) : (
+              <Reveal className="solid-card flex flex-col p-7" delay={80}>
+                <Clock className="size-5 text-highlight" aria-hidden="true" />
+                <h2 className="mt-6 font-display text-2xl font-medium">Response times</h2>
+                <p className="mt-3 text-sm text-muted-foreground">
+                  We read email on working days and usually reply within one business day. Listings
+                  reported as misleading are reviewed first.
+                </p>
+              </Reveal>
+            )}
+            <Reveal className="solid-card flex flex-col p-7" delay={140}>
               <MapPin className="size-5 text-highlight" aria-hidden="true" />
               <h2 className="mt-6 font-display text-2xl font-medium">Coverage</h2>
               <p className="mt-3 text-sm text-muted-foreground">

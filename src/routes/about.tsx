@@ -1,7 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { GraduationCap, MessageCircle, ShieldCheck } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { MarketingShell, WHATSAPP_URL } from "@/shared/components/MarketingChrome";
+import { MarketingShell } from "@/shared/components/MarketingChrome";
+import { SupportLink } from "@/shared/components/SupportLink";
+import { SUPPORT_LABEL } from "@/shared/contact";
 import { Reveal } from "@/shared/components/VideoPanel";
 import { useSiteSettings } from "@/shared/hooks/useSiteSettings";
 
@@ -109,14 +111,12 @@ function AboutPage() {
               >
                 Browse Listings
               </Link>
-              <a
-                href={WHATSAPP_URL}
-                target="_blank"
-                rel="noopener noreferrer"
+              <SupportLink
+                message="Hi UniHub, I'd like to know more about how you verify listings"
                 className="inline-flex min-h-12 items-center rounded-full border border-border bg-accent px-6 text-sm font-semibold"
               >
-                WhatsApp support
-              </a>
+                {SUPPORT_LABEL}
+              </SupportLink>
             </div>
           </Reveal>
         </div>

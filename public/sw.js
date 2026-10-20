@@ -13,7 +13,7 @@
  *
  * The VERSION constant must be bumped whenever precache URLs change.
  */
-const VERSION = "unihub-v1.0.0";
+const VERSION = "unihub-v1.0.1";
 const SHELL_CACHE = `${VERSION}-shell`;
 const RUNTIME_CACHE = `${VERSION}-runtime`;
 
@@ -21,10 +21,11 @@ const RUNTIME_CACHE = `${VERSION}-runtime`;
 const PRECACHE_URLS = [
   "/",
   "/listings",
-  "/app",
-  "/hostels",
+  "/list-property",
   "/contact",
   "/about",
+  "/privacy",
+  "/terms",
   "/admin/login",
   "/landlord/login",
   "/landlord/register",

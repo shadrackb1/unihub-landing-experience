@@ -1,10 +1,19 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { Mail, Menu, MessageCircle, X, LogIn, UserCircle2 } from "lucide-react";
 import { Logo } from "@/shared/components/Logo";
 import { useAuth } from "@/shared/context/AuthContext";
 
-import { WHATSAPP_URL, waLink, WHATSAPP_NUMBER, formatWhatsAppNumber } from "@/shared/contact";
+import {
+  WHATSAPP_URL,
+  waLink,
+  WHATSAPP_NUMBER,
+  formatWhatsAppNumber,
+  SUPPORT_ACTION,
+  SUPPORT_EMAIL,
+  WHATSAPP_CONFIGURED,
+} from "@/shared/contact";
+import { SupportLink } from "@/shared/components/SupportLink";
 export { WHATSAPP_URL, waLink, WHATSAPP_NUMBER, formatWhatsAppNumber };
 
 const NAV_LINKS = [
@@ -22,8 +31,7 @@ function Wordmark() {
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
-  const { user, login } = useAuth();
-  const navigate = useNavigate();
+  const { user } = useAuth();
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -31,10 +39,6 @@ export function SiteHeader() {
       document.body.style.overflow = "";
     };
   }, [open]);
-
-  const handleLoginClick = () => {
-    navigate({ to: "/admin/login" });
-  };
 
   return (
     <>
@@ -68,16 +72,7 @@ export function SiteHeader() {
                 <LogIn className="size-4" aria-hidden="true" />
                 <span>Admin</span>
               </Link>
-            ) : (
-              <button
-                type="button"
-                onClick={handleLoginClick}
-                className="inline-flex items-center gap-2 min-h-10 rounded-full bg-primary px-4 text-sm font-semibold text-primary-foreground shadow-glow hover:bg-primary/90 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-              >
-                <LogIn className="size-4" aria-hidden="true" />
-                <span>CMS Login</span>
-              </button>
-            )}
+            ) : null}
             <Link
               to="/listings"
               className="hidden min-h-10 items-center rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground shadow-glow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:inline-flex"
@@ -122,19 +117,7 @@ export function SiteHeader() {
                   <LogIn className="size-4" aria-hidden="true" />
                   Admin
                 </Link>
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => {
-                    handleLoginClick();
-                    setOpen(false);
-                  }}
-                  className="mt-3 inline-flex items-center justify-center gap-2 min-h-12 rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground shadow-glow"
-                >
-                  <LogIn className="size-4" aria-hidden="true" />
-                  CMS Login
-                </button>
-              )}
+              ) : null}
               <Link
                 to="/listings"
                 className="mt-3 inline-flex min-h-12 items-center justify-center rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground shadow-glow"
@@ -181,15 +164,18 @@ export function SiteFooter() {
               Verified student housing near Kenyan campuses. Browse freely, then talk directly to
               the people listing it.
             </p>
-            <a
-              href={WHATSAPP_URL}
-              target="_blank"
-              rel="noreferrer"
+            <SupportLink
+              message="Hi UniHub, I'd like help finding verified student housing"
               className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-foreground hover:text-highlight"
-              aria-label="Contact UniHub support on WhatsApp"
+              aria-label={`Contact UniHub support: ${SUPPORT_ACTION.label}`}
             >
-              <MessageCircle className="size-4" /> WhatsApp support
-            </a>
+              {WHATSAPP_CONFIGURED ? (
+                <MessageCircle className="size-4" aria-hidden="true" />
+              ) : (
+                <Mail className="size-4" aria-hidden="true" />
+              )}
+              {SUPPORT_ACTION.label}
+            </SupportLink>
           </div>
           <FooterColumn
             title="Product"
@@ -224,9 +210,12 @@ export function SiteFooter() {
             <Link to="/admin" className="text-muted-foreground hover:text-foreground transition-colors" title="Admin Portal" aria-label="Admin Portal">
               <UserCircle2 className="size-4" />
             </Link>
-            <p className="flex items-center gap-2">
-              <Mail className="size-3.5" /> hello@unihub.ke
-            </p>
+            <a
+              href={`mailto:${SUPPORT_EMAIL}`}
+              className="flex items-center gap-2 transition-colors hover:text-foreground"
+            >
+              <Mail className="size-3.5" aria-hidden="true" /> {SUPPORT_EMAIL}
+            </a>
           </div>
         </div>
       </div>

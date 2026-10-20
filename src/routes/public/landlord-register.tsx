@@ -1,6 +1,8 @@
-import { createFileRoute } from '@tanstack/react-router';
-import { LandlordRegisterPage } from '@/features/landlord/pages/LandlordRegisterPage';
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
-export const Route = createFileRoute('/public/landlord-register')({
-  component: LandlordRegisterPage,
+/** Legacy signup URL kept alive for old links and QR codes. */
+export const Route = createFileRoute("/public/landlord-register")({
+  beforeLoad: () => {
+    throw redirect({ to: "/landlord/register" });
+  },
 });

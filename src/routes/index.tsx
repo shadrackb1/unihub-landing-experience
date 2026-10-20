@@ -10,7 +10,9 @@ import {
   ShieldCheck,
   Sparkles,
 } from "lucide-react";
-import { SiteFooter, SiteHeader, WHATSAPP_URL } from "@/shared/components/MarketingChrome";
+import { SiteFooter, SiteHeader } from "@/shared/components/MarketingChrome";
+import { SupportLink } from "@/shared/components/SupportLink";
+import { WHATSAPP_CONFIGURED } from "@/shared/contact";
 import {
   PortraitVideo,
   Reveal,
@@ -542,13 +544,24 @@ function Index() {
                           </p>
                           <p className="mt-1 text-xs text-muted-foreground">{listing.deposit}</p>
                         </div>
-                        <Link
-                          to="/listings"
-                          aria-label={`View details for ${listing.title}`}
-                          className="flex size-11 shrink-0 items-center justify-center rounded-full border border-border bg-accent transition-colors hover:bg-primary hover:text-primary-foreground"
-                        >
-                          <ArrowRight className="size-4" aria-hidden="true" />
-                        </Link>
+                        {listing.id ? (
+                          <Link
+                            to="/listings/$id"
+                            params={{ id: listing.id }}
+                            aria-label={`View details for ${listing.title}`}
+                            className="flex size-11 shrink-0 items-center justify-center rounded-full border border-border bg-accent transition-colors hover:bg-primary hover:text-primary-foreground"
+                          >
+                            <ArrowRight className="size-4" aria-hidden="true" />
+                          </Link>
+                        ) : (
+                          <Link
+                            to="/listings"
+                            aria-label={`Browse listings like ${listing.title}`}
+                            className="flex size-11 shrink-0 items-center justify-center rounded-full border border-border bg-accent transition-colors hover:bg-primary hover:text-primary-foreground"
+                          >
+                            <ArrowRight className="size-4" aria-hidden="true" />
+                          </Link>
+                        )}
                       </div>
                     </div>
                   </article>
@@ -694,14 +707,13 @@ function Index() {
             <p className="mt-5 text-sm text-muted-foreground">
               Free to browse · Contact agents directly
             </p>
-            <a
-              href={WHATSAPP_URL}
-              target="_blank"
-              rel="noopener noreferrer"
+            <SupportLink
+              message="Hi UniHub, I'd like help finding verified student housing"
               className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-foreground hover:text-highlight"
             >
-              <MessageCircle className="size-4" aria-hidden="true" /> Or chat on WhatsApp
-            </a>
+              <MessageCircle className="size-4" aria-hidden="true" />
+              {WHATSAPP_CONFIGURED ? "Or chat on WhatsApp" : "Or email our support team"}
+            </SupportLink>
           </Reveal>
         </section>
       </main>

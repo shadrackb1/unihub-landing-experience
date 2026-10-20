@@ -1,7 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Check } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { MarketingShell, WHATSAPP_URL } from "@/shared/components/MarketingChrome";
+import { MarketingShell } from "@/shared/components/MarketingChrome";
+import { SupportLink } from "@/shared/components/SupportLink";
+import { SUPPORT_LABEL } from "@/shared/contact";
 import { Reveal } from "@/shared/components/VideoPanel";
 
 export const Route = createFileRoute("/list-property")({
@@ -37,7 +39,7 @@ function ListPropertyPage() {
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
               Put hostels, bedsitters, and rentals in front of students actively searching near
-              campus. Onboarding starts with a short WhatsApp chat.
+              campus. Create a landlord account, get verified, then publish listings yourself.
             </p>
           </Reveal>
 
@@ -52,19 +54,23 @@ function ListPropertyPage() {
                 ))}
               </ul>
               <div className="mt-8 flex flex-wrap gap-3">
-                <a
-                  href={WHATSAPP_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Link
+                  to="/landlord/register"
                   className="cta-shine inline-flex min-h-12 items-center rounded-full bg-primary px-6 text-sm font-semibold text-primary-foreground shadow-glow"
                 >
-                  Start on WhatsApp
-                </a>
-                <Link
-                  to="/contact"
+                  Create a landlord account
+                </Link>
+                <SupportLink
+                  message="Hi UniHub, I have a question about listing my property"
                   className="inline-flex min-h-12 items-center rounded-full border border-border bg-accent px-6 text-sm font-semibold"
                 >
-                  Email UniHub
+                  {SUPPORT_LABEL === "WhatsApp support" ? "Ask on WhatsApp" : "Email us"}
+                </SupportLink>
+                <Link
+                  to="/landlord"
+                  className="inline-flex min-h-12 items-center rounded-full px-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  Already registered? Sign in
                 </Link>
               </div>
             </Reveal>
@@ -82,7 +88,7 @@ function ListPropertyPage() {
                 <li>
                   <span className="font-display text-highlight">03</span>
                   <p className="mt-1 text-foreground">
-                    Your listing goes live for campus searchers.
+                    Once approved, add listings from your dashboard. They go live after review.
                   </p>
                 </li>
               </ol>

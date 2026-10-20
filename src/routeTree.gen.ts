@@ -41,6 +41,7 @@ import { Route as LandlordPendingRouteImport } from './routes/landlord.pending'
 import { Route as LandlordRegisterRouteImport } from './routes/landlord.register'
 import { Route as LandlordRejectedRouteImport } from './routes/landlord.rejected'
 import { Route as LandlordSuspendedRouteImport } from './routes/landlord.suspended'
+import { Route as ListingsIdRouteImport } from './routes/listings_.$id'
 import { Route as PropertiesIdRouteImport } from './routes/properties.$id'
 import { Route as PublicLandlordRegisterRouteImport } from './routes/public/landlord-register'
 import { Route as AdminHostelsNewRouteImport } from './routes/admin/hostels_.new'
@@ -209,6 +210,11 @@ const LandlordSuspendedRoute = LandlordSuspendedRouteImport.update({
   path: '/suspended',
   getParentRoute: () => LandlordRoute,
 } as any)
+const ListingsIdRoute = ListingsIdRouteImport.update({
+  id: '/listings_/$id',
+  path: '/listings/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PropertiesIdRoute = PropertiesIdRouteImport.update({
   id: '/properties/$id',
   path: '/properties/$id',
@@ -276,6 +282,7 @@ export interface FileRoutesByFullPath {
   '/landlord/register': typeof LandlordRegisterRoute
   '/landlord/rejected': typeof LandlordRejectedRoute
   '/landlord/suspended': typeof LandlordSuspendedRoute
+  '/listings/$id': typeof ListingsIdRoute
   '/properties/$id': typeof PropertiesIdRoute
   '/public/landlord-register': typeof PublicLandlordRegisterRoute
   '/admin/': typeof AdminIndexRoute
@@ -315,6 +322,7 @@ export interface FileRoutesByTo {
   '/landlord/register': typeof LandlordRegisterRoute
   '/landlord/rejected': typeof LandlordRejectedRoute
   '/landlord/suspended': typeof LandlordSuspendedRoute
+  '/listings/$id': typeof ListingsIdRoute
   '/properties/$id': typeof PropertiesIdRoute
   '/public/landlord-register': typeof PublicLandlordRegisterRoute
   '/admin': typeof AdminIndexRoute
@@ -357,6 +365,7 @@ export interface FileRoutesById {
   '/landlord/register': typeof LandlordRegisterRoute
   '/landlord/rejected': typeof LandlordRejectedRoute
   '/landlord/suspended': typeof LandlordSuspendedRoute
+  '/listings_/$id': typeof ListingsIdRoute
   '/properties/$id': typeof PropertiesIdRoute
   '/public/landlord-register': typeof PublicLandlordRegisterRoute
   '/admin/': typeof AdminIndexRoute
@@ -400,6 +409,7 @@ export interface FileRouteTypes {
     | '/landlord/register'
     | '/landlord/rejected'
     | '/landlord/suspended'
+    | '/listings/$id'
     | '/properties/$id'
     | '/public/landlord-register'
     | '/admin/'
@@ -439,6 +449,7 @@ export interface FileRouteTypes {
     | '/landlord/register'
     | '/landlord/rejected'
     | '/landlord/suspended'
+    | '/listings/$id'
     | '/properties/$id'
     | '/public/landlord-register'
     | '/admin'
@@ -480,6 +491,7 @@ export interface FileRouteTypes {
     | '/landlord/register'
     | '/landlord/rejected'
     | '/landlord/suspended'
+    | '/listings_/$id'
     | '/properties/$id'
     | '/public/landlord-register'
     | '/admin/'
@@ -503,6 +515,7 @@ export interface RootRouteChildren {
   ListingsRoute: typeof ListingsRoute
   PrivacyRoute: typeof PrivacyRoute
   TermsRoute: typeof TermsRoute
+  ListingsIdRoute: typeof ListingsIdRoute
   PropertiesIdRoute: typeof PropertiesIdRoute
   PublicLandlordRegisterRoute: typeof PublicLandlordRegisterRoute
 }
@@ -733,6 +746,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LandlordSuspendedRouteImport
       parentRoute: typeof LandlordRoute
     }
+    '/listings_/$id': {
+      id: '/listings_/$id'
+      path: '/listings/$id'
+      fullPath: '/listings/$id'
+      preLoaderRoute: typeof ListingsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/properties/$id': {
       id: '/properties/$id'
       path: '/properties/$id'
@@ -876,6 +896,7 @@ const rootRouteChildren: RootRouteChildren = {
   ListingsRoute: ListingsRoute,
   PrivacyRoute: PrivacyRoute,
   TermsRoute: TermsRoute,
+  ListingsIdRoute: ListingsIdRoute,
   PropertiesIdRoute: PropertiesIdRoute,
   PublicLandlordRegisterRoute: PublicLandlordRegisterRoute,
 }

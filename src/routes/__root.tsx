@@ -10,30 +10,52 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
+import { MarketingShell } from "@/shared/components/MarketingChrome";
 import { reportError } from "@/infrastructure/error-reporting";
 import { useOnlineRefresh } from "@/shared/hooks/useOnlineRefresh";
 import PwaBridge from "@/shared/components/PwaBridge";
 import InstallAppButton from "@/shared/components/InstallAppButton";
 
 function NotFoundComponent() {
+  // The root head has no title of its own, so an unknown URL used to open a
+  // blank tab title alongside a chrome-less dead end.
+  useEffect(() => {
+    document.title = "Page not found · UniHub";
+  }, []);
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
+    <MarketingShell>
+      <section className="mx-auto flex min-h-[70vh] max-w-3xl flex-col justify-center px-5 py-16 md:px-8">
+        <p className="eyebrow">404</p>
+        <h1 className="mt-3 font-display text-4xl font-medium leading-tight sm:text-5xl">
+          That page isn&rsquo;t here.
+        </h1>
+        <p className="mt-4 max-w-xl text-base leading-relaxed text-muted-foreground">
+          The link may be out of date, or the listing behind it has been taken. Everything below is
+          live and reachable.
         </p>
-        <div className="mt-6">
+        <div className="mt-8 flex flex-wrap gap-3">
+          <Link
+            to="/listings"
+            className="inline-flex min-h-11 items-center rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground shadow-glow transition-colors hover:bg-primary/90"
+          >
+            Browse listings
+          </Link>
+          <Link
+            to="/contact"
+            className="inline-flex min-h-11 items-center rounded-full border border-border bg-accent px-5 text-sm font-semibold text-foreground"
+          >
+            Contact the team
+          </Link>
           <Link
             to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            className="inline-flex min-h-11 items-center rounded-full px-3 text-sm font-medium text-muted-foreground underline-offset-4 hover:text-foreground hover:underline"
           >
-            Go home
+            Home
           </Link>
         </div>
-      </div>
-    </div>
+      </section>
+    </MarketingShell>
   );
 }
 
@@ -79,6 +101,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   head: () => ({
     meta: [
       { charSet: "utf-8" },
+      { title: "UniHub · Verified student housing in Kenya" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { name: "theme-color", content: "#0A0A0A" },
       { name: "author", content: "UniHub" },
