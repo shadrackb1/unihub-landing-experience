@@ -1,262 +1,394 @@
 // @ts-nocheck
-import { useState } from 'react';
-import { 
-  Loader2, Mail, MessageCircle, Phone, ShieldCheck, 
-  CheckCircle, XCircle, TrendingUp, Building2, 
-  Users, MapPin, BookOpen, Calendar, CreditCard,
-  PieChart, BarChart, ArrowUpRight, Edit2, 
-  DollarSign, ImagePlus, Video, Plus, Sprout as Sapling,
-  FileText, ArrowLeftRight as CornerLeftRight, Zap
-} from 'lucide-react';
-import { Link, useNavigate } from '@tanstack/react-router';
+import { useEffect, useState } from 'react';
+import { Link } from '@tanstack/react-router';
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import { auth, db } from '@/shared/lib/firebase';
+import { useApprovedLandlord } from '@/features/landlord/hooks/useApprovedLandlord';
+import { LandlordShell } from '@/features/landlord/components/LandlordShell';
+import {
+  listLandlordListings, AD_PLANS, formatKes, requestAd, isAdLive, type MarketListing,
+} from '@/features/marketplace/services';
 import { cn } from '@/shared/lib/utils';
+import {
+  Loader2, Building2, CheckCircle, XCircle, AlertTriangle, Plus,
+  ClipboardList, Zap, ImageIcon, ArrowRight,
+} from 'lucide-react';
+
+type View = 'select-listing' | 'select-plan';
+
+function ListingOption({ listing }: { listing: MarketListing }) {
+  return (
+    <label className="flex items-start gap-3 rounded-xl border p-4 transition-colors cursor-pointer border-border bg-card hover:border-foreground/50">
+      <input
+        type="radio"
+        name="listingId"
+        value={listing.id}
+        className="mt-0.5 h-4 w-4 rounded border-border text-primary focus:ring-ring"
+      />
+      <div>
+        <p className="font-medium truncate max-w-[20rem]">{listing.title ?? 'Untitled listing'}</p>
+        <p className="mt-0.5 text-sm text-muted-foreground">
+          {listing.category && listing.location
+            ? `${listing.category} · ${listing.location}`
+            : listing.location ?? listing.category ?? 'No details'}
+          {listing.campus ? ` · Near ${listing.campus}` : ''}
+        </p>
+        <p className="mt-1 text-sm font-medium">{formatKes(listing.price)}/month</p>
+      </div>
+    </label>
+  );
+}
 
 export const LandlordAdsPage = () => {
-  const [activeCampaigns, setActiveCampaigns] = useState([
-    {
-      id: 'ad_001',
-      listingId: 'prop_001',
-      listingTitle: 'Spacious 2BR Near JKUAT',
-      plan: 'month',
-      startedAt: new Date(Date.now() - 10 * 86400000), // 10 days ago
-      expiresAt: new Date(Date.now() + 20 * 86400000), // 20 days from now
-      cost: 1500,
-      status: 'active',
-      views: 1240,
-      inquiries: 34
-    }
-  ]);
-  
-  const [isLoading, setIsLoading] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
-  const [showError, setShowError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const { isApproved, status: profileStatus } = useApprovedLandlord();
+  const [listings, setListings] = useState<MarketListing[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [view, setView] = useState<View>('select-listing');
+  const [selectedListingId, setSelectedListingId] = useState<string | null>(null);
+  const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null);
+  const [actionInFlight, setActionInFlight] = useState<string | null>(null);
+  const [actionMsg, setActionMsg] = useState<{ kind: 'success' | 'error'; text: string } | null>(null);
 
-  const handleRequestAdBoost = (listingId: string) => {
-    // In a real implementation, we'd navigate to ad selection for this listing
-    window.location.href = `/landlord/ads/new?listingId=${listingId}`;
-  };
-
-  const handleCancelCampaign = async (id: string) => {
-    setIsLoading(true);
+  const loadListings = async () => {
+    if (!auth.currentUser) return;
     try {
-      // In a real implementation, update Firestore to cancel
-      setActiveCampaigns(activeCampaigns.filter(campaign => campaign.id !== id));
-      setShowSuccess(true);
-      setTimeout(() => setShowSuccess(false), 2000);
-    } catch (error) {
-      console.error('Failed to cancel campaign:', error);
-      setShowError(true);
-      setErrorMessage(error instanceof Error ? error.message : 'Failed to cancel campaign');
+      const mine = await listLandlordListings(auth.currentUser.uid);
+      setListings(mine);
+    } catch (e) {
+      console.error('Failed to load listings:', e);
+      setError(e instanceof Error ? e.message : 'Could not load your listings.');
     } finally {
       setIsLoading(false);
     }
   };
 
+  useEffect(() => {
+    loadListings();
+  }, []);
+
+  useEffect(() => {
+    if (view !== 'select-listing') setActionMsg(null);
+  }, [view]);
+
+  const selectedListing = listings.find((l) => l.id === selectedListingId);
+  const plansForListing = selectedListingId ? AD_PLANS : [];
+  const activeBoosts = listings.filter(isAdLive);
+  const requested = listings.filter((l) => l.adStatus === 'requested');
+
+  const handleRequestAd = async () => {
+    if (!selectedListingId || !selectedPlanId) return;
+    setActionInFlight(selectedListingId);
+    setActionMsg(null);
+    try {
+      await requestAd(selectedListingId, selectedPlanId);
+      await loadListings();
+      setActionMsg({ kind: 'success', text: 'Boost request sent. We will confirm payment details on WhatsApp.' });
+      setSelectedListingId(null);
+      setSelectedPlanId(null);
+      setView('select-listing');
+    } catch (e) {
+      console.error('Ad request failed:', e);
+      setActionMsg({ kind: 'error', text: e instanceof Error ? e.message : 'Could not request the boost. Try again.' });
+    } finally {
+      setActionInFlight(null);
+    }
+  };
+
+  if (!isApproved && profileStatus !== 'pending') {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background p-6">
+        <div className="solid-card p-6 max-w-sm text-center">
+          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-destructive/20">
+            <AlertTriangle className="h-6 w-6 text-destructive" />
+          </div>
+          <h2 className="font-display text-lg font-medium">Portal access restricted</h2>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Your account is {profileStatus}. You will be able to use the portal once your status changes.
+          </p>
+          <Link
+            to="/landlord"
+            className="mt-5 cta-shine block w-full rounded-full bg-primary px-4 py-3 text-center text-sm font-semibold text-primary-foreground shadow-glow"
+          >
+            Back to portal home
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-zinc-50">
-      <div className="flex min-h-screen">
-        {/* Sidebar - simplified */}
-        <aside className="w-64 bg-white border-r border-zinc-200">
-          <div className="flex h-16 items-center justify-between px-6 border-b border-zinc-200">
-            <div className="flex items-center gap-3">
-              <Building2 className="h-5 w-5 text-indigo-600" />
-              <h1 className="text-xl font-semibold text-gray-800">Ad Boost Campaigns</h1>
+    <LandlordShell>
+      <div className="mb-6 flex items-center justify-between">
+        <div>
+          <h1 className="font-display text-2xl font-medium">Ad boosts</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Boost a published listing so it appears first when students browse.
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={() => {
+            setSelectedListingId(null);
+            setSelectedPlanId(null);
+            setView('select-listing');
+          }}
+          className="inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-glow transition-colors hover:bg-primary/90"
+        >
+          <Plus className="h-4 w-4" />
+          New boost
+        </button>
+      </div>
+
+      {error && (
+        <div className="mb-5 flex items-start gap-3 rounded-xl border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive">
+          <XCircle className="mt-0.5 h-4 w-4 shrink-0" />
+          <span>{error}</span>
+        </div>
+      )}
+
+      {actionMsg && (
+        <div
+          className={cn(
+            'mb-5 flex items-start gap-3 rounded-xl p-4 text-sm transition-opacity',
+            actionMsg.kind === 'success'
+              ? 'border-border bg-accent text-secondary-foreground'
+              : 'border-destructive/30 bg-destructive/10 text-destructive'
+          )}
+          role={actionMsg.kind === 'error' ? 'alert' : 'status'}
+        >
+          {actionMsg.kind === 'success' ? (
+            <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-status" />
+          ) : (
+            <XCircle className="mt-0.5 h-4 w-4 shrink-0" />
+          )}
+          <span>{actionMsg.text}</span>
+        </div>
+      )}
+
+      {view === 'select-listing' && (
+        <>
+          <div className="mb-6">
+            <h2 className="font-display text-lg font-medium">Choose a listing to boost</h2>
+            <p className="mt-1 text-sm text-muted-foreground">Only published listings can be boosted.</p>
+          </div>
+
+          {isLoading ? (
+            <div className="flex items-center justify-center py-16">
+              <Loader2 className="h-5 w-5 text-muted-foreground animate-spin" />
+            </div>
+          ) : listings.length === 0 ? (
+            <div className="mt-8 flex flex-col items-center gap-3 py-12 text-center">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-accent">
+                <ClipboardList className="h-5 w-5" />
+              </div>
+              <p className="text-sm text-muted-foreground">No listings yet. Create one first, then come back to boost it.</p>
+              <Link
+                to="/landlord/listings/new"
+                className="cta-shine inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-glow transition-colors hover:bg-primary/90"
+              >
+                <Plus className="h-4 w-4" />
+                Create a listing
+              </Link>
+            </div>
+          ) : (
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {listings.map((listing) => (
+                <ListingOption key={listing.id} listing={listing} />
+              ))}
+            </div>
+          )}
+
+          {selectedListingId && (
+            <div className="mt-6 flex items-center justify-between border-t border-border pt-4">
+              <div className="text-sm text-muted-foreground">
+                Selected:{' '}
+                <span className="font-medium text-foreground">
+                  {listings.find((l) => l.id === selectedListingId)?.title ?? 'this listing'}
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedListingId(null);
+                  setView('select-plan');
+                }}
+                className="cta-shine inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-glow transition-colors hover:bg-primary/90"
+              >
+                Choose a plan
+                <ArrowRight className="h-4 w-4" />
+              </button>
+            </div>
+          )}
+        </>
+      )}
+
+      {view === 'select-plan' && (
+        <>
+          <div className="mb-6 flex items-center justify-between">
+            <div>
+              <h2 className="font-display text-lg font-medium">Choose a plan</h2>
+              <p className="mt-1 text-sm text-muted-foreground">Boosts run for the chosen period and stop automatically.</p>
+            </div>
+            <button
+              type="button"
+              onClick={() => setView('select-listing')}
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Change listing
+            </button>
+          </div>
+
+          {selectedListing && (
+            <div className="mb-6 rounded-xl border border-border bg-card/60 p-4">
+              <p className="text-sm text-muted-foreground">Boosting</p>
+              <p className="mt-0.5 font-medium">{selectedListing.title ?? 'Untitled listing'}</p>
+              <p className="text-sm text-muted-foreground">
+                {selectedListing.category && selectedListing.location
+                  ? `${selectedListing.category} · ${selectedListing.location}`
+                  : selectedListing.location ?? selectedListing.category ?? 'No details'}
+                {selectedListing.campus ? ` · Near ${selectedListing.campus}` : ''}
+              </p>
+            </div>
+          )}
+
+          <div className="grid gap-4 sm:grid-cols-3">
+            {plansForListing.map((plan) => (
+              <button
+                key={plan.id}
+                type="button"
+                disabled={actionInFlight !== null}
+                onClick={() => setSelectedPlanId(plan.id)}
+                className={cn(
+                  'relative flex flex-col gap-3 rounded-xl border p-5 text-left transition-colors',
+                  selectedPlanId === plan.id
+                    ? 'border-foreground bg-foreground/5 text-background'
+                    : 'border-border bg-card hover:border-foreground/50'
+                )}
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium">{plan.label}</span>
+                  {selectedPlanId === plan.id && (
+                    <span className="text-xs text-highlight">Selected</span>
+                  )}
+                </div>
+                <p className="text-2xl font-display font-medium">{formatKes(plan.price)}</p>
+                <p className="text-xs text-muted-foreground">{plan.days} days · no hidden fees</p>
+              </button>
+            ))}
+          </div>
+
+          <div className="mt-6 flex items-center justify-between border-t border-border pt-4">
+            <div className="text-sm text-muted-foreground">
+              Total:{' '}
+              <span className="font-medium text-foreground">
+                {selectedPlanId
+                  ? formatKes(AD_PLANS.find((p) => p.id === selectedPlanId)?.price ?? 0)
+                  : '—'}
+              </span>
+            </div>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => setView('select-listing')}
+                className="rounded-full border border-border bg-card px-4 py-2 text-sm font-medium text-foreground hover:bg-accent"
+              >
+                Back
+              </button>
+              <button
+                type="button"
+                disabled={!selectedPlanId || actionInFlight !== null}
+                onClick={handleRequestAd}
+                className={cn(
+                  'cta-shine inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-glow disabled:opacity-50',
+                  !selectedPlanId || actionInFlight !== null ? '' : 'hover:bg-primary/90'
+                )}
+              >
+                {actionInFlight ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Sending request…
+                  </>
+                ) : (
+                  <>
+                    Request boost
+                    <Zap className="h-4 w-4" />
+                  </>
+                )}
+              </button>
             </div>
           </div>
-          
-          <nav className="mt-6 space-y-2 px-4 pb-4">
-            <Link 
-              to="/landlord" 
-              className="w-full flex items-center justify-start px-3 py-2 rounded-lg text-left text-sm font-medium hover:bg-zinc-50"
-            >
-              <ArrowUpRight className="h-4 w-4 mr-2" />
-              Dashboard
-            </Link>
-            
-            <Link 
-              to="/landlord/listings" 
-              className="w-full flex items-center justify-start px-3 py-2 rounded-lg text-left text-sm font-medium hover:bg-zinc-50"
-            >
-              <Users className="h-4 w-4 mr-2" />
-              Listings
-            </Link>
-            
-            <Link 
-              to="/landlord/ads" 
-              className="w-full flex items-center justify-start px-3 py-2 rounded-lg text-left text-sm font-medium bg-indigo-50 text-indigo-600"
-            >
-              <CreditCard className="h-4 w-4 mr-2" />
-              Ad Boosts
-            </Link>
-          </nav>
-        </aside>
+        </>
+      )}
 
-        {/* Main Content */}
-        <main className="flex-1 p-6">
-          {isLoading && (
-            <div className="flex items-center justify-center h-96">
-              <Loader2 className="h-6 w-6 text-indigo-500 animate-spin" />
-            </div>
-          )}
-          
-          {!isLoading && (
-            <div className="space-y-6">
-              {/* Status messages */}
-              {showSuccess && (
-                <div className="mb-4 p-4 bg-green-50 border-l-4 border-green-500">
-                  <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-                  <span className="text-green-800">Operation successful!</span>
-                </div>
-              )}
-              
-              {showError && (
-                <div className="mb-4 p-4 bg-red-50 border-l-4 border-red-500">
-                  <XCircle className="h-4 w-4 text-red-500 mr-2" />
-                  <span className="text-red-800">{errorMessage}</span>
-                </div>
-              )}
-              
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-bold text-gray-800">Your Ad Campaigns</h2>
-                <Link 
-                  to="/landlord/ads/new" 
-                  className="px-3 py-2 rounded-lg text-sm font-medium text-indigo-600 hover:bg-indigo-50"
-                >
-                  + New Campaign
-                </Link>
-              </div>
-              
-              <div className="space-y-4">
-                {activeCampaigns.length === 0 ? (
-                  <div className="text-center py-12">
-                    <CreditCard className="h-12 w-12 text-indigo-300 mb-4" />
-                    <p className="text-sm text-gray-500">
-                      You don't have any active ad campaigns yet. Boost a listing to get more student views!
-                    </p>
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    {activeCampaigns.map((campaign) => (
-                      <div 
-                        key={campaign.id} 
-                        className="bg-white rounded-xl shadow-sm p-6 border border-zinc-200 hover:shadow-lg transition-all"
-                      >
-                        <div className="flex items-center justify-between">
-                          {/* Left side - campaign info */}
-                          <div className="flex-1 space-x-4">
-                            <div className="flex items-center space-x-3">
-                              <Zap className="h-5 w-5" 
-                                className={campaign.status === 'active' ? 'text-green-500' : 
-                                          campaign.status === 'paused' ? 'text-yellow-500' : 
-                                          campaign.status === 'completed' ? 'text-gray-500' : 'text-red-500'}
-                              />
-                              <div>
-                                <h3 className="font-medium text-gray-800 mb-1">Boost for: {campaign.listingTitle}</h3>
-                                <p className="text-sm text-gray-500">
-                                  {campaign.plan === 'week' ? '1 Week' : 
-                                  campaign.plan === 'fortnight' ? '2 Weeks' : 
-                                  campaign.plan === 'month' ? '1 Month' : 'Custom'}
-                                </p>
-                                <p className="text-xs text-gray-400">
-                                  Started: {campaign.startedAt.toLocaleDateString()} • 
-                                  Expires: {campaign.expiresAt.toLocaleDateString()}
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-                        
-                            {/* Right side - stats and actions */}
-                            <div className="flex items-center space-x-3">
-                              <div className="flex items-center space-x-2">
-                                <MessageCircle className="h-4 w-4 text-gray-500" />
-                                <span className="text-sm">{campaign.views} views</span>
-                              </div>
-                              
-                              <div className="flex items-center space-x-2 mt-2">
-                                <DollarSign className="h-4 w-4 text-gray-500" />
-                                <span className="text-sm">KES {campaign.cost.toLocaleString()}</span>
-                              </div>
-                              
-                              <div className="flex items-center space-x-2 mt-2">
-                                <ArrowUpRight className="h-4 w-4 text-gray-500" />
-                                <span className="text-sm">{campaign.inquiries} inquiries</span>
-                              </div>
-                              
-                              {campaign.status === 'active' && (
-                                <button
-                                  onClick={() => handleCancelCampaign(campaign.id)}
-                                  className="px-2 py-1 text-xs font-medium bg-red-100 text-red-600 rounded hover:bg-red-200"
-                                >
-                                  Pause
-                                </button>
-                              )}
-                              {(campaign.status === 'paused' || campaign.status === 'completed') && (
-                                <button
-                                  onClick={() => handleCancelCampaign(campaign.id)}
-                                  className="px-2 py-1 text-xs font-medium bg-indigo-100 text-indigo-600 rounded hover:bg-indigo-200"
-                                >
-                                  Reactivate
-                                </button>
-                              )}
-                            </div>
-                          </div>
+      {(activeBoosts.length > 0 || requested.length > 0) && (
+        <div className="mt-8">
+          <h2 className="font-display text-lg font-medium">Your boosts</h2>
+
+          {requested.length > 0 && (
+            <div className="mt-4 rounded-xl border border-border bg-card/60 p-4">
+              <h3 className="mb-3 flex items-center gap-2 text-sm font-medium text-muted-foreground">
+                <ClipboardList className="h-4 w-4" />
+                Waiting for confirmation ({requested.length})
+              </h3>
+              <ul className="divide-y divide-border">
+                {requested.map((listing) => {
+                  const plan = AD_PLANS.find((p) => p.id === listing.adPlan);
+                  return (
+                    <li key={listing.id} className="py-3">
+                      <div className="flex items-center justify-between gap-3">
+                        <div>
+                          <p className="font-medium truncate max-w-sm">{listing.title ?? 'Untitled listing'}</p>
+                          <p className="text-sm text-muted-foreground">{plan ? `${plan.label}` : 'Unknown plan'}</p>
                         </div>
-                      ))}
-                    </div>
-                  )}
-              </div>
-              
-              <div className="mt-8">
-                <h2 className="text-xl font-bold text-gray-800 mb-4">How Ad Boosting Works</h2>
-                <div className="grid gap-6">
-                  <div className="bg-white rounded-xl shadow-sm p-6 border border-zinc-200">
-                    <h3 className="text-lg font-medium text-gray-900 mb-4">Choose Your Plan</h3>
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between p-3 bg-indigo-50 rounded-lg">
-                        <span className="text-sm font-medium text-white">7 Days</span>
-                        <span className="text-sm font-medium text-white">KES 500</span>
+                        <span className="text-sm text-muted-foreground">{formatKes(plan?.price ?? 0)}</span>
                       </div>
-                      <p className="text-sm text-gray-500">
-                        Great for testing or short-term availability
-                      </p>
-                    </div>
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between p-3 bg-indigo-100 rounded-lg">
-                        <span className="text-sm font-medium text-indigo-600">14 Days</span>
-                        <span className="text-sm font-medium text-indigo-600">KES 900</span>
-                      </div>
-                      <p className="text-sm text-gray-500">
-                        Most popular - balanced reach and value
-                      </p>
-                    </div>
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between p-3 bg-indigo-200 rounded-lg">
-                        <span className="text-sm font-medium text-indigo-600">30 Days</span>
-                        <span className="text-sm font-medium text-indigo-600">KES 1,500</span>
-                      </div>
-                      <p className="text-sm text-gray-500">
-                        Best value for long-term listings
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="bg-white rounded-xl shadow-sm p-6 border border-zinc-200">
-                    <h3 className="text-lg font-medium text-gray-900 mb-4">What You Get</h3>
-                    <ul className="space-y-2 text-sm text-gray-600">
-                      <li>Priority placement in search results</li>
-                      <li>Featured badge on your listing</li>
-                      <li>Increased visibility to students</li>
-                      <li>Performance tracking (views & inquiries)</li>
-                      <li>Automatic expiration - no surprises</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
+                    </li>
+                  );
+                })}
+              </ul>
             </div>
           )}
-        </main>
-      </div>
-    </div>
+
+          {activeBoosts.length > 0 && (
+            <div className="mt-4 rounded-xl border border-border bg-card/60 p-4">
+              <h3 className="mb-3 flex items-center gap-2 text-sm font-medium text-muted-foreground">
+                <Zap className="h-4 w-4" />
+                Active boosts ({activeBoosts.length})
+              </h3>
+              <ul className="divide-y divide-border">
+                {activeBoosts.map((listing) => {
+                  const plan = AD_PLANS.find((p) => p.id === listing.adPlan);
+                  return (
+                    <li key={listing.id} className="py-3">
+                      <div className="flex items-center justify-between gap-3">
+                        <div>
+                          <p className="font-medium truncate max-w-sm">{listing.title ?? 'Untitled listing'}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {listing.adExpiresAt
+                              ? `Ends ${new Date(listing.adExpiresAt).toLocaleDateString('en-KE')}`
+                              : 'No end date'}
+                          </p>
+                        </div>
+                        <span className="text-sm text-muted-foreground">{formatKes(plan?.price ?? 0)}</span>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          )}
+        </div>
+      )}
+
+      {listings.length === 0 && !isLoading && (
+        <div className="mt-8 flex flex-col items-center gap-3 py-12 text-center">
+          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-accent">
+            <ImageIcon className="h-5 w-5" />
+          </div>
+          <p className="text-sm text-muted-foreground">No listings yet.</p>
+        </div>
+      )}
+    </LandlordShell>
   );
 };

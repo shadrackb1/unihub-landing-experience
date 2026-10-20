@@ -9,7 +9,8 @@ import { Loader2, MessageCircle } from 'lucide-react';
 import { AuthProvider, useAuth } from '@/shared/context/AuthContext';
 import { LandlordProvider, useLandlord } from '@/shared/context/LandlordContext';
 import { homeForStatus } from '@/features/landlord/services/landlordService';
-import { waLink, formatWhatsAppNumber } from '@/shared/contact';
+import { formatWhatsAppNumber, SUPPORT_LABEL } from '@/shared/contact';
+import { SupportLink } from '@/shared/components/SupportLink';
 
 export const Route = createFileRoute('/landlord')({
   head: () => ({
@@ -44,8 +45,8 @@ function Redirect({ to }: { to: string }) {
     void navigate({ to: to as never, replace: true });
   }, [navigate, to]);
   return (
-    <div className="min-h-screen flex items-center justify-center bg-zinc-50">
-      <Loader2 className="h-6 w-6 text-indigo-500 animate-spin" />
+    <div className="flex min-h-screen items-center justify-center bg-background">
+      <Loader2 className="size-6 animate-spin text-highlight" aria-label="Loading" />
     </div>
   );
 }
@@ -60,19 +61,19 @@ function GateScreen({
   children?: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-zinc-50 flex items-center justify-center p-6">
-      <div className="bg-white rounded-xl shadow-2xl p-8 w-full max-w-md text-center">
-        <h2 className="text-xl font-bold text-gray-800 mb-3">{title}</h2>
-        <p className="text-sm text-gray-600 mb-6">{body}</p>
-        {children}
-        <a
-          href={waLink('Hi UniHub, I need help accessing the landlord portal')}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 text-sm text-indigo-600 hover:text-indigo-500 font-medium"
+    <div className="flex min-h-screen items-center justify-center bg-background px-5 py-12 text-foreground">
+      <div className="w-full max-w-md rounded-2xl border border-border bg-card p-6 text-center sm:p-8">
+        <h1 className="font-display text-xl font-medium leading-snug">{title}</h1>
+        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{body}</p>
+        <div className="mt-6">{children}</div>
+        <SupportLink
+          message="Hi UniHub, I need help accessing the landlord portal"
+          className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-highlight hover:underline"
         >
-          <MessageCircle className="h-4 w-4" /> WhatsApp support ({formatWhatsAppNumber()})
-        </a>
+          <MessageCircle className="size-4" aria-hidden="true" />
+          {SUPPORT_LABEL}
+          {formatWhatsAppNumber() ? ` (${formatWhatsAppNumber()})` : ''}
+        </SupportLink>
       </div>
     </div>
   );
@@ -85,8 +86,8 @@ function LandlordGate({ pathname }: { pathname: string }) {
   if (loading || !user || profileState === 'loading') {
     if (!loading && !user) return <Redirect to="/landlord/login" />;
     return (
-      <div className="min-h-screen flex items-center justify-center bg-zinc-50">
-        <Loader2 className="h-6 w-6 text-indigo-500 animate-spin" />
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <Loader2 className="size-6 animate-spin text-highlight" aria-label="Loading your account" />
       </div>
     );
   }
@@ -96,7 +97,7 @@ function LandlordGate({ pathname }: { pathname: string }) {
       <GateScreen title="Can't verify your profile" body={profileMessage}>
         <button
           onClick={refreshProfile}
-          className="mb-4 w-full px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium"
+          className="mb-4 inline-flex min-h-11 w-full items-center justify-center rounded-full bg-primary px-4 text-sm font-semibold text-primary-foreground shadow-glow"
         >
           Try again
         </button>
@@ -112,7 +113,7 @@ function LandlordGate({ pathname }: { pathname: string }) {
       >
         <a
           href="/landlord/register"
-          className="mb-4 block w-full px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium"
+          className="mb-4 inline-flex min-h-11 w-full items-center justify-center rounded-full bg-primary px-4 text-sm font-semibold text-primary-foreground shadow-glow"
         >
           Register as a landlord
         </a>

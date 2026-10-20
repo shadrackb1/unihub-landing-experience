@@ -1,251 +1,362 @@
 import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
   addDoc,
-  setDoc,
-  updateDoc,
+  collection,
   deleteDoc,
+  doc,
+  getDocs,
+  updateDoc,
   query,
   where,
-  serverTimestamp,
-  Timestamp,
-} from "firebase/firestore";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { auth, db, storage } from "@/shared/lib/firebase";
+  Timestamp
+} from 'firebase/firestore';
+import { db } from '@/shared/lib/firebase';
 
-export type LandlordStatus = "pending" | "approved" | "rejected" | "suspended";
-export type ListingStatus = "pending" | "published" | "rejected" | "hidden";
-export type AdStatus = "none" | "requested" | "active" | "rejected";
+const COLLECTIONS = {
+  listings: 'listings',
+  landlords: 'landlords',
+} as const;
 
-export interface LandlordProfile {
-  id: string;
-  fullName: string;
-  businessName: string;
-  email: string;
-  phone: string;
-  whatsapp: string;
-  idNumber: string;
-  areas: string;
-  propertyCount: string;
-  status: LandlordStatus;
-  reviewNote?: string;
-  createdAt?: number;
-  reviewedAt?: number;
+/**
+ * Firestore promises can hang forever when the backend is unreachable (the
+ * SDK retries the listen/commit stream instead of rejecting). Every screen
+ * that awaits a read or write would then sit on a spinner or a disabled
+ * button with no explanation, so bound each call and surface a real error.
+ */
+function withTimeout<A>(promise: Promise<A>, ms = 8000, what = 'The database'): Promise<A> {
+  let timer: ReturnType<typeof setTimeout>;
+  return Promise.race([
+    promise,
+    new Promise<never>((_, reject) => {
+      timer = setTimeout(
+        () => reject(new Error(`${what} did not respond in time. Check your connection and try again.`)),
+        ms,
+      );
+    }),
+  ]).finally(() => clearTimeout(timer));
 }
 
-export interface MarketListing {
+function timestampToDate(data: any): any {
+  if (!data) return data;
+  if (Array.isArray(data)) return data.map(timestampToDate);
+  if (typeof data !== 'object' || data === null) return data;
+
+  const result: any = {};
+  for (const [key, value] of Object.entries(data)) {
+    if (value instanceof Timestamp) {
+      result[key] = value.toDate();
+    } else if (value && typeof value === 'object') {
+      result[key] = timestampToDate(value);
+    } else {
+      result[key] = value;
+    }
+  }
+  return result;
+}
+
+function dateToTimestamp(data: any): any {
+  if (!data) return data;
+  if (Array.isArray(data)) return data.map(dateToTimestamp);
+  if (typeof data !== 'object' || data === null) return data;
+
+  const result: any = {};
+  for (const [key, value] of Object.entries(data)) {
+    if (value instanceof Date) {
+      result[key] = Timestamp.fromDate(value);
+    } else if (value && typeof value === 'object') {
+      result[key] = dateToTimestamp(value);
+    } else {
+      result[key] = value;
+    }
+  }
+  return result;
+}
+
+export interface AdPlan {
   id: string;
-  landlordId: string;
-  landlordName: string;
-  whatsapp: string;
+  label: string;
+  price: number;
+  days: number;
+}
+
+export const AD_PLANS: AdPlan[] = [
+  { id: 'free', label: 'Free', price: 0, days: 7 },
+  { id: 'basic', label: 'Basic', price: 500, days: 14 },
+  { id: 'pro', label: 'Pro', price: 900, days: 30 },
+  { id: 'premium', label: 'Premium', price: 1500, days: 90 },
+];
+
+export type AdPlanId = AdPlan['id'];
+
+export function formatKes(amount: number): string {
+  if (amount >= 1e6) return 'KES ' + (amount / 1e6).toFixed(1) + 'm';
+  if (amount >= 1e3) return 'KES ' + (amount / 1e3).toFixed(1) + 'k';
+  return 'KES ' + amount.toLocaleString('en-KE');
+}
+
+export const AD_BOOST_OPTIONS = [
+  { id: 'week', label: '7-day boost', price: 500, days: 7 },
+  { id: 'fortnight', label: '14-day boost', price: 900, days: 14 },
+  { id: 'month', label: '30-day boost', price: 1500, days: 30 },
+] as const;
+
+export async function requestAd(listingId: string, planId: string): Promise<void> {
+  if (!listingId || !planId) return;
+  const listingRef = doc(db, COLLECTIONS.listings, listingId);
+  await withTimeout(updateDoc(listingRef, dateToTimestamp({
+    adStatus: 'requested',
+    adPlan: planId,
+    requestedAt: new Date(),
+  })), 8000, 'Sending your boost request');
+}
+
+export function isAdLive(listing: { adStatus?: string; adExpiresAt?: unknown }): boolean {
+  if (listing.adStatus !== 'live') return false;
+  if (!listing.adExpiresAt) return true;
+  return new Date(listing.adExpiresAt as Date) > new Date();
+}
+
+function byCreatedAtDesc(a: MarketListing, b: MarketListing): number {
+  const toMs = (value: unknown) => (value instanceof Date ? value.getTime() : 0);
+  return toMs(b.createdAt) - toMs(a.createdAt);
+}
+
+/**
+ * Listings owned by one landlord.
+ *
+ * Owner-scoped on purpose: the previous version ordered every listing in the
+ * collection with no `where`, so one landlord's dashboard could show another
+ * landlord's properties. New documents carry `ownerUid`; older ones written by
+ * the legacy form carry `landlordId`, so we read both and merge.
+ *
+ * Sorting happens in memory so this never needs a composite index.
+ */
+export async function listLandlordListings(ownerUid: string): Promise<Array<MarketListing>> {
+  if (!ownerUid) return [];
+
+  const [byOwner, byLandlord] = await withTimeout(
+    Promise.all([
+      getDocs(query(collection(db, COLLECTIONS.listings), where('ownerUid', '==', ownerUid))),
+      getDocs(query(collection(db, COLLECTIONS.listings), where('landlordId', '==', ownerUid))),
+    ]),
+    8000,
+    'Loading your listings',
+  );
+
+  const merged = new Map<string, MarketListing>();
+  for (const snap of [...byOwner.docs, ...byLandlord.docs]) {
+    merged.set(snap.id, { id: snap.id, ...timestampToDate(snap.data()) } as MarketListing);
+  }
+  return [...merged.values()].sort(byCreatedAtDesc);
+}
+
+export type CreateListingInput = {
   title: string;
-  category: string;
-  location: string;
   campus: string;
+  location: string;
+  type: string;
   price: number;
   deposit: number;
   description: string;
   amenities: string[];
   images: string[];
-  status: ListingStatus;
-  reviewNote?: string;
-  featured: boolean;
-  adStatus: AdStatus;
-  adPlan?: string;
-  adExpiresAt?: number;
-  createdAt?: number;
-  updatedAt?: number;
-}
-
-export type ListingInput = Pick<
-  MarketListing,
-  "title" | "category" | "location" | "campus" | "price" | "deposit" | "description" | "amenities" | "images"
->;
-
-export const LISTING_CATEGORIES = ["Hostel", "Bedsitter", "Single room", "Studio", "Shared apartment", "One bedroom"];
-
-export const AD_PLANS = [
-  { id: "week", label: "7-day boost", days: 7, price: 500 },
-  { id: "fortnight", label: "14-day boost", days: 14, price: 900 },
-  { id: "month", label: "30-day boost", days: 30, price: 1500 },
-] as const;
-
-const LANDLORDS = "landlords";
-const LISTINGS = "marketListings";
-
-function toMillis(v: unknown): number | undefined {
-  if (v instanceof Timestamp) return v.toMillis();
-  if (typeof v === "number") return v;
-  return undefined;
-}
-
-function mapLandlord(id: string, d: any): LandlordProfile {
-  return { ...d, id, createdAt: toMillis(d.createdAt), reviewedAt: toMillis(d.reviewedAt) };
-}
-
-function mapListing(id: string, d: any): MarketListing {
-  return {
-    amenities: [],
-    images: [],
-    featured: false,
-    adStatus: "none",
-    ...d,
-    id,
-    createdAt: toMillis(d.createdAt),
-    updatedAt: toMillis(d.updatedAt),
-    adExpiresAt: toMillis(d.adExpiresAt),
-  };
-}
-
-const newest = <T extends { createdAt?: number }>(a: T, b: T) => (b.createdAt ?? 0) - (a.createdAt ?? 0);
-
-/* ---------- Roles ---------- */
-
-export async function isAdminUser(uid: string, email: string | null): Promise<boolean> {
-  const allow = String(import.meta.env["VITE_ADMIN_EMAILS"] ?? "")
-    .split(",")
-    .map((s) => s.trim().toLowerCase())
-    .filter(Boolean);
-  if (email && allow.includes(email.toLowerCase())) return true;
-  try {
-    const snap = await getDoc(doc(db, "users", uid));
-    return snap.exists() && snap.data()["role"] === "admin";
-  } catch {
-    return false;
-  }
-}
-
-/* ---------- Landlords ---------- */
-
-export type RegisterInput = Omit<LandlordProfile, "id" | "status" | "createdAt" | "reviewedAt" | "reviewNote"> & {
-  password: string;
+  landlordName?: string;
 };
 
-export async function registerLandlord(input: RegisterInput): Promise<void> {
-  const { password, ...profile } = input;
-  const cred = await createUserWithEmailAndPassword(auth, profile.email, password);
-  await updateProfile(cred.user, { displayName: profile.fullName });
-  await setDoc(doc(db, LANDLORDS, cred.user.uid), {
-    ...profile,
-    status: "pending",
-    createdAt: serverTimestamp(),
-  });
-  await setDoc(doc(db, "users", cred.user.uid), {
-    id: cred.user.uid,
-    email: profile.email,
-    name: profile.fullName,
-    role: "landlord",
-    createdAt: Date.now(),
-  });
-}
+/** Create a listing awaiting admin review, owned by the signed-in landlord. */
+export async function createListing(
+  ownerUid: string,
+  input: CreateListingInput,
+): Promise<string> {
+  if (!ownerUid) throw new Error('You need to be signed in to create a listing.');
 
-export async function getLandlord(uid: string): Promise<LandlordProfile | null> {
-  const snap = await getDoc(doc(db, LANDLORDS, uid));
-  return snap.exists() ? mapLandlord(snap.id, snap.data()) : null;
-}
-
-export async function listLandlords(): Promise<LandlordProfile[]> {
-  const snap = await getDocs(collection(db, LANDLORDS));
-  return snap.docs.map((d) => mapLandlord(d.id, d.data())).sort(newest);
-}
-
-export async function reviewLandlord(uid: string, status: LandlordStatus, reviewNote = ""): Promise<void> {
-  await updateDoc(doc(db, LANDLORDS, uid), { status, reviewNote, reviewedAt: serverTimestamp() });
-  if (status !== "approved") {
-    // Pull a suspended/rejected landlord's live listings off the site.
-    const mine = await listLandlordListings(uid);
-    await Promise.all(
-      mine.filter((l) => l.status === "published").map((l) => updateDoc(doc(db, LISTINGS, l.id), { status: "hidden" })),
-    );
-  }
-}
-
-/* ---------- Listings ---------- */
-
-export async function listLandlordListings(uid: string): Promise<MarketListing[]> {
-  const snap = await getDocs(query(collection(db, LISTINGS), where("landlordId", "==", uid)));
-  return snap.docs.map((d) => mapListing(d.id, d.data())).sort(newest);
-}
-
-export async function listAllListings(): Promise<MarketListing[]> {
-  const snap = await getDocs(collection(db, LISTINGS));
-  return snap.docs.map((d) => mapListing(d.id, d.data())).sort(newest);
-}
-
-export function isAdLive(l: MarketListing): boolean {
-  return l.featured && l.adStatus === "active" && (!l.adExpiresAt || l.adExpiresAt > Date.now());
-}
-
-export async function listPublishedListings(): Promise<MarketListing[]> {
-  const snap = await getDocs(query(collection(db, LISTINGS), where("status", "==", "published")));
-  return snap.docs
-    .map((d) => mapListing(d.id, d.data()))
-    .sort((a, b) => Number(isAdLive(b)) - Number(isAdLive(a)) || newest(a, b));
-}
-
-export async function getListing(id: string): Promise<MarketListing | null> {
-  const snap = await getDoc(doc(db, LISTINGS, id));
-  return snap.exists() ? mapListing(snap.id, snap.data()) : null;
-}
-
-export async function createListing(landlord: LandlordProfile, input: ListingInput): Promise<string> {
-  const res = await addDoc(collection(db, LISTINGS), {
+  const ref = await withTimeout(addDoc(collection(db, COLLECTIONS.listings), {
     ...input,
-    landlordId: landlord.id,
-    landlordName: landlord.businessName || landlord.fullName,
-    whatsapp: landlord.whatsapp || landlord.phone,
-    status: "pending",
-    featured: false,
-    adStatus: "none",
-    createdAt: serverTimestamp(),
-    updatedAt: serverTimestamp(),
-  });
-  return res.id;
-}
-
-export async function updateListing(id: string, input: ListingInput): Promise<void> {
-  // Edits go back through moderation.
-  await updateDoc(doc(db, LISTINGS, id), { ...input, status: "pending", updatedAt: serverTimestamp() });
+    ownerUid,
+    landlordId: ownerUid, // legacy field kept in sync for older readers
+    category: input.type,
+    status: 'pending',
+    adStatus: 'inactive',
+    inquiries: 0,
+    createdAt: Timestamp.fromDate(new Date()),
+    updatedAt: Timestamp.fromDate(new Date()),
+  }), 8000, 'Saving your listing');
+  return ref.id;
 }
 
 export async function deleteListing(id: string): Promise<void> {
-  await deleteDoc(doc(db, LISTINGS, id));
+  if (!id) throw new Error('Missing listing id.');
+  await withTimeout(deleteDoc(doc(db, COLLECTIONS.listings, id)), 8000, 'Deleting the listing');
 }
 
-export async function moderateListing(id: string, status: ListingStatus, reviewNote = ""): Promise<void> {
-  await updateDoc(doc(db, LISTINGS, id), { status, reviewNote, updatedAt: serverTimestamp() });
+/** Landlord-side visibility toggle (hide a live listing, or re-publish a hidden one). */
+export async function updateListingStatus(
+  id: string,
+  status: 'published' | 'hidden',
+): Promise<void> {
+  if (!id) throw new Error('Missing listing id.');
+  await withTimeout(
+    updateDoc(doc(db, COLLECTIONS.listings, id), {
+      status,
+      updatedAt: Timestamp.fromDate(new Date()),
+    }),
+    8000,
+    'Updating the listing',
+  );
 }
 
-export async function requestAd(id: string, planId: string): Promise<void> {
-  await updateDoc(doc(db, LISTINGS, id), { adStatus: "requested", adPlan: planId, updatedAt: serverTimestamp() });
+export type MarketListing = {
+  id: string;
+  title?: string;
+  type?: string;
+  category?: string;
+  location?: string;
+  campus?: string;
+  price?: number;
+  deposit?: number;
+  description?: string;
+  amenities?: string[];
+  images?: string[];
+  landlordName?: string;
+  ownerUid?: string;
+  landlordId?: string;
+  inquiries?: number;
+  status?: 'draft' | 'pending' | 'published' | 'rejected' | 'hidden' | 'live' | 'requested' | 'expired' | 'inactive';
+  adStatus?: 'live' | 'requested' | 'expired' | 'inactive';
+  adPlan?: string;
+  adExpiresAt?: unknown;
+  featured?: boolean;
+  createdAt?: unknown;
+  updatedAt?: unknown;
+};
+
+// ---- admin marketplace exports needed by AdminMarketplacePages ----
+
+export type LandlordStatus = 'pending' | 'approved' | 'rejected' | 'suspended';
+export type ListingStatus = 'pending' | 'published' | 'rejected' | 'hidden';
+
+export type LandlordProfile = {
+  id: string;
+  fullName: string;
+  businessName?: string;
+  email: string;
+  phone?: string;
+  whatsapp?: string;
+  idNumber?: string;
+  areas?: string;
+  propertyCount?: number;
+  status: LandlordStatus;
+  reviewNote?: string;
+};
+
+/** Every landlord profile, for the admin vetting queue. */
+export async function listLandlords(): Promise<LandlordProfile[]> {
+  const snapshot = await withTimeout(
+    getDocs(collection(db, COLLECTIONS.landlords)),
+    8000,
+    'Loading landlord profiles',
+  );
+  return snapshot.docs
+    .map((snap) => {
+      const data = timestampToDate(snap.data());
+      return {
+        id: snap.id,
+        fullName: data.fullName ?? '',
+        businessName: data.businessName ?? '',
+        email: data.email ?? '',
+        phone: data.phone ?? '',
+        whatsapp: data.whatsappNumber ?? data.whatsapp ?? '',
+        idNumber: data.nationalId ?? data.idNumber ?? '',
+        areas: Array.isArray(data.targetCampuses) ? data.targetCampuses.join(', ') : (data.areas ?? ''),
+        propertyCount: typeof data.estimatedProperties === 'number' ? data.estimatedProperties : undefined,
+        status: (data.status ?? 'pending') as LandlordStatus,
+        reviewNote: data.reviewNote ?? '',
+      } satisfies LandlordProfile;
+    })
+    .sort((a, b) => a.fullName.localeCompare(b.fullName));
 }
 
-export async function reviewAd(listing: MarketListing, approve: boolean): Promise<void> {
-  if (!approve) {
-    await updateDoc(doc(db, LISTINGS, listing.id), { adStatus: "rejected", featured: false });
-    return;
-  }
-  const plan = AD_PLANS.find((p) => p.id === listing.adPlan) ?? AD_PLANS[0];
-  await updateDoc(doc(db, LISTINGS, listing.id), {
-    adStatus: "active",
-    featured: true,
-    adExpiresAt: Date.now() + plan.days * 86_400_000,
-  });
+export async function reviewLandlord(
+  id: string,
+  status: LandlordStatus,
+  note?: string,
+): Promise<void> {
+  if (!id) throw new Error('Missing landlord id.');
+  await withTimeout(
+    updateDoc(doc(db, COLLECTIONS.landlords, id), {
+      status,
+      reviewNote: note ?? '',
+      reviewedAt: Timestamp.fromDate(new Date()),
+      updatedAt: Timestamp.fromDate(new Date()),
+    }),
+    8000,
+    'Updating the landlord',
+  );
+}
+
+/** Every listing, for admin moderation. Newest first. */
+export async function listAllListings(): Promise<MarketListing[]> {
+  const snapshot = await withTimeout(
+    getDocs(collection(db, COLLECTIONS.listings)),
+    8000,
+    'Loading listings',
+  );
+  return snapshot.docs
+    .map((snap) => ({ id: snap.id, ...timestampToDate(snap.data()) } as MarketListing))
+    .sort(byCreatedAtDesc);
+}
+
+export async function moderateListing(
+  id: string,
+  status: ListingStatus,
+  note?: string,
+): Promise<void> {
+  if (!id) throw new Error('Missing listing id.');
+  await withTimeout(
+    updateDoc(doc(db, COLLECTIONS.listings, id), {
+      status,
+      ...(note === undefined ? {} : { reviewNote: note }),
+      updatedAt: Timestamp.fromDate(new Date()),
+    }),
+    8000,
+    'Updating the listing',
+  );
 }
 
 export async function setFeatured(id: string, featured: boolean): Promise<void> {
-  await updateDoc(doc(db, LISTINGS, id), featured
-    ? { featured: true, adStatus: "active", adExpiresAt: null }
-    : { featured: false, adStatus: "none" });
+  if (!id) throw new Error('Missing listing id.');
+  await withTimeout(
+    updateDoc(doc(db, COLLECTIONS.listings, id), {
+      featured,
+      updatedAt: Timestamp.fromDate(new Date()),
+    }),
+    8000,
+    'Updating the listing',
+  );
 }
 
-export async function uploadListingImage(uid: string, file: File): Promise<string> {
-  const r = ref(storage, `listing-images/${uid}/${Date.now()}-${file.name.replace(/[^\w.-]/g, "_")}`);
-  await uploadBytes(r, file);
-  return getDownloadURL(r);
+export async function reviewAd(listing: MarketListing, approved: boolean): Promise<void> {
+  if (!listing.id) return;
+  const listingRef = doc(db, COLLECTIONS.listings, listing.id);
+  if (approved) {
+    // Determine boost duration from the adPlan
+    const plan = AD_PLANS.find((p) => p.id === listing.adPlan);
+    const days = plan ? plan.days : 7; // default to 7 days
+    await withTimeout(updateDoc(listingRef, dateToTimestamp({
+      adStatus: 'live' as const,
+      adPlan: listing.adPlan,
+      adExpiresAt: addDays(days),
+    })), 8000, 'Approving the boost');
+  } else {
+    await withTimeout(updateDoc(listingRef, dateToTimestamp({
+      adStatus: 'inactive' as const,
+      adPlan: undefined,
+      adExpiresAt: undefined,
+    })), 8000, 'Declining the boost');
+  }
 }
 
-export const formatKes = (n: number) => `KES ${Number(n || 0).toLocaleString()}`;
+function addDays(days: number): Date {
+  const date = new Date();
+  date.setDate(date.getDate() + days);
+  return date;
+}

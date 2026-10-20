@@ -1,390 +1,221 @@
-// @ts-nocheck
-import { useState, useEffect } from 'react';
-import { 
-  Loader2, Mail, MessageCircle, Phone, ShieldCheck, 
-  CheckCircle, XCircle, TrendingUp, Building2, 
-  Users, MapPin, BookOpen, Calendar, CreditCard,
-  PieChart, BarChart, ArrowUpRight
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Link } from '@tanstack/react-router';
+import {
+  Building2, CheckCircle2, Clock, Megaphone, Plus, Loader2,
+  AlertTriangle, ArrowRight, ClipboardList, ShieldCheck,
 } from 'lucide-react';
-import { Link, useNavigate } from '@tanstack/react-router';
-import { doc, getDoc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
-import { auth } from '@/shared/lib/firebase';
-import { db } from '@/shared/lib/firebase';
+import { LandlordShell } from '@/features/landlord/components/LandlordShell';
+import { useLandlord } from '@/shared/context/LandlordContext';
+import { useApprovedLandlord } from '@/features/landlord/hooks/useApprovedLandlord';
+import {
+  isAdLive,
+  listLandlordListings,
+  type MarketListing,
+} from '@/features/marketplace/services';
 import { cn } from '@/shared/lib/utils';
 
+function StatCard({
+  label, value, hint, icon: Icon, tone,
+}: {
+  label: string;
+  value: number;
+  hint: string;
+  icon: typeof Building2;
+  tone: string;
+}) {
+  return (
+    <div className="rounded-2xl border border-border bg-card p-5">
+      <div className="flex items-center justify-between">
+        <p className="text-sm font-medium text-muted-foreground">{label}</p>
+        <span className={cn('flex h-8 w-8 items-center justify-center rounded-lg', tone)}>
+          <Icon className="h-4 w-4" aria-hidden="true" />
+        </span>
+      </div>
+      <p className="mt-3 font-display text-3xl font-medium tabular-nums">{value}</p>
+      <p className="mt-1 text-xs text-muted-foreground">{hint}</p>
+    </div>
+  );
+}
+
 export const LandlordDashboard = () => {
-  const [stats, setStats] = useState({
-    activeListings: 0,
-    totalInquiries: 0,
-    pendingReviews: 0,
-    monthlyEarnings: 0
-  });
-  
-  const [recentListings, setRecentListings] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('overview');
-  const [showSuccess, setShowSuccess] = useState(false);
-  const [showError, setShowError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const { profile } = useLandlord();
+  const { uid, isApproved, profileState } = useApprovedLandlord();
+
+  const [listings, setListings] = useState<MarketListing[] | null>(null);
+  const [loadError, setLoadError] = useState('');
+
+  const load = useCallback(async () => {
+    if (!uid) return;
+    setLoadError('');
+    try {
+      setListings(await listLandlordListings(uid));
+    } catch (error) {
+      console.error('Failed to load dashboard:', error);
+      setListings([]);
+      setLoadError('We could not load your dashboard data. Check your connection and try again.');
+    }
+  }, [uid]);
 
   useEffect(() => {
-    const loadLandlordData = async () => {
-      try {
-        setIsLoading(true);
-        const user = auth.currentUser;
-        if (!user) throw new Error('User not authenticated');
-        
-        const landlordDoc = await getDoc(doc(db, 'landlords', user.uid));
-        if (!landlordDoc.exists()) throw new Error('Landlord profile not found');
-        
-        const landlordData = landlordDoc.data();
-        
-        // In a real app, we'd fetch actual stats from listings collection
-        // For now, we'll use mock data
-        setStats({
-          activeListings: landlordData.activeListings || 3,
-          totalInquiries: landlordData.totalInquiries || 24,
-          pendingReviews: landlordData.pendingReviews || 0,
-          monthlyEarnings: landlordData.monthlyEarnings || 0
-        });
-        
-        setRecentListings([
-          {
-            id: 'prop_001',
-            title: 'Spacious 2BR Near JKUAT',
-            status: 'published',
-            inquiries: 5,
-            date: new Date(Date.now() - 2 * 86400000) // 2 days ago
-          },
-          {
-            id: 'prop_002',
-            title: 'Modern Studio Near UoN',
-            status: 'featured',
-            inquiries: 12,
-            date: new Date(Date.now() - 5 * 86400000) // 5 days ago
-          },
-          {
-            id: 'prop_003',
-            title: 'Cozy Bedsitter Near Kenyatta Uni',
-            status: 'pending',
-            inquiries: 2,
-            date: new Date(Date.now() - 1 * 86400000) // 1 day ago
-          }
-        ]);
-      } catch (error) {
-        console.error('Failed to load landlord data:', error);
-        setShowError(true);
-        setErrorMessage(error instanceof Error ? error.message : 'Failed to load dashboard');
-      } finally {
-        setIsLoading(false);
-      }
+    if (profileState === 'loading') return;
+    void load();
+  }, [load, profileState]);
+
+  const stats = useMemo(() => {
+    const rows = listings ?? [];
+    return {
+      total: rows.length,
+      live: rows.filter((l) => l.status === 'published').length,
+      pending: rows.filter((l) => l.status === 'pending').length,
+      boosted: rows.filter((l) => isAdLive(l)).length,
     };
-    
-    loadLandlordData();
-  }, []);
+  }, [listings]);
 
-  const handleRefill = async () => {
-    setIsLoading(true);
-    try {
-      // In a real implementation, this would trigger a refill of inquiries or similar
-      setShowSuccess(true);
-      setTimeout(() => setShowSuccess(false), 3000);
-    } catch (error) {
-      console.error('Refill failed:', error);
-      setShowError(true);
-      setErrorMessage(error instanceof Error ? error.message : 'Refill failed');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const recent = useMemo(
+    () =>
+      (listings ?? [])
+        .slice()
+        .sort((a, b) => (b.createdAt instanceof Date ? b.createdAt.getTime() : 0) - (a.createdAt instanceof Date ? a.createdAt.getTime() : 0))
+        .slice(0, 3),
+    [listings],
+  );
 
-  const handleNewListing = () => {
-    // Navigate to new listing form
-    window.location.href = '/landlord/listings/new';
-  };
-
-  const handleAdBoost = () => {
-    // Navigate to ad boost selection
-    window.location.href = '/landlord/ads';
-  };
+  const firstName = (profile?.fullName ?? '').trim().split(' ')[0] || 'there';
+  const loading = listings === null && !loadError;
 
   return (
-    <div className="min-h-screen bg-zinc-50">
-      <div className="flex min-h-screen">
-        {/* Sidebar */}
-        <aside className="w-64 bg-white border-r border-zinc-200">
-          <div className="flex h-16 items-center justify-between px-6 border-b border-zinc-200">
-            <div className="flex items-center gap-3">
-              <Building2 className="h-5 w-5 text-indigo-600" />
-              <h1 className="text-xl font-semibold text-gray-800">Landlord Dashboard</h1>
+    <LandlordShell>
+      <div className="space-y-6">
+        <header>
+          <h1 className="font-display text-2xl font-medium">Welcome back, {firstName}</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {isApproved
+              ? 'Your account is approved. Keep your listings fresh so students can find them.'
+              : 'Your account is awaiting approval.'}
+          </p>
+        </header>
+
+        {!isApproved && (
+          <div className="flex flex-wrap items-center gap-3 rounded-xl border border-amber-500/30 bg-amber-500/10 p-4 text-sm text-amber-800">
+            <ShieldCheck className="h-4 w-4 shrink-0" />
+            <p className="flex-1">
+              Approval usually takes about 24 hours. Only approved accounts can publish listings.
+            </p>
+            <Link to="/landlord/pending" className="rounded-full border border-amber-600/40 px-3 py-1.5 text-xs font-semibold">
+              View status
+            </Link>
+          </div>
+        )}
+
+        {loadError && (
+          <div className="flex flex-wrap items-center gap-3 rounded-xl border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive">
+            <AlertTriangle className="h-4 w-4 shrink-0" />
+            <p className="flex-1">{loadError}</p>
+            <button
+              type="button"
+              onClick={() => { setListings(null); void load(); }}
+              className="rounded-full border border-destructive/40 px-3 py-1.5 text-xs font-semibold"
+            >
+              Try again
+            </button>
+          </div>
+        )}
+
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <StatCard label="Listings" value={stats.total} hint="Everything you have submitted" icon={ClipboardList} tone="bg-accent text-foreground" />
+          <StatCard label="Live" value={stats.live} hint="Visible to students right now" icon={CheckCircle2} tone="bg-emerald-500/10 text-emerald-600" />
+          <StatCard label="In review" value={stats.pending} hint="Waiting for admin approval" icon={Clock} tone="bg-amber-500/10 text-amber-600" />
+          <StatCard label="Boosted" value={stats.boosted} hint="Paid placements currently running" icon={Megaphone} tone="bg-indigo-500/10 text-indigo-600" />
+        </div>
+
+        <section className="grid gap-4 lg:grid-cols-[1.4fr_1fr]">
+          <div className="rounded-2xl border border-border bg-card p-5">
+            <div className="flex items-center justify-between">
+              <h2 className="font-display text-lg font-medium">Recent listings</h2>
+              <Link to="/landlord/listings" className="inline-flex items-center gap-1 text-sm font-medium text-highlight hover:underline">
+                View all <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
             </div>
-            <div className="flex items-center gap-2 text-sm">
-              <CheckCircle className="h-4 w-4 text-green-600" />
-              <span className="text-green-600">Online</span>
+
+            {loading && (
+              <div className="flex items-center justify-center py-12" role="status">
+                <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+                <span className="sr-only">Loading listings</span>
+              </div>
+            )}
+
+            {!loading && recent.length === 0 && (
+              <div className="py-10 text-center">
+                <Building2 className="mx-auto h-8 w-8 text-muted-foreground/60" aria-hidden="true" />
+                <p className="mt-3 text-sm text-muted-foreground">No listings yet.</p>
+                <Link
+                  to="/landlord/listings/new"
+                  className="mt-4 inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-glow"
+                >
+                  <Plus className="h-4 w-4" /> Add your first listing
+                </Link>
+              </div>
+            )}
+
+            {!loading && recent.length > 0 && (
+              <ul className="mt-4 divide-y divide-border">
+                {recent.map((listing) => (
+                  <li key={listing.id} className="flex items-center justify-between gap-3 py-3">
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-medium">{listing.title ?? 'Untitled listing'}</p>
+                      <p className="truncate text-xs text-muted-foreground">
+                        {[listing.campus, listing.location].filter(Boolean).join(' · ') || 'Location not set'}
+                      </p>
+                    </div>
+                    <span
+                      className={cn(
+                        'shrink-0 rounded-full border px-2 py-0.5 text-xs font-medium',
+                        listing.status === 'published'
+                          ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-700'
+                          : listing.status === 'hidden'
+                            ? 'border-border bg-accent text-muted-foreground'
+                            : 'border-amber-500/30 bg-amber-500/10 text-amber-700',
+                      )}
+                    >
+                      {listing.status === 'published' ? 'Live' : listing.status === 'hidden' ? 'Hidden' : 'In review'}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+          <div className="rounded-2xl border border-border bg-card p-5">
+            <h2 className="font-display text-lg font-medium">Quick actions</h2>
+            <div className="mt-4 space-y-2">
+              <Link
+                to="/landlord/listings/new"
+                className="flex items-center gap-3 rounded-xl border border-border p-3 text-sm font-medium transition-colors hover:bg-accent"
+              >
+                <Plus className="h-4 w-4 text-highlight" />
+                Add a new listing
+                <ArrowRight className="ml-auto h-3.5 w-3.5 text-muted-foreground" />
+              </Link>
+              <Link
+                to="/landlord/ads/new"
+                className="flex items-center gap-3 rounded-xl border border-border p-3 text-sm font-medium transition-colors hover:bg-accent"
+              >
+                <Megaphone className="h-4 w-4 text-highlight" />
+                Boost a listing
+                <ArrowRight className="ml-auto h-3.5 w-3.5 text-muted-foreground" />
+              </Link>
+              <Link
+                to="/landlord/listings"
+                className="flex items-center gap-3 rounded-xl border border-border p-3 text-sm font-medium transition-colors hover:bg-accent"
+              >
+                <ClipboardList className="h-4 w-4 text-highlight" />
+                Manage my listings
+                <ArrowRight className="ml-auto h-3.5 w-3.5 text-muted-foreground" />
+              </Link>
             </div>
           </div>
-          
-          <nav className="mt-6 space-y-2 px-4">
-            <Link 
-              to="/landlord" 
-              className={cn(
-                'w-full flex items-center justify-start px-3 py-2 rounded-lg text-left text-sm font-medium',
-                activeTab === 'overview' ? 'bg-indigo-50 text-indigo-600' : 'hover:bg-zinc-50'
-              )}
-            >
-              <TrendingUp className="h-4 w-4 mr-2" />
-              Overview
-            </Link>
-            
-            <Link 
-              to="/landlord/listings" 
-              className={cn(
-                'w-full flex items-center justify-start px-3 py-2 rounded-lg text-left text-sm font-medium',
-                activeTab === 'listings' ? 'bg-indigo-50 text-indigo-600' : 'hover:bg-zinc-50'
-              )}
-            >
-              <Users className="h-4 w-4 mr-2" />
-              Listings
-            </Link>
-            
-            <Link 
-              to="/landlord/ads" 
-              className={cn(
-                'w-full flex items-center justify-start px-3 py-2 rounded-lg text-left text-sm font-medium',
-                activeTab === 'ads' ? 'bg-indigo-50 text-indigo-600' : 'hover:bg-zinc-50'
-              )}
-            >
-              <CreditCard className="h-4 w-4 mr-2" />
-              Ad Boosts
-            </Link>
-          </nav>
-        </aside>
-
-        {/* Main Content */}
-        <main className="flex-1 p-6">
-          {isLoading && (
-            <div className="flex items-center justify-center h-96">
-              <Loader2 className="h-6 w-6 text-indigo-500 animate-spin" />
-            </div>
-          )}
-          
-          {!isLoading && (
-            <div className="space-y-6">
-              {/* Status messages */}
-              {showSuccess && (
-                <div className="mb-4 p-4 bg-green-50 border-l-4 border-green-500">
-                  <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-                  <span className="text-green-800">Operation successful!</span>
-                </div>
-              )}
-              
-              {showError && (
-                <div className="mb-4 p-4 bg-red-50 border-l-4 border-red-500">
-                  <XCircle className="h-4 w-4 text-red-500 mr-2" />
-                  <span className="text-red-800">{errorMessage}</span>
-                </div>
-              )}
-              
-              {/* Overview Tab */}
-              {activeTab === 'overview' && (
-                <>
-                  <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-                    <div className="bg-white rounded-xl shadow-sm p-6 border border-zinc-200">
-                      <h3 className="text-lg font-medium text-gray-900 mb-4">Active Listings</h3>
-                      <div className="flex items-center justify-between">
-                        <div className="text-3xl font-bold text-indigo-600">{stats.activeListings}</div>
-                        <div className="flex items-center space-x-2">
-                          <MapPin className="h-5 w-5 text-indigo-400" />
-                          <span className="text-sm text-gray-500">properties</span>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="bg-white rounded-xl shadow-sm p-6 border border-zinc-200">
-                      <h3 className="text-lg font-medium text-gray-900 mb-4">Total Inquiries</h3>
-                      <div className="flex items-center justify-between">
-                        <div className="text-3xl font-bold text-indigo-600">{stats.totalInquiries}</div>
-                        <div className="flex items-center space-x-2">
-                          <MessageCircle className="h-5 w-5 text-indigo-400" />
-                          <span className="text-sm text-gray-500">messages</span>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="bg-white rounded-xl shadow-sm p-6 border border-zinc-200">
-                      <h3 className="text-lg font-medium text-gray-900 mb-4">Pending Reviews</h3>
-                      <div className="flex items-center justify-between">
-                        <div className="text-3xl font-bold text-indigo-600">{stats.pendingReviews}</div>
-                        <div className="flex items-center space-x-2">
-                          <Loader2 className="h-5 w-5 text-indigo-400 animate-spin" />
-                          <span className="text-sm text-gray-500">listings</span>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="bg-white rounded-xl shadow-sm p-6 border border-zinc-200">
-                      <h3 className="text-lg font-medium text-gray-900 mb-4">Monthly Earnings</h3>
-                      <div className="flex items-center justify-between">
-                        <div className="text-3xl font-bold text-indigo-600">KES {stats.monthlyEarnings.toLocaleString()}</div>
-                        <div className="flex items-center space-x-2">
-                          <ArrowUpRight className="h-5 w-5 text-indigo-400" />
-                          <span className="text-sm text-gray-500">from ads</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="mt-8">
-                    <h2 className="text-xl font-bold text-gray-800 mb-4">Quick Actions</h2>
-                    <div className="grid gap-4 sm:grid-cols-2">
-                      <Link 
-                        to="/landlord/listings/new" 
-                        className="bg-white rounded-xl shadow-sm p-6 border border-zinc-200 hover:shadow-lg transition-all"
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-3">
-                            <Building2 className="h-6 w-6 text-indigo-600" />
-                            <div>
-                              <h3 className="font-medium text-gray-800">Add New Property</h3>
-                              <p className="text-sm text-gray-500">List your first property</p>
-                            </div>
-                          </div>
-                          <TrendingUp className="h-6 w-6 text-indigo-600" />
-                        </div>
-                      </Link>
-                      
-                      <button
-                        onClick={handleAdBoost}
-                        className="bg-white rounded-xl shadow-sm p-6 border border-zinc-200 hover:shadow-lg transition-all"
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-3">
-                            <CreditCard className="h-6 w-6 text-indigo-600" />
-                            <div>
-                              <h3 className="font-medium text-gray-800">Boost Visibility</h3>
-                              <p className="text-sm text-gray-500">Get more student views</p>
-                            </div>
-                          </div>
-                          <ArrowUpRight className="h-6 w-6 text-indigo-600" />
-                        </div>
-                      </button>
-                    </div>
-                  </div>
-                </>
-              )}
-              
-              {/* Listings Tab */}
-              {activeTab === 'listings' && (
-                <>
-                  <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-xl font-bold text-gray-800">My Properties</h2>
-                    <Link 
-                      to="/landlord/listings/new" 
-                      className="px-3 py-2 rounded-lg text-sm font-medium text-indigo-600 hover:bg-indigo-50"
-                    >
-                      + New Listing
-                    </Link>
-                  </div>
-                  
-                  {recentListings.length === 0 ? (
-                    <div className="text-center py-12">
-                      <Building2 className="h-12 w-12 text-indigo-300 mb-4" />
-                      <p className="text-sm text-gray-500">
-                        You haven't listed any properties yet. Click above to add your first listing!
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="space-y-4">
-                      {recentListings.map((listing) => (
-                        <div 
-                          key={listing.id} 
-                          className="bg-white rounded-xl shadow-sm p-6 border border-zinc-200 hover:shadow-lg transition-all"
-                        >
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center space-x-3">
-                              <MapPin
-                                className={'h-5 w-5 ' + (listing.status === 'published' ? 'text-green-500' : 
-                                          listing.status === 'featured' ? 'text-indigo-500' : 
-                                          listing.status === 'pending' ? 'text-yellow-500' : 'text-gray-500')}
-                              />
-                              <div>
-                                <h3 className="font-medium text-gray-800">{listing.title}</h3>
-                                <p className="text-sm text-gray-500">{listing.status === 'featured' ? 'Featured Listing' : 
-                                                              listing.status === 'published' ? 'Active' : 
-                                                              listing.status === 'pending' ? 'Pending Review' : 'Inactive'}</p>
-                              </div>
-                            </div>
-                            <div className="text-right space-x-2">
-                              <div className="flex items-center space-x-2">
-                                <MessageCircle className="h-4 w-4 text-gray-500" />
-                                <span className="text-sm">{listing.inquiries}</span>
-                              </div>
-                              <span className="text-xs text-gray-400">
-                                {listing.date.toLocaleDateString()}
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </>
-              )}
-              
-              {/* Ads Tab */}
-              {activeTab === 'ads' && (
-                <>
-                  <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-xl font-bold text-gray-800">Ad Boost Campaigns</h2>
-                    <Link 
-                      to="/landlord/ads/new" 
-                      className="px-3 py-2 rounded-lg text-sm font-medium text-indigo-600 hover:bg-indigo-50"
-                    >
-                      + New Campaign
-                    </Link>
-                  </div>
-                  
-                  <div className="grid gap-4">
-                    <div className="bg-white rounded-xl shadow-sm p-6 border border-zinc-200">
-                      <h3 className="text-lg font-medium text-gray-900 mb-4">Boost Options</h3>
-                      <div className="space-y-4">
-                        <div className="flex items-center justify-between p-4 bg-indigo-50 rounded-lg">
-                          <span className="text-sm font-medium text-white">7 Days</span>
-                          <span className="text-sm font-medium text-white">KES 500</span>
-                        </div>
-                        <p className="text-sm text-gray-500 mt-2">
-                          Ideal for testing or short-term vacancies
-                        </p>
-                        <div className="flex items-center justify-between p-4 bg-indigo-100 rounded-lg">
-                          <span className="text-sm font-medium text-indigo-600">14 Days</span>
-                          <span className="text-sm font-medium text-indigo-600">KES 900</span>
-                        </div>
-                        <p className="text-sm text-gray-500 mt-2">
-                          Most popular - balanced reach and cost
-                        </p>
-                        <div className="flex items-center justify-between p-4 bg-indigo-200 rounded-lg">
-                          <span className="text-sm font-medium text-indigo-600">30 Days</span>
-                          <span className="text-sm font-medium text-indigo-600">KES 1,500</span>
-                        </div>
-                        <p className="text-sm text-gray-500 mt-2">
-                          Best value for long-term listings
-                        </p>
-                      </div>
-                    </div>
-                    
-                    <div className="bg-white rounded-xl shadow-sm p-6 border border-zinc-200">
-                      <h3 className="text-lg font-medium text-gray-900 mb-4">Active Campaigns</h3>
-                      <p className="text-sm text-gray-500 text-center py-8">
-                        No active campaigns yet. Boost a listing to get started!
-                      </p>
-                    </div>
-                  </div>
-                </>
-              )}
-            </div>
-          )}
-        </main>
+        </section>
       </div>
-    </div>
+    </LandlordShell>
   );
 };

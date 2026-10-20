@@ -1,333 +1,346 @@
-// @ts-nocheck
-import { useState } from 'react';
-import { 
-  Loader2, Mail, MessageCircle, Phone, ShieldCheck, 
-  CheckCircle, XCircle, TrendingUp, Building2, 
-  Users, MapPin, BookOpen, Calendar, CreditCard,
-  PieChart, BarChart, ArrowUpRight, Edit2, 
-  DollarSign, ImagePlus, Video
-} from 'lucide-react';
+import { useCallback, useEffect, useState } from 'react';
 import { Link, useNavigate } from '@tanstack/react-router';
+import {
+  Building2, MapPin, Plus, Loader2, AlertTriangle, Megaphone,
+  Eye, EyeOff, Trash2, CheckCircle2, RefreshCw, ShieldCheck,
+} from 'lucide-react';
+import { LandlordShell } from '@/features/landlord/components/LandlordShell';
+import { useApprovedLandlord } from '@/features/landlord/hooks/useApprovedLandlord';
+import {
+  deleteListing,
+  formatKes,
+  isAdLive,
+  listLandlordListings,
+  updateListingStatus,
+  type MarketListing,
+} from '@/features/marketplace/services';
 import { cn } from '@/shared/lib/utils';
 
+type Feedback = { kind: 'success' | 'error'; message: string } | null;
+
+const STATUS_LABEL: Record<string, string> = {
+  pending: 'Pending review',
+  published: 'Live',
+  hidden: 'Hidden',
+  rejected: 'Rejected',
+  draft: 'Draft',
+};
+
+function StatusBadge({ status }: { status?: string | undefined }) {
+  const key = status ?? 'pending';
+  const tone =
+    key === 'published'
+      ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-700'
+      : key === 'rejected'
+        ? 'border-destructive/30 bg-destructive/10 text-destructive'
+        : key === 'hidden'
+          ? 'border-border bg-accent text-muted-foreground'
+          : 'border-amber-500/30 bg-amber-500/10 text-amber-700';
+  return (
+    <span className={cn('inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-medium', tone)}>
+      {STATUS_LABEL[key] ?? key}
+    </span>
+  );
+}
+
 export const LandlordListingsPage = () => {
-  const [listings, setListings] = useState([
-    {
-      id: 'prop_001',
-      title: 'Spacious 2BR Near JKUAT',
-      campus: 'JKUAT',
-      location: 'Juja',
-      type: 'Two Bedroom',
-      price: 18000,
-      deposit: 18000,
-      status: 'published',
-      inquiries: 5,
-      adStatus: 'active',
-      adExpiresAt: new Date(Date.now() + 15 * 86400000), // 15 days
-      dateCreated: new Date(Date.now() - 30 * 86400000),
-      images: [
-        'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&q=80&w=800'
-      ]
-    },
-    {
-      id: 'prop_002',
-      title: 'Modern Studio Near UoN',
-      campus: 'UoN',
-      location: 'Nairobi',
-      type: 'Studio',
-      price: 12000,
-      deposit: 12000,
-      status: 'featured',
-      inquiries: 12,
-      adStatus: 'none',
-      dateCreated: new Date(Date.now() - 45 * 86400000),
-      images: [
-        'https://images.unsplash.com/photo-1502672260266-1c1de242407d?auto=format&fit=crop&q=80&w=800'
-      ]
-    },
-    {
-      id: 'prop_003',
-      title: 'Cozy Bedsitter Near Kenyatta Uni',
-      campus: 'KU',
-      location: 'Kahawa',
-      type: 'Bedsitter',
-      price: 8000,
-      deposit: 8000,
-      status: 'pending',
-      inquiries: 2,
-      adStatus: 'requested',
-      dateCreated: new Date(Date.now() - 5 * 86400000),
-      images: [
-        'https://images.unsplash.com/photo-1536376072261-38c75010e6c9?auto=format&fit=crop&q=80&w=800'
-      ]
-    }
-  ]);
-  
-  const [isLoading, setIsLoading] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
-  const [showError, setShowError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const { uid, isApproved, profileState, profileMessage } = useApprovedLandlord();
+  const navigate = useNavigate();
 
-  const handleChangeStatus = async (id: string, newStatus: string) => {
-    setIsLoading(true);
+  const [listings, setListings] = useState<MarketListing[] | null>(null);
+  const [loadError, setLoadError] = useState('');
+  const [feedback, setFeedback] = useState<Feedback>(null);
+  const [busyId, setBusyId] = useState<string | null>(null);
+  const [confirmId, setConfirmId] = useState<string | null>(null);
+
+  const load = useCallback(async () => {
+    if (!uid) return;
+    setLoadError('');
     try {
-      // In a real implementation, update Firestore
-      setListings(listings.map(listing => 
-        listing.id === id ? { ...listing, status: newStatus } : listing
-      ));
-      setShowSuccess(true);
-      setTimeout(() => setShowSuccess(false), 2000);
+      const rows = await listLandlordListings(uid);
+      setListings(rows);
     } catch (error) {
-      console.error('Failed to update status:', error);
-      setShowError(true);
-      setErrorMessage(error instanceof Error ? error.message : 'Failed to update status');
-    } finally {
-      setIsLoading(false);
+      console.error('Failed to load listings:', error);
+      setListings([]);
+      setLoadError('We could not load your listings. Check your connection and try again.');
     }
-  };
+  }, [uid]);
 
-  const handleRequestAdBoost = (id: string) => {
-    // Navigate to ad boost selection for this listing
-    window.location.href = `/landlord/ads/new?listingId=${id}`;
-  };
+  useEffect(() => {
+    if (profileState === 'loading') return;
+    void load();
+  }, [load, profileState]);
 
-  const handleEditListing = (id: string) => {
-    window.location.href = `/landlord/listings/${id}/edit`;
-  };
-
-  const handleDeleteListing = async (id: string) => {
-    setIsLoading(true);
+  const runAction = async (id: string, action: () => Promise<void>, successMessage: string) => {
+    setBusyId(id);
+    setFeedback(null);
     try {
-      // In a real implementation, delete from Firestore
-      setListings(listings.filter(listing => listing.id !== id));
-      setShowSuccess(true);
-      setTimeout(() => setShowSuccess(false), 2000);
+      await action();
+      setFeedback({ kind: 'success', message: successMessage });
     } catch (error) {
-      console.error('Failed to delete listing:', error);
-      setShowError(true);
-      setErrorMessage(error instanceof Error ? error.message : 'Failed to delete listing');
+      console.error('Listing action failed:', error);
+      setFeedback({
+        kind: 'error',
+        message: error instanceof Error ? error.message : 'That action did not go through. Please try again.',
+      });
     } finally {
-      setIsLoading(false);
+      setBusyId(null);
+      setConfirmId(null);
     }
   };
+
+  const handleToggleVisibility = (listing: MarketListing) => {
+    const nextStatus = listing.status === 'hidden' ? 'published' : 'hidden';
+    void runAction(
+      listing.id,
+      async () => {
+        await updateListingStatus(listing.id, nextStatus);
+        setListings((prev) =>
+          (prev ?? []).map((l) => (l.id === listing.id ? { ...l, status: nextStatus } : l)),
+        );
+      },
+      nextStatus === 'hidden' ? 'Listing hidden from search.' : 'Listing published again.',
+    );
+  };
+
+  const handleDelete = (listing: MarketListing) => {
+    void runAction(
+      listing.id,
+      async () => {
+        await deleteListing(listing.id);
+        setListings((prev) => (prev ?? []).filter((l) => l.id !== listing.id));
+      },
+      `“${listing.title ?? 'Listing'}” was deleted.`,
+    );
+  };
+
+  const loading = listings === null && !loadError;
 
   return (
-    <div className="min-h-screen bg-zinc-50">
-      <div className="flex min-h-screen">
-        {/* Sidebar - simplified */}
-        <aside className="w-64 bg-white border-r border-zinc-200">
-          <div className="flex h-16 items-center justify-between px-6 border-b border-zinc-200">
-            <div className="flex items-center gap-3">
-              <Building2 className="h-5 w-5 text-indigo-600" />
-              <h1 className="text-xl font-semibold text-gray-800">My Properties</h1>
-            </div>
+    <LandlordShell>
+      <div className="space-y-6">
+        <header className="flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <h1 className="font-display text-2xl font-medium">Listings</h1>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Everything you have submitted to UniHub, and what students currently see.
+            </p>
           </div>
-          
-          <nav className="mt-6 space-y-2 px-4 pb-4">
-            <Link 
-              to="/landlord" 
-              className="w-full flex items-center justify-start px-3 py-2 rounded-lg text-left text-sm font-medium hover:bg-zinc-50"
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => void load()}
+              disabled={loading}
+              className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-sm font-medium hover:bg-accent disabled:opacity-60"
             >
-              <ArrowUpRight className="h-4 w-4 mr-2" />
-              Dashboard
-            </Link>
-            
-            <Link 
-              to="/landlord/listings" 
-              className="w-full flex items-center justify-start px-3 py-2 rounded-lg text-left text-sm font-medium bg-indigo-50 text-indigo-600"
+              <RefreshCw className={cn('h-4 w-4', loading && 'animate-spin')} />
+              Refresh
+            </button>
+            <Link
+              to="/landlord/listings/new"
+              className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-glow"
             >
-              <Users className="h-4 w-4 mr-2" />
-              Listings
+              <Plus className="h-4 w-4" />
+              New listing
             </Link>
-            
-            <Link 
-              to="/landlord/ads" 
-              className="w-full flex items-center justify-start px-3 py-2 rounded-lg text-left text-sm font-medium hover:bg-zinc-50"
-            >
-              <CreditCard className="h-4 w-4 mr-2" />
-              Ad Boosts
-            </Link>
-          </nav>
-        </aside>
+          </div>
+        </header>
 
-        {/* Main Content */}
-        <main className="flex-1 p-6">
-          {isLoading && (
-            <div className="flex items-center justify-center h-96">
-              <Loader2 className="h-6 w-6 text-indigo-500 animate-spin" />
-            </div>
-          )}
-          
-          {!isLoading && (
-            <div className="space-y-6">
-              {/* Status messages */}
-              {showSuccess && (
-                <div className="mb-4 p-4 bg-green-50 border-l-4 border-green-500">
-                  <CheckCircle className="h-4 w-4 text-green-500 mr-2" />
-                  <span className="text-green-800">Operation successful!</span>
-                </div>
-              )}
-              
-              {showError && (
-                <div className="mb-4 p-4 bg-red-50 border-l-4 border-red-500">
-                  <XCircle className="h-4 w-4 text-red-500 mr-2" />
-                  <span className="text-red-800">{errorMessage}</span>
-                </div>
-              )}
-              
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-bold text-gray-800">My Properties</h2>
-                <Link 
-                  to="/landlord/listings/new" 
-                  className="px-3 py-2 rounded-lg text-sm font-medium text-indigo-600 hover:bg-indigo-50"
-                >
-                  + New Listing
-                </Link>
-              </div>
-              
-              <div className="space-y-4">
-                {listings.length === 0 ? (
-                  <div className="text-center py-12">
-                    <Building2 className="h-12 w-12 text-indigo-300 mb-4" />
-                    <p className="text-sm text-gray-500">
-                      You haven't listed any properties yet. Click above to add your first listing!
-                    </p>
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    {listings.map((listing) => (
-                      <div 
-                        key={listing.id} 
-                        className="bg-white rounded-xl shadow-sm p-6 border border-zinc-200 hover:shadow-lg transition-all"
-                      >
-                        <div className="flex items-center justify-between">
-                          {/* Left side - property info */}
-                          <div className="flex-1 space-x-4">
-                            <div className="flex items-center space-x-3">
-                              <MapPin className="h-5 w-5" 
-                                className={listing.status === 'published' ? 'text-green-500' : 
-                                          listing.status === 'featured' ? 'text-indigo-500' : 
-                                          listing.status === 'pending' ? 'text-yellow-500' : 'text-gray-500'}
-                              />
-                              <div>
-                                <h3 className="font-medium text-gray-800 mb-1">{listing.title}</h3>
-                                <div className="flex items-center space-x-2 text-sm">
-                                  <span className="font-medium">{listing.campus}</span>
-                                  <span className="text-gray-500">•</span>
-                                  <span>{listing.location}</span>
-                                </div>
-                                <p className="text-sm text-gray-500">
-                                  {listing.type} • KES {listing.price.toLocaleString()} / month
-                                </p>
-                                {listing.deposit && (
-                                  <p className="text-xs text-gray-400">
-                                    Deposit: KES {listing.deposit.toLocaleString()}
-                                  </p>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                          
-                          {/* Right side - status and actions */}
-                          <div className="flex items-center space-x-3">
-                            <div className="flex items-center space-x-2">
-                              {listing.adStatus === 'active' && (
-                                <div className="flex items-center space-x-1 bg-indigo-100 text-indigo-600 text-xs px-2 py-0.5 rounded">
-                                  <ArrowUpRight className="h-3 w-3" /> Boosted
-                                </div>
-                              )}
-                              {listing.adStatus === 'requested' && (
-                                <div className="flex items-center space-x-1 bg-yellow-100 text-yellow-600 text-xs px-2 py-0.5 rounded">
-                                  <Loader2 className="h-3 w-3 animate-spin" /> Pending
-                                </div>
-                              )}
-                            </div>
-                            
-                            <div className="flex items-center space-x-2 mt-2">
-                              <MessageCircle className="h-4 w-4 text-gray-500" />
-                              <span className="text-sm">{listing.inquiries} inquiries</span>
-                            </div>
-                            
-                            <div className="flex items-center space-x-2 mt-2">
-                              {listing.status === 'published' && (
-                                <button
-                                  onClick={() => handleRequestAdBoost(listing.id)}
-                                  className="px-2 py-1 text-xs font-medium bg-indigo-600 text-white rounded hover:bg-indigo-700"
-                                >
-                                  Boost
-                                </button>
-                              )}
-                              {listing.status !== 'pending' && (
-                                <>
-                                  <button
-                                    onClick={() => handleEditListing(listing.id)}
-                                    className="px-2 py-1 text-xs font-medium bg-gray-200 text-gray-800 rounded hover:bg-gray-300 mr-1"
-                                  >
-                                    Edit
-                                  </button>
-                                  <button
-                                    onClick={() => handleDeleteListing(listing.id)}
-                                    className="px-2 py-1 text-xs font-medium bg-red-100 text-red-600 rounded hover:bg-red-200"
-                                  >
-                                    Delete
-                                  </button>
-                                </>
-                              )}
-                              {listing.status === 'pending' && (
-                                <span className="px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-600 rounded">
-                                  Pending Review
-                                </span>
-                              )}
-                              {listing.status === 'published' && (
-                                <>
-                                  <button
-                                    onClick={() => handleChangeStatus(listing.id, 'hidden')}
-                                    className="px-2 py-1 text-xs font-medium bg-gray-200 text-gray-800 rounded hover:bg-gray-300 mr-1"
-                                  >
-                                    Hide
-                                  </button>
-                                  <button
-                                    onClick={() => handleChangeStatus(listing.id, 'featured')}
-                                    className="px-2 py-1 text-xs font-medium bg-indigo-100 text-indigo-600 rounded hover:bg-indigo-200"
-                                  >
-                                    Featured
-                                  </button>
-                                </>
-                              )}
-                            </div>
-                          </div>
+        {feedback && (
+          <div
+            role="status"
+            aria-live="polite"
+            className={cn(
+              'flex items-start gap-3 rounded-xl border p-4 text-sm',
+              feedback.kind === 'success'
+                ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-800'
+                : 'border-destructive/30 bg-destructive/10 text-destructive',
+            )}
+          >
+            {feedback.kind === 'success' ? (
+              <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" />
+            ) : (
+              <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
+            )}
+            <span>{feedback.message}</span>
+            <button
+              type="button"
+              onClick={() => setFeedback(null)}
+              className="ml-auto text-xs underline underline-offset-4 opacity-70 hover:opacity-100"
+            >
+              Dismiss
+            </button>
+          </div>
+        )}
+
+        {!isApproved && (
+          <div className="flex items-start gap-3 rounded-xl border border-border bg-card p-4 text-sm text-muted-foreground">
+            <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-highlight" />
+            <p>
+              Your account is still under review, so listings cannot go live yet. They publish once
+              an admin approves your account.
+            </p>
+          </div>
+        )}
+
+        {loadError && (
+          <div className="flex flex-col items-start gap-3 rounded-xl border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive">
+            <span>{loadError}</span>
+            <button
+              type="button"
+              onClick={() => { setListings(null); void load(); }}
+              className="rounded-full border border-destructive/40 px-4 py-1.5 text-xs font-semibold"
+            >
+              Try again
+            </button>
+            {profileState === 'unavailable' && <span className="text-xs opacity-80">{profileMessage}</span>}
+          </div>
+        )}
+
+        {loading && (
+          <div className="flex items-center justify-center rounded-2xl border border-border bg-card py-20" role="status">
+            <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+            <span className="sr-only">Loading your listings</span>
+          </div>
+        )}
+
+        {!loading && listings && listings.length === 0 && !loadError && (
+          <div className="rounded-2xl border border-dashed border-border bg-card px-6 py-16 text-center">
+            <Building2 className="mx-auto h-10 w-10 text-muted-foreground/60" aria-hidden="true" />
+            <h2 className="mt-4 font-display text-lg font-medium">No listings yet</h2>
+            <p className="mx-auto mt-2 max-w-sm text-sm text-muted-foreground">
+              Add your first property. It goes to review, then students can find it near campus.
+            </p>
+            <Link
+              to="/landlord/listings/new"
+              className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-glow"
+            >
+              <Plus className="h-4 w-4" />
+              Add a listing
+            </Link>
+          </div>
+        )}
+
+        {!loading && listings && listings.length > 0 && (
+          <ul className="space-y-3">
+            {listings.map((listing) => {
+              const busy = busyId === listing.id;
+              const boosting = isAdLive(listing);
+              const awaitingBoost = listing.adStatus === 'requested';
+              const cover = listing.images?.[0];
+
+              return (
+                <li key={listing.id} className="rounded-2xl border border-border bg-card p-4 sm:p-5">
+                  <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
+                    <div className="h-24 w-full shrink-0 overflow-hidden rounded-xl border border-border bg-accent sm:w-32">
+                      {cover ? (
+                        <img src={cover} alt="" className="h-full w-full object-cover" loading="lazy" />
+                      ) : (
+                        <div className="flex h-full items-center justify-center text-muted-foreground">
+                          <Building2 className="h-6 w-6" aria-hidden="true" />
                         </div>
-                        
-                        {/* Images preview */}
-                        {listing.images && listing.images.length > 0 && (
-                          <div className="mt-4">
-                            <div className="flex space-x-2">
-                              {listing.images.slice(0, 3).map((img, index) => (
-                                <img 
-                                  key={index} 
-                                  src={img} 
-                                  alt={listing.title} 
-                                  className="w-16 h-16 object-cover rounded"
-                                  style={{ aspectRatio: '4 / 3' }}
-                                />
-                              ))}
-                              {listing.images.length > 3 && (
-                                <div className="flex items-center justify-center w-16 h-16 bg-zinc-200 rounded text-xs">
-                                  +{listing.images.length - 3}
-                                </div>
-                              )}
-                            </div>
-                          </div>
+                      )}
+                    </div>
+
+                    <div className="min-w-0 flex-1">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <h2 className="font-display text-lg font-medium">{listing.title ?? 'Untitled listing'}</h2>
+                        <StatusBadge status={listing.status} />
+                        {boosting && (
+                          <span className="inline-flex items-center gap-1 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-2.5 py-1 text-xs font-medium text-indigo-700">
+                            <Megaphone className="h-3 w-3" /> Boosted
+                          </span>
+                        )}
+                        {awaitingBoost && (
+                          <span className="inline-flex items-center rounded-full border border-amber-500/30 bg-amber-500/10 px-2.5 py-1 text-xs font-medium text-amber-700">
+                            Boost in review
+                          </span>
                         )}
                       </div>
-                    ))}
+
+                      <p className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
+                        {listing.campus && <span className="font-medium text-foreground">{listing.campus}</span>}
+                        {listing.location && (
+                          <span className="inline-flex items-center gap-1">
+                            <MapPin className="h-3.5 w-3.5" /> {listing.location}
+                          </span>
+                        )}
+                        {typeof listing.price === 'number' && (
+                          <span>
+                            {formatKes(listing.price)} <span className="text-xs">/ month</span>
+                          </span>
+                        )}
+                      </p>
+
+                      {listing.status === 'rejected' && (
+                        <p className="mt-2 text-sm text-destructive">
+                          This listing was rejected. Update the details and resubmit, or contact support.
+                        </p>
+                      )}
+
+                      <div className="mt-4 flex flex-wrap items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => void navigate({ to: '/landlord/ads/new', search: { listingId: listing.id } })}
+                          disabled={busy || awaitingBoost}
+                          className="inline-flex items-center gap-2 rounded-full border border-border px-3 py-1.5 text-xs font-semibold hover:bg-accent disabled:opacity-50"
+                        >
+                          <Megaphone className="h-3.5 w-3.5" />
+                          {boosting ? 'Extend boost' : awaitingBoost ? 'Boost requested' : 'Boost'}
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => handleToggleVisibility(listing)}
+                          disabled={busy || listing.status === 'pending' || listing.status === 'rejected'}
+                          className="inline-flex items-center gap-2 rounded-full border border-border px-3 py-1.5 text-xs font-semibold hover:bg-accent disabled:opacity-50"
+                        >
+                          {listing.status === 'hidden' ? <Eye className="h-3.5 w-3.5" /> : <EyeOff className="h-3.5 w-3.5" />}
+                          {listing.status === 'hidden' ? 'Publish' : 'Hide'}
+                        </button>
+
+                        {confirmId === listing.id ? (
+                          <span className="inline-flex items-center gap-2 rounded-full border border-destructive/40 bg-destructive/5 px-3 py-1.5 text-xs">
+                            <span className="font-semibold text-destructive">Delete permanently?</span>
+                            <button
+                              type="button"
+                              onClick={() => handleDelete(listing)}
+                              disabled={busy}
+                              className="font-semibold text-destructive underline underline-offset-2 disabled:opacity-50"
+                            >
+                              Yes, delete
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setConfirmId(null)}
+                              disabled={busy}
+                              className="text-muted-foreground underline underline-offset-2"
+                            >
+                              Cancel
+                            </button>
+                          </span>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => setConfirmId(listing.id)}
+                            disabled={busy}
+                            className="inline-flex items-center gap-2 rounded-full border border-border px-3 py-1.5 text-xs font-semibold text-destructive hover:bg-destructive/10 disabled:opacity-50"
+                          >
+                            <Trash2 className="h-3.5 w-3.5" />
+                            Delete
+                          </button>
+                        )}
+
+                        {busy && <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" aria-label="Working" />}
+                      </div>
+                    </div>
                   </div>
-                )}
-              </div>
-            </div>
-          )}
-        </main>
+                </li>
+              );
+            })}
+          </ul>
+        )}
       </div>
-    </div>
+    </LandlordShell>
   );
 };
