@@ -1,0 +1,264 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+enum UserRole {
+  TENANT
+  LANDLORD
+  ADMIN
+  UNIVERSITY_ADMIN
+}
+
+enum LandlordStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  SUSPENDED
+}
+
+enum ListingCategory {
+  HOSTEL
+  BEDSITTER
+  SINGLE_ROOM
+  STUDIO
+  SHARED_APARTMENT
+}
+
+enum ListingStatus {
+  AVAILABLE
+  RENTED
+  HIDDEN
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  emailVerified DateTime?
+  name          String?
+  password      String?   // hashed with bcrypt
+  role          UserRole  @default(TENANT)
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  landlordProfile LandlordProfile?
+  listings        Listing[]
+  favorites       Favorite[]
+  sessions        Session[]
+  accounts        Account[]
+}
+
+model LandlordProfile {
+  id                 String        @id @default(cuid())
+  userId             String        @unique
+  user               User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  businessName       String
+  phone              String
+  whatsappNumber     String
+  nationalId         String?
+  targetCampuses     String        // JSON string array
+  estimatedProperties Int
+  status             LandlordStatus @default(PENDING)
+  reviewNote         String?
+  consentGivenAt     DateTime      @default(now())
+  consentVersion     String        @default("2026-07-01")
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+
+  listings Listing[]
+}
+
+model Listing {
+  id              String          @id @default(cuid())
+  title           String
+  description     String
+  price           Int             // in cents (KES)
+  deposit         Int             // in cents (KES)
+  category        ListingCategory
+  location        String
+  latitude        Float?
+  longitude       Float?
+  images          String          // JSON string array
+  amenities       String          // JSON string array
+  genderRestriction String?       // none, male_only, female_only
+  hasWifi         Boolean         @default(false)
+  hasWater        Boolean         @default(false)
+  videoUrl        String?
+  status          ListingStatus   @default(AVAILABLE)
+  isVerified      Boolean         @default(false)
+  landlordId      String
+  landlord        LandlordProfile @relation(fields: [landlordId], references: [id], onDelete: Cascade)
+  userId          String
+  user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  university      String?
+  distanceFromCampus String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  favorites Favorite[]
+}
+
+model Favorite {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listingId String
+  listing   Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, listingId])
+}
+
+model University {
+  id              String    @id @default(cuid())
+  name            String
+  slug            String    @unique
+  logoUrl         String?
+  location        String
+  contactEmail    String?
+  contactPhone    String?
+  description     String
+  verified        Boolean   @default(false)
+  adminUserId     String?
+  status          String    @default("active")
+  foundedYear     Int?
+  studentCount    Int?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  hostels Hostel[]
+}
+
+model Hostel {
+  id              String        @id @default(cuid())
+  universityId    String
+  university      University    @relation(fields: [universityId], references: [id], onDelete: Cascade)
+  name            String
+  location        String
+  description     String
+  hostelType      String        // boys, girls, mixed
+  images          String        // JSON string array
+  amenities       String        // JSON string array
+  wardenName      String?
+  wardenPhone     String?
+  wardenEmail     String?
+  status          String        @default("active")
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  rooms HostelRoom[]
+}
+
+model HostelRoom {
+  id              String    @id @default(cuid())
+  hostelId        String
+  hostel          Hostel    @relation(fields: [hostelId], references: [id], onDelete: Cascade)
+  roomNumber      String
+  bedNumber       String?
+  roomType        String    // single, shared_double, shared_quad, shared_open
+  pricePerMonth   Int?
+  pricePerSemester Int?
+  pricePerYear    Int?
+  status          String    @default("available")
+  currentOccupants Int      @default(0)
+  maxOccupants    Int
+  occupancyPercentage Float @default(0)
+  amenities       String    // JSON string array
+  features        String    // JSON string array
+  availableFrom   DateTime?
+  availableUntil  DateTime?
+  bookingDeadline DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model Apartment {
+  id              String    @id @default(cuid())
+  name            String
+  location        String
+  description     String
+  address         String
+  latitude        Float?
+  longitude       Float?
+  amenities       String    // JSON string array
+  images          String    // JSON string array
+  agentId         String
+  ownerType       String    // individual, company
+  ownerName       String?
+  contactEmail    String?
+  contactPhone    String?
+  status          String    @default("active")
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  rooms Room[]
+}
+
+model Room {
+  id              String     @id @default(cuid())
+  apartmentId     String
+  apartment       Apartment  @relation(fields: [apartmentId], references: [id], onDelete: Cascade)
+  roomNumber      String
+  roomType        String     // single, double, bedsitter, studio, one_bedroom, two_bedroom
+  price           Int
+  deposit         Int?
+  description     String
+  features        String     // JSON string array
+  images          String     // JSON string array
+  status          String     @default("available")
+  maxOccupants    Int
+  squareMeters    Float?
+  availabilityDate DateTime?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+}
+
+// Better Auth tables
+model Session {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token        String   @unique
+  expiresAt    DateTime
+  ipAddress    String?
+  userAgent    String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accountId         String
+  providerId        String
+  accessToken       String?
+  refreshToken      String?
+  accessTokenExpiresAt DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope             String?
+  idToken           String?
+  password          String? // for email/password provider
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@unique([providerId, accountId])
+}
+
+model VerificationToken {
+  id        String   @id @default(cuid())
+  identifier String
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@unique([identifier, token])
+}
