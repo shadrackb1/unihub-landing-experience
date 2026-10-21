@@ -251,79 +251,79 @@ unihub-landing-experience/
 
 ### System Overview
 
-![System Overview](docs/diagrams/system-overview.json)
+[View System Overview Diagram](docs/diagrams/system-overview.json) — *Paste JSON into [Diagrammer](https://diagrammer.dev) for interactive view*
 
 *High-level component architecture showing frontend (TanStack Start, React 19), backend (Better Auth, Prisma, SQLite), legacy Firebase stack, MapLibre GL, and external services (Vercel, GitHub, Tile Providers).*
 
 ### Authentication Flow — Better Auth (Primary) + Firebase (Legacy)
 
-![Auth Flow](docs/diagrams/auth-flow.json)
+[View Auth Flow Diagram](docs/diagrams/auth-flow.json) — *Paste JSON into [Diagrammer](https://diagrammer.dev) for interactive view*
 
 *Dual auth stack during mid-migration: Better Auth for admin routes with requireAdmin guard, Firebase Auth/Firestore for legacy landlord portal. Shows session validation, admin email checks, Firestore profile fetch, and status-based routing.*
 
 ### Data Flow — Static Listings to Browser
 
-![Data Flow](docs/diagrams/data-flow.json)
+[View Data Flow Diagram](docs/diagrams/data-flow.json) — *Paste JSON into [Diagrammer](https://diagrammer.dev) for interactive view*
 
 *How listing data flows from static TypeScript files (listings.ts, residenceClips.ts, campuses.ts) through TanStack Start components (ListingGrid, CampusMap, VideoPanel) to student browser. All filtering/sorting client-side; contact links open external apps.*
 
 ### Deployment Pipeline — GitHub to Vercel
 
-![Deployment Pipeline](docs/diagrams/deployment-pipeline.json)
+[View Deployment Pipeline Diagram](docs/diagrams/deployment-pipeline.json) — *Paste JSON into [Diagrammer](https://diagrammer.dev) for interactive view*
 
 *CI/CD flow: local dev → git push → GitHub webhook → Vercel build (prisma generate, type-check, lint) → preview deployment → production deployment (main branch). Configured via vercel.json with iad1 region.*
 
 ### 7-Act Funnel — Homepage Experience
 
-![7-Act Funnel](docs/diagrams/funnel-flow.json)
+[View 7-Act Funnel Diagram](docs/diagrams/funnel-flow.json) — *Paste JSON into [Diagrammer](https://diagrammer.dev) for interactive view*
 
 *Student journey through 7 acts: Arrive → Orient → Believe → Witness → Choose → Place → Move. Scroll-triggered transitions, prefers-reduced-motion gating, campus pin interaction, video autoplay, filter changes, contact link clicks.*
 
 ### Interactive Campus Map — Data Flow
 
-![Campus Map Data Flow](docs/diagrams/map-dataflow.json)
+[View Campus Map Data Flow Diagram](docs/diagrams/map-dataflow.json) — *Paste JSON into [Diagrammer](https://diagrammer.dev) for interactive view*
 
 *MapLibre GL initialisation with custom style JSON (vector + raster sources), OpenFreeMap/Esri tile requests, 8 campus pins with pulse animation, layer toggle control, pin click → listing filter, cleanup on unmount.*
 
 ### Video Panel — Viewport-Aware Autoplay
 
-![Video Panel](docs/diagrams/video-panel.json)
+[View Video Panel Diagram](docs/diagrams/video-panel.json) — *Paste JSON into [Diagrammer](https://diagrammer.dev) for interactive view*
 
 *VideoPanel component: prefers-reduced-motion check → IntersectionObserver (threshold 0.25, rootMargin -10%) → autoplay on enter, pause on leave → user click toggles play/pause/unmute → cleanup on unmount.*
 
 ### Admin Dashboard — Route Guards & Data Loading
 
-![Admin Guards](docs/diagrams/admin-guards.json)
+[View Admin Guards Diagram](docs/diagrams/admin-guards.json) — *Paste JSON into [Diagrammer](https://diagrammer.dev) for interactive view*
 
 *TanStack Router loaders: SSR check → waitForUser (8s timeout) → Firebase auth state → admin email validation → guardedLoader with 6s Firestore timeout → graceful fallback on error → admin UI render.*
 
 ### Landlord Portal — Registration, Sign-In & Status Routing
 
-![Landlord Portal](docs/diagrams/landlord-portal.json)
+[View Landlord Portal Diagram](docs/diagrams/landlord-portal.json) — *Paste JSON into [Diagrammer](https://diagrammer.dev) for interactive view*
 
 *Firebase Auth registration with auth rollback on Firestore write failure → sign-in with parallel profile fetch (8s timeout) → profile state handling (ok/missing/unavailable) → status-based routing (pending/approved/rejected/suspended).*
 
 ### Entity Relationship Diagram — Prisma Schema
 
-![ER Diagram](docs/diagrams/er-diagram.json)
+[View ER Diagram](docs/diagrams/er-diagram.json) — *Paste JSON into [Diagrammer](https://diagrammer.dev) for interactive view*
 
 *Core models: User (Better Auth), LandlordProfile, Listing, Favorite, University, Hostel, HostelRoom, Apartment, Room, plus Better Auth tables (Session, Account, VerificationToken). Cardinalities shown.*
 
 ### Data Processing & Transfers — DPIA-Aligned
 
-![Data Processing](docs/diagrams/data-processing.json)
+[View Data Processing Diagram](docs/diagrams/data-processing.json) — *Paste JSON into [Diagrammer](https://diagrammer.dev) for interactive view*
 
 *Personal data flows per DPA 2019: student browsing (anonymous), contact links (external), landlord onboarding (off-platform), admin entry → build/deploy → Vercel/GitHub (US). Transfer assessment: non-personal data only, SCCs + supplementary measures.*
 
 ### Security Boundaries
 
-![Security Boundaries](docs/diagrams/security-boundaries.json)
+[View Security Boundaries Diagram](docs/diagrams/security-boundaries.json) — *Paste JSON into [Diagrammer](https://diagrammer.dev) for interactive view*
 
 *Defense-in-depth: HTTPS/TLS, CSP, Better Auth (bcrypt, CSRF), Prisma (SQL injection prevention), Firebase legacy rules, admin guards, env var separation, error sanitisation, zero tracking, self-hosted assets, 2FA on GitHub/Vercel.*
 
 ### International Transfer Assessment
 
-![Transfer Assessment](docs/diagrams/transfer-assessment.json)
+[View Transfer Assessment Diagram](docs/diagrams/transfer-assessment.json) — *Paste JSON into [Diagrammer](https://diagrammer.dev) for interactive view*
 
 *DPA 2019 Part VI compliance: transfers to Vercel (US), GitHub (US), Map CDNs (global). Data categories: public listings, sanitised logs, source code. US not adequate → SCCs (Vercel/GitHub DPAs) + supplementary measures (minimisation, encryption, access control, no sensitive data). Residual risk: LOW.*
 
