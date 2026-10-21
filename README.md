@@ -1,36 +1,107 @@
-﻿# UniHub
-
-Verified student housing platform for Kenyan university campuses.
-
+﻿<h1 align="center">UniHub</h1>
 <p align="center">
-  <a href="#quick-start"><img src="https://img.shields.io/badge/Quick_Start-4CAF50?style=for-the-badge&logo=rocket&logoColor=white" alt="Quick Start" /></a>
-  <a href="#architecture"><img src="https://img.shields.io/badge/Architecture-2196F3?style=for-the-badge&logo=diagram&logoColor=white" alt="Architecture" /></a>
-  <a href="#tech-stack"><img src="https://img.shields.io/badge/Tech_Stack-FF9800?style=for-the-badge&logo=layers&logoColor=white" alt="Tech Stack" /></a>
-  <a href="#deployment"><img src="https://img.shields.io/badge/Deploy-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Deploy to Vercel" /></a>
-  <a href="https://github.com/shadrackb1/unihub-landing-experience"><img src="https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub Repository" /></a>
-  <a href="#license--contact"><img src="https://img.shields.io/badge/License-Private-informational?style=for-the-badge" alt="License" /></a>
+  <strong>Verified student housing discovery platform for Kenyan university campuses</strong>
+  <br />
+  <em>TanStack Start · React 19 · Better Auth · Prisma · MapLibre GL · Vercel</em>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Node.js-20.x-339933?style=flat&logo=node.js&logoColor=white" alt="Node.js" />
-  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=typescript&logoColor=white" alt="TypeScript" />
-  <img src="https://img.shields.io/badge/React-19-61DAFB?style=flat&logo=react&logoColor=white" alt="React" />
-  <img src="https://img.shields.io/badge/Tailwind_CSS-v4-06B6D4?style=flat&logo=tailwindcss&logoColor=white" alt="Tailwind CSS" />
-  <img src="https://img.shields.io/badge/Vite-8-646CFF?style=flat&logo=vite&logoColor=white" alt="Vite" />
-  <img src="https://img.shields.io/badge/TanStack_Start-1.168-000000?style=flat&logo=tanstack&logoColor=white" alt="TanStack Start" />
-  <img src="https://img.shields.io/badge/Vercel-000000?style=flat&logo=vercel&logoColor=white" alt="Vercel" />
-  <img src="https://img.shields.io/badge/Prisma-7-2D3748?style=flat&logo=prisma&logoColor=white" alt="Prisma" />
-  <img src="https://img.shields.io/badge/Better_Auth-1.7-FF6B35?style=flat&logo=auth0&logoColor=white" alt="Better Auth" />
-  <img src="https://img.shields.io/badge/MapLibre_GL-5.24-FF6B00?style=flat&logo=maplibre&logoColor=white" alt="MapLibre GL" />
+  <a href="#quick-start"><img src="https://img.shields.io/badge/Quick_Start-4CAF50?style=for-the-badge&logo=rocket&logoColor=white" alt="Quick Start" /></a>
+  <a href="#license"><img src="https://img.shields.io/badge/License-Private-informational?style=for-the-badge" alt="License" /></a>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Claude_Code-D97757?style=flat&logo=claude&logoColor=white" alt="Claude Code" />
+  <img src="https://img.shields.io/badge/GitHub_Copilot-000000?style=flat&logo=github&logoColor=white" alt="GitHub Copilot" />
+  <img src="https://img.shields.io/badge/Cursor-000000?style=flat&logo=cursor&logoColor=white" alt="Cursor" />
+</p>
+
+<p align="center">
+  <a href="README.md">English</a>
 </p>
 
 ---
 
-## Architecture Diagrams (Mermaid - Rendered on GitHub)
+## Features
 
-### 1. System Architecture Overview
+| Feature | Description |
+|---|---|
+| Campus-Centric Discovery | Interactive MapLibre GL map with 8 Kenyan campus pins (Nairobi, Juja, Kahawa, Madaraka, Thika, Kesses, Njoro, Nakuru) |
+| Verified Listings Only | Property data manually verified off-platform before publication — no fake photos or scam listings |
+| Zero-Barrier Browsing | Students search and filter listings without accounts, cookies, or tracking |
+| Direct Contact Links | WhatsApp and email links open external apps — UniHub never intermediates communication |
+| 7-Act Homepage Funnel | Scroll-triggered narrative: Arrive → Orient → Believe → Witness → Choose → Place → Move |
+| Dual Auth Stack (Migration) | Better Auth (primary) for admin routes; Firebase Auth/Firestore (legacy) for landlord portal |
+| Viewport-Aware Video | IntersectionObserver autoplays videos at 25% visibility, respects `prefers-reduced-motion` |
+| Extreme Data Minimisation | Zero student personal data collected; landlord data gathered off-platform via WhatsApp |
+
+---
+
+## Quick Start
+
+### Prerequisites
+
+- Node.js 20.11.0 or higher
+- npm 10+
+
+### Install
+
+```bash
+git clone https://github.com/shadrackb1/unihub-landing-experience.git
+cd unihub-landing-experience
+npm install
+```
+
+### Configure
+
+```bash
+cp .env.example .env
+# Edit .env with your values (see Configuration section)
+```
+
+### Database Setup
+
+```bash
+# Generate Prisma client
+npx prisma generate
+
+# Run migrations (creates dev.db with schema)
+npx prisma migrate dev --name init
+
+# Seed test accounts (7 users across 5 roles)
+npm run db:seed
+```
+
+**Seeded test accounts:**
+
+| Role | Email | Password |
+|---|---|---|
+| Admin | admin@unihub.ke | TestAdmin2024! |
+| Landlord (Pending) | landlord.pending@unihub.ke | TestLandlord2024! |
+| Landlord (Approved) | landlord.approved@unihub.ke | TestLandlord2024! |
+| Landlord (Rejected) | landlord.rejected@unihub.ke | TestLandlord2024! |
+| Landlord (Suspended) | landlord.suspended@unihub.ke | TestLandlord2024! |
+| Student / Tenant | student@unihub.ke | TestStudent2024! |
+| University Admin | university@unihub.ke | TestUniversity2024! |
+
+> Change passwords after first login.
+
+### Run Development Server
+
+```bash
+npm run dev
+```
+
+Server starts at **http://localhost:5173** with HMR.
+
+---
+
+## Architecture
+
+### System Overview
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '14px'}}}%%
 flowchart TB
     subgraph Frontend["🌐 Frontend (Browser)"]
         React[React 19 + TanStack Router]
@@ -73,17 +144,18 @@ flowchart TB
     Vercel --> React
     GitHub --> Vercel
     
-    classDef primary fill:#4CAF50,color:#fff;
-    classDef legacy fill:#FF9800,color:#fff;
-    classDef external fill:#2196F3,color:#fff;
-    class BetterAuth,Prisma,SQLite primary;
-    class FirebaseAuth,Firestore legacy;
-    class Vercel,GitHub,TileProviders external;
+    classDef primary fill:#10B981,stroke:#059669,color:#fff,stroke-width:2px
+    classDef legacy fill:#F59E0B,stroke:#D97706,color:#fff,stroke-width:2px
+    classDef external fill:#3B82F6,stroke:#2563EB,color:#fff,stroke-width:2px
+    class BetterAuth,Prisma,SQLite primary
+    class FirebaseAuth,Firestore legacy
+    class Vercel,GitHub,TileProviders external
 ```
 
-### 2. Authentication Flow (Better Auth Primary + Firebase Legacy)
+### Authentication Flow (Better Auth Primary + Firebase Legacy)
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '14px'}}}%%
 flowchart TD
     Start([User visits /admin or /landlord]) --> Path{Route path?}
     
@@ -121,17 +193,126 @@ flowchart TD
     StatusRoute -->|rejected| Rejected[/landlord/rejected]
     StatusRoute -->|suspended| Suspended[/landlord/suspended]
     
-    classDef success fill:#4CAF50,color:#fff;
-    classDef warning fill:#FF9800,color:#fff;
-    classDef error fill:#F44336,color:#fff;
-    class AdminAccess,Dashboard success;
-    class DevAllow,Pending warning;
-    class RedirectLogin,RedirectHome,LandlordLogin,Rejected,Suspended,ErrorMsg error;
+    classDef success fill:#10B981,stroke:#059669,color:#fff,stroke-width:2px
+    classDef warning fill:#F59E0B,stroke:#D97706,color:#fff,stroke-width:2px
+    classDef error fill:#F43F5E,stroke:#E11D48,color:#fff,stroke-width:2px
+    class AdminAccess,Dashboard success
+    class DevAllow,Pending warning
+    class RedirectLogin,RedirectHome,LandlordLogin,Rejected,Suspended,ErrorMsg error
 ```
 
-### 3. Data Flow - Static Listings to Browser
+### 7-Act Funnel — Homepage Experience
 
 ```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '14px'}}}%%
+flowchart TD
+    Entry([Student Lands]) --> Act1[Act 1: ARRIVE<br/>Hero Video + Headline]
+    Act1 --> Scroll1{Scroll/IO}
+    Scroll1 --> Act2[Act 2: ORIENT<br/>Campus Map + Pins]
+    Act2 --> Scroll2{Scroll/IO}
+    Scroll2 --> Act3[Act 3: BELIEVE<br/>Trust Signals]
+    Act3 --> Scroll3{Scroll/IO}
+    Scroll3 --> Act4[Act 4: WITNESS<br/>Video Gallery]
+    Act4 --> Scroll4{Scroll/IO}
+    Scroll4 --> Act5[Act 5: CHOOSE<br/>Listing Grid + Filters]
+    Act5 --> Scroll5{Scroll/IO}
+    Scroll5 --> Act6[Act 6: PLACE<br/>Listing Detail]
+    Act6 --> Scroll6{Scroll/IO}
+    Scroll6 --> Act7[Act 7: MOVE<br/>Contact Links]
+    
+    Act2 --> PinClick[Click Pin → Filter]
+    Act4 --> VideoAuto[Video Autoplay 25%]
+    Act5 --> FilterChange[Instant Filter]
+    Act7 --> ContactClick[Click → External]
+    ContactClick --> Exit([In Conversation])
+    
+    Motion{prefers-reduced-motion?}
+    Motion -->|Yes| Static[Static Layout]
+    Motion -->|No| Animated[Staggered Animations]
+    
+    classDef act fill:#E8F5E9,stroke:#2E7D32,color:#1B5E20,stroke-width:2px
+    classDef decision fill:#FFF3E0,stroke:#F57F17,color:#E65100,stroke-width:2px
+    classDef external fill:#F3E5F5,stroke:#7B1FA2,color:#4A148C,stroke-width:2px
+    class Act1,Act2,Act3,Act4,Act5,Act6,Act7 act
+    class Scroll1,Scroll2,Scroll3,Scroll4,Scroll5,Scroll6,Motion decision
+    class Static,Animated,PinClick,VideoAuto,FilterChange,ContactClick,Exit external
+```
+
+### Campus Map Data Flow — MapLibre GL
+
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '14px'}}}%%
+flowchart TB
+    Mount[Component Mount] --> Init[new maplibregl.Map]
+    Init --> Style[Custom Style JSON]
+    
+    Style --> VectorSource[Vector Source: OpenFreeMap]
+    Style --> RasterSource[Raster Source: Esri]
+    
+    VectorSource --> TileRequest[Tile Requests]
+    RasterSource --> TileRequest
+    TileRequest --> TileCDN[Tile CDNs]
+    
+    Init --> LayerToggle[Layer Toggle Control]
+    LayerToggle --> Style
+    
+    CampusData[Campus Data 8 pins] --> AddMarkers[Add Markers]
+    AddMarkers --> Init
+    AddMarkers --> PinClick{Pin Click?}
+    PinClick -->|Yes| FilterListings[Filter by Campus]
+    PinClick -->|No| Rendered[Map Rendered]
+    
+    TileCDN -.-> Rendered
+    Rendered --> Cleanup[Cleanup on Unmount]
+    
+    classDef process fill:#E3F2FD,stroke:#1976D2,color:#0D47A1,stroke-width:2px
+    classDef external fill:#F3E5F5,stroke:#7B1FA2,color:#4A148C,stroke-width:2px
+    classDef interactive fill:#E8F5E9,stroke:#2E7D32,color:#1B5E20,stroke-width:2px
+    class Mount,Init,Style,VectorSource,RasterSource,TileRequest,AddMarkers,LayerToggle process
+    class TileCDN,CampusData external
+    class PinClick,FilterListings,Rendered interactive
+```
+
+### Video Panel — Viewport-Aware Autoplay
+
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '14px'}}}%%
+flowchart TD
+    Mount[VideoPanel Mounts] --> ReducedMotion{prefers-reduced-motion?}
+    
+    ReducedMotion -->|Yes| PosterOnly[Show Poster + Play Button]
+    ReducedMotion -->|No| CreateObserver[IntersectionObserver<br/>threshold: 0.25<br/>rootMargin: 0px 0px -10% 0px]
+    
+    CreateObserver --> Observe[Observe Video Element]
+    Observe --> Intersection{Ratio ≥ 0.25?}
+    
+    Intersection -->|Entering| Autoplay[video.play<br/>muted, playsInline]
+    Intersection -->|Leaving| Pause[video.pause]
+    
+    Autoplay --> UserClick{User Clicks?}
+    Pause --> UserClick
+    PosterOnly --> UserClick
+    
+    UserClick -->|Play| Autoplay
+    UserClick -->|Pause| Pause
+    UserClick -->|Unmute| Unmute[video.muted = false]
+    
+    Mount -.-> Cleanup[observer.disconnect]
+    
+    classDef autoplay fill:#10B981,stroke:#059669,color:#fff,stroke-width:2px
+    classDef pause fill:#F59E0B,stroke:#D97706,color:#fff,stroke-width:2px
+    classDef user fill:#3B82F6,stroke:#2563EB,color:#fff,stroke-width:2px
+    classDef check fill:#FFF3E0,stroke:#F57F17,color:#E65100,stroke-width:2px
+    class Autoplay,Unmute autoplay
+    class Pause pause
+    class UserClick user
+    class ReducedMotion,Intersection check
+```
+
+### Data Flow — Static Listings to Browser
+
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '14px'}}}%%
 flowchart LR
     subgraph Source["📁 Source Files"]
         ListingsTS[src/data/listings.ts]
@@ -181,265 +362,137 @@ flowchart LR
     VideoPanel --> Assets[Static Assets]
     VideoPanel --> Video
     
-    classDef source fill:#E3F2FD;
-    classDef build fill:#FFF3E0;
-    classDef comp fill:#E8F5E9;
-    classDef browser fill:#F3E5F5;
-    class ListingsTS,ClipsTS,CampusesTS source;
-    class StaticImport build;
-    class ListingGrid,FilterSort,ListingCard,ContactLinks,CampusMap,MapLibre,VideoPanel comp;
-    class Grid,Map,Video,External browser;
+    classDef source fill:#E3F2FD,stroke:#1976D2,color:#0D47A1,stroke-width:2px
+    classDef build fill:#FFF3E0,stroke:#F57F17,color:#E65100,stroke-width:2px
+    classDef comp fill:#E8F5E9,stroke:#2E7D32,color:#1B5E20,stroke-width:2px
+    classDef browser fill:#F3E5F5,stroke:#7B1FA2,color:#4A148C,stroke-width:2px
+    class ListingsTS,ClipsTS,CampusesTS source
+    class StaticImport build
+    class ListingGrid,FilterSort,ListingCard,ContactLinks,CampusMap,MapLibre,VideoPanel comp
+    class Grid,Map,Video,External browser
 ```
 
-### 4. Deployment Pipeline - GitHub to Vercel
+### Entity Relationship Diagram — Prisma Schema
 
 ```mermaid
-flowchart TD
-    Dev[💻 Local Dev] --> Commit[git commit + push]
-    Commit --> GitHub[(GitHub Repo)]
-    GitHub --> Webhook[Vercel Webhook]
-    Webhook --> Install[npm install]
-    Install --> PrismaGen[npx prisma generate]
-    PrismaGen --> Build[npm run build]
+%%{init: {'theme': 'base', 'themeVariables': {'fontSize': '13px'}}}%%
+erDiagram
+    USER {
+        string id PK
+        string email UK
+        string name
+        string passwordHash
+        string role
+        string emailVerified
+        string image
+        datetime createdAt
+        datetime updatedAt
+    }
+    LANDLORD_PROFILE {
+        string id PK
+        string userId FK
+        string businessName
+        string contactPhone
+        string contactEmail
+        string status
+        string idNumber
+        string verificationNotes
+        datetime createdAt
+        datetime updatedAt
+    }
+    LISTING {
+        string id PK
+        string landlordId FK
+        string title
+        string location
+        string category
+        int price
+        int deposit
+        string description
+        json images
+        json amenities
+        string campusId FK
+        boolean isActive
+        datetime createdAt
+        datetime updatedAt
+    }
+    CAMPUS {
+        string id PK
+        string name
+        string location
+        float latitude
+        float longitude
+        string university
+    }
+    SESSION {
+        string id PK
+        string userId FK
+        string token UK
+        datetime expiresAt
+        datetime createdAt
+        datetime updatedAt
+    }
+    ACCOUNT {
+        string id PK
+        string userId FK
+        string providerId
+        string accountId
+        string accessToken
+        string refreshToken
+        string idToken
+        string scope
+        datetime createdAt
+        datetime updatedAt
+    }
+    VERIFICATION_TOKEN {
+        string identifier
+        string token UK
+        datetime expiresAt
+    }
     
-    Build --> TypeCheck{TypeScript OK?}
-    TypeCheck -->|No| Fail[❌ Build Failed]
-    TypeCheck -->|Yes| Lint{ESLint Pass?}
-    Lint -->|No| Fail
-    Lint -->|Yes| Preview[🔗 Preview Deploy]
+    USER ||--o{ LANDLORD_PROFILE : "has"
+    USER ||--o{ LISTING : "owns"
+    USER ||--o{ SESSION : "has"
+    USER ||--o{ ACCOUNT : "has"
+    LANDLORD_PROFILE ||--o{ LISTING : "publishes"
+    CAMPUS ||--o{ LISTING : "located_at"
     
-    Preview --> MainBranch{main branch?}
-    MainBranch -->|No| PreviewDone[Preview URL]
-    MainBranch -->|Yes| Production[🚀 Production Deploy]
+    classDef entity fill:#3B82F6,stroke:#2563EB,color:#fff,stroke-width:2px
+    classDef auth fill:#F97316,stroke:#EA580C,color:#fff,stroke-width:2px
     
-    Production --> VercelURL[https://unihub.ke]
-    
-    VercelConfig[vercel.json config] -.-> Build
-    EnvVars[Env Variables] -.-> Build
-    
-    classDef success fill:#4CAF50,color:#fff;
-    classDef fail fill:#F44336,color:#fff;
-    classDef process fill:#E3F2FD;
-    class VercelURL,Production,PreviewDone success;
-    class Fail fail;
-    class Dev,Commit,GitHub,Webhook,Install,PrismaGen,Build,Preview,PreviewDone process;
-```
-
-### 5. 7-Act Funnel - Homepage Experience
-
-```mermaid
-flowchart TD
-    Entry([Student Lands]) --> Act1[Act 1: ARRIVE\nHero Video + Headline]
-    Act1 --> Scroll1{Scroll/IO}
-    Scroll1 --> Act2[Act 2: ORIENT\nCampus Map + Pins]
-    Act2 --> Scroll2{Scroll/IO}
-    Scroll2 --> Act3[Act 3: BELIEVE\nTrust Signals]
-    Act3 --> Scroll3{Scroll/IO}
-    Scroll3 --> Act4[Act 4: WITNESS\nVideo Gallery]
-    Act4 --> Scroll4{Scroll/IO}
-    Scroll4 --> Act5[Act 5: CHOOSE\nListing Grid + Filters]
-    Act5 --> Scroll5{Scroll/IO}
-    Scroll5 --> Act6[Act 6: PLACE\nListing Detail]
-    Act6 --> Scroll6{Scroll/IO}
-    Scroll6 --> Act7[Act 7: MOVE\nContact Links]
-    
-    Act2 --> PinClick[Click Pin → Filter]
-    Act4 --> VideoAuto[Video Autoplay 25%]
-    Act5 --> FilterChange[Instant Filter]
-    Act7 --> ContactClick[Click → External]
-    ContactClick --> Exit([In Conversation])
-    
-    Motion{prefers-reduced-motion?}
-    Motion -->|Yes| Static[Static Layout]
-    Motion -->|No| Animated[Staggered Animations]
-    
-    classDef act fill:#E8F5E9;
-    classDef decision fill:#FFF3E0;
-    classDef external fill:#F3E5F5;
-    class Act1,Act2,Act3,Act4,Act5,Act6,Act7 act;
-    class Scroll1,Scroll2,Scroll3,Scroll4,Scroll5,Scroll6,Motion decision;
-    class Static,Animated,PinClick,VideoAuto,FilterChange,ContactClick,Exit external;
-```
-
-### 6. Campus Map Data Flow - MapLibre GL
-
-```mermaid
-flowchart TB
-    Mount[Component Mount] --> Init[new maplibregl.Map]
-    Init --> Style[Custom Style JSON]
-    
-    Style --> VectorSource[Vector Source: OpenFreeMap]
-    Style --> RasterSource[Raster Source: Esri]
-    
-    VectorSource --> TileRequest[Tile Requests]
-    RasterSource --> TileRequest
-    TileRequest --> TileCDN[Tile CDNs]
-    
-    Init --> LayerToggle[Layer Toggle Control]
-    LayerToggle --> Style
-    
-    CampusData[Campus Data 8 pins] --> AddMarkers[Add Markers]
-    AddMarkers --> Init
-    AddMarkers --> PinClick{Pin Click?}
-    PinClick -->|Yes| FilterListings[Filter by Campus]
-    PinClick -->|No| Rendered[Map Rendered]
-    
-    TileCDN -.-> Rendered
-    Rendered --> Cleanup[Cleanup on Unmount]
-    
-    classDef process fill:#E3F2FD;
-    classDef external fill:#F3E5F5;
-    classDef interactive fill:#E8F5E9;
-    class Mount,Init,Style,VectorSource,RasterSource,TileRequest,AddMarkers,LayerToggle process;
-    class TileCDN,CampusData external;
-    class PinClick,FilterListings,Rendered interactive;
-```
-
-### 7. Video Panel - Viewport-Aware Autoplay
-
-```mermaid
-flowchart TD
-    Mount[VideoPanel Mounts] --> ReducedMotion{prefers-reduced-motion?}
-    
-    ReducedMotion -->|Yes| PosterOnly[Show Poster + Play Button]
-    ReducedMotion -->|No| CreateObserver[IntersectionObserver\nthreshold: 0.25\nrootMargin: 0px 0px -10% 0px]
-    
-    CreateObserver --> Observe[Observe Video Element]
-    Observe --> Intersection{Ratio ≥ 0.25?}
-    
-    Intersection -->|Entering| Autoplay[video.play\nmuted, playsInline]
-    Intersection -->|Leaving| Pause[video.pause]
-    
-    Autoplay --> UserClick{User Clicks?}
-    Pause --> UserClick
-    PosterOnly --> UserClick
-    
-    UserClick -->|Play| Autoplay
-    UserClick -->|Pause| Pause
-    UserClick -->|Unmute| Unmute[video.muted = false]
-    
-    Mount -.-> Cleanup[observer.disconnect]
-    
-    classDef autoplay fill:#4CAF50,color:#fff;
-    classDef pause fill:#FF9800,color:#fff;
-    classDef user fill:#2196F3,color:#fff;
-    classDef check fill:#FFF3E0;
-    class Autoplay,Unmute autoplay;
-    class Pause pause;
-    class UserClick user;
-    class ReducedMotion,Intersection check;
+    class USER,LANDLORD_PROFILE,LISTING,CAMPUS entity
+    class SESSION,ACCOUNT,VERIFICATION_TOKEN auth
 ```
 
 ---
 
-## Architecture Diagrams (Images)
+## Configuration
 
-### System Architecture Diagram 1
-<p align="center">
-  <img src="docs/architecture-1.png" alt="System Architecture Diagram 1" width="800" />
-</p>
+### Environment Variables
 
-### System Architecture Diagram 2
-<p align="center">
-  <img src="docs/architecture-2.png" alt="System Architecture Diagram 2" width="800" />
-</p>
+| Variable | Description | Default | Required |
+|---|---|---|---|
+| `DATABASE_URL` | SQLite database file path | `file:./dev.db` | Yes |
+| `BETTER_AUTH_SECRET` | 64-char secret for session encryption | — | Yes |
+| `BETTER_AUTH_URL` | Auth callback base URL | `http://localhost:5173` | Yes |
+| `VITE_APP_URL` | Frontend application URL | `http://localhost:5173` | Yes |
+| `VITE_WHATSAPP_NUMBER` | Default WhatsApp number for listings | `254700000000` | No |
+| `VITE_ADMIN_EMAILS` | Comma-separated admin emails | — | No |
 
----
-
-## Quick Start
-
-### Prerequisites
-
-- Node.js 20.11.0 or higher
-- npm 10+
-
-### Install
-
+Generate `BETTER_AUTH_SECRET`:
 ```bash
-git clone https://github.com/shadrackb1/unihub-landing-experience.git
-cd unihub-landing-experience
-npm install
+openssl rand -base64 32
 ```
 
-### Environment
+### Key Files
 
-Copy `.env.example` to `.env` and fill in values:
-
-```bash
-cp .env.example .env
-```
-
-Required variables:
-
-```env
-# Database (SQLite file)
-DATABASE_URL="file:./dev.db"
-
-# Better Auth (generate with: openssl rand -base64 32)
-BETTER_AUTH_SECRET="your-64-char-secret"
-BETTER_AUTH_URL="http://localhost:5173"
-
-# App
-VITE_APP_URL="http://localhost:5173"
-VITE_WHATSAPP_NUMBER="254700000000"
-VITE_ADMIN_EMAILS="admin@unihub.ke"
-```
-
-### Database Setup
-
-```bash
-# Generate Prisma client
-npx prisma generate
-
-# Run migrations (creates dev.db with schema)
-npx prisma migrate dev --name init
-
-# Seed test accounts (7 users across 5 roles)
-npm run db:seed
-```
-
-Seeded test accounts:
-
-| Role | Email | Password |
-|------|-------|----------|
-| Admin | admin@unihub.ke | TestAdmin2024! |
-| Landlord (Pending) | landlord.pending@unihub.ke | TestLandlord2024! |
-| Landlord (Approved) | landlord.approved@unihub.ke | TestLandlord2024! |
-| Landlord (Rejected) | landlord.rejected@unihub.ke | TestLandlord2024! |
-| Landlord (Suspended) | landlord.suspended@unihub.ke | TestLandlord2024! |
-| Student / Tenant | student@unihub.ke | TestStudent2024! |
-| University Admin | university@unihub.ke | TestUniversity2024! |
-
-> Change passwords after first login.
-
-### Run Development Server
-
-```bash
-npm run dev
-```
-
-Server starts at **http://localhost:5173** with HMR.
-
----
-
-## Key Commands
-
-```bash
-# Development
-npm run dev              # Start dev server
-npm run build            # Production build
-npm run preview          # Preview production build
-
-# Database
-npx prisma generate      # Generate Prisma client
-npx prisma migrate dev   # Run migrations
-npx prisma studio        # Open Prisma Studio (GUI)
-npm run db:seed          # Seed test accounts
-
-# Code Quality
-npm run lint             # ESLint
-npm run format           # Prettier
-```
+| File | Purpose |
+|---|---|
+| `.env.example` | Template for environment variables |
+| `prisma/schema.prisma` | Database schema (SQLite) |
+| `vercel.json` | Vercel deployment config (iad1 region) |
+| `tsconfig.json` | TypeScript config with path aliases |
+| `vite.config.ts` | Vite + TanStack Start config |
 
 ---
 
@@ -455,17 +508,15 @@ unihub-landing-experience/
 │   ├── assets/                   # Local MP4 videos & images
 │   ├── components/               # Shared UI components
 │   │   └── ui/                   # Reusable primitives (buttons, cards, dialogs)
-│   ├── data/                     # Static data (listings, residence clips)
+│   ├── data/                     # Static data (listings, residence clips, campuses)
 │   ├── features/                 # Feature-based modules
 │   │   ├── admin/                # Admin dashboard & guards
 │   │   │   ├── components/       # Admin UI components
+│   │   │   ├── pages/            # Admin pages
 │   │   │   ├── routes/           # Admin routes (TanStack Router)
 │   │   │   └── requireAdmin.ts   # Auth guard for admin routes
 │   │   ├── auth/                 # Auth routes (login, register)
-│   │   │   ├── components/
-│   │   │   └── routes/
 │   │   ├── campus/               # Campus map & data
-│   │   │   └── components/
 │   │   ├── landlord/             # Landlord portal
 │   │   │   ├── components/
 │   │   │   ├── pages/
@@ -475,54 +526,32 @@ unihub-landing-experience/
 │   │   │   ├── components/       # ListingGrid
 │   │   │   ├── hooks/            # useListings
 │   │   │   └── routes/
-│   │   ├── marketplace/          # Properties marketplace
+│   │   ├── marketplace/          # AI description assistant
 │   │   └── residence/            # Hostels, apartments, rooms
-│   │       └── components/       # ResidenceVideoGallery, CoolVideoCard
 │   ├── hooks/                    # Shared hooks
-│   │   └── use-mobile.tsx
 │   ├── lib/                      # Core utilities
 │   │   ├── auth/                 # Better Auth server config
-│   │   │   └── index.ts
 │   │   ├── auth-client.ts        # Better Auth React client
 │   │   ├── utils.ts              # cn() tailwind merge
 │   │   └── withTimeout.ts        # Promise timeout utility
 │   ├── routes/                   # File-based TanStack Router (legacy paths)
-│   │   ├── __root.tsx            # Root layout (HTML, Head, Meta)
-│   │   ├── index.tsx             # Homepage (7-Act funnel)
-│   │   ├── listings.tsx          # Browse listings (legacy route)
-│   │   ├── about.tsx
-│   │   ├── contact.tsx
-│   │   ├── list-property.tsx
-│   │   ├── privacy.tsx
-│   │   └── terms.tsx
+│   ├── shared/
+│   │   ├── components/           # Experience, VideoPanel, MarketingChrome
+│   │   ├── context/              # AuthContext, LandlordContext
+│   │   ├── hooks/                # useOnlineRefresh, useSiteSettings
+│   │   ├── lib/                  # Firebase config (legacy)
+│   │   ├── services/             # Firestore CRUD (legacy)
+│   │   └── contact.ts            # WhatsApp/email constants
 │   ├── server.ts                 # Nitro server entrypoint
 │   ├── start.ts                  # TanStack Start handler
 │   ├── styles.css                # OKLCH design tokens + Tailwind v4
-│   ├── router.tsx                # Router instance
-│   └── shared/
-│       ├── components/           # Shared components
-│       │   ├── Experience.tsx    # Journey timeline & act navigation
-│       │   ├── LetterReveal.tsx
-│       │   ├── MarketingChrome.tsx  # Header, Footer, MarketingShell
-│       │   ├── SupportLink.tsx
-│       │   └── VideoPanel.tsx    # Viewport-aware autoplay video
-│       ├── context/              # React contexts
-│       │   ├── AuthContext.tsx   # Better Auth state & methods
-│       │   └── LandlordContext.tsx
-│       ├── hooks/                # Shared hooks
-│       │   ├── useOnlineRefresh.ts
-│       │   └── useSiteSettings.ts
-│       ├── lib/                  # Shared lib
-│       │   └── firebase.ts       # Firebase config (legacy)
-│       ├── services/             # Shared services
-│       │   └── firestore.ts      # Legacy Firestore CRUD
-│       └── contact.ts            # WhatsApp/email constants
+│   └── router.tsx                # Router instance
 ├── prisma/
 │   ├── schema.prisma             # Prisma data model (SQLite)
 │   ├── migrations/               # Migration history
 │   └── seed.ts                   # TypeScript seeder
-├── scripts/                      # Utility scripts
-├── docs/                         # Architecture diagrams
+├── scripts/                      # Utility scripts (DPIA, consent PDFs)
+├── docs/                         # Architecture diagrams (JSON + PNG + SVG)
 ├── AGENT_ONBOARDING.md           # AI agent setup guide
 ├── package.json
 ├── tsconfig.json
@@ -533,166 +562,43 @@ unihub-landing-experience/
 
 ---
 
-## Developer Navigation Guide
-
-| Task | File / Directory |
-|------|------------------|
-| Add a new page | `src/routes/` or `src/features/*/routes/` |
-| Add API endpoint | `src/routes/api/` |
-| Modify auth | `src/lib/auth/index.ts` |
-| Modify DB schema | `prisma/schema.prisma` |
-| Change UI tokens | `src/styles.css` (OKLCH colors, spacing) |
-| Add test account | `prisma/seed.ts` → `TEST_ACCOUNTS` array |
-| Debug landlord flow | `src/features/landlord/` |
-| Debug admin guard | `src/features/admin/requireAdmin.ts` |
-| Shared timeout utility | `src/shared/lib/withTimeout.ts` |
-| Static listing data | `src/data/listings.ts` |
-| Residence video clips | `src/data/residenceClips.ts` |
-
----
-
-## Architecture
-
-<p align="center">
-  <a href="docs/diagrams/system-overview.json"><img src="https://img.shields.io/badge/View-System_Overview-2196F3?style=for-the-badge&logo=diagram&logoColor=white" alt="System Overview" /></a>
-  <a href="docs/diagrams/auth-flow.json"><img src="https://img.shields.io/badge/View-Auth_Flow-4CAF50?style=for-the-badge&logo=shield&logoColor=white" alt="Auth Flow" /></a>
-  <a href="docs/diagrams/data-flow.json"><img src="https://img.shields.io/badge/View-Data_Flow-FF9800?style=for-the-badge&logo=database&logoColor=white" alt="Data Flow" /></a>
-  <a href="docs/diagrams/deployment-pipeline.json"><img src="https://img.shields.io/badge/View-Deployment_Pipeline-9C27B0?style=for-the-badge&logo=rocket&logoColor=white" alt="Deployment Pipeline" /></a>
-  <a href="docs/diagrams/funnel-flow.json"><img src="https://img.shields.io/badge/View-7_Act_Funnel-EC4899?style=for-the-badge&logo=chart&logoColor=white" alt="7-Act Funnel" /></a>
-  <a href="docs/diagrams/map-dataflow.json"><img src="https://img.shields.io/badge/View-Campus_Map_Flow-06B6D4?style=for-the-badge&logo=map&logoColor=white" alt="Campus Map Flow" /></a>
-  <a href="docs/diagrams/video-panel.json"><img src="https://img.shields.io/badge/View-Video_Panel-9C27B0?style=for-the-badge&logo=video&logoColor=white" alt="Video Panel" /></a>
-  <a href="docs/diagrams/admin-guards.json"><img src="https://img.shields.io/badge/View-Admin_Guards-607D8B?style=for-the-badge&logo=security&logoColor=white" alt="Admin Guards" /></a>
-  <a href="docs/diagrams/landlord-portal.json"><img src="https://img.shields.io/badge/View-Landlord_Portal-FF5722?style=for-the-badge&logo=home&logoColor=white" alt="Landlord Portal" /></a>
-  <a href="docs/diagrams/er-diagram.json"><img src="https://img.shields.io/badge/View-ER_Diagram-3F51B5?style=for-the-badge&logo=data&logoColor=white" alt="ER Diagram" /></a>
-  <a href="docs/diagrams/data-processing.json"><img src="https://img.shields.io/badge/View-Data_Processing-009688?style=for-the-badge&logo=privacy&logoColor=white" alt="Data Processing" /></a>
-  <a href="docs/diagrams/security-boundaries.json"><img src="https://img.shields.io/badge/View-Security_Boundaries-F44336?style=for-the-badge&logo=lock&logoColor=white" alt="Security Boundaries" /></a>
-  <a href="docs/diagrams/transfer-assessment.json"><img src="https://img.shields.io/badge/View-Transfer_Assessment-795548?style=for-the-badge&logo=globe&logoColor=white" alt="Transfer Assessment" /></a>
-</p>
-
-### System Overview
-
-[View System Overview Diagram](docs/diagrams/system-overview.json) — *Paste JSON into [Diagrammer](https://diagrammer.dev) for interactive view*
-
-*High-level component architecture showing frontend (TanStack Start, React 19), backend (Better Auth, Prisma, SQLite), legacy Firebase stack, MapLibre GL, and external services (Vercel, GitHub, Tile Providers).*
-
-### Authentication Flow — Better Auth (Primary) + Firebase (Legacy)
-
-[View Auth Flow Diagram](docs/diagrams/auth-flow.json) — *Paste JSON into [Diagrammer](https://diagrammer.dev) for interactive view*
-
-*Dual auth stack during mid-migration: Better Auth for admin routes with requireAdmin guard, Firebase Auth/Firestore for legacy landlord portal. Shows session validation, admin email checks, Firestore profile fetch, and status-based routing.*
-
-### Data Flow — Static Listings to Browser
-
-[View Data Flow Diagram](docs/diagrams/data-flow.json) — *Paste JSON into [Diagrammer](https://diagrammer.dev) for interactive view*
-
-*How listing data flows from static TypeScript files (listings.ts, residenceClips.ts, campuses.ts) through TanStack Start components (ListingGrid, CampusMap, VideoPanel) to student browser. All filtering/sorting client-side; contact links open external apps.*
-
-### Deployment Pipeline — GitHub to Vercel
-
-[View Deployment Pipeline Diagram](docs/diagrams/deployment-pipeline.json) — *Paste JSON into [Diagrammer](https://diagrammer.dev) for interactive view*
-
-*CI/CD flow: local dev → git push → GitHub webhook → Vercel build (prisma generate, type-check, lint) → preview deployment → production deployment (main branch). Configured via vercel.json with iad1 region.*
-
-### 7-Act Funnel — Homepage Experience
-
-[View 7-Act Funnel Diagram](docs/diagrams/funnel-flow.json) — *Paste JSON into [Diagrammer](https://diagrammer.dev) for interactive view*
-
-*Student journey through 7 acts: Arrive → Orient → Believe → Witness → Choose → Place → Move. Scroll-triggered transitions, prefers-reduced-motion gating, campus pin interaction, video autoplay, filter changes, contact link clicks.*
-
-### Interactive Campus Map — Data Flow
-
-[View Campus Map Data Flow Diagram](docs/diagrams/map-dataflow.json) — *Paste JSON into [Diagrammer](https://diagrammer.dev) for interactive view*
-
-*MapLibre GL initialisation with custom style JSON (vector + raster sources), OpenFreeMap/Esri tile requests, 8 campus pins with pulse animation, layer toggle control, pin click → listing filter, cleanup on unmount.*
-
-### Video Panel — Viewport-Aware Autoplay
-
-[View Video Panel Diagram](docs/diagrams/video-panel.json) — *Paste JSON into [Diagrammer](https://diagrammer.dev) for interactive view*
-
-*VideoPanel component: prefers-reduced-motion check → IntersectionObserver (threshold 0.25, rootMargin -10%) → autoplay on enter, pause on leave → user click toggles play/pause/unmute → cleanup on unmount.*
-
-### Admin Dashboard — Route Guards & Data Loading
-
-[View Admin Guards Diagram](docs/diagrams/admin-guards.json) — *Paste JSON into [Diagrammer](https://diagrammer.dev) for interactive view*
-
-*TanStack Router loaders: SSR check → waitForUser (8s timeout) → Firebase auth state → admin email validation → guardedLoader with 6s Firestore timeout → graceful fallback on error → admin UI render.*
-
-### Landlord Portal — Registration, Sign-In & Status Routing
-
-[View Landlord Portal Diagram](docs/diagrams/landlord-portal.json) — *Paste JSON into [Diagrammer](https://diagrammer.dev) for interactive view*
-
-*Firebase Auth registration with auth rollback on Firestore write failure → sign-in with parallel profile fetch (8s timeout) → profile state handling (ok/missing/unavailable) → status-based routing (pending/approved/rejected/suspended).*
-
-### Entity Relationship Diagram — Prisma Schema
-
-[View ER Diagram](docs/diagrams/er-diagram.json) — *Paste JSON into [Diagrammer](https://diagrammer.dev) for interactive view*
-
-*Core models: User (Better Auth), LandlordProfile, Listing, Favorite, University, Hostel, HostelRoom, Apartment, Room, plus Better Auth tables (Session, Account, VerificationToken). Cardinalities shown.*
-
-### Data Processing & Transfers — DPIA-Aligned
-
-[View Data Processing Diagram](docs/diagrams/data-processing.json) — *Paste JSON into [Diagrammer](https://diagrammer.dev) for interactive view*
-
-*Personal data flows per DPA 2019: student browsing (anonymous), contact links (external), landlord onboarding (off-platform), admin entry → build/deploy → Vercel/GitHub (US). Transfer assessment: non-personal data only, SCCs + supplementary measures.*
-
-### Security Boundaries
-
-[View Security Boundaries Diagram](docs/diagrams/security-boundaries.json) — *Paste JSON into [Diagrammer](https://diagrammer.dev) for interactive view*
-
-*Defense-in-depth: HTTPS/TLS, CSP, Better Auth (bcrypt, CSRF), Prisma (SQL injection prevention), Firebase legacy rules, admin guards, env var separation, error sanitisation, zero tracking, self-hosted assets, 2FA on GitHub/Vercel.*
-
-### International Transfer Assessment
-
-[View Transfer Assessment Diagram](docs/diagrams/transfer-assessment.json) — *Paste JSON into [Diagrammer](https://diagrammer.dev) for interactive view*
-
-*DPA 2019 Part VI compliance: transfers to Vercel (US), GitHub (US), Map CDNs (global). Data categories: public listings, sanitised logs, source code. US not adequate → SCCs (Vercel/GitHub DPAs) + supplementary measures (minimisation, encryption, access control, no sensitive data). Residual risk: LOW.*
-
-### Routing
-
-- **TanStack Router** file-based: `src/routes/` (legacy) + `src/features/*/routes/` (new)
-- Route tree generated at `src/routeTree.gen.ts`
-- Server functions via `createServerFn` in `src/start.ts`
-
-### Data
-
-- **Prisma 7** with `@prisma/adapter-libsql` (SQLite driver)
-- Generated client at `node_modules/.prisma/client/client`
-- Run via `tsx` for scripts (`npx tsx scripts/...`)
-
----
-
 ## Tech Stack
 
 ### Frontend
 
 | Technology | Purpose | Version |
-|------------|---------|---------|
+|---|---|---|
 | TanStack Start | Full-stack React framework with SSR | 1.168 |
 | React | UI library | 19 |
 | TypeScript | Type-safe development | 5.8 |
 | Tailwind CSS | Utility-first styling with OKLCH tokens | v4 |
+| TanStack Router | File-based routing | 1.170 |
 | MapLibre GL | Interactive campus map (no API keys) | 5.24 |
 | Radix UI | Accessible UI primitives | 1.1-1.2 |
 | Lucide Icons | Icon system | 0.575 |
 | Motion | Animations | 14.0 |
+| React Hook Form | Form handling | 7.71 |
+| Zod | Schema validation | 3.25 |
 
 ### Authentication & Database
 
 | Technology | Purpose | Version |
-|------------|---------|---------|
+|---|---|---|
 | Better Auth | Modern auth (email/password, admin plugin) | 1.7 |
 | Prisma ORM | Type-safe database access (SQLite) | 7.10 |
 | @prisma/adapter-libsql | Driver adapter for SQLite | 7.10 |
+| Firebase Auth | Legacy landlord portal auth | 13.0 |
+| Firestore | Legacy landlord portal database | 13.0 |
 
 ### Build & Infrastructure
 
 | Technology | Purpose | Version |
-|------------|---------|---------|
+|---|---|---|
 | Vite | Build tool and dev server | 8.1 |
 | Nitro | Server output and deployment preset | 3.0 |
-| TanStack Router | File-based routing | 1.170 |
 | Vercel | Hosting and deployment | — |
 | ESLint + Prettier | Code quality and formatting | 9.32 / 3.7 |
+| tsx | TypeScript execution for scripts | 4.23 |
 
 ---
 
@@ -724,14 +630,14 @@ Deploy steps:
 1. Import `shadrackb1/unihub-landing-experience` into Vercel
 2. Set Node.js runtime to `20.x`
 3. Confirm build command and output directory
-4. Deploy (no env vars or map API keys required)
+4. Deploy (no env vars or map API keys required for core features)
 
 ---
 
 ## Architecture Diagrams (All in `/docs/diagrams`)
 
 | Diagram | Description | Format |
-|---------|-------------|--------|
+|---|---|---|
 | `system-overview.json` | High-level system component architecture | JSON (Diagrammer) |
 | `auth-flow.json` | Better Auth + Firebase dual stack flow | JSON (Diagrammer) |
 | `data-flow.json` | Static listings → components → browser | JSON (Diagrammer) |
@@ -745,6 +651,8 @@ Deploy steps:
 | `data-processing.json` | DPIA-aligned personal data flows | JSON (Diagrammer) |
 | `security-boundaries.json` | Defense-in-depth security controls | JSON (Diagrammer) |
 | `transfer-assessment.json` | International transfer DPA 2019 Part VI | JSON (Diagrammer) |
+| `architecture-1.png` | System architecture overview (downloaded) | PNG |
+| `architecture-2.png` | System architecture detail (downloaded) | PNG |
 | `experience-funnel.svg` | 7-Act funnel (animated, legacy) | SVG |
 | `technical-architecture.svg` | Technical architecture (legacy) | SVG |
 | `routes-architecture.svg` | TanStack + Legacy SPA routes (legacy) | SVG |
@@ -753,12 +661,80 @@ Deploy steps:
 | `map-dataflow-animated.svg` | Campus MapLibre flow (animated, legacy) | SVG |
 | `video-panel-animated.svg` | VideoPanel logic (animated, legacy) | SVG |
 | `funnel-animated.svg` | 7-Act funnel (animated, legacy) | SVG |
-| `architecture-1.png` | System architecture overview (downloaded) | PNG |
-| `architecture-2.png` | System architecture detail (downloaded) | PNG |
 
-> **New diagrams** (JSON format) render in the [Diagrammer viewer](https://diagrammer.dev) — paste the JSON to view interactive, zoomable diagrams.
-> **Legacy diagrams** (SVG) open directly in browser for animations and hover effects.
-> **PNG diagrams** (architecture-1.png, architecture-2.png) render directly in GitHub README at 800px width.
+> **JSON diagrams** render in the [Diagrammer viewer](https://diagrammer.dev) — paste the JSON to view interactive, zoomable diagrams.
+> **SVG diagrams** open directly in browser for animations and hover effects.
+> **PNG diagrams** render directly in this README at 800px width.
+
+---
+
+## System Architecture Diagrams (PNG)
+
+### System Architecture Diagram 1
+<p align="center">
+  <img src="docs/architecture-1.png" alt="System Architecture Diagram 1" width="800" />
+</p>
+
+### System Architecture Diagram 2
+<p align="center">
+  <img src="docs/architecture-2.png" alt="System Architecture Diagram 2" width="800" />
+</p>
+
+---
+
+## Key Commands
+
+```bash
+# Development
+npm run dev              # Start dev server
+npm run build            # Production build
+npm run preview          # Preview production build
+
+# Database
+npx prisma generate      # Generate Prisma client
+npx prisma migrate dev   # Run migrations
+npx prisma studio        # Open Prisma Studio (GUI)
+npm run db:seed          # Seed test accounts
+
+# Code Quality
+npm run lint             # ESLint
+npm run format           # Prettier
+```
+
+---
+
+## Developer Navigation Guide
+
+| Task | File / Directory |
+|---|---|
+| Add a new page | `src/routes/` or `src/features/*/routes/` |
+| Add API endpoint | `src/routes/api/` |
+| Modify auth | `src/lib/auth/index.ts` |
+| Modify DB schema | `prisma/schema.prisma` |
+| Change UI tokens | `src/styles.css` (OKLCH colors, spacing) |
+| Add test account | `prisma/seed.ts` → `TEST_ACCOUNTS` array |
+| Debug landlord flow | `src/features/landlord/` |
+| Debug admin guard | `src/features/admin/requireAdmin.ts` |
+| Shared timeout utility | `src/shared/lib/withTimeout.ts` |
+| Static listing data | `src/data/listings.ts` |
+| Residence video clips | `src/data/residenceClips.ts` |
+| Campus data | `src/data/campuses.ts` |
+
+---
+
+## Routing
+
+- **TanStack Router** file-based: `src/routes/` (legacy) + `src/features/*/routes/` (new)
+- Route tree generated at `src/routeTree.gen.ts`
+- Server functions via `createServerFn` in `src/start.ts`
+
+---
+
+## Data
+
+- **Prisma 7** with `@prisma/adapter-libsql` (SQLite driver)
+- Generated client at `node_modules/.prisma/client/client`
+- Run scripts via `tsx` (`npx tsx scripts/...`)
 
 ---
 
@@ -772,9 +748,24 @@ Deploy steps:
 
 ---
 
-## License & Contact
+## Contributing
 
-- **License** — Private project. Map data subject to OpenStreetMap and Esri terms.
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing`)
+3. Commit your changes (`git commit -m 'feat: add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing`)
+5. Open a Pull Request
+
+---
+
+## License
+
+Private project. Map data subject to OpenStreetMap and Esri terms.
+
+---
+
+## Contact
+
 - **WhatsApp** — Configurable via `VITE_WHATSAPP_NUMBER`
 - **Email** — hello@unihub.ke
 - **Repo** — https://github.com/shadrackb1/unihub-landing-experience
