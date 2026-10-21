@@ -253,9 +253,7 @@ git status
 
 # Stage & commit (user.name = shadrackb1, user.email = shadrackb@kabarak.ac.ke)
 git add -A
-git commit -m "type: description
-
-Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
+git commit -m "type: description"
 
 # Push to origin/main
 git push origin main

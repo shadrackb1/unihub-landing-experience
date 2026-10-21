@@ -1,4 +1,4 @@
-﻿<h1 align="center">UniHub</h1>
+<h1 align="center">UniHub</h1>
 <p align="center">
   <strong>Verified student housing discovery platform for Kenyan university campuses</strong>
   <br />
@@ -11,7 +11,6 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Claude_Code-D97757?style=flat&logo=claude&logoColor=white" alt="Claude Code" />
   <img src="https://img.shields.io/badge/GitHub_Copilot-000000?style=flat&logo=github&logoColor=white" alt="GitHub Copilot" />
   <img src="https://img.shields.io/badge/Cursor-000000?style=flat&logo=cursor&logoColor=white" alt="Cursor" />
 </p>
