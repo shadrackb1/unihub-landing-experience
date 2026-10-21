@@ -8,42 +8,19 @@ export function useListings(): SampleListing[] {
   // offline cache re-populates) as soon as connectivity returns.
   const onlineTick = useOnlineRefresh();
 
+  // TODO: Re-enable when API service is implemented
+  // The previous implementation used a legacy Firestore service that was removed.
+  // For now, we use the static sample listings as the data source.
   useEffect(() => {
     let live = true;
-    import("@/legacy/services/firestore")
-      .then(async (m) => {
-        try {
-          const [properties, hostels] = await Promise.all([
-            m.getProperties("available"),
-            m.getHostels(),
-          ]);
-          const mapped: SampleListing[] = [
-            ...properties.map((p: any) => ({
-              id: p.id,
-              title: p.title,
-              location: p.location,
-              category: p.categoryId ?? "Room",
-              price: `KES ${Number(p.price ?? 0).toLocaleString()}`,
-              deposit: p.deposit
-                ? `Deposit: KES ${Number(p.deposit).toLocaleString()}`
-                : "Deposit: 1 month",
-              image: p.media?.[0]?.secure_url ?? sampleListings[0]!.image,
-            })),
-            ...hostels.map((h: any) => ({
-              title: h.name,
-              location: h.location,
-              category: h.hostel_type === "girls" ? "Girls hostel" : h.hostel_type === "boys" ? "Boys hostel" : "Hostel",
-              price: "KES —",
-              deposit: "Shared facilities",
-              image: h.images?.[0]?.secure_url ?? sampleListings[1]!.image,
-            })),
-          ];
-          if (live && mapped.length > 0) setListings(mapped);
-        } catch {
-          // offline or empty — keep sample listings
-        }
-      })
-      .catch(() => {});
+
+    // Future: Replace with API call to /api/listings
+    // const response = await fetch("/api/listings");
+    // if (response.ok) {
+    //   const data = await response.json();
+    //   if (live) setListings(data);
+    // }
+
     return () => {
       live = false;
     };
