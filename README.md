@@ -332,6 +332,20 @@ flowchart TD
 
 ---
 
+## Architecture Diagrams (Images)
+
+### System Architecture Diagram 1
+<p align="center">
+  <img src="docs/architecture-1.png" alt="System Architecture Diagram 1" width="800" />
+</p>
+
+### System Architecture Diagram 2
+<p align="center">
+  <img src="docs/architecture-2.png" alt="System Architecture Diagram 2" width="800" />
+</p>
+
+---
+
 ## Quick Start
 
 ### Prerequisites
@@ -739,9 +753,12 @@ Deploy steps:
 | `map-dataflow-animated.svg` | Campus MapLibre flow (animated, legacy) | SVG |
 | `video-panel-animated.svg` | VideoPanel logic (animated, legacy) | SVG |
 | `funnel-animated.svg` | 7-Act funnel (animated, legacy) | SVG |
+| `architecture-1.png` | System architecture overview (downloaded) | PNG |
+| `architecture-2.png` | System architecture detail (downloaded) | PNG |
 
 > **New diagrams** (JSON format) render in the [Diagrammer viewer](https://diagrammer.dev) — paste the JSON to view interactive, zoomable diagrams.
 > **Legacy diagrams** (SVG) open directly in browser for animations and hover effects.
+> **PNG diagrams** (architecture-1.png, architecture-2.png) render directly in GitHub README at 800px width.
 
 ---
 
