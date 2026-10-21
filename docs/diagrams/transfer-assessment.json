@@ -1,0 +1,105 @@
+{
+  "version": "1",
+  "type": "flowchart",
+  "title": "International Transfer Assessment — Vercel (US) & GitHub (US)",
+  "description": "DPA 2019 Part VI compliance: data categories, SCCs, supplementary measures, residual risk",
+  "nodes": [
+    {
+      "id": "transfer-occurs",
+      "label": "International Transfers Occur",
+      "description": "Vercel (iad1, US), GitHub (US), Map Tile CDNs (global)",
+      "shape": "pill",
+      "color": "amber",
+      "emphasis": "strong"
+    },
+    {
+      "id": "data-categories",
+      "label": "Data Categories Transferred",
+      "description": "1. Public property listings (business data)\n2. Technical error logs (sanitised)\n3. Source code (private repo)\n4. Map tile requests (no personal data)",
+      "shape": "rectangle",
+      "color": "blue"
+    },
+    {
+      "id": "personal-data-check",
+      "label": "Personal Data in Transfer?",
+      "shape": "diamond",
+      "color": "amber"
+    },
+    {
+      "id": "no-personal-data",
+      "label": "NO — Listings are PUBLIC business data\nError logs SANITISED\nMap tiles = no user identifiers",
+      "shape": "rounded",
+      "color": "green"
+    },
+    {
+      "id": "kenyan-law",
+      "label": "Kenyan DPA 2019 Part VI",
+      "description": "Transfers require adequate protection (s.48) or SCCs (s.49)",
+      "shape": "rectangle",
+      "color": "slate"
+    },
+    {
+      "id": "us-adequacy",
+      "label": "US Adequacy Status",
+      "description": "NOT adequate under Kenyan law — must rely on SCCs + supplementary measures",
+      "shape": "diamond",
+      "color": "amber"
+    },
+    {
+      "id": "sccs",
+      "label": "Standard Contractual Clauses",
+      "description": "Vercel DPA + GitHub DPA include SCCs (EU standard, recognised by ODPC)",
+      "shape": "rectangle",
+      "color": "green"
+    },
+    {
+      "id": "supplementary",
+      "label": "Supplementary Measures",
+      "description": "• Extreme data minimisation (no personal data)\n• Encryption in transit (TLS 1.2+)\n• Access controls (2FA, branch protection)\n• No sensitive/special category data\n• Controller in Kenya (local decisions)",
+      "shape": "rectangle",
+      "color": "green"
+    },
+    {
+      "id": "map-tiles-exempt",
+      "label": "Map Tiles — Not a 'Transfer'",
+      "description": "No personal data in tile requests; keyless public CDNs; standard web traffic",
+      "shape": "rounded",
+      "color": "cyan"
+    },
+    {
+      "id": "residual-risk",
+      "label": "Residual Risk Assessment",
+      "description": "LOW — Data nature (public listings) + SCCs + minimisation + no sensitive data",
+      "shape": "pill",
+      "color": "green",
+      "emphasis": "strong"
+    },
+    {
+      "id": "odpc-consult",
+      "label": "ODPC Consultation Required?",
+      "description": "NO — processing NOT likely high risk (DPIA Part 3 conclusion)",
+      "shape": "diamond",
+      "color": "green"
+    },
+    {
+      "id": "action-a2",
+      "label": "Action A2: Document Transfer Assessment",
+      "description": "File with DPIA; monitor ODPC guidance; evaluate local hosting if guidance changes",
+      "shape": "rectangle",
+      "color": "blue"
+    }
+  ],
+  "edges": [
+    { "from": "transfer-occurs", "to": "data-categories" },
+    { "from": "data-categories", "to": "personal-data-check" },
+    { "from": "personal-data-check", "to": "no-personal-data", "label": "NO personal data" },
+    { "from": "no-personal-data", "to": "kenyan-law" },
+    { "from": "kenyan-law", "to": "us-adequacy" },
+    { "from": "us-adequacy", "to": "sccs", "label": "not adequate" },
+    { "from": "sccs", "to": "supplementary" },
+    { "from": "supplementary", "to": "residual-risk" },
+    { "from": "transfer-occurs", "to": "map-tiles-exempt" },
+    { "from": "residual-risk", "to": "odpc-consult" },
+    { "from": "odpc-consult", "to": "action-a2", "label": "NO" }
+  ]
+}

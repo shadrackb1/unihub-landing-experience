@@ -71,4 +71,3 @@ export const sampleListings: SampleListing[] = [
     image: sharedImage,
   },
 ];
-

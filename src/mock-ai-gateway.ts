@@ -1,1 +1,9 @@
-export const generateResponse = async (prompt: string) => { return 'Mock AI response for: ' + prompt; }; export class GatewayError extends Error { constructor(message: string) { super(message); this.name = 'GatewayError'; } }
+export const generateResponse = async (prompt: string) => {
+  return "Mock AI response for: " + prompt;
+};
+export class GatewayError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "GatewayError";
+  }
+}

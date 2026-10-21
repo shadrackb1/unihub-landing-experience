@@ -44,7 +44,11 @@ export function reviveTimestamps(value: any): any {
       restored[subkey] = reviveTimestamps(subvalue);
     }
     const keys = Object.keys(value);
-    if (keys.length === 2 && typeof restored.seconds === "number" && typeof restored.nanoseconds === "number") {
+    if (
+      keys.length === 2 &&
+      typeof restored.seconds === "number" &&
+      typeof restored.nanoseconds === "number"
+    ) {
       restored.toMillis = () => restored.seconds * 1000 + Math.floor(restored.nanoseconds / 1e6);
       restored.toDate = () => new Date(restored.toMillis());
       restored.isEqual = (other: any) => Boolean(other) && other.seconds === restored.seconds;

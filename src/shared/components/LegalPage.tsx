@@ -1,7 +1,7 @@
-import type { ReactNode } from 'react';
-import { Link } from '@tanstack/react-router';
-import { MarketingShell } from '@/shared/components/MarketingChrome';
-import { Reveal } from '@/shared/components/VideoPanel';
+import type { ReactNode } from "react";
+import { Link } from "@tanstack/react-router";
+import { MarketingShell } from "@/shared/components/MarketingChrome";
+import { Reveal } from "@/shared/components/VideoPanel";
 
 export interface LegalSection {
   heading: string;
@@ -15,7 +15,7 @@ interface Props {
   summary: string;
   sections: LegalSection[];
   /** The sibling document, linked at the foot of the page. */
-  related?: { to: '/privacy' | '/terms'; label: string };
+  related?: { to: "/privacy" | "/terms"; label: string };
 }
 
 /**
@@ -30,7 +30,9 @@ export function LegalPage({ title, updated, summary, sections, related }: Props)
         <div className="mx-auto max-w-3xl px-5 md:px-8">
           <Reveal>
             <p className="eyebrow">Legal</p>
-            <h1 className="mt-3 font-display text-4xl font-medium leading-tight sm:text-5xl">{title}</h1>
+            <h1 className="mt-3 font-display text-4xl font-medium leading-tight sm:text-5xl">
+              {title}
+            </h1>
             <p className="mt-4 text-xs uppercase tracking-[0.16em] text-muted-foreground">
               Last updated {updated}
             </p>
@@ -41,7 +43,9 @@ export function LegalPage({ title, updated, summary, sections, related }: Props)
             {sections.map((section, index) => (
               <Reveal key={section.heading} className="border-b border-border py-7">
                 <h2 className="flex items-baseline gap-3 font-display text-xl font-medium">
-                  <span className="instrument shrink-0 tabular-nums">{String(index + 1).padStart(2, '0')}</span>
+                  <span className="instrument shrink-0 tabular-nums">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
                   {section.heading}
                 </h2>
                 <div className="mt-3 space-y-3 text-sm leading-relaxed text-muted-foreground sm:text-base">

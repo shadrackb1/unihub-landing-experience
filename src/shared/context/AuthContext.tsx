@@ -42,10 +42,18 @@ const SIGNED_OUT: AuthContextType = {
   user: null,
   session: null,
   loading: false,
-  login: async () => { throw new Error("No AuthProvider mounted"); },
-  register: async () => { throw new Error("No AuthProvider mounted"); },
-  logout: async () => { throw new Error("No AuthProvider mounted"); },
-  refreshSession: async () => { throw new Error("No AuthProvider mounted"); },
+  login: async () => {
+    throw new Error("No AuthProvider mounted");
+  },
+  register: async () => {
+    throw new Error("No AuthProvider mounted");
+  },
+  logout: async () => {
+    throw new Error("No AuthProvider mounted");
+  },
+  refreshSession: async () => {
+    throw new Error("No AuthProvider mounted");
+  },
 };
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -119,7 +127,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, session, loading, login, register, logout, refreshSession }}>
+    <AuthContext.Provider
+      value={{ user, session, loading, login, register, logout, refreshSession }}
+    >
       {children}
     </AuthContext.Provider>
   );

@@ -1,0 +1,134 @@
+{
+  "version": "1",
+  "type": "flowchart",
+  "title": "Data Flow — Static Listings to Browser",
+  "description": "How listing data flows from static TypeScript file through TanStack Start to student browser",
+  "nodes": [
+    {
+      "id": "listings-ts",
+      "label": "src/data/listings.ts",
+      "description": "SampleListing[] array — verified property data",
+      "shape": "rectangle",
+      "color": "blue",
+      "emphasis": "strong"
+    },
+    {
+      "id": "residence-clips",
+      "label": "src/data/residenceClips.ts",
+      "description": "Video metadata for residence galleries",
+      "shape": "rectangle",
+      "color": "blue"
+    },
+    {
+      "id": "campuses-ts",
+      "label": "src/data/campuses.ts",
+      "description": "8 Kenyan campus coordinates + metadata",
+      "shape": "rectangle",
+      "color": "blue"
+    },
+    {
+      "id": "static-import",
+      "label": "Static Import (build-time)",
+      "description": "import { listings } from '@/data/listings'",
+      "shape": "rounded",
+      "color": "slate"
+    },
+    {
+      "id": "listing-grid",
+      "label": "ListingGrid Component",
+      "description": "src/features/listings/components/ListingGrid.tsx",
+      "shape": "rectangle",
+      "color": "green"
+    },
+    {
+      "id": "filter-sort",
+      "label": "Client-side Filter/Sort",
+      "description": "Campus, category, price, deposit — no server round-trip",
+      "shape": "rounded",
+      "color": "green"
+    },
+    {
+      "id": "listing-card",
+      "label": "ListingCard Component",
+      "description": "Displays title, location, price, deposit, images, contact links",
+      "shape": "rectangle",
+      "color": "green"
+    },
+    {
+      "id": "contact-links",
+      "label": "Contact Links (WhatsApp/Email)",
+      "description": "wa.me/ and mailto: — opens external apps",
+      "shape": "pill",
+      "color": "cyan"
+    },
+    {
+      "id": "student-browser",
+      "label": "Student Browser",
+      "description": "Renders listings, handles interactions",
+      "shape": "pill",
+      "color": "blue",
+      "emphasis": "strong"
+    },
+    {
+      "id": "map-component",
+      "label": "CampusMap Component",
+      "description": "src/features/campus/components/CampusMap.tsx",
+      "shape": "rectangle",
+      "color": "cyan"
+    },
+    {
+      "id": "maplibre",
+      "label": "MapLibre GL Instance",
+      "description": "Renders vector + satellite tiles",
+      "shape": "rounded",
+      "color": "cyan"
+    },
+    {
+      "id": "tile-providers",
+      "label": "Tile Providers",
+      "description": "OpenFreeMap (vector), Esri (satellite)",
+      "shape": "pill",
+      "color": "cyan"
+    },
+    {
+      "id": "campus-pins",
+      "label": "8 Campus Pins",
+      "description": "Pulse animation on load, click for campus listings",
+      "shape": "rounded",
+      "color": "cyan"
+    },
+    {
+      "id": "video-panel",
+      "label": "VideoPanel Component",
+      "description": "Viewport-aware autoplay (IntersectionObserver)",
+      "shape": "rectangle",
+      "color": "violet"
+    },
+    {
+      "id": "assets",
+      "label": "Static Assets (MP4/Images)",
+      "description": "Self-hosted in public/ and src/assets/",
+      "shape": "rectangle",
+      "color": "slate"
+    }
+  ],
+  "edges": [
+    { "from": "listings-ts", "to": "static-import", "label": "exports" },
+    { "from": "residence-clips", "to": "static-import", "label": "exports" },
+    { "from": "campuses-ts", "to": "static-import", "label": "exports" },
+    { "from": "static-import", "to": "listing-grid", "label": "imports listings" },
+    { "from": "listing-grid", "to": "filter-sort", "label": "passes data" },
+    { "from": "filter-sort", "to": "listing-card", "label": "renders filtered" },
+    { "from": "listing-card", "to": "contact-links", "label": "renders links" },
+    { "from": "contact-links", "to": "student-browser", "label": "click → external app" },
+    { "from": "listing-grid", "to": "student-browser", "label": "renders grid" },
+    { "from": "campuses-ts", "to": "map-component", "label": "provides coordinates" },
+    { "from": "map-component", "to": "maplibre", "label": "initialises" },
+    { "from": "maplibre", "to": "tile-providers", "label": "fetches tiles", "style": "dashed" },
+    { "from": "map-component", "to": "campus-pins", "label": "adds pins" },
+    { "from": "campus-pins", "to": "listing-grid", "label": "click → filter by campus" },
+    { "from": "residence-clips", "to": "video-panel", "label": "provides video metadata" },
+    { "from": "video-panel", "to": "assets", "label": "loads MP4", "style": "dashed" },
+    { "from": "video-panel", "to": "student-browser", "label": "renders video" }
+  ]
+}

@@ -6,4 +6,3 @@ export const Route = createFileRoute("/hostels/$id")({
     throw redirect({ to: "/listings" });
   },
 });
-

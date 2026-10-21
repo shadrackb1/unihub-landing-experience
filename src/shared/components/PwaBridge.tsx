@@ -22,7 +22,10 @@ export function PwaBridge() {
 
     // One-shot silent reload for a previously announced update.
     try {
-      if (window.localStorage.getItem(PENDING_RELOAD_KEY) === "1" && window.sessionStorage.getItem(PENDING_RELOAD_KEY) !== "1") {
+      if (
+        window.localStorage.getItem(PENDING_RELOAD_KEY) === "1" &&
+        window.sessionStorage.getItem(PENDING_RELOAD_KEY) !== "1"
+      ) {
         window.sessionStorage.setItem(PENDING_RELOAD_KEY, "1");
         window.localStorage.removeItem(PENDING_RELOAD_KEY);
         window.location.reload();
@@ -41,7 +44,12 @@ export function PwaBridge() {
           let previous: string | null = null;
           try {
             previous = window.localStorage.getItem(SW_UPDATE_KEY);
-            if (previous && version && previous !== version && window.localStorage.getItem(KNOWN_BADGE) !== version) {
+            if (
+              previous &&
+              version &&
+              previous !== version &&
+              window.localStorage.getItem(KNOWN_BADGE) !== version
+            ) {
               window.localStorage.setItem(KNOWN_BADGE, version);
               window.localStorage.setItem(PENDING_RELOAD_KEY, "1");
             }
@@ -51,7 +59,8 @@ export function PwaBridge() {
           }
         };
         navigator.serviceWorker.addEventListener("message", onActivateMessage);
-        unregisterBanner = () => navigator.serviceWorker.removeEventListener("message", onActivateMessage);
+        unregisterBanner = () =>
+          navigator.serviceWorker.removeEventListener("message", onActivateMessage);
       })
       .catch(() => {
         // SW registration failed — the app still works online.

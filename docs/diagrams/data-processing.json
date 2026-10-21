@@ -1,0 +1,126 @@
+{
+  "version": "1",
+  "type": "flowchart",
+  "title": "Data Processing & Transfers — DPIA-Aligned View",
+  "description": "Personal data flows, international transfers, and safeguards per DPA 2019 sections 25, 31",
+  "nodes": [
+    {
+      "id": "student-browse",
+      "label": "Student Browses Listings",
+      "description": "Anonymous — NO personal data collected",
+      "shape": "pill",
+      "color": "green",
+      "emphasis": "strong"
+    },
+    {
+      "id": "student-contact",
+      "label": "Student Clicks Contact Link",
+      "description": "wa.me/ or mailto: — leaves UniHub, data enters WhatsApp/Email (external)",
+      "shape": "pill",
+      "color": "cyan"
+    },
+    {
+      "id": "landlord-onboard",
+      "label": "Landlord Onboarding (Off-Platform)",
+      "description": "WhatsApp chat — landlord VOLUNTEERS property data expecting publication",
+      "shape": "pill",
+      "color": "amber"
+    },
+    {
+      "id": "admin-entry",
+      "label": "Admin Manual Entry",
+      "description": "Verified data → src/data/listings.ts (static file in repo)",
+      "shape": "rectangle",
+      "color": "slate"
+    },
+    {
+      "id": "build-deploy",
+      "label": "Build & Deploy",
+      "description": "npm run build → Vercel (iad1, US)",
+      "shape": "rectangle",
+      "color": "violet"
+    },
+    {
+      "id": "listing-data-us",
+      "label": "Listing Data in US (Vercel)",
+      "description": "PUBLIC business data only — NO personal data",
+      "shape": "rectangle",
+      "color": "green"
+    },
+    {
+      "id": "github-repo",
+      "label": "GitHub Repo (US)",
+      "description": "Private repo — source code + listings.ts",
+      "shape": "rectangle",
+      "color": "violet"
+    },
+    {
+      "id": "error-logs",
+      "label": "Error Logs (Vercel US)",
+      "description": "Sanitised via error-capture.ts — NO personal data",
+      "shape": "rectangle",
+      "color": "slate"
+    },
+    {
+      "id": "map-tiles",
+      "label": "Map Tile Requests",
+      "description": "Client → OpenFreeMap/Esri CDN — NO auth, NO user ID, NO cookies",
+      "shape": "pill",
+      "color": "cyan"
+    },
+    {
+      "id": "transfer-assessment",
+      "label": "Transfer Impact Assessment",
+      "description": "Data category: NON-PERSONAL (public listings) + TECHNICAL LOGS",
+      "shape": "diamond",
+      "color": "amber"
+    },
+    {
+      "id": "safeguards",
+      "label": "Safeguards Applied",
+      "description": "SCCs (Vercel/GitHub DPAs) + Minimisation + Encryption + Access Control + No Sensitive Data",
+      "shape": "rectangle",
+      "color": "green"
+    },
+    {
+      "id": "dpia-conclusion",
+      "label": "DPIA Conclusion",
+      "description": "NOT high risk — NO ODPC submission required — Good practice record only",
+      "shape": "pill",
+      "color": "green",
+      "emphasis": "strong"
+    },
+    {
+      "id": "firebase-legacy",
+      "label": "Firebase Auth/Firestore (Legacy)",
+      "description": "Landlord portal ONLY — being phased out",
+      "shape": "rectangle",
+      "color": "amber",
+      "emphasis": "subtle"
+    },
+    {
+      "id": "better-auth-db",
+      "label": "Better Auth + Prisma (SQLite)",
+      "description": "Admin auth only — 7 test accounts, bcrypt passwords",
+      "shape": "rectangle",
+      "color": "blue"
+    }
+  ],
+  "edges": [
+    { "from": "student-browse", "to": "student-contact" },
+    { "from": "landlord-onboard", "to": "admin-entry" },
+    { "from": "admin-entry", "to": "build-deploy" },
+    { "from": "build-deploy", "to": "listing-data-us" },
+    { "from": "admin-entry", "to": "github-repo" },
+    { "from": "build-deploy", "to": "error-logs" },
+    { "from": "student-browse", "to": "map-tiles" },
+    { "from": "listing-data-us", "to": "transfer-assessment" },
+    { "from": "github-repo", "to": "transfer-assessment" },
+    { "from": "error-logs", "to": "transfer-assessment" },
+    { "from": "map-tiles", "to": "transfer-assessment", "style": "dashed" },
+    { "from": "transfer-assessment", "to": "safeguards" },
+    { "from": "safeguards", "to": "dpia-conclusion" },
+    { "from": "landlord-onboard", "to": "firebase-legacy", "style": "dotted" },
+    { "from": "better-auth-db", "to": "dpia-conclusion" }
+  ]
+}

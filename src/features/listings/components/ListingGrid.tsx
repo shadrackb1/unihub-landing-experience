@@ -1,7 +1,7 @@
-import { ArrowRight, MapPin, ShieldCheck } from 'lucide-react';
-import { Link } from '@tanstack/react-router';
-import { Reveal } from '@/shared/components/VideoPanel';
-import type { SampleListing } from '@/data/listings';
+import { ArrowRight, MapPin, ShieldCheck } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { Reveal } from "@/shared/components/VideoPanel";
+import type { SampleListing } from "@/data/listings";
 
 export function ListingGrid({ listings }: { listings: SampleListing[] }) {
   return (

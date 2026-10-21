@@ -3,7 +3,7 @@
 **Project:** UniHub — Verified Student Housing Discovery Platform  
 **Group:** Group 1  
 **Course:** KLS 126 — Data Science for Lawyers, Kabarak University  
-**Submitted by:** Titus Kimutai Chukor (LAW/M/0227/01/23)  
+**Submitted by:** Group 1 Representative  
 **Date:** 21st October 2026  
 **Version:** 1.0
 
@@ -97,6 +97,5 @@ We, the members of Group 1, declare that:
 **Signed on behalf of Group 1:**
 
 _________________________________  
-**Titus Kimutai Chukor** (LAW/M/0227/01/23)  
-Group Representative  
+**Group 1 Representative**  
 21st October 2026

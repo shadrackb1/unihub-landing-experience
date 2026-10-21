@@ -1,30 +1,32 @@
-import { useMemo } from 'react';
-import { useLandlord } from '@/shared/context/LandlordContext';
-import type { LandlordProfile, LandlordStatus } from '@/features/marketplace/services';
+import { useMemo } from "react";
+import { useLandlord } from "@/shared/context/LandlordContext";
+import type { LandlordProfile, LandlordStatus } from "@/features/marketplace/services";
 
 interface ApprovedLandlordReturn {
   profile: LandlordProfile | null;
   isApproved: boolean;
   status: LandlordStatus;
   uid: string;
-  profileState: 'loading' | 'ok' | 'missing' | 'unavailable';
+  profileState: "loading" | "ok" | "missing" | "unavailable";
   profileMessage: string;
 }
 
-function toMarketplaceProfile(p: ReturnType<typeof useLandlord>['profile']): LandlordProfile | null {
+function toMarketplaceProfile(
+  p: ReturnType<typeof useLandlord>["profile"],
+): LandlordProfile | null {
   if (!p) return null;
   return {
     id: p.uid,
     fullName: p.fullName,
-    businessName: p.businessName ?? '',
+    businessName: p.businessName ?? "",
     email: p.email,
     phone: p.phone,
     whatsapp: p.whatsappNumber,
-    idNumber: p.nationalId ?? '',
-    areas: p.targetCampuses.join(', '),
+    idNumber: p.nationalId ?? "",
+    areas: p.targetCampuses.join(", "),
     propertyCount: p.estimatedProperties,
     status: p.status,
-    reviewNote: p.reviewNote ?? '',
+    reviewNote: p.reviewNote ?? "",
   };
 }
 
@@ -43,15 +45,18 @@ function toMarketplaceProfile(p: ReturnType<typeof useLandlord>['profile']): Lan
 export function useApprovedLandlord(): ApprovedLandlordReturn {
   const { user, profile, profileState, profileMessage } = useLandlord();
 
-  const profileOrNull = useMemo<LandlordProfile | null>(() => toMarketplaceProfile(profile), [profile]);
+  const profileOrNull = useMemo<LandlordProfile | null>(
+    () => toMarketplaceProfile(profile),
+    [profile],
+  );
 
-  const isApproved = profile?.status === 'approved';
+  const isApproved = profile?.status === "approved";
 
   return {
     profile: profileOrNull,
     isApproved,
-    status: (profile?.status ?? 'pending') as LandlordStatus,
-    uid: user?.uid ?? '',
+    status: (profile?.status ?? "pending") as LandlordStatus,
+    uid: user?.uid ?? "",
     profileState,
     profileMessage,
   };

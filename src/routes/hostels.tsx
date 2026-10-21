@@ -10,4 +10,3 @@ export const Route = createFileRoute("/hostels")({
     throw redirect({ to: "/listings" });
   },
 });
-

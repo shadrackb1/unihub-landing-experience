@@ -1,56 +1,62 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Link, useNavigate, useSearch } from '@tanstack/react-router';
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Link, useNavigate, useSearch } from "@tanstack/react-router";
 import {
-  ArrowLeft, ArrowRight, CheckCircle2, Loader2, Megaphone, AlertTriangle, MessageCircle,
-} from 'lucide-react';
-import { LandlordShell } from '@/features/landlord/components/LandlordShell';
-import { useApprovedLandlord } from '@/features/landlord/hooks/useApprovedLandlord';
+  ArrowLeft,
+  ArrowRight,
+  CheckCircle2,
+  Loader2,
+  Megaphone,
+  AlertTriangle,
+  MessageCircle,
+} from "lucide-react";
+import { LandlordShell } from "@/features/landlord/components/LandlordShell";
+import { useApprovedLandlord } from "@/features/landlord/hooks/useApprovedLandlord";
 import {
   AD_PLANS,
   formatKes,
   listLandlordListings,
   requestAd,
   type MarketListing,
-} from '@/features/marketplace/services';
-import { waLink } from '@/shared/contact';
-import { cn } from '@/shared/lib/utils';
+} from "@/features/marketplace/services";
+import { waLink } from "@/shared/contact";
+import { cn } from "@/shared/lib/utils";
 
 const PAID_PLANS = AD_PLANS.filter((plan) => plan.price > 0);
 
 export const LandlordNewAdsPage = () => {
   const { uid, profileState } = useApprovedLandlord();
   const navigate = useNavigate();
-  const { listingId: preselectedId } = useSearch({ from: '/landlord/ads_/new' });
+  const { listingId: preselectedId } = useSearch({ from: "/landlord/ads_/new" });
 
   const [listings, setListings] = useState<MarketListing[] | null>(null);
-  const [loadError, setLoadError] = useState('');
-  const [selectedListing, setSelectedListing] = useState(preselectedId ?? '');
-  const [planId, setPlanId] = useState('');
+  const [loadError, setLoadError] = useState("");
+  const [selectedListing, setSelectedListing] = useState(preselectedId ?? "");
+  const [planId, setPlanId] = useState("");
   const [step, setStep] = useState<1 | 2>(1);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState('');
+  const [submitError, setSubmitError] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
   const load = useCallback(async () => {
     if (!uid) return;
-    setLoadError('');
+    setLoadError("");
     try {
       setListings(await listLandlordListings(uid));
     } catch (error) {
-      console.error('Failed to load listings for boost:', error);
+      console.error("Failed to load listings for boost:", error);
       setListings([]);
-      setLoadError('We could not load your listings. Check your connection and try again.');
+      setLoadError("We could not load your listings. Check your connection and try again.");
     }
   }, [uid]);
 
   useEffect(() => {
-    if (profileState === 'loading') return;
+    if (profileState === "loading") return;
     void load();
   }, [load, profileState]);
 
   const boostable = useMemo(
-    () => (listings ?? []).filter((l) => l.status === 'published' || l.status === 'hidden'),
+    () => (listings ?? []).filter((l) => l.status === "published" || l.status === "hidden"),
     [listings],
   );
 
@@ -59,12 +65,12 @@ export const LandlordNewAdsPage = () => {
 
   const goToStepTwo = () => {
     const next: Record<string, string> = {};
-    if (!selectedListing) next['listing'] = 'Choose the property you want to boost.';
-    if (!planId) next['plan'] = 'Choose how long the boost should run.';
+    if (!selectedListing) next["listing"] = "Choose the property you want to boost.";
+    if (!planId) next["plan"] = "Choose how long the boost should run.";
     setErrors(next);
     if (Object.keys(next).length === 0) {
       setStep(2);
-      setSubmitError('');
+      setSubmitError("");
     }
   };
 
@@ -80,16 +86,16 @@ export const LandlordNewAdsPage = () => {
     }
 
     setIsSubmitting(true);
-    setSubmitError('');
+    setSubmitError("");
     try {
       await requestAd(selectedListing, planId);
       setSubmitted(true);
     } catch (error) {
-      console.error('Failed to request boost:', error);
+      console.error("Failed to request boost:", error);
       setSubmitError(
         error instanceof Error
           ? error.message
-          : 'We could not submit your boost request. Please try again.',
+          : "We could not submit your boost request. Please try again.",
       );
     } finally {
       setIsSubmitting(false);
@@ -101,15 +107,19 @@ export const LandlordNewAdsPage = () => {
       <LandlordShell>
         <div className="mx-auto max-w-lg rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-8 text-center">
           <CheckCircle2 className="mx-auto h-10 w-10 text-emerald-600" aria-hidden="true" />
-          <h1 className="mt-4 font-display text-xl font-medium text-emerald-900">Boost requested</h1>
+          <h1 className="mt-4 font-display text-xl font-medium text-emerald-900">
+            Boost requested
+          </h1>
           <p className="mt-2 text-sm text-emerald-800">
-            We&apos;ve recorded your request for {chosenListing?.title ?? 'your listing'} on the{' '}
-            {chosenPlan?.label ?? 'selected'} plan. Our team confirms payment and activates it — usually
-            within a few hours on working days.
+            We&apos;ve recorded your request for {chosenListing?.title ?? "your listing"} on the{" "}
+            {chosenPlan?.label ?? "selected"} plan. Our team confirms payment and activates it —
+            usually within a few hours on working days.
           </p>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
             <a
-              href={waLink('Hi UniHub, I just requested a listing boost and want to complete payment')}
+              href={waLink(
+                "Hi UniHub, I just requested a listing boost and want to complete payment",
+              )}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-glow"
@@ -134,7 +144,10 @@ export const LandlordNewAdsPage = () => {
     <LandlordShell>
       <div className="mx-auto max-w-2xl space-y-6">
         <header>
-          <Link to="/landlord/ads" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground">
+          <Link
+            to="/landlord/ads"
+            className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
+          >
             <ArrowLeft className="h-3.5 w-3.5" /> Back to boosts
           </Link>
           <h1 className="mt-3 font-display text-2xl font-medium">Boost a listing</h1>
@@ -145,13 +158,37 @@ export const LandlordNewAdsPage = () => {
         </header>
 
         <ol className="flex items-center gap-3 text-sm" aria-label="Boost steps">
-          <li className={cn('flex items-center gap-2 font-medium', step === 1 ? 'text-foreground' : 'text-muted-foreground')}>
-            <span className={cn('flex h-6 w-6 items-center justify-center rounded-full border text-xs', step === 1 ? 'border-primary bg-primary text-primary-foreground' : 'border-border')}>1</span>
+          <li
+            className={cn(
+              "flex items-center gap-2 font-medium",
+              step === 1 ? "text-foreground" : "text-muted-foreground",
+            )}
+          >
+            <span
+              className={cn(
+                "flex h-6 w-6 items-center justify-center rounded-full border text-xs",
+                step === 1 ? "border-primary bg-primary text-primary-foreground" : "border-border",
+              )}
+            >
+              1
+            </span>
             Choose listing &amp; plan
           </li>
           <li className="h-px flex-1 bg-border" aria-hidden="true" />
-          <li className={cn('flex items-center gap-2 font-medium', step === 2 ? 'text-foreground' : 'text-muted-foreground')}>
-            <span className={cn('flex h-6 w-6 items-center justify-center rounded-full border text-xs', step === 2 ? 'border-primary bg-primary text-primary-foreground' : 'border-border')}>2</span>
+          <li
+            className={cn(
+              "flex items-center gap-2 font-medium",
+              step === 2 ? "text-foreground" : "text-muted-foreground",
+            )}
+          >
+            <span
+              className={cn(
+                "flex h-6 w-6 items-center justify-center rounded-full border text-xs",
+                step === 2 ? "border-primary bg-primary text-primary-foreground" : "border-border",
+              )}
+            >
+              2
+            </span>
             Confirm
           </li>
         </ol>
@@ -162,7 +199,10 @@ export const LandlordNewAdsPage = () => {
             <p className="flex-1">{loadError}</p>
             <button
               type="button"
-              onClick={() => { setListings(null); void load(); }}
+              onClick={() => {
+                setListings(null);
+                void load();
+              }}
               className="rounded-full border border-destructive/40 px-3 py-1.5 text-xs font-semibold"
             >
               Try again
@@ -171,7 +211,10 @@ export const LandlordNewAdsPage = () => {
         )}
 
         {loading && (
-          <div className="flex items-center justify-center rounded-2xl border border-border bg-card py-16" role="status">
+          <div
+            className="flex items-center justify-center rounded-2xl border border-border bg-card py-16"
+            role="status"
+          >
             <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
             <span className="sr-only">Loading your listings</span>
           </div>
@@ -194,7 +237,11 @@ export const LandlordNewAdsPage = () => {
         )}
 
         {!loading && boostable.length > 0 && (
-          <form onSubmit={handleSubmit} className="space-y-4 rounded-2xl border border-border bg-card p-5 sm:p-6" noValidate>
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-4 rounded-2xl border border-border bg-card p-5 sm:p-6"
+            noValidate
+          >
             {step === 1 && (
               <>
                 <fieldset>
@@ -204,8 +251,10 @@ export const LandlordNewAdsPage = () => {
                       <label
                         key={listing.id}
                         className={cn(
-                          'flex cursor-pointer items-center gap-3 rounded-xl border p-3 transition-colors',
-                          selectedListing === listing.id ? 'border-primary bg-accent' : 'border-border hover:bg-accent/60',
+                          "flex cursor-pointer items-center gap-3 rounded-xl border p-3 transition-colors",
+                          selectedListing === listing.id
+                            ? "border-primary bg-accent"
+                            : "border-border hover:bg-accent/60",
                         )}
                       >
                         <input
@@ -215,20 +264,25 @@ export const LandlordNewAdsPage = () => {
                           checked={selectedListing === listing.id}
                           onChange={() => {
                             setSelectedListing(listing.id);
-                            setErrors((prev) => ({ ...prev, listing: '' }));
+                            setErrors((prev) => ({ ...prev, listing: "" }));
                           }}
                           className="h-4 w-4"
                         />
                         <span className="min-w-0">
-                          <span className="block truncate text-sm font-medium">{listing.title ?? 'Untitled listing'}</span>
+                          <span className="block truncate text-sm font-medium">
+                            {listing.title ?? "Untitled listing"}
+                          </span>
                           <span className="block truncate text-xs text-muted-foreground">
-                            {[listing.campus, listing.location].filter(Boolean).join(' · ') || 'Location not set'}
+                            {[listing.campus, listing.location].filter(Boolean).join(" · ") ||
+                              "Location not set"}
                           </span>
                         </span>
                       </label>
                     ))}
                   </div>
-                  {errors['listing'] && <p className="mt-2 text-xs text-destructive">{errors['listing']}</p>}
+                  {errors["listing"] && (
+                    <p className="mt-2 text-xs text-destructive">{errors["listing"]}</p>
+                  )}
                 </fieldset>
 
                 <fieldset>
@@ -238,8 +292,10 @@ export const LandlordNewAdsPage = () => {
                       <label
                         key={plan.id}
                         className={cn(
-                          'cursor-pointer rounded-xl border p-3 text-center transition-colors',
-                          planId === plan.id ? 'border-primary bg-accent' : 'border-border hover:bg-accent/60',
+                          "cursor-pointer rounded-xl border p-3 text-center transition-colors",
+                          planId === plan.id
+                            ? "border-primary bg-accent"
+                            : "border-border hover:bg-accent/60",
                         )}
                       >
                         <input
@@ -249,21 +305,32 @@ export const LandlordNewAdsPage = () => {
                           checked={planId === plan.id}
                           onChange={() => {
                             setPlanId(plan.id);
-                            setErrors((prev) => ({ ...prev, plan: '' }));
+                            setErrors((prev) => ({ ...prev, plan: "" }));
                           }}
                           className="sr-only"
                         />
                         <span className="block text-sm font-semibold">{plan.label}</span>
-                        <span className="mt-1 block text-xs text-muted-foreground">{plan.days} days</span>
-                        <span className="mt-2 block font-display text-lg font-medium">{formatKes(plan.price)}</span>
+                        <span className="mt-1 block text-xs text-muted-foreground">
+                          {plan.days} days
+                        </span>
+                        <span className="mt-2 block font-display text-lg font-medium">
+                          {formatKes(plan.price)}
+                        </span>
                       </label>
                     ))}
                   </div>
-                  {errors['plan'] && <p className="mt-2 text-xs text-destructive">{errors['plan']}</p>}
+                  {errors["plan"] && (
+                    <p className="mt-2 text-xs text-destructive">{errors["plan"]}</p>
+                  )}
                 </fieldset>
 
                 <div className="flex items-center justify-between gap-3 pt-2">
-                  <Link to="/landlord/ads" className="text-sm text-muted-foreground hover:text-foreground">Cancel</Link>
+                  <Link
+                    to="/landlord/ads"
+                    className="text-sm text-muted-foreground hover:text-foreground"
+                  >
+                    Cancel
+                  </Link>
                   <button
                     type="button"
                     onClick={goToStepTwo}
@@ -280,25 +347,26 @@ export const LandlordNewAdsPage = () => {
                 <div className="space-y-3 rounded-xl border border-border bg-background p-4 text-sm">
                   <div className="flex items-start justify-between gap-3">
                     <span className="text-muted-foreground">Listing</span>
-                    <span className="text-right font-medium">{chosenListing?.title ?? '—'}</span>
+                    <span className="text-right font-medium">{chosenListing?.title ?? "—"}</span>
                   </div>
                   <div className="flex items-start justify-between gap-3">
                     <span className="text-muted-foreground">Plan</span>
                     <span className="text-right font-medium">
-                      {chosenPlan ? `${chosenPlan.label} · ${chosenPlan.days} days` : '—'}
+                      {chosenPlan ? `${chosenPlan.label} · ${chosenPlan.days} days` : "—"}
                     </span>
                   </div>
                   <div className="flex items-start justify-between gap-3">
                     <span className="text-muted-foreground">Price</span>
                     <span className="text-right font-display text-lg font-medium">
-                      {chosenPlan ? formatKes(chosenPlan.price) : '—'}
+                      {chosenPlan ? formatKes(chosenPlan.price) : "—"}
                     </span>
                   </div>
                 </div>
 
                 <p className="rounded-xl border border-border bg-accent/50 p-4 text-sm text-muted-foreground">
-                  Submitting records the request. Our team sends M-Pesa or bank details on WhatsApp and
-                  activates the boost after payment is confirmed. Nothing is charged automatically.
+                  Submitting records the request. Our team sends M-Pesa or bank details on WhatsApp
+                  and activates the boost after payment is confirmed. Nothing is charged
+                  automatically.
                 </p>
 
                 {submitError && (
@@ -320,8 +388,12 @@ export const LandlordNewAdsPage = () => {
                     disabled={isSubmitting}
                     className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-glow disabled:opacity-60"
                   >
-                    {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Megaphone className="h-4 w-4" />}
-                    {isSubmitting ? 'Submitting…' : 'Submit boost request'}
+                    {isSubmitting ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <Megaphone className="h-4 w-4" />
+                    )}
+                    {isSubmitting ? "Submitting…" : "Submit boost request"}
                   </button>
                 </div>
               </>
@@ -331,7 +403,7 @@ export const LandlordNewAdsPage = () => {
 
         <button
           type="button"
-          onClick={() => void navigate({ to: '/landlord/ads' })}
+          onClick={() => void navigate({ to: "/landlord/ads" })}
           className="text-xs text-muted-foreground underline underline-offset-4 hover:text-foreground"
         >
           I&apos;ll choose a listing later

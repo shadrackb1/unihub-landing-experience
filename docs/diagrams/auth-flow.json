@@ -1,0 +1,162 @@
+{
+  "version": "1",
+  "type": "flowchart",
+  "title": "Authentication Flow — Better Auth (Primary) + Firebase (Legacy)",
+  "description": "Dual auth stack during mid-migration: Better Auth for new features, Firebase for legacy landlord portal",
+  "nodes": [
+    {
+      "id": "start",
+      "label": "User visits /admin or /landlord",
+      "shape": "pill",
+      "color": "blue"
+    },
+    {
+      "id": "check-path",
+      "label": "Route path?",
+      "shape": "diamond",
+      "color": "amber"
+    },
+    {
+      "id": "admin-path",
+      "label": "/admin/*",
+      "shape": "rectangle",
+      "color": "blue"
+    },
+    {
+      "id": "landlord-path",
+      "label": "/landlord/*",
+      "shape": "rectangle",
+      "color": "amber"
+    },
+    {
+      "id": "better-auth-guard",
+      "label": "requireAdmin() guard",
+      "description": "src/features/admin/requireAdmin.ts",
+      "shape": "rectangle",
+      "color": "green"
+    },
+    {
+      "id": "better-auth-check",
+      "label": "Better Auth session valid?",
+      "shape": "diamond",
+      "color": "amber"
+    },
+    {
+      "id": "admin-emails",
+      "label": "VITE_ADMIN_EMAILS configured?",
+      "shape": "diamond",
+      "color": "amber"
+    },
+    {
+      "id": "admin-allow",
+      "label": "Allow access (dev mode)",
+      "description": "Warns in console if no admin emails",
+      "shape": "rounded",
+      "color": "green"
+    },
+    {
+      "id": "admin-check-email",
+      "label": "User email in admin list?",
+      "shape": "diamond",
+      "color": "amber"
+    },
+    {
+      "id": "admin-redirect-login",
+      "label": "Redirect to /admin/login",
+      "shape": "pill",
+      "color": "rose"
+    },
+    {
+      "id": "admin-redirect-home",
+      "label": "Redirect to /",
+      "shape": "pill",
+      "color": "rose"
+    },
+    {
+      "id": "admin-success",
+      "label": "Admin access granted",
+      "shape": "pill",
+      "color": "green",
+      "emphasis": "strong"
+    },
+    {
+      "id": "firebase-guard",
+      "label": "LandlordContext / requireAdmin",
+      "description": "src/shared/context/LandlordContext.tsx",
+      "shape": "rectangle",
+      "color": "amber"
+    },
+    {
+      "id": "firebase-auth-check",
+      "label": "Firebase Auth state resolved?",
+      "shape": "diamond",
+      "color": "amber"
+    },
+    {
+      "id": "firestore-profile",
+      "label": "Fetch landlord profile",
+      "description": "landlordService.ts → Firestore",
+      "shape": "rectangle",
+      "color": "amber"
+    },
+    {
+      "id": "profile-status",
+      "label": "Profile status?",
+      "shape": "diamond",
+      "color": "amber"
+    },
+    {
+      "id": "status-pending",
+      "label": "Redirect to /landlord/pending",
+      "shape": "pill",
+      "color": "amber"
+    },
+    {
+      "id": "status-approved",
+      "label": "Redirect to /landlord",
+      "shape": "pill",
+      "color": "green"
+    },
+    {
+      "id": "status-rejected",
+      "label": "Redirect to /landlord/rejected",
+      "shape": "pill",
+      "color": "rose"
+    },
+    {
+      "id": "status-suspended",
+      "label": "Redirect to /landlord/suspended",
+      "shape": "pill",
+      "color": "rose"
+    },
+    {
+      "id": "firebase-login",
+      "label": "Redirect to /landlord/login",
+      "shape": "pill",
+      "color": "rose"
+    }
+  ],
+  "edges": [
+    { "from": "start", "to": "check-path" },
+    { "from": "check-path", "to": "admin-path", "label": "admin" },
+    { "from": "check-path", "to": "landlord-path", "label": "landlord" },
+    { "from": "admin-path", "to": "better-auth-guard" },
+    { "from": "better-auth-guard", "to": "better-auth-check" },
+    { "from": "better-auth-check", "to": "admin-redirect-login", "label": "no session" },
+    { "from": "better-auth-check", "to": "admin-emails", "label": "has session" },
+    { "from": "admin-emails", "to": "admin-allow", "label": "not configured (dev)" },
+    { "from": "admin-emails", "to": "admin-check-email", "label": "configured" },
+    { "from": "admin-check-email", "to": "admin-redirect-home", "label": "not in list" },
+    { "from": "admin-check-email", "to": "admin-success", "label": "in list" },
+    { "from": "admin-allow", "to": "admin-success" },
+    { "from": "landlord-path", "to": "firebase-guard" },
+    { "from": "firebase-guard", "to": "firebase-auth-check" },
+    { "from": "firebase-auth-check", "to": "firebase-login", "label": "not authenticated" },
+    { "from": "firebase-auth-check", "to": "firestore-profile", "label": "authenticated" },
+    { "from": "firestore-profile", "to": "profile-status" },
+    { "from": "profile-status", "to": "status-pending", "label": "pending" },
+    { "from": "profile-status", "to": "status-approved", "label": "approved" },
+    { "from": "profile-status", "to": "status-rejected", "label": "rejected" },
+    { "from": "profile-status", "to": "status-suspended", "label": "suspended" }
+  ]
+}

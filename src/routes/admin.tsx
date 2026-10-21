@@ -12,9 +12,5 @@ export const Route = createFileRoute("/admin")({
 function AdminRoot() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const isLogin = pathname.startsWith("/admin/login");
-  return (
-    <AuthProvider>
-      {isLogin ? <Outlet /> : <ProtectedRoute />}
-    </AuthProvider>
-  );
+  return <AuthProvider>{isLogin ? <Outlet /> : <ProtectedRoute />}</AuthProvider>;
 }

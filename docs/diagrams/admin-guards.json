@@ -1,0 +1,153 @@
+{
+  "version": "1",
+  "type": "flowchart",
+  "title": "Admin Dashboard — Route Guards & Data Loading",
+  "description": "TanStack Router loaders with requireAdmin guard, guardedLoader for Firestore reads with timeout",
+  "nodes": [
+    {
+      "id": "admin-route",
+      "label": "Admin Route Loaded",
+      "description": "/admin/* (ssr: false in route config)",
+      "shape": "pill",
+      "color": "blue"
+    },
+    {
+      "id": "ssr-check",
+      "label": "Server-side render?",
+      "description": "typeof window === 'undefined'",
+      "shape": "diamond",
+      "color": "amber"
+    },
+    {
+      "id": "ssr-return",
+      "label": "Return { user: null }",
+      "description": "Skips auth during SSR pass",
+      "shape": "rounded",
+      "color": "slate"
+    },
+    {
+      "id": "wait-for-user",
+      "label": "waitForUser()",
+      "description": "Promise race: onAuthStateChanged vs 8s timeout",
+      "shape": "rectangle",
+      "color": "green"
+    },
+    {
+      "id": "firebase-auth",
+      "label": "Firebase Auth State",
+      "description": "onAuthStateChanged(auth, resolve)",
+      "shape": "rounded",
+      "color": "amber"
+    },
+    {
+      "id": "timeout-8s",
+      "label": "8s Timeout Fallback",
+      "description": "resolve(auth.currentUser) if auth hangs",
+      "shape": "rounded",
+      "color": "amber"
+    },
+    {
+      "id": "user-check",
+      "label": "User authenticated?",
+      "shape": "diamond",
+      "color": "amber"
+    },
+    {
+      "id": "redirect-login",
+      "label": "Redirect to /admin/login",
+      "description": "throw redirect({ to: '/admin/login' })",
+      "shape": "pill",
+      "color": "rose"
+    },
+    {
+      "id": "admin-emails-check",
+      "label": "VITE_ADMIN_EMAILS configured?",
+      "shape": "diamond",
+      "color": "amber"
+    },
+    {
+      "id": "dev-mode-allow",
+      "label": "Allow (dev mode) + warn",
+      "description": "console.warn if no admin emails configured",
+      "shape": "rounded",
+      "color": "green"
+    },
+    {
+      "id": "email-in-list",
+      "label": "User email in admin list?",
+      "shape": "diamond",
+      "color": "amber"
+    },
+    {
+      "id": "redirect-home",
+      "label": "Redirect to /",
+      "description": "throw redirect({ to: '/' })",
+      "shape": "pill",
+      "color": "rose"
+    },
+    {
+      "id": "guarded-loader",
+      "label": "guardedLoader(loader, fallback)",
+      "description": "Runs requireAdmin() first, then loader with 6s timeout",
+      "shape": "rectangle",
+      "color": "green",
+      "emphasis": "strong"
+    },
+    {
+      "id": "loader-timeout",
+      "label": "withTimeout(loader(), 6000ms)",
+      "description": "Prevents Firestore hang → empty fallback",
+      "shape": "rounded",
+      "color": "green"
+    },
+    {
+      "id": "loader-error",
+      "label": "Loader error/timeout?",
+      "shape": "diamond",
+      "color": "amber"
+    },
+    {
+      "id": "return-fallback",
+      "label": "Return fallback (empty state)",
+      "description": "console.error logged, UI degrades gracefully",
+      "shape": "rounded",
+      "color": "amber"
+    },
+    {
+      "id": "return-data",
+      "label": "Return loader data",
+      "shape": "rounded",
+      "color": "green"
+    },
+    {
+      "id": "render-admin",
+      "label": "Admin UI Rendered",
+      "description": "Sidebar, dashboard, landlord management",
+      "shape": "pill",
+      "color": "green",
+      "emphasis": "strong"
+    }
+  ],
+  "edges": [
+    { "from": "admin-route", "to": "ssr-check" },
+    { "from": "ssr-check", "to": "ssr-return", "label": "true" },
+    { "from": "ssr-check", "to": "wait-for-user", "label": "false (client)" },
+    { "from": "wait-for-user", "to": "firebase-auth" },
+    { "from": "wait-for-user", "to": "timeout-8s" },
+    { "from": "firebase-auth", "to": "user-check" },
+    { "from": "timeout-8s", "to": "user-check" },
+    { "from": "user-check", "to": "redirect-login", "label": "no" },
+    { "from": "user-check", "to": "admin-emails-check", "label": "yes" },
+    { "from": "admin-emails-check", "to": "dev-mode-allow", "label": "not configured" },
+    { "from": "admin-emails-check", "to": "email-in-list", "label": "configured" },
+    { "from": "dev-mode-allow", "to": "guarded-loader" },
+    { "from": "email-in-list", "to": "redirect-home", "label": "no" },
+    { "from": "email-in-list", "to": "guarded-loader", "label": "yes" },
+    { "from": "guarded-loader", "to": "loader-timeout" },
+    { "from": "loader-timeout", "to": "loader-error" },
+    { "from": "loader-error", "to": "return-fallback", "label": "yes" },
+    { "from": "loader-error", "to": "return-data", "label": "no" },
+    { "from": "return-fallback", "to": "render-admin" },
+    { "from": "return-data", "to": "render-admin" }
+  ]
+}

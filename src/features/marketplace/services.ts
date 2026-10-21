@@ -7,13 +7,13 @@ import {
   updateDoc,
   query,
   where,
-  Timestamp
-} from 'firebase/firestore';
-import { db } from '@/shared/lib/firebase';
+  Timestamp,
+} from "firebase/firestore";
+import { db } from "@/shared/lib/firebase";
 
 const COLLECTIONS = {
-  listings: 'listings',
-  landlords: 'landlords',
+  listings: "listings",
+  landlords: "landlords",
 } as const;
 
 /**
@@ -22,13 +22,16 @@ const COLLECTIONS = {
  * that awaits a read or write would then sit on a spinner or a disabled
  * button with no explanation, so bound each call and surface a real error.
  */
-function withTimeout<A>(promise: Promise<A>, ms = 8000, what = 'The database'): Promise<A> {
+function withTimeout<A>(promise: Promise<A>, ms = 8000, what = "The database"): Promise<A> {
   let timer: ReturnType<typeof setTimeout>;
   return Promise.race([
     promise,
     new Promise<never>((_, reject) => {
       timer = setTimeout(
-        () => reject(new Error(`${what} did not respond in time. Check your connection and try again.`)),
+        () =>
+          reject(
+            new Error(`${what} did not respond in time. Check your connection and try again.`),
+          ),
         ms,
       );
     }),
@@ -38,13 +41,13 @@ function withTimeout<A>(promise: Promise<A>, ms = 8000, what = 'The database'): 
 function timestampToDate(data: any): any {
   if (!data) return data;
   if (Array.isArray(data)) return data.map(timestampToDate);
-  if (typeof data !== 'object' || data === null) return data;
+  if (typeof data !== "object" || data === null) return data;
 
   const result: any = {};
   for (const [key, value] of Object.entries(data)) {
     if (value instanceof Timestamp) {
       result[key] = value.toDate();
-    } else if (value && typeof value === 'object') {
+    } else if (value && typeof value === "object") {
       result[key] = timestampToDate(value);
     } else {
       result[key] = value;
@@ -56,13 +59,13 @@ function timestampToDate(data: any): any {
 function dateToTimestamp(data: any): any {
   if (!data) return data;
   if (Array.isArray(data)) return data.map(dateToTimestamp);
-  if (typeof data !== 'object' || data === null) return data;
+  if (typeof data !== "object" || data === null) return data;
 
   const result: any = {};
   for (const [key, value] of Object.entries(data)) {
     if (value instanceof Date) {
       result[key] = Timestamp.fromDate(value);
-    } else if (value && typeof value === 'object') {
+    } else if (value && typeof value === "object") {
       result[key] = dateToTimestamp(value);
     } else {
       result[key] = value;
@@ -79,38 +82,45 @@ export interface AdPlan {
 }
 
 export const AD_PLANS: AdPlan[] = [
-  { id: 'free', label: 'Free', price: 0, days: 7 },
-  { id: 'basic', label: 'Basic', price: 500, days: 14 },
-  { id: 'pro', label: 'Pro', price: 900, days: 30 },
-  { id: 'premium', label: 'Premium', price: 1500, days: 90 },
+  { id: "free", label: "Free", price: 0, days: 7 },
+  { id: "basic", label: "Basic", price: 500, days: 14 },
+  { id: "pro", label: "Pro", price: 900, days: 30 },
+  { id: "premium", label: "Premium", price: 1500, days: 90 },
 ];
 
-export type AdPlanId = AdPlan['id'];
+export type AdPlanId = AdPlan["id"];
 
 export function formatKes(amount: number): string {
-  if (amount >= 1e6) return 'KES ' + (amount / 1e6).toFixed(1) + 'm';
-  if (amount >= 1e3) return 'KES ' + (amount / 1e3).toFixed(1) + 'k';
-  return 'KES ' + amount.toLocaleString('en-KE');
+  if (amount >= 1e6) return "KES " + (amount / 1e6).toFixed(1) + "m";
+  if (amount >= 1e3) return "KES " + (amount / 1e3).toFixed(1) + "k";
+  return "KES " + amount.toLocaleString("en-KE");
 }
 
 export const AD_BOOST_OPTIONS = [
-  { id: 'week', label: '7-day boost', price: 500, days: 7 },
-  { id: 'fortnight', label: '14-day boost', price: 900, days: 14 },
-  { id: 'month', label: '30-day boost', price: 1500, days: 30 },
+  { id: "week", label: "7-day boost", price: 500, days: 7 },
+  { id: "fortnight", label: "14-day boost", price: 900, days: 14 },
+  { id: "month", label: "30-day boost", price: 1500, days: 30 },
 ] as const;
 
 export async function requestAd(listingId: string, planId: string): Promise<void> {
   if (!listingId || !planId) return;
   const listingRef = doc(db, COLLECTIONS.listings, listingId);
-  await withTimeout(updateDoc(listingRef, dateToTimestamp({
-    adStatus: 'requested',
-    adPlan: planId,
-    requestedAt: new Date(),
-  })), 8000, 'Sending your boost request');
+  await withTimeout(
+    updateDoc(
+      listingRef,
+      dateToTimestamp({
+        adStatus: "requested",
+        adPlan: planId,
+        requestedAt: new Date(),
+      }),
+    ),
+    8000,
+    "Sending your boost request",
+  );
 }
 
 export function isAdLive(listing: { adStatus?: string; adExpiresAt?: unknown }): boolean {
-  if (listing.adStatus !== 'live') return false;
+  if (listing.adStatus !== "live") return false;
   if (!listing.adExpiresAt) return true;
   return new Date(listing.adExpiresAt as Date) > new Date();
 }
@@ -135,11 +145,11 @@ export async function listLandlordListings(ownerUid: string): Promise<Array<Mark
 
   const [byOwner, byLandlord] = await withTimeout(
     Promise.all([
-      getDocs(query(collection(db, COLLECTIONS.listings), where('ownerUid', '==', ownerUid))),
-      getDocs(query(collection(db, COLLECTIONS.listings), where('landlordId', '==', ownerUid))),
+      getDocs(query(collection(db, COLLECTIONS.listings), where("ownerUid", "==", ownerUid))),
+      getDocs(query(collection(db, COLLECTIONS.listings), where("landlordId", "==", ownerUid))),
     ]),
     8000,
-    'Loading your listings',
+    "Loading your listings",
   );
 
   const merged = new Map<string, MarketListing>();
@@ -163,44 +173,45 @@ export type CreateListingInput = {
 };
 
 /** Create a listing awaiting admin review, owned by the signed-in landlord. */
-export async function createListing(
-  ownerUid: string,
-  input: CreateListingInput,
-): Promise<string> {
-  if (!ownerUid) throw new Error('You need to be signed in to create a listing.');
+export async function createListing(ownerUid: string, input: CreateListingInput): Promise<string> {
+  if (!ownerUid) throw new Error("You need to be signed in to create a listing.");
 
-  const ref = await withTimeout(addDoc(collection(db, COLLECTIONS.listings), {
-    ...input,
-    ownerUid,
-    landlordId: ownerUid, // legacy field kept in sync for older readers
-    category: input.type,
-    status: 'pending',
-    adStatus: 'inactive',
-    inquiries: 0,
-    createdAt: Timestamp.fromDate(new Date()),
-    updatedAt: Timestamp.fromDate(new Date()),
-  }), 8000, 'Saving your listing');
+  const ref = await withTimeout(
+    addDoc(collection(db, COLLECTIONS.listings), {
+      ...input,
+      ownerUid,
+      landlordId: ownerUid, // legacy field kept in sync for older readers
+      category: input.type,
+      status: "pending",
+      adStatus: "inactive",
+      inquiries: 0,
+      createdAt: Timestamp.fromDate(new Date()),
+      updatedAt: Timestamp.fromDate(new Date()),
+    }),
+    8000,
+    "Saving your listing",
+  );
   return ref.id;
 }
 
 export async function deleteListing(id: string): Promise<void> {
-  if (!id) throw new Error('Missing listing id.');
-  await withTimeout(deleteDoc(doc(db, COLLECTIONS.listings, id)), 8000, 'Deleting the listing');
+  if (!id) throw new Error("Missing listing id.");
+  await withTimeout(deleteDoc(doc(db, COLLECTIONS.listings, id)), 8000, "Deleting the listing");
 }
 
 /** Landlord-side visibility toggle (hide a live listing, or re-publish a hidden one). */
 export async function updateListingStatus(
   id: string,
-  status: 'published' | 'hidden',
+  status: "published" | "hidden",
 ): Promise<void> {
-  if (!id) throw new Error('Missing listing id.');
+  if (!id) throw new Error("Missing listing id.");
   await withTimeout(
     updateDoc(doc(db, COLLECTIONS.listings, id), {
       status,
       updatedAt: Timestamp.fromDate(new Date()),
     }),
     8000,
-    'Updating the listing',
+    "Updating the listing",
   );
 }
 
@@ -220,8 +231,17 @@ export type MarketListing = {
   ownerUid?: string;
   landlordId?: string;
   inquiries?: number;
-  status?: 'draft' | 'pending' | 'published' | 'rejected' | 'hidden' | 'live' | 'requested' | 'expired' | 'inactive';
-  adStatus?: 'live' | 'requested' | 'expired' | 'inactive';
+  status?:
+    | "draft"
+    | "pending"
+    | "published"
+    | "rejected"
+    | "hidden"
+    | "live"
+    | "requested"
+    | "expired"
+    | "inactive";
+  adStatus?: "live" | "requested" | "expired" | "inactive";
   adPlan?: string;
   adExpiresAt?: unknown;
   featured?: boolean;
@@ -231,8 +251,8 @@ export type MarketListing = {
 
 // ---- admin marketplace exports needed by AdminMarketplacePages ----
 
-export type LandlordStatus = 'pending' | 'approved' | 'rejected' | 'suspended';
-export type ListingStatus = 'pending' | 'published' | 'rejected' | 'hidden';
+export type LandlordStatus = "pending" | "approved" | "rejected" | "suspended";
+export type ListingStatus = "pending" | "published" | "rejected" | "hidden";
 
 export type LandlordProfile = {
   id: string;
@@ -253,23 +273,26 @@ export async function listLandlords(): Promise<LandlordProfile[]> {
   const snapshot = await withTimeout(
     getDocs(collection(db, COLLECTIONS.landlords)),
     8000,
-    'Loading landlord profiles',
+    "Loading landlord profiles",
   );
   return snapshot.docs
     .map((snap) => {
       const data = timestampToDate(snap.data());
       return {
         id: snap.id,
-        fullName: data.fullName ?? '',
-        businessName: data.businessName ?? '',
-        email: data.email ?? '',
-        phone: data.phone ?? '',
-        whatsapp: data.whatsappNumber ?? data.whatsapp ?? '',
-        idNumber: data.nationalId ?? data.idNumber ?? '',
-        areas: Array.isArray(data.targetCampuses) ? data.targetCampuses.join(', ') : (data.areas ?? ''),
-        propertyCount: typeof data.estimatedProperties === 'number' ? data.estimatedProperties : undefined,
-        status: (data.status ?? 'pending') as LandlordStatus,
-        reviewNote: data.reviewNote ?? '',
+        fullName: data.fullName ?? "",
+        businessName: data.businessName ?? "",
+        email: data.email ?? "",
+        phone: data.phone ?? "",
+        whatsapp: data.whatsappNumber ?? data.whatsapp ?? "",
+        idNumber: data.nationalId ?? data.idNumber ?? "",
+        areas: Array.isArray(data.targetCampuses)
+          ? data.targetCampuses.join(", ")
+          : (data.areas ?? ""),
+        propertyCount:
+          typeof data.estimatedProperties === "number" ? data.estimatedProperties : undefined,
+        status: (data.status ?? "pending") as LandlordStatus,
+        reviewNote: data.reviewNote ?? "",
       } satisfies LandlordProfile;
     })
     .sort((a, b) => a.fullName.localeCompare(b.fullName));
@@ -280,16 +303,16 @@ export async function reviewLandlord(
   status: LandlordStatus,
   note?: string,
 ): Promise<void> {
-  if (!id) throw new Error('Missing landlord id.');
+  if (!id) throw new Error("Missing landlord id.");
   await withTimeout(
     updateDoc(doc(db, COLLECTIONS.landlords, id), {
       status,
-      reviewNote: note ?? '',
+      reviewNote: note ?? "",
       reviewedAt: Timestamp.fromDate(new Date()),
       updatedAt: Timestamp.fromDate(new Date()),
     }),
     8000,
-    'Updating the landlord',
+    "Updating the landlord",
   );
 }
 
@@ -298,10 +321,10 @@ export async function listAllListings(): Promise<MarketListing[]> {
   const snapshot = await withTimeout(
     getDocs(collection(db, COLLECTIONS.listings)),
     8000,
-    'Loading listings',
+    "Loading listings",
   );
   return snapshot.docs
-    .map((snap) => ({ id: snap.id, ...timestampToDate(snap.data()) } as MarketListing))
+    .map((snap) => ({ id: snap.id, ...timestampToDate(snap.data()) }) as MarketListing)
     .sort(byCreatedAtDesc);
 }
 
@@ -310,7 +333,7 @@ export async function moderateListing(
   status: ListingStatus,
   note?: string,
 ): Promise<void> {
-  if (!id) throw new Error('Missing listing id.');
+  if (!id) throw new Error("Missing listing id.");
   await withTimeout(
     updateDoc(doc(db, COLLECTIONS.listings, id), {
       status,
@@ -318,19 +341,19 @@ export async function moderateListing(
       updatedAt: Timestamp.fromDate(new Date()),
     }),
     8000,
-    'Updating the listing',
+    "Updating the listing",
   );
 }
 
 export async function setFeatured(id: string, featured: boolean): Promise<void> {
-  if (!id) throw new Error('Missing listing id.');
+  if (!id) throw new Error("Missing listing id.");
   await withTimeout(
     updateDoc(doc(db, COLLECTIONS.listings, id), {
       featured,
       updatedAt: Timestamp.fromDate(new Date()),
     }),
     8000,
-    'Updating the listing',
+    "Updating the listing",
   );
 }
 
@@ -341,17 +364,31 @@ export async function reviewAd(listing: MarketListing, approved: boolean): Promi
     // Determine boost duration from the adPlan
     const plan = AD_PLANS.find((p) => p.id === listing.adPlan);
     const days = plan ? plan.days : 7; // default to 7 days
-    await withTimeout(updateDoc(listingRef, dateToTimestamp({
-      adStatus: 'live' as const,
-      adPlan: listing.adPlan,
-      adExpiresAt: addDays(days),
-    })), 8000, 'Approving the boost');
+    await withTimeout(
+      updateDoc(
+        listingRef,
+        dateToTimestamp({
+          adStatus: "live" as const,
+          adPlan: listing.adPlan,
+          adExpiresAt: addDays(days),
+        }),
+      ),
+      8000,
+      "Approving the boost",
+    );
   } else {
-    await withTimeout(updateDoc(listingRef, dateToTimestamp({
-      adStatus: 'inactive' as const,
-      adPlan: undefined,
-      adExpiresAt: undefined,
-    })), 8000, 'Declining the boost');
+    await withTimeout(
+      updateDoc(
+        listingRef,
+        dateToTimestamp({
+          adStatus: "inactive" as const,
+          adPlan: undefined,
+          adExpiresAt: undefined,
+        }),
+      ),
+      8000,
+      "Declining the boost",
+    );
   }
 }
 

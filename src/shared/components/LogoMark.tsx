@@ -38,4 +38,3 @@ export const LogoMark = ({ className }: { className?: string }) => {
     </span>
   );
 };
-

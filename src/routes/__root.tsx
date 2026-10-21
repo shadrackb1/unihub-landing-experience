@@ -161,9 +161,11 @@ function CmsTheme() {
           const root = document.documentElement;
           const theme = settings.theme as any;
           if (theme.primaryColor) root.style.setProperty("--color-brand-500", theme.primaryColor);
-          if (theme.backgroundColor) root.style.setProperty("--color-surface-900", theme.backgroundColor);
+          if (theme.backgroundColor)
+            root.style.setProperty("--color-surface-900", theme.backgroundColor);
           if (theme.surfaceColor) root.style.setProperty("--color-surface-800", theme.surfaceColor);
-          if (theme.fontFamily) root.style.setProperty("--CMS-font-family", `"${theme.fontFamily}", sans-serif`);
+          if (theme.fontFamily)
+            root.style.setProperty("--CMS-font-family", `"${theme.fontFamily}", sans-serif`);
           if (theme.borderRadius) root.style.setProperty("--CMS-border-radius", theme.borderRadius);
         } catch {
           // offline or no CMS settings — keep default theme

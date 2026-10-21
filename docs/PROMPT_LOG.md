@@ -3,7 +3,7 @@
 **Project:** UniHub — Verified Student Housing Discovery Platform  
 **Group:** Group 1  
 **Course:** KLS 126 — Data Science for Lawyers, Kabarak University  
-**Maintained by:** Titus Kimutai Chukor (LAW/M/0227/01/23)  
+**Maintained by:** Group 1  
 **Period:** Week 2 – Week 5 (September – October 2026)
 
 ---

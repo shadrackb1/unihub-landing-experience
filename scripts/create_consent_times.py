@@ -132,8 +132,8 @@ story.append(HRFlowable(width="40%", thickness=1, color=ACCENT_GOLD, spaceAfter=
 
 # Document info table
 cover_info = [
-    ["Project", "UniHub — Verified Student Housing Platform"],
-    ["Course", "KLS 126 — Data Science for Lawyers"],
+    ["Project", "UniHub: Verified Student Housing Platform"],
+    ["Course", "KLS 126: Data Science for Lawyers"],
     ["Institution", "Kabarak University, School of Law"],
     ["Group", "Group 1"],
     ["Date", "21st October 2026"],
@@ -277,10 +277,10 @@ story.append(HRFlowable(width="100%", thickness=1, color=ACCENT_GOLD, spaceAfter
 key_info = [
     [Paragraph("<b>Data Controller</b>", table_header_style), Paragraph("UniHub Kenya (operating as UniHub)", table_cell_style)],
     [Paragraph("<b>Contact for Rights Requests</b>", table_header_style), Paragraph("hello@unihub.ke | WhatsApp: +254 700 000 000", table_cell_style)],
-    [Paragraph("<b>Data Protection Officer</b>", table_header_style), Paragraph("Shadrack Baraka (Founder) — shadrack@unihub.ke", table_cell_style)],
+    [Paragraph("<b>Data Protection Officer</b>", table_header_style), Paragraph("Shadrack Baraka (Founder), shadrack@unihub.ke", table_cell_style)],
     [Paragraph("<b>Lawful Basis</b>", table_header_style), Paragraph("Legitimate Interest (s. 30(1)(f) DPA 2019) for listings; Consent for landlord registration", table_cell_style)],
     [Paragraph("<b>Data Retention</b>", table_header_style), Paragraph("Listings: until removed by admin. Landlord profile: until account closure or withdrawal.", table_cell_style)],
-    [Paragraph("<b>International Transfers</b>", table_header_style), Paragraph("Vercel (US / iad1), GitHub (US) — SCCs + supplementary measures in place", table_cell_style)],
+    [Paragraph("<b>International Transfers</b>", table_header_style), Paragraph("Vercel (US / iad1), GitHub (US), SCCs + supplementary measures in place", table_cell_style)],
     [Paragraph("<b>Special Category Data</b>", table_header_style), Paragraph("None processed", table_cell_style)],
     [Paragraph("<b>Automated Decisions</b>", table_header_style), Paragraph("None", table_cell_style)],
 ]
@@ -310,13 +310,13 @@ data_items = [
     "Full name",
     "Email address",
     "Phone number and WhatsApp number (for student contact)",
-    "National ID or passport number (for identity verification only — never shown publicly)",
+    "National ID or passport number (for identity verification only, never shown publicly)",
     "Business or agency name (optional)",
     "Campuses/areas you serve and estimated number of properties",
     "Any note you add for the review team",
     "Consent record (date/time of consent and policy version)",
     "Property listings you publish: title, location, category, price, deposit, photos, amenities",
-    "Basic technical logs from hosting provider (request times, errors) — no personal data",
+    "Basic technical logs from hosting provider (request times, errors), no personal data",
 ]
 
 for item in data_items:
@@ -325,7 +325,7 @@ for item in data_items:
 story.append(Spacer(1, 0.5*cm))
 story.append(Paragraph(
     "<b>Students who only browse UniHub provide no personal data.</b> No accounts, no cookies, "
-    "no analytics, no tracking. Contact links (WhatsApp/email) open external apps — UniHub does "
+    "no analytics, no tracking. Contact links (WhatsApp/email) open external apps. UniHub does "
     "not see or capture that communication.",
     body_style
 ))
@@ -340,7 +340,7 @@ purpose_data = [
      Paragraph("Name, email, phone, WhatsApp, national ID, business name", table_cell_style),
      Paragraph("Consent (s. 32) + Legitimate Interest (s. 30(1)(f))", table_cell_style)],
     [Paragraph("Publish property listings for student discovery", table_cell_style),
-     Paragraph("Listing details (no personal data — property attributes only)", table_cell_style),
+     Paragraph("Listing details (no personal data, property attributes only)", table_cell_style),
      Paragraph("Legitimate Interest (s. 30(1)(f))", table_cell_style)],
     [Paragraph("Enable student contact via WhatsApp/email", table_cell_style),
      Paragraph("Landlord's public WhatsApp/email (provided by landlord)", table_cell_style),
@@ -394,7 +394,7 @@ processor_data = [
     [Paragraph("OpenFreeMap / Esri", table_cell_style),
      Paragraph("Map tiles (public, keyless)", table_cell_style),
      Paragraph("Global CDN", table_cell_center),
-     Paragraph("Not processors — no personal data transmitted", table_cell_style)],
+     Paragraph("Not processors: no personal data transmitted", table_cell_style)],
 ]
 
 proc_table = Table(processor_data, colWidths=[3*cm, 3.5*cm, 2.5*cm, 7*cm])
@@ -414,7 +414,7 @@ story.append(proc_table)
 story.append(Spacer(1, 0.5*cm))
 story.append(Paragraph(
     "<b>Your WhatsApp number and business email are published on your listings</b> so students can "
-    "contact you directly. This is by design — UniHub facilitates contact but does not intermediate. "
+    "contact you directly. This is by design. UniHub facilitates contact but does not intermediate. "
     "Your national ID is <b>never</b> shown to students or published.",
     body_style
 ))
@@ -434,17 +434,17 @@ for item in retention_items:
     story.append(Paragraph(f"•  {item}", bullet_style))
 
 # ===== SECTION 7: YOUR RIGHTS =====
-story.append(Paragraph("7. Your Rights (Data Protection Act, 2019 — Sections 26, 29–32)", heading1_style))
+story.append(Paragraph("7. Your Rights (Data Protection Act, 2019, Sections 26 and 29 to 32)", heading1_style))
 story.append(HRFlowable(width="100%", thickness=1, color=ACCENT_GOLD, spaceAfter=10, spaceBefore=0))
 
 rights = [
-    "Right to be informed — this form and the privacy policy at /privacy",
-    "Right of access — request a copy of your data via hello@unihub.ke",
-    "Right to rectification — request correction of inaccurate data",
-    "Right to erasure — request account closure and data deletion",
-    "Right to object — object to processing based on legitimate interest",
-    "Right to data portability — receive your listing data in JSON format",
-    "Right to withdraw consent — at any time, without penalty (see Section 4)",
+    "Right to be informed: this form and the privacy policy at /privacy",
+    "Right of access: request a copy of your data via hello@unihub.ke",
+    "Right to rectification: request correction of inaccurate data",
+    "Right to erasure: request account closure and data deletion",
+    "Right to object: object to processing based on legitimate interest",
+    "Right to data portability: receive your listing data in JSON format",
+    "Right to withdraw consent: at any time, without penalty (see Section 4)",
     "Right to complain to the Office of the Data Protection Commissioner (ODPC)",
 ]
 for right in rights:

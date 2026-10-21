@@ -1,20 +1,36 @@
 // @ts-nocheck
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 import {
-  Loader2, Building2, CheckCircle, XCircle,
-  ShieldCheck, Phone, MapPin, Users, FileText,
-  Mail, ArrowRight,
-} from 'lucide-react';
-import { Link, useNavigate } from '@tanstack/react-router';
-import { registerLandlord, homeForStatus } from '@/features/landlord/services/landlordService';
-import { useLandlord } from '@/shared/context/LandlordContext';
-import { cn } from '@/shared/lib/utils';
+  Loader2,
+  Building2,
+  CheckCircle,
+  XCircle,
+  ShieldCheck,
+  Phone,
+  MapPin,
+  Users,
+  FileText,
+  Mail,
+  ArrowRight,
+} from "lucide-react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { registerLandlord, homeForStatus } from "@/features/landlord/services/landlordService";
+import { useLandlord } from "@/shared/context/LandlordContext";
+import { cn } from "@/shared/lib/utils";
 
-const STEP_LABELS = ['Account', 'Profile', 'Verification'];
+const STEP_LABELS = ["Account", "Profile", "Verification"];
 
 const CAMPUS_OPTIONS = [
-  'Nairobi', 'Juja', 'Kahawa', 'Madaraka', 'Thika',
-  'Kesses', 'Njoro', 'Nakuru', 'Meru', 'Eldoret',
+  "Nairobi",
+  "Juja",
+  "Kahawa",
+  "Madaraka",
+  "Thika",
+  "Kesses",
+  "Njoro",
+  "Nakuru",
+  "Meru",
+  "Eldoret",
 ];
 
 export const LandlordRegisterPage = () => {
@@ -24,7 +40,7 @@ export const LandlordRegisterPage = () => {
 
   // Returning landlords who already have a profile skip registration.
   useEffect(() => {
-    if (user && profileState === 'ok' && profile) {
+    if (user && profileState === "ok" && profile) {
       void navigate({ to: homeForStatus(profile.status), replace: true });
     }
   }, [user, profile, profileState, navigate]);
@@ -32,27 +48,27 @@ export const LandlordRegisterPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showError, setShowError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
 
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    confirmPassword: '',
-    fullName: '',
-    businessName: '',
-    phone: '',
-    whatsappNumber: '',
-    nationalId: '',
-    targetCampuses: '',
-    estimatedProperties: '',
-    reviewNote: '',
+    email: "",
+    password: "",
+    confirmPassword: "",
+    fullName: "",
+    businessName: "",
+    phone: "",
+    whatsappNumber: "",
+    nationalId: "",
+    targetCampuses: "",
+    estimatedProperties: "",
+    reviewNote: "",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value,
+      [name]: type === "checkbox" ? (e.target as HTMLInputElement).checked : value,
     }));
   };
 
@@ -67,7 +83,7 @@ export const LandlordRegisterPage = () => {
     if (step < 3) {
       if (step === 1 && formData.password !== formData.confirmPassword) {
         setShowError(true);
-        setErrorMessage('Passwords do not match');
+        setErrorMessage("Passwords do not match");
         return;
       }
       setStep((s) => s + 1);
@@ -76,7 +92,7 @@ export const LandlordRegisterPage = () => {
 
     if (!consent) {
       setShowError(true);
-      setErrorMessage('Please consent to storing your information to continue.');
+      setErrorMessage("Please consent to storing your information to continue.");
       return;
     }
 
@@ -91,7 +107,7 @@ export const LandlordRegisterPage = () => {
         whatsappNumber: formData.whatsappNumber,
         nationalId: formData.nationalId,
         targetCampuses: formData.targetCampuses
-          .split(',')
+          .split(",")
           .map((c) => c.trim())
           .filter(Boolean),
         estimatedProperties: parseInt(formData.estimatedProperties, 10) || 0,
@@ -100,21 +116,21 @@ export const LandlordRegisterPage = () => {
 
       setShowSuccess(true);
       setTimeout(() => {
-        void navigate({ to: '/landlord/pending', replace: true });
+        void navigate({ to: "/landlord/pending", replace: true });
       }, 2000);
     } catch (error) {
-      console.error('Registration failed:', error);
+      console.error("Registration failed:", error);
       setShowError(true);
-      setErrorMessage(error instanceof Error ? error.message : 'Registration failed');
+      setErrorMessage(error instanceof Error ? error.message : "Registration failed");
     } finally {
       setIsLoading(false);
     }
   };
 
   const inputBase =
-    'w-full px-4 py-3 rounded-xl border border-input bg-background text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-shadow';
+    "w-full px-4 py-3 rounded-xl border border-input bg-background text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-shadow";
 
-  const labelClass = 'block text-sm font-medium text-secondary-foreground mb-1.5';
+  const labelClass = "block text-sm font-medium text-secondary-foreground mb-1.5";
 
   if (showSuccess) {
     return (
@@ -171,7 +187,8 @@ export const LandlordRegisterPage = () => {
               Become a verified landlord
             </h1>
             <p className="mt-2 text-sm text-muted-foreground max-w-md">
-              Join landlords who list student housing on UniHub. We verify every account so students can trust who they are dealing with.
+              Join landlords who list student housing on UniHub. We verify every account so students
+              can trust who they are dealing with.
             </p>
           </div>
 
@@ -185,35 +202,30 @@ export const LandlordRegisterPage = () => {
                 <div key={label} className="flex items-center gap-2 flex-1">
                   <div
                     className={cn(
-                      'flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-semibold transition-colors',
+                      "flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-semibold transition-colors",
                       isDone
-                        ? 'rounded-full bg-status/20 text-status'
+                        ? "rounded-full bg-status/20 text-status"
                         : isActive
-                        ? 'rounded-full bg-primary text-primary-foreground shadow-glow'
-                        : 'rounded-full border border-border bg-card text-muted-foreground'
+                          ? "rounded-full bg-primary text-primary-foreground shadow-glow"
+                          : "rounded-full border border-border bg-card text-muted-foreground",
                     )}
                   >
-                    {isDone ? (
-                      <CheckCircle className="h-4 w-4" />
-                    ) : (
-                      idx
-                    )}
+                    {isDone ? <CheckCircle className="h-4 w-4" /> : idx}
                   </div>
                   <span
                     className={cn(
-                      'text-xs font-medium sm:text-sm',
-                      isActive ? 'text-foreground' : isDone ? 'text-muted-foreground' : 'text-muted-foreground'
+                      "text-xs font-medium sm:text-sm",
+                      isActive
+                        ? "text-foreground"
+                        : isDone
+                          ? "text-muted-foreground"
+                          : "text-muted-foreground",
                     )}
                   >
                     {label}
                   </span>
                   {i < STEP_LABELS.length - 1 && (
-                    <div
-                      className={cn(
-                        'flex-1 h-px',
-                        isDone ? 'bg-status/40' : 'bg-border'
-                      )}
-                    />
+                    <div className={cn("flex-1 h-px", isDone ? "bg-status/40" : "bg-border")} />
                   )}
                 </div>
               );
@@ -234,7 +246,9 @@ export const LandlordRegisterPage = () => {
               <div className="space-y-5">
                 <div className="flex items-center gap-2 mb-1">
                   <Mail className="h-4 w-4 text-muted-foreground" />
-                  <h2 className="font-display text-lg font-medium text-foreground">Account details</h2>
+                  <h2 className="font-display text-lg font-medium text-foreground">
+                    Account details
+                  </h2>
                 </div>
 
                 <div className="space-y-1.5">
@@ -296,8 +310,8 @@ export const LandlordRegisterPage = () => {
                     type="submit"
                     disabled={isLoading}
                     className={cn(
-                      'cta-shine inline-flex items-center justify-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-glow transition-colors disabled:opacity-50',
-                      isLoading ? 'hover:bg-primary/90' : ''
+                      "cta-shine inline-flex items-center justify-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-glow transition-colors disabled:opacity-50",
+                      isLoading ? "hover:bg-primary/90" : "",
                     )}
                   >
                     {isLoading ? (
@@ -355,7 +369,9 @@ export const LandlordRegisterPage = () => {
                       className={inputBase}
                       placeholder="Joy Homes Real Estate"
                     />
-                    <p className="text-xs text-muted-foreground">Optional — leave blank if you list as an individual.</p>
+                    <p className="text-xs text-muted-foreground">
+                      Optional — leave blank if you list as an individual.
+                    </p>
                   </div>
 
                   <div className="space-y-1.5">
@@ -363,14 +379,16 @@ export const LandlordRegisterPage = () => {
                       Phone number
                     </label>
                     <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">+254</span>
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">
+                        +254
+                      </span>
                       <input
                         id="phone"
                         type="tel"
                         name="phone"
                         value={formData.phone}
                         onChange={handleChange}
-                        className={cn(inputBase, 'pl-10')}
+                        className={cn(inputBase, "pl-10")}
                         placeholder="7XX XXX XXX"
                         required
                         autoComplete="tel-national"
@@ -383,14 +401,16 @@ export const LandlordRegisterPage = () => {
                       WhatsApp number
                     </label>
                     <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">+254</span>
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">
+                        +254
+                      </span>
                       <input
                         id="whatsappNumber"
                         type="tel"
                         name="whatsappNumber"
                         value={formData.whatsappNumber}
                         onChange={handleChange}
-                        className={cn(inputBase, 'pl-10')}
+                        className={cn(inputBase, "pl-10")}
                         placeholder="7XX XXX XXX"
                         required
                         autoComplete="tel-national"
@@ -406,7 +426,13 @@ export const LandlordRegisterPage = () => {
                     onClick={() => setStep(1)}
                     className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
                   >
-                    <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                    <svg
+                      className="h-4 w-4"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    >
                       <path d="M15 18l-6-6 6-6" />
                     </svg>
                     Back
@@ -415,8 +441,8 @@ export const LandlordRegisterPage = () => {
                     type="submit"
                     disabled={isLoading}
                     className={cn(
-                      'cta-shine inline-flex items-center justify-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-glow transition-colors disabled:opacity-50',
-                      isLoading ? '' : 'hover:bg-primary/90'
+                      "cta-shine inline-flex items-center justify-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-glow transition-colors disabled:opacity-50",
+                      isLoading ? "" : "hover:bg-primary/90",
                     )}
                   >
                     {isLoading ? (
@@ -440,7 +466,9 @@ export const LandlordRegisterPage = () => {
               <div className="space-y-5">
                 <div className="flex items-center gap-2 mb-1">
                   <ShieldCheck className="h-4 w-4 text-muted-foreground" />
-                  <h2 className="font-display text-lg font-medium text-foreground">Verification details</h2>
+                  <h2 className="font-display text-lg font-medium text-foreground">
+                    Verification details
+                  </h2>
                 </div>
 
                 <div className="grid gap-4 sm:grid-cols-2">
@@ -475,22 +503,30 @@ export const LandlordRegisterPage = () => {
                           type="button"
                           onClick={() => {
                             const current = formData.targetCampuses
-                              .split(',')
+                              .split(",")
                               .map((c) => c.trim())
                               .filter(Boolean);
                             const exists = current.includes(campus);
                             const next = exists
                               ? current.filter((c) => c !== campus)
                               : [...current, campus];
-                            setField('targetCampuses', next.join(', '));
+                            setField("targetCampuses", next.join(", "));
                           }}
                           className={cn(
-                            'inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors',
-                            formData.targetCampuses.split(',').map((c) => c.trim()).filter(Boolean).includes(campus)
-                              ? 'border-foreground bg-foreground text-background'
-                              : 'border-border bg-card text-secondary-foreground hover:border-foreground/50'
+                            "inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors",
+                            formData.targetCampuses
+                              .split(",")
+                              .map((c) => c.trim())
+                              .filter(Boolean)
+                              .includes(campus)
+                              ? "border-foreground bg-foreground text-background"
+                              : "border-border bg-card text-secondary-foreground hover:border-foreground/50",
                           )}
-                          aria-pressed={formData.targetCampuses.split(',').map((c) => c.trim()).filter(Boolean).includes(campus)}
+                          aria-pressed={formData.targetCampuses
+                            .split(",")
+                            .map((c) => c.trim())
+                            .filter(Boolean)
+                            .includes(campus)}
                         >
                           {campus}
                         </button>
@@ -554,7 +590,8 @@ export const LandlordRegisterPage = () => {
                     />
                     <div>
                       <span className="text-sm text-secondary-foreground">
-                        I consent to UniHub storing this information to verify my landlord application, and I confirm the details provided are accurate.
+                        I consent to UniHub storing this information to verify my landlord
+                        application, and I confirm the details provided are accurate.
                       </span>
                       <p className="mt-1 text-xs text-muted-foreground">
                         You can ask us to delete your data at any time by emailing hello@unihub.ke.
@@ -569,7 +606,13 @@ export const LandlordRegisterPage = () => {
                     onClick={() => setStep(2)}
                     className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
                   >
-                    <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+                    <svg
+                      className="h-4 w-4"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    >
                       <path d="M15 18l-6-6 6-6" />
                     </svg>
                     Back
@@ -578,8 +621,8 @@ export const LandlordRegisterPage = () => {
                     type="submit"
                     disabled={isLoading}
                     className={cn(
-                      'cta-shine inline-flex items-center justify-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-glow transition-colors disabled:opacity-50',
-                      isLoading ? '' : 'hover:bg-primary/90'
+                      "cta-shine inline-flex items-center justify-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-glow transition-colors disabled:opacity-50",
+                      isLoading ? "" : "hover:bg-primary/90",
                     )}
                   >
                     {isLoading ? (
@@ -597,13 +640,12 @@ export const LandlordRegisterPage = () => {
                 </div>
               </div>
             )}
-
           </form>
 
           {/* Footer */}
           <div className="mt-5 rounded-xl border border-border bg-card/40 p-4 text-center sm:text-left">
             <p className="text-sm text-muted-foreground">
-              Already have an account?{' '}
+              Already have an account?{" "}
               <Link
                 to="/landlord/login"
                 className="text-primary font-medium hover:underline underline-offset-2"

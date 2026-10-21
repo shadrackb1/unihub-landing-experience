@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { getSiteSettings } from '@/shared/services/firestore';
+import { useEffect, useState } from "react";
+import { getSiteSettings } from "@/shared/services/firestore";
 
 export type SiteSettingsData = {
   heroTitle?: string;
@@ -20,7 +20,7 @@ let cached: Promise<SiteSettingsData | null> | null = null;
 
 function loadSiteSettings(): Promise<SiteSettingsData | null> {
   cached ??= getSiteSettings().catch((error) => {
-    console.warn('Site settings unavailable, using defaults:', error);
+    console.warn("Site settings unavailable, using defaults:", error);
     cached = null;
     return null;
   });

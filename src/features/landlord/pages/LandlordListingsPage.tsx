@@ -1,11 +1,21 @@
-import { useCallback, useEffect, useState } from 'react';
-import { Link, useNavigate } from '@tanstack/react-router';
+import { useCallback, useEffect, useState } from "react";
+import { Link, useNavigate } from "@tanstack/react-router";
 import {
-  Building2, MapPin, Plus, Loader2, AlertTriangle, Megaphone,
-  Eye, EyeOff, Trash2, CheckCircle2, RefreshCw, ShieldCheck,
-} from 'lucide-react';
-import { LandlordShell } from '@/features/landlord/components/LandlordShell';
-import { useApprovedLandlord } from '@/features/landlord/hooks/useApprovedLandlord';
+  Building2,
+  MapPin,
+  Plus,
+  Loader2,
+  AlertTriangle,
+  Megaphone,
+  Eye,
+  EyeOff,
+  Trash2,
+  CheckCircle2,
+  RefreshCw,
+  ShieldCheck,
+} from "lucide-react";
+import { LandlordShell } from "@/features/landlord/components/LandlordShell";
+import { useApprovedLandlord } from "@/features/landlord/hooks/useApprovedLandlord";
 import {
   deleteListing,
   formatKes,
@@ -13,31 +23,36 @@ import {
   listLandlordListings,
   updateListingStatus,
   type MarketListing,
-} from '@/features/marketplace/services';
-import { cn } from '@/shared/lib/utils';
+} from "@/features/marketplace/services";
+import { cn } from "@/shared/lib/utils";
 
-type Feedback = { kind: 'success' | 'error'; message: string } | null;
+type Feedback = { kind: "success" | "error"; message: string } | null;
 
 const STATUS_LABEL: Record<string, string> = {
-  pending: 'Pending review',
-  published: 'Live',
-  hidden: 'Hidden',
-  rejected: 'Rejected',
-  draft: 'Draft',
+  pending: "Pending review",
+  published: "Live",
+  hidden: "Hidden",
+  rejected: "Rejected",
+  draft: "Draft",
 };
 
 function StatusBadge({ status }: { status?: string | undefined }) {
-  const key = status ?? 'pending';
+  const key = status ?? "pending";
   const tone =
-    key === 'published'
-      ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-700'
-      : key === 'rejected'
-        ? 'border-destructive/30 bg-destructive/10 text-destructive'
-        : key === 'hidden'
-          ? 'border-border bg-accent text-muted-foreground'
-          : 'border-amber-500/30 bg-amber-500/10 text-amber-700';
+    key === "published"
+      ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-700"
+      : key === "rejected"
+        ? "border-destructive/30 bg-destructive/10 text-destructive"
+        : key === "hidden"
+          ? "border-border bg-accent text-muted-foreground"
+          : "border-amber-500/30 bg-amber-500/10 text-amber-700";
   return (
-    <span className={cn('inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-medium', tone)}>
+    <span
+      className={cn(
+        "inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-medium",
+        tone,
+      )}
+    >
       {STATUS_LABEL[key] ?? key}
     </span>
   );
@@ -48,26 +63,26 @@ export const LandlordListingsPage = () => {
   const navigate = useNavigate();
 
   const [listings, setListings] = useState<MarketListing[] | null>(null);
-  const [loadError, setLoadError] = useState('');
+  const [loadError, setLoadError] = useState("");
   const [feedback, setFeedback] = useState<Feedback>(null);
   const [busyId, setBusyId] = useState<string | null>(null);
   const [confirmId, setConfirmId] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     if (!uid) return;
-    setLoadError('');
+    setLoadError("");
     try {
       const rows = await listLandlordListings(uid);
       setListings(rows);
     } catch (error) {
-      console.error('Failed to load listings:', error);
+      console.error("Failed to load listings:", error);
       setListings([]);
-      setLoadError('We could not load your listings. Check your connection and try again.');
+      setLoadError("We could not load your listings. Check your connection and try again.");
     }
   }, [uid]);
 
   useEffect(() => {
-    if (profileState === 'loading') return;
+    if (profileState === "loading") return;
     void load();
   }, [load, profileState]);
 
@@ -76,12 +91,15 @@ export const LandlordListingsPage = () => {
     setFeedback(null);
     try {
       await action();
-      setFeedback({ kind: 'success', message: successMessage });
+      setFeedback({ kind: "success", message: successMessage });
     } catch (error) {
-      console.error('Listing action failed:', error);
+      console.error("Listing action failed:", error);
       setFeedback({
-        kind: 'error',
-        message: error instanceof Error ? error.message : 'That action did not go through. Please try again.',
+        kind: "error",
+        message:
+          error instanceof Error
+            ? error.message
+            : "That action did not go through. Please try again.",
       });
     } finally {
       setBusyId(null);
@@ -90,7 +108,7 @@ export const LandlordListingsPage = () => {
   };
 
   const handleToggleVisibility = (listing: MarketListing) => {
-    const nextStatus = listing.status === 'hidden' ? 'published' : 'hidden';
+    const nextStatus = listing.status === "hidden" ? "published" : "hidden";
     void runAction(
       listing.id,
       async () => {
@@ -99,7 +117,7 @@ export const LandlordListingsPage = () => {
           (prev ?? []).map((l) => (l.id === listing.id ? { ...l, status: nextStatus } : l)),
         );
       },
-      nextStatus === 'hidden' ? 'Listing hidden from search.' : 'Listing published again.',
+      nextStatus === "hidden" ? "Listing hidden from search." : "Listing published again.",
     );
   };
 
@@ -110,7 +128,7 @@ export const LandlordListingsPage = () => {
         await deleteListing(listing.id);
         setListings((prev) => (prev ?? []).filter((l) => l.id !== listing.id));
       },
-      `“${listing.title ?? 'Listing'}” was deleted.`,
+      `“${listing.title ?? "Listing"}” was deleted.`,
     );
   };
 
@@ -133,7 +151,7 @@ export const LandlordListingsPage = () => {
               disabled={loading}
               className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-sm font-medium hover:bg-accent disabled:opacity-60"
             >
-              <RefreshCw className={cn('h-4 w-4', loading && 'animate-spin')} />
+              <RefreshCw className={cn("h-4 w-4", loading && "animate-spin")} />
               Refresh
             </button>
             <Link
@@ -151,13 +169,13 @@ export const LandlordListingsPage = () => {
             role="status"
             aria-live="polite"
             className={cn(
-              'flex items-start gap-3 rounded-xl border p-4 text-sm',
-              feedback.kind === 'success'
-                ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-800'
-                : 'border-destructive/30 bg-destructive/10 text-destructive',
+              "flex items-start gap-3 rounded-xl border p-4 text-sm",
+              feedback.kind === "success"
+                ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-800"
+                : "border-destructive/30 bg-destructive/10 text-destructive",
             )}
           >
-            {feedback.kind === 'success' ? (
+            {feedback.kind === "success" ? (
               <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" />
             ) : (
               <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
@@ -188,17 +206,25 @@ export const LandlordListingsPage = () => {
             <span>{loadError}</span>
             <button
               type="button"
-              onClick={() => { setListings(null); void load(); }}
+              onClick={() => {
+                setListings(null);
+                void load();
+              }}
               className="rounded-full border border-destructive/40 px-4 py-1.5 text-xs font-semibold"
             >
               Try again
             </button>
-            {profileState === 'unavailable' && <span className="text-xs opacity-80">{profileMessage}</span>}
+            {profileState === "unavailable" && (
+              <span className="text-xs opacity-80">{profileMessage}</span>
+            )}
           </div>
         )}
 
         {loading && (
-          <div className="flex items-center justify-center rounded-2xl border border-border bg-card py-20" role="status">
+          <div
+            className="flex items-center justify-center rounded-2xl border border-border bg-card py-20"
+            role="status"
+          >
             <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
             <span className="sr-only">Loading your listings</span>
           </div>
@@ -226,15 +252,23 @@ export const LandlordListingsPage = () => {
             {listings.map((listing) => {
               const busy = busyId === listing.id;
               const boosting = isAdLive(listing);
-              const awaitingBoost = listing.adStatus === 'requested';
+              const awaitingBoost = listing.adStatus === "requested";
               const cover = listing.images?.[0];
 
               return (
-                <li key={listing.id} className="rounded-2xl border border-border bg-card p-4 sm:p-5">
+                <li
+                  key={listing.id}
+                  className="rounded-2xl border border-border bg-card p-4 sm:p-5"
+                >
                   <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
                     <div className="h-24 w-full shrink-0 overflow-hidden rounded-xl border border-border bg-accent sm:w-32">
                       {cover ? (
-                        <img src={cover} alt="" className="h-full w-full object-cover" loading="lazy" />
+                        <img
+                          src={cover}
+                          alt=""
+                          className="h-full w-full object-cover"
+                          loading="lazy"
+                        />
                       ) : (
                         <div className="flex h-full items-center justify-center text-muted-foreground">
                           <Building2 className="h-6 w-6" aria-hidden="true" />
@@ -244,7 +278,9 @@ export const LandlordListingsPage = () => {
 
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-center gap-2">
-                        <h2 className="font-display text-lg font-medium">{listing.title ?? 'Untitled listing'}</h2>
+                        <h2 className="font-display text-lg font-medium">
+                          {listing.title ?? "Untitled listing"}
+                        </h2>
                         <StatusBadge status={listing.status} />
                         {boosting && (
                           <span className="inline-flex items-center gap-1 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-2.5 py-1 text-xs font-medium text-indigo-700">
@@ -259,49 +295,65 @@ export const LandlordListingsPage = () => {
                       </div>
 
                       <p className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
-                        {listing.campus && <span className="font-medium text-foreground">{listing.campus}</span>}
+                        {listing.campus && (
+                          <span className="font-medium text-foreground">{listing.campus}</span>
+                        )}
                         {listing.location && (
                           <span className="inline-flex items-center gap-1">
                             <MapPin className="h-3.5 w-3.5" /> {listing.location}
                           </span>
                         )}
-                        {typeof listing.price === 'number' && (
+                        {typeof listing.price === "number" && (
                           <span>
                             {formatKes(listing.price)} <span className="text-xs">/ month</span>
                           </span>
                         )}
                       </p>
 
-                      {listing.status === 'rejected' && (
+                      {listing.status === "rejected" && (
                         <p className="mt-2 text-sm text-destructive">
-                          This listing was rejected. Update the details and resubmit, or contact support.
+                          This listing was rejected. Update the details and resubmit, or contact
+                          support.
                         </p>
                       )}
 
                       <div className="mt-4 flex flex-wrap items-center gap-2">
                         <button
                           type="button"
-                          onClick={() => void navigate({ to: '/landlord/ads/new', search: { listingId: listing.id } })}
+                          onClick={() =>
+                            void navigate({
+                              to: "/landlord/ads/new",
+                              search: { listingId: listing.id },
+                            })
+                          }
                           disabled={busy || awaitingBoost}
                           className="inline-flex items-center gap-2 rounded-full border border-border px-3 py-1.5 text-xs font-semibold hover:bg-accent disabled:opacity-50"
                         >
                           <Megaphone className="h-3.5 w-3.5" />
-                          {boosting ? 'Extend boost' : awaitingBoost ? 'Boost requested' : 'Boost'}
+                          {boosting ? "Extend boost" : awaitingBoost ? "Boost requested" : "Boost"}
                         </button>
 
                         <button
                           type="button"
                           onClick={() => handleToggleVisibility(listing)}
-                          disabled={busy || listing.status === 'pending' || listing.status === 'rejected'}
+                          disabled={
+                            busy || listing.status === "pending" || listing.status === "rejected"
+                          }
                           className="inline-flex items-center gap-2 rounded-full border border-border px-3 py-1.5 text-xs font-semibold hover:bg-accent disabled:opacity-50"
                         >
-                          {listing.status === 'hidden' ? <Eye className="h-3.5 w-3.5" /> : <EyeOff className="h-3.5 w-3.5" />}
-                          {listing.status === 'hidden' ? 'Publish' : 'Hide'}
+                          {listing.status === "hidden" ? (
+                            <Eye className="h-3.5 w-3.5" />
+                          ) : (
+                            <EyeOff className="h-3.5 w-3.5" />
+                          )}
+                          {listing.status === "hidden" ? "Publish" : "Hide"}
                         </button>
 
                         {confirmId === listing.id ? (
                           <span className="inline-flex items-center gap-2 rounded-full border border-destructive/40 bg-destructive/5 px-3 py-1.5 text-xs">
-                            <span className="font-semibold text-destructive">Delete permanently?</span>
+                            <span className="font-semibold text-destructive">
+                              Delete permanently?
+                            </span>
                             <button
                               type="button"
                               onClick={() => handleDelete(listing)}
@@ -331,7 +383,12 @@ export const LandlordListingsPage = () => {
                           </button>
                         )}
 
-                        {busy && <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" aria-label="Working" />}
+                        {busy && (
+                          <Loader2
+                            className="h-4 w-4 animate-spin text-muted-foreground"
+                            aria-label="Working"
+                          />
+                        )}
                       </div>
                     </div>
                   </div>

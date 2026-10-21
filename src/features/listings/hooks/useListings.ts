@@ -28,4 +28,3 @@ export function useListings(): SampleListing[] {
 
   return listings;
 }
-

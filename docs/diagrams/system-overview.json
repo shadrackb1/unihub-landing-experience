@@ -1,0 +1,118 @@
+{
+  "version": "1",
+  "type": "graph",
+  "title": "UniHub System Overview",
+  "description": "High-level component architecture showing frontend, backend, and external services",
+  "nodes": [
+    {
+      "id": "browser",
+      "label": "Student Browser",
+      "description": "React 19 + TanStack Router (SPA + SSR)",
+      "shape": "rounded",
+      "color": "blue",
+      "emphasis": "strong"
+    },
+    {
+      "id": "tanstack-start",
+      "label": "TanStack Start",
+      "description": "File-based routing, SSR, createServerFn",
+      "shape": "rectangle",
+      "color": "blue"
+    },
+    {
+      "id": "vite",
+      "label": "Vite 8 + Nitro 3",
+      "description": "Build tool + server output (Vercel preset)",
+      "shape": "rectangle",
+      "color": "slate"
+    },
+    {
+      "id": "better-auth",
+      "label": "Better Auth",
+      "description": "Email/password, admin plugin, 7-day sessions",
+      "shape": "rectangle",
+      "color": "green"
+    },
+    {
+      "id": "prisma",
+      "label": "Prisma 7 + libsql",
+      "description": "SQLite database, generated client",
+      "shape": "rectangle",
+      "color": "green"
+    },
+    {
+      "id": "firebase-auth",
+      "label": "Firebase Auth (Legacy)",
+      "description": "Landlord portal, admin guard",
+      "shape": "rectangle",
+      "color": "amber",
+      "emphasis": "subtle"
+    },
+    {
+      "id": "firestore",
+      "label": "Firestore (Legacy)",
+      "description": "Landlord profiles, site settings, legacy listings",
+      "shape": "rectangle",
+      "color": "amber",
+      "emphasis": "subtle"
+    },
+    {
+      "id": "maplibre",
+      "label": "MapLibre GL",
+      "description": "Interactive campus map (vector + satellite)",
+      "shape": "rounded",
+      "color": "cyan"
+    },
+    {
+      "id": "tile-providers",
+      "label": "Tile Providers",
+      "description": "OpenFreeMap (vector), Esri (satellite)",
+      "shape": "pill",
+      "color": "cyan"
+    },
+    {
+      "id": "vercel",
+      "label": "Vercel (iad1)",
+      "description": "Hosting, serverless functions, logs",
+      "shape": "pill",
+      "color": "violet",
+      "emphasis": "strong"
+    },
+    {
+      "id": "github",
+      "label": "GitHub",
+      "description": "Source control, CI/CD, private repo",
+      "shape": "pill",
+      "color": "violet"
+    },
+    {
+      "id": "static-data",
+      "label": "Static Listing Data",
+      "description": "src/data/listings.ts (TypeScript array)",
+      "shape": "rectangle",
+      "color": "slate"
+    },
+    {
+      "id": "assets",
+      "label": "Static Assets",
+      "description": "Videos, images, self-hosted fonts",
+      "shape": "rectangle",
+      "color": "slate"
+    }
+  ],
+  "edges": [
+    { "from": "browser", "to": "tanstack-start", "label": "HTTP/SSR", "direction": "both" },
+    { "from": "tanstack-start", "to": "vite", "label": "builds with", "direction": "forward" },
+    { "from": "tanstack-start", "to": "better-auth", "label": "auth", "direction": "both" },
+    { "from": "better-auth", "to": "prisma", "label": "adapter", "direction": "both" },
+    { "from": "tanstack-start", "to": "static-data", "label": "imports", "direction": "forward" },
+    { "from": "tanstack-start", "to": "assets", "label": "serves", "direction": "forward" },
+    { "from": "tanstack-start", "to": "maplibre", "label": "renders", "direction": "forward" },
+    { "from": "maplibre", "to": "tile-providers", "label": "fetches tiles", "direction": "forward", "style": "dashed" },
+    { "from": "browser", "to": "firebase-auth", "label": "legacy auth", "direction": "both", "style": "dotted" },
+    { "from": "firebase-auth", "to": "firestore", "label": "legacy data", "direction": "both", "style": "dotted" },
+    { "from": "vite", "to": "vercel", "label": "deploys to", "direction": "forward" },
+    { "from": "github", "to": "vercel", "label": "triggers deploy", "direction": "forward" },
+    { "from": "vercel", "to": "browser", "label": "serves", "direction": "forward" }
+  ]
+}

@@ -1,43 +1,55 @@
-import { Link, useNavigate, useRouterState } from '@tanstack/react-router';
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import {
-  LayoutDashboard, ClipboardList, Megaphone, Plus, LogOut,
-  Menu, X, Building2, Mail, MessageCircle,
-} from 'lucide-react';
-import { useState } from 'react';
-import { useAuth } from '@/shared/context/AuthContext';
-import { useLandlord } from '@/shared/context/LandlordContext';
-import { cn } from '@/shared/lib/utils';
-import { SUPPORT_LABEL, WHATSAPP_CONFIGURED, SUPPORT_EMAIL } from '@/shared/contact';
-import { SupportLink } from '@/shared/components/SupportLink';
+  LayoutDashboard,
+  ClipboardList,
+  Megaphone,
+  Plus,
+  LogOut,
+  Menu,
+  X,
+  Building2,
+  Mail,
+  MessageCircle,
+} from "lucide-react";
+import { useState } from "react";
+import { useAuth } from "@/shared/context/AuthContext";
+import { useLandlord } from "@/shared/context/LandlordContext";
+import { cn } from "@/shared/lib/utils";
+import { SUPPORT_LABEL, WHATSAPP_CONFIGURED, SUPPORT_EMAIL } from "@/shared/contact";
+import { SupportLink } from "@/shared/components/SupportLink";
 
 interface ShellProps {
   children: React.ReactNode;
 }
 
 const NAV = [
-  { to: '/landlord', label: 'Dashboard', icon: LayoutDashboard, end: true },
-  { to: '/landlord/listings', label: 'Listings', icon: ClipboardList },
-  { to: '/landlord/ads', label: 'Ad boosts', icon: Megaphone },
+  { to: "/landlord", label: "Dashboard", icon: LayoutDashboard, end: true },
+  { to: "/landlord/listings", label: "Listings", icon: ClipboardList },
+  { to: "/landlord/ads", label: "Ad boosts", icon: Megaphone },
 ] as const;
 
 export function LandlordShell({ children }: ShellProps) {
   const { logout } = useAuth();
   const { profile } = useLandlord();
   const navigate = useNavigate();
-  const pathname = useRouterState({ select: (s) => s.location.pathname }).replace(/\/$/, '') || '/';
+  const pathname = useRouterState({ select: (s) => s.location.pathname }).replace(/\/$/, "") || "/";
   const [open, setOpen] = useState(false);
 
   const handleLogout = async () => {
-    try { await logout(); } catch { /* already signed out */ }
-    navigate({ to: '/landlord/login', replace: true });
+    try {
+      await logout();
+    } catch {
+      /* already signed out */
+    }
+    navigate({ to: "/landlord/login", replace: true });
   };
 
-  const activeFor = (item: typeof NAV[number]) => {
-    if ('end' in item && item.end) return pathname === item.to;
+  const activeFor = (item: (typeof NAV)[number]) => {
+    if ("end" in item && item.end) return pathname === item.to;
     return pathname.startsWith(item.to);
   };
 
-  const displayName = profile?.fullName ?? 'Landlord';
+  const displayName = profile?.fullName ?? "Landlord";
 
   return (
     <div className="min-h-screen flex bg-background">
@@ -57,7 +69,7 @@ export function LandlordShell({ children }: ShellProps) {
           </Link>
           <button
             type="button"
-            aria-label={open ? 'Close menu' : 'Open menu'}
+            aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
             className="rounded-full p-2 text-muted-foreground transition-colors hover:bg-accent"
@@ -70,8 +82,8 @@ export function LandlordShell({ children }: ShellProps) {
       {/* Sidebar */}
       <aside
         className={cn(
-          'fixed inset-y-0 left-0 z-30 flex h-full w-64 flex-col border-r border-border bg-card md:relative md:translate-x-0 transition-transform duration-200',
-          open ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
+          "fixed inset-y-0 left-0 z-30 flex h-full w-64 flex-col border-r border-border bg-card md:relative md:translate-x-0 transition-transform duration-200",
+          open ? "translate-x-0" : "-translate-x-full md:translate-x-0",
         )}
       >
         <div className="flex h-16 items-center justify-between border-b border-border px-5">
@@ -98,10 +110,10 @@ export function LandlordShell({ children }: ShellProps) {
                 to={item.to}
                 onClick={() => setOpen(false)}
                 className={cn(
-                  'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors',
+                  "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors",
                   active
-                    ? 'bg-accent text-foreground'
-                    : 'text-muted-foreground hover:bg-accent/60 hover:text-foreground'
+                    ? "bg-accent text-foreground"
+                    : "text-muted-foreground hover:bg-accent/60 hover:text-foreground",
                 )}
               >
                 <item.icon className="h-4 w-4" />
@@ -115,9 +127,11 @@ export function LandlordShell({ children }: ShellProps) {
           <div className="rounded-xl border border-border bg-card/60 p-3">
             <p className="truncate text-sm font-medium">{displayName}</p>
             <p className="text-xs text-muted-foreground">
-              {profile?.status === 'approved'
-                ? 'Approved landlord'
-                : profile?.status ? String(profile.status) : 'Not yet approved'}
+              {profile?.status === "approved"
+                ? "Approved landlord"
+                : profile?.status
+                  ? String(profile.status)
+                  : "Not yet approved"}
             </p>
           </div>
           <button
@@ -131,9 +145,13 @@ export function LandlordShell({ children }: ShellProps) {
           <SupportLink
             message="Hi UniHub, I need help in the landlord portal"
             className="mt-2 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-            aria-label={`${SUPPORT_LABEL} — ${WHATSAPP_CONFIGURED ? 'opens WhatsApp' : SUPPORT_EMAIL}`}
+            aria-label={`${SUPPORT_LABEL} — ${WHATSAPP_CONFIGURED ? "opens WhatsApp" : SUPPORT_EMAIL}`}
           >
-            {WHATSAPP_CONFIGURED ? <MessageCircle className="h-4 w-4" /> : <Mail className="h-4 w-4" />}
+            {WHATSAPP_CONFIGURED ? (
+              <MessageCircle className="h-4 w-4" />
+            ) : (
+              <Mail className="h-4 w-4" />
+            )}
             {SUPPORT_LABEL}
           </SupportLink>
         </div>
@@ -150,9 +168,7 @@ export function LandlordShell({ children }: ShellProps) {
 
       {/* Main content */}
       <main className="flex-1 pb-10 pt-16 md:pt-0">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-6">
-          {children}
-        </div>
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-6">{children}</div>
       </main>
     </div>
   );

@@ -1,0 +1,156 @@
+{
+  "version": "1",
+  "type": "flowchart",
+  "title": "7-Act Funnel — Homepage Experience Flow",
+  "description": "Student journey through 7 acts: Arrive → Orient → Believe → Witness → Choose → Place → Move",
+  "nodes": [
+    {
+      "id": "entry",
+      "label": "Student Lands on Homepage",
+      "shape": "pill",
+      "color": "blue",
+      "emphasis": "strong"
+    },
+    {
+      "id": "act1-arrive",
+      "label": "Act 1: ARRIVE",
+      "description": "Hero video + headline \"Verified housing near your campus\"",
+      "shape": "rectangle",
+      "color": "blue"
+    },
+    {
+      "id": "act2-orient",
+      "label": "Act 2: ORIENT",
+      "description": "Campus map with 8 pulsing pins — \"Find your campus\"",
+      "shape": "rectangle",
+      "color": "cyan"
+    },
+    {
+      "id": "act3-believe",
+      "label": "Act 3: BELIEVE",
+      "description": "Trust signals: verification badge, stats, landlord quotes",
+      "shape": "rectangle",
+      "color": "green"
+    },
+    {
+      "id": "act4-witness",
+      "label": "Act 4: WITNESS",
+      "description": "Residence video gallery — real walkthroughs",
+      "shape": "rectangle",
+      "color": "violet"
+    },
+    {
+      "id": "act5-choose",
+      "label": "Act 5: CHOOSE",
+      "description": "Listing grid with filters (campus, category, price, deposit)",
+      "shape": "rectangle",
+      "color": "amber"
+    },
+    {
+      "id": "act6-place",
+      "label": "Act 6: PLACE",
+      "description": "Listing detail — photos, specs, contact links",
+      "shape": "rectangle",
+      "color": "amber"
+    },
+    {
+      "id": "act7-move",
+      "label": "Act 7: MOVE",
+      "description": "WhatsApp/Email contact → external conversation",
+      "shape": "pill",
+      "color": "green",
+      "emphasis": "strong"
+    },
+    {
+      "id": "scroll-trigger",
+      "label": "Scroll / IntersectionObserver",
+      "description": "Triggers act transitions, staggers animations",
+      "shape": "diamond",
+      "color": "slate"
+    },
+    {
+      "id": "reduced-motion",
+      "label": "prefers-reduced-motion?",
+      "shape": "diamond",
+      "color": "amber"
+    },
+    {
+      "id": "animations-on",
+      "label": "Full Staggered Animations",
+      "description": "Framer Motion: fade, slide, scale per act",
+      "shape": "rounded",
+      "color": "blue"
+    },
+    {
+      "id": "animations-off",
+      "label": "Static Layout (No Motion)",
+      "description": "All acts visible, no transitions",
+      "shape": "rounded",
+      "color": "slate"
+    },
+    {
+      "id": "map-interaction",
+      "label": "Click Campus Pin",
+      "description": "Filters listings to that campus",
+      "shape": "rounded",
+      "color": "cyan"
+    },
+    {
+      "id": "video-autoplay",
+      "label": "VideoPanel Autoplay",
+      "description": "25% viewport threshold, pauses on leave",
+      "shape": "rounded",
+      "color": "violet"
+    },
+    {
+      "id": "filter-change",
+      "label": "Filter Listings",
+      "description": "Instant client-side filter (no network)",
+      "shape": "rounded",
+      "color": "amber"
+    },
+    {
+      "id": "contact-click",
+      "label": "Click WhatsApp/Email",
+      "description": "Opens external app with pre-filled message",
+      "shape": "pill",
+      "color": "cyan"
+    },
+    {
+      "id": "exit",
+      "label": "Student in Conversation with Landlord",
+      "description": "Off-platform — UniHub role complete",
+      "shape": "pill",
+      "color": "green",
+      "emphasis": "strong"
+    }
+  ],
+  "edges": [
+    { "from": "entry", "to": "act1-arrive" },
+    { "from": "act1-arrive", "to": "scroll-trigger" },
+    { "from": "scroll-trigger", "to": "act2-orient" },
+    { "from": "act2-orient", "to": "scroll-trigger" },
+    { "from": "scroll-trigger", "to": "act3-believe" },
+    { "from": "act3-believe", "to": "scroll-trigger" },
+    { "from": "scroll-trigger", "to": "act4-witness" },
+    { "from": "act4-witness", "to": "scroll-trigger" },
+    { "from": "scroll-trigger", "to": "act5-choose" },
+    { "from": "act5-choose", "to": "scroll-trigger" },
+    { "from": "scroll-trigger", "to": "act6-place" },
+    { "from": "act6-place", "to": "scroll-trigger" },
+    { "from": "scroll-trigger", "to": "act7-move" },
+    { "from": "act1-arrive", "to": "reduced-motion" },
+    { "from": "reduced-motion", "to": "animations-on", "label": "false" },
+    { "from": "reduced-motion", "to": "animations-off", "label": "true" },
+    { "from": "animations-on", "to": "act2-orient" },
+    { "from": "animations-off", "to": "act2-orient" },
+    { "from": "act2-orient", "to": "map-interaction" },
+    { "from": "map-interaction", "to": "act5-choose" },
+    { "from": "act4-witness", "to": "video-autoplay" },
+    { "from": "act5-choose", "to": "filter-change" },
+    { "from": "filter-change", "to": "act5-choose" },
+    { "from": "act6-place", "to": "contact-click" },
+    { "from": "contact-click", "to": "exit" },
+    { "from": "act7-move", "to": "exit" }
+  ]
+}

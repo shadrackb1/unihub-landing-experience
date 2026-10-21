@@ -1,6 +1,11 @@
 import { initializeApp, getApps } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { initializeFirestore, getFirestore, memoryLocalCache, type Firestore } from "firebase/firestore";
+import {
+  initializeFirestore,
+  getFirestore,
+  memoryLocalCache,
+  type Firestore,
+} from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import fallbackConfig from "../../../firebase-applet-config.json";
 
@@ -21,7 +26,9 @@ export const auth = getAuth(app);
 export const storage = getStorage(app);
 
 const databaseId =
-  (env["VITE_FIREBASE_FIRESTORE_DATABASE_ID"] as string | undefined) || fallback["firestoreDatabaseId"] || undefined;
+  (env["VITE_FIREBASE_FIRESTORE_DATABASE_ID"] as string | undefined) ||
+  fallback["firestoreDatabaseId"] ||
+  undefined;
 
 function createDb(): Firestore {
   try {

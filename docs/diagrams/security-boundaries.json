@@ -1,0 +1,124 @@
+{
+  "version": "1",
+  "type": "flowchart",
+  "title": "Security Boundaries — Auth, HTTPS, Sanitisation, Access Control",
+  "description": "Defense-in-depth security controls across the application stack",
+  "nodes": [
+    {
+      "id": "network",
+      "label": "Network Layer",
+      "description": "HTTPS everywhere (Vercel enforced) — TLS 1.2+",
+      "shape": "pill",
+      "color": "blue",
+      "emphasis": "strong"
+    },
+    {
+      "id": "csp",
+      "label": "Content Security Policy",
+      "description": "script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self' tiles.openfreemap.org server.arcgisonline.com",
+      "shape": "rectangle",
+      "color": "blue"
+    },
+    {
+      "id": "better-auth",
+      "label": "Better Auth (Primary)",
+      "description": "Email/password, bcrypt, 7-day sessions, admin plugin, CSRF protection",
+      "shape": "rectangle",
+      "color": "green"
+    },
+    {
+      "id": "prisma-db",
+      "label": "Prisma + SQLite (libsql)",
+      "description": "Type-safe queries — prevents SQL injection",
+      "shape": "rectangle",
+      "color": "green"
+    },
+    {
+      "id": "firebase-legacy",
+      "label": "Firebase Auth (Legacy)",
+      "description": "Landlord portal only — being phased out",
+      "shape": "rectangle",
+      "color": "amber",
+      "emphasis": "subtle"
+    },
+    {
+      "id": "firestore-rules",
+      "label": "Firestore Rules",
+      "description": "Landlord profile read/write restricted to owner UID",
+      "shape": "rectangle",
+      "color": "amber"
+    },
+    {
+      "id": "admin-guard",
+      "label": "Admin Route Guard",
+      "description": "requireAdmin() + guardedLoader with 6s timeout",
+      "shape": "rectangle",
+      "color": "green"
+    },
+    {
+      "id": "vite-env",
+      "label": "Vite Env Variables",
+      "description": "VITE_* exposed to client; secrets only in server (BETTER_AUTH_SECRET)",
+      "shape": "rounded",
+      "color": "slate"
+    },
+    {
+      "id": "error-sanitise",
+      "label": "Error Sanitisation",
+      "description": "error-capture.ts scrubs request body, headers, URLs before logging",
+      "shape": "rectangle",
+      "color": "green"
+    },
+    {
+      "id": "no-tracking",
+      "label": "Zero Tracking",
+      "description": "No cookies, no analytics, no pixels, no fingerprinting",
+      "shape": "rectangle",
+      "color": "green"
+    },
+    {
+      "id": "self-hosted",
+      "label": "Self-Hosted Assets",
+      "description": "Fonts, icons, videos — no third-party CDNs for code",
+      "shape": "rectangle",
+      "color": "slate"
+    },
+    {
+      "id": "github-2fa",
+      "label": "GitHub + Vercel 2FA",
+      "description": "Branch protection, only founder has deploy access",
+      "shape": "rectangle",
+      "color": "violet"
+    },
+    {
+      "id": "vercel-logs",
+      "label": "Vercel Function Logs",
+      "description": "Sanitised errors only — 30 day retention",
+      "shape": "rounded",
+      "color": "violet"
+    },
+    {
+      "id": "data-min",
+      "label": "Data Minimisation by Design",
+      "description": "No DB for listings (static file), no auth for students, no forms",
+      "shape": "pill",
+      "color": "green",
+      "emphasis": "strong"
+    }
+  ],
+  "edges": [
+    { "from": "network", "to": "csp" },
+    { "from": "network", "to": "better-auth" },
+    { "from": "network", "to": "firebase-legacy" },
+    { "from": "better-auth", "to": "prisma-db" },
+    { "from": "better-auth", "to": "admin-guard" },
+    { "from": "firebase-legacy", "to": "firestore-rules" },
+    { "from": "vite-env", "to": "better-auth" },
+    { "from": "vite-env", "to": "firebase-legacy" },
+    { "from": "admin-guard", "to": "error-sanitise" },
+    { "from": "error-sanitise", "to": "vercel-logs" },
+    { "from": "no-tracking", "to": "data-min" },
+    { "from": "self-hosted", "to": "data-min" },
+    { "from": "github-2fa", "to": "network" }
+  ]
+}

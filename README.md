@@ -2,9 +2,6 @@
 
 Verified student housing platform for Kenyan university campuses.
 
-**Student:** TITUS KIMUTAI CHUKOR  
-**Reg No:** LAW/M/0227/01/23
-
 <p align="center">
   <a href="#quick-start"><img src="https://img.shields.io/badge/Quick_Start-4CAF50?style=for-the-badge&logo=rocket&logoColor=white" alt="Quick Start" /></a>
   <a href="#architecture"><img src="https://img.shields.io/badge/Architecture-2196F3?style=for-the-badge&logo=diagram&logoColor=white" alt="Architecture" /></a>
@@ -237,59 +234,98 @@ unihub-landing-experience/
 ## Architecture
 
 <p align="center">
-  <a href="docs/routes-architecture.svg"><img src="https://img.shields.io/badge/View-Route_Architecture-2196F3?style=for-the-badge&logo=diagram&logoColor=white" alt="Route Architecture" /></a>
-  <a href="docs/backend-architecture.svg"><img src="https://img.shields.io/badge/View-Backend_Architecture-9C27B0?style=for-the-badge&logo=database&logoColor=white" alt="Backend Architecture" /></a>
-  <a href="docs/funnel-animated.svg"><img src="https://img.shields.io/badge/View-7_Act_Funnel-EC4899?style=for-the-badge&logo=chart&logoColor=white" alt="7-Act Funnel" /></a>
-  <a href="docs/map-dataflow-animated.svg"><img src="https://img.shields.io/badge/View-Campus_Map_Flow-06B6D4?style=for-the-badge&logo=map&logoColor=white" alt="Campus Map Flow" /></a>
-  <a href="docs/video-panel-animated.svg"><img src="https://img.shields.io/badge/View-Video_Panel-EC4899?style=for-the-badge&logo=video&logoColor=white" alt="Video Panel" /></a>
+  <a href="docs/diagrams/system-overview.json"><img src="https://img.shields.io/badge/View-System_Overview-2196F3?style=for-the-badge&logo=diagram&logoColor=white" alt="System Overview" /></a>
+  <a href="docs/diagrams/auth-flow.json"><img src="https://img.shields.io/badge/View-Auth_Flow-4CAF50?style=for-the-badge&logo=shield&logoColor=white" alt="Auth Flow" /></a>
+  <a href="docs/diagrams/data-flow.json"><img src="https://img.shields.io/badge/View-Data_Flow-FF9800?style=for-the-badge&logo=database&logoColor=white" alt="Data Flow" /></a>
+  <a href="docs/diagrams/deployment-pipeline.json"><img src="https://img.shields.io/badge/View-Deployment_Pipeline-9C27B0?style=for-the-badge&logo=rocket&logoColor=white" alt="Deployment Pipeline" /></a>
+  <a href="docs/diagrams/funnel-flow.json"><img src="https://img.shields.io/badge/View-7_Act_Funnel-EC4899?style=for-the-badge&logo=chart&logoColor=white" alt="7-Act Funnel" /></a>
+  <a href="docs/diagrams/map-dataflow.json"><img src="https://img.shields.io/badge/View-Campus_Map_Flow-06B6D4?style=for-the-badge&logo=map&logoColor=white" alt="Campus Map Flow" /></a>
+  <a href="docs/diagrams/video-panel.json"><img src="https://img.shields.io/badge/View-Video_Panel-9C27B0?style=for-the-badge&logo=video&logoColor=white" alt="Video Panel" /></a>
+  <a href="docs/diagrams/admin-guards.json"><img src="https://img.shields.io/badge/View-Admin_Guards-607D8B?style=for-the-badge&logo=security&logoColor=white" alt="Admin Guards" /></a>
+  <a href="docs/diagrams/landlord-portal.json"><img src="https://img.shields.io/badge/View-Landlord_Portal-FF5722?style=for-the-badge&logo=home&logoColor=white" alt="Landlord Portal" /></a>
+  <a href="docs/diagrams/er-diagram.json"><img src="https://img.shields.io/badge/View-ER_Diagram-3F51B5?style=for-the-badge&logo=data&logoColor=white" alt="ER Diagram" /></a>
+  <a href="docs/diagrams/data-processing.json"><img src="https://img.shields.io/badge/View-Data_Processing-009688?style=for-the-badge&logo=privacy&logoColor=white" alt="Data Processing" /></a>
+  <a href="docs/diagrams/security-boundaries.json"><img src="https://img.shields.io/badge/View-Security_Boundaries-F44336?style=for-the-badge&logo=lock&logoColor=white" alt="Security Boundaries" /></a>
+  <a href="docs/diagrams/transfer-assessment.json"><img src="https://img.shields.io/badge/View-Transfer_Assessment-795548?style=for-the-badge&logo=globe&logoColor=white" alt="Transfer Assessment" /></a>
 </p>
 
-### Route Architecture
+### System Overview
 
-![Route Architecture](docs/routes-architecture.svg)
+![System Overview](docs/diagrams/system-overview.json)
 
-*Shows TanStack Start routes (SSR), Legacy SPA routes under `/app`, and infrastructure files. Click image for full-size SVG.*
+*High-level component architecture showing frontend (TanStack Start, React 19), backend (Better Auth, Prisma, SQLite), legacy Firebase stack, MapLibre GL, and external services (Vercel, GitHub, Tile Providers).*
 
-### Backend Architecture
+### Authentication Flow — Better Auth (Primary) + Firebase (Legacy)
 
-![Backend Architecture](docs/backend-architecture.svg)
+![Auth Flow](docs/diagrams/auth-flow.json)
 
-*Shows new app routes, legacy SPA services layer (firestore.ts, firebase.ts, storage.ts), and Firebase/Cloud services (Firestore DB, Auth, Storage, Cloudinary CDN). Click image for full-size SVG.*
+*Dual auth stack during mid-migration: Better Auth for admin routes with requireAdmin guard, Firebase Auth/Firestore for legacy landlord portal. Shows session validation, admin email checks, Firestore profile fetch, and status-based routing.*
 
-### Auth Stack (Mid-Migration)
+### Data Flow — Static Listings to Browser
 
-| Layer | Technology | Status |
-|-------|------------|--------|
-| Primary | Better Auth + Prisma + SQLite | Active (seeded accounts, AuthContext) |
-| Legacy | Firebase Auth + Firestore | Landlord portal, admin guard, CMS settings |
+![Data Flow](docs/diagrams/data-flow.json)
 
-**Better Auth** (`src/lib/auth/index.ts`):
-- Email/password, admin plugin, 7-day session
-- Prisma adapter with `@prisma/adapter-libsql`
-- `AuthContext.tsx` provides `useAuth()` hook
+*How listing data flows from static TypeScript files (listings.ts, residenceClips.ts, campuses.ts) through TanStack Start components (ListingGrid, CampusMap, VideoPanel) to student browser. All filtering/sorting client-side; contact links open external apps.*
 
-**Firebase** (`src/shared/lib/firebase.ts`):
-- Used by `LandlordContext.tsx`, `landlordService.ts`, `requireAdmin.ts`
-- Firestore for landlord profiles, site settings, legacy listings
-- Being phased out; new code should use Better Auth + Prisma
+### Deployment Pipeline — GitHub to Vercel
+
+![Deployment Pipeline](docs/diagrams/deployment-pipeline.json)
+
+*CI/CD flow: local dev → git push → GitHub webhook → Vercel build (prisma generate, type-check, lint) → preview deployment → production deployment (main branch). Configured via vercel.json with iad1 region.*
 
 ### 7-Act Funnel — Homepage Experience
 
-![7-Act Funnel](docs/funnel-animated.svg)
+![7-Act Funnel](docs/diagrams/funnel-flow.json)
 
-*The homepage guides users through 7 acts: Arrive → Orient → Believe → Witness → Choose → Place → Move. Each act has distinct visual treatment and staggered animations. Hover any act for glow effect. Click image for animated SVG.*
+*Student journey through 7 acts: Arrive → Orient → Believe → Witness → Choose → Place → Move. Scroll-triggered transitions, prefers-reduced-motion gating, campus pin interaction, video autoplay, filter changes, contact link clicks.*
 
 ### Interactive Campus Map — Data Flow
 
-![Campus Map Data Flow](docs/map-dataflow-animated.svg)
+![Campus Map Data Flow](docs/diagrams/map-dataflow.json)
 
-*MapLibre GL renders keyless vector tiles (OpenFreeMap Dark) and satellite tiles (Esri World Imagery). 8 Kenyan campus pins pulse on load. Tile requests and pin data flow animate continuously. Click image for animated SVG.*
+*MapLibre GL initialisation with custom style JSON (vector + raster sources), OpenFreeMap/Esri tile requests, 8 campus pins with pulse animation, layer toggle control, pin click → listing filter, cleanup on unmount.*
 
 ### Video Panel — Viewport-Aware Autoplay
 
-![Video Panel](docs/video-panel-animated.svg)
+![Video Panel](docs/diagrams/video-panel.json)
 
-*VideoPanel component uses IntersectionObserver (threshold: 0.25, rootMargin: "0px 0px -10% 0px") to auto-play when 25% visible and pause on leave. Respects `prefers-reduced-motion`. Click image for animated SVG.*
+*VideoPanel component: prefers-reduced-motion check → IntersectionObserver (threshold 0.25, rootMargin -10%) → autoplay on enter, pause on leave → user click toggles play/pause/unmute → cleanup on unmount.*
+
+### Admin Dashboard — Route Guards & Data Loading
+
+![Admin Guards](docs/diagrams/admin-guards.json)
+
+*TanStack Router loaders: SSR check → waitForUser (8s timeout) → Firebase auth state → admin email validation → guardedLoader with 6s Firestore timeout → graceful fallback on error → admin UI render.*
+
+### Landlord Portal — Registration, Sign-In & Status Routing
+
+![Landlord Portal](docs/diagrams/landlord-portal.json)
+
+*Firebase Auth registration with auth rollback on Firestore write failure → sign-in with parallel profile fetch (8s timeout) → profile state handling (ok/missing/unavailable) → status-based routing (pending/approved/rejected/suspended).*
+
+### Entity Relationship Diagram — Prisma Schema
+
+![ER Diagram](docs/diagrams/er-diagram.json)
+
+*Core models: User (Better Auth), LandlordProfile, Listing, Favorite, University, Hostel, HostelRoom, Apartment, Room, plus Better Auth tables (Session, Account, VerificationToken). Cardinalities shown.*
+
+### Data Processing & Transfers — DPIA-Aligned
+
+![Data Processing](docs/diagrams/data-processing.json)
+
+*Personal data flows per DPA 2019: student browsing (anonymous), contact links (external), landlord onboarding (off-platform), admin entry → build/deploy → Vercel/GitHub (US). Transfer assessment: non-personal data only, SCCs + supplementary measures.*
+
+### Security Boundaries
+
+![Security Boundaries](docs/diagrams/security-boundaries.json)
+
+*Defense-in-depth: HTTPS/TLS, CSP, Better Auth (bcrypt, CSRF), Prisma (SQL injection prevention), Firebase legacy rules, admin guards, env var separation, error sanitisation, zero tracking, self-hosted assets, 2FA on GitHub/Vercel.*
+
+### International Transfer Assessment
+
+![Transfer Assessment](docs/diagrams/transfer-assessment.json)
+
+*DPA 2019 Part VI compliance: transfers to Vercel (US), GitHub (US), Map CDNs (global). Data categories: public listings, sanitised logs, source code. US not adequate → SCCs (Vercel/GitHub DPAs) + supplementary measures (minimisation, encryption, access control, no sensitive data). Residual risk: LOW.*
 
 ### Routing
 
@@ -372,19 +408,34 @@ Deploy steps:
 
 ---
 
-## Architecture Diagrams (All in `/docs`)
+## Architecture Diagrams (All in `/docs/diagrams`)
 
 | Diagram | Description | Format |
 |---------|-------------|--------|
-| `architecture-diagram.png` | System overview diagram | PNG |
-| `routes-architecture.svg` | TanStack Start + Legacy SPA route map | SVG |
-| `backend-architecture.svg` | Services layer + Firebase/Cloud | SVG |
-| `legacy-spa-architecture.svg` | Legacy SPA internal architecture | SVG |
-| `funnel-animated.svg` | 7-Act homepage funnel (animated) | SVG |
-| `map-dataflow-animated.svg` | Campus MapLibre data flow (animated) | SVG |
-| `video-panel-animated.svg` | VideoPanel IntersectionObserver logic (animated) | SVG |
+| `system-overview.json` | High-level system component architecture | JSON (Diagrammer) |
+| `auth-flow.json` | Better Auth + Firebase dual stack flow | JSON (Diagrammer) |
+| `data-flow.json` | Static listings → components → browser | JSON (Diagrammer) |
+| `deployment-pipeline.json` | GitHub → Vercel CI/CD pipeline | JSON (Diagrammer) |
+| `funnel-flow.json` | 7-Act homepage funnel experience | JSON (Diagrammer) |
+| `map-dataflow.json` | MapLibre GL tile sources + campus pins | JSON (Diagrammer) |
+| `video-panel.json` | IntersectionObserver viewport autoplay | JSON (Diagrammer) |
+| `admin-guards.json` | TanStack Router loaders + requireAdmin | JSON (Diagrammer) |
+| `landlord-portal.json` | Firebase Auth + Firestore registration/sign-in | JSON (Diagrammer) |
+| `er-diagram.json` | Prisma schema entity relationships | JSON (Diagrammer) |
+| `data-processing.json` | DPIA-aligned personal data flows | JSON (Diagrammer) |
+| `security-boundaries.json` | Defense-in-depth security controls | JSON (Diagrammer) |
+| `transfer-assessment.json` | International transfer DPA 2019 Part VI | JSON (Diagrammer) |
+| `experience-funnel.svg` | 7-Act funnel (animated, legacy) | SVG |
+| `technical-architecture.svg` | Technical architecture (legacy) | SVG |
+| `routes-architecture.svg` | TanStack + Legacy SPA routes (legacy) | SVG |
+| `backend-architecture.svg` | Services + Firebase/Cloud (legacy) | SVG |
+| `legacy-spa-architecture.svg` | Legacy SPA internals (legacy) | SVG |
+| `map-dataflow-animated.svg` | Campus MapLibre flow (animated, legacy) | SVG |
+| `video-panel-animated.svg` | VideoPanel logic (animated, legacy) | SVG |
+| `funnel-animated.svg` | 7-Act funnel (animated, legacy) | SVG |
 
-> All SVGs are interactive — open in browser for animations and hover effects.
+> **New diagrams** (JSON format) render in the [Diagrammer viewer](https://diagrammer.dev) — paste the JSON to view interactive, zoomable diagrams.
+> **Legacy diagrams** (SVG) open directly in browser for animations and hover effects.
 
 ---
 

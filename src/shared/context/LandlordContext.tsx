@@ -1,13 +1,13 @@
-import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { onAuthStateChanged, type User } from 'firebase/auth';
-import { auth } from '@/shared/lib/firebase';
+import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
+import { onAuthStateChanged, type User } from "firebase/auth";
+import { auth } from "@/shared/lib/firebase";
 import {
   fetchLandlordProfile,
   type LandlordProfile,
   type ProfileResult,
-} from '@/features/landlord/services/landlordService';
+} from "@/features/landlord/services/landlordService";
 
-export type ProfileState = 'loading' | 'ok' | 'missing' | 'unavailable';
+export type ProfileState = "loading" | "ok" | "missing" | "unavailable";
 
 interface LandlordContextType {
   user: User | null;
@@ -33,8 +33,8 @@ export function LandlordProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
   const [profile, setProfile] = useState<LandlordProfile | null>(null);
-  const [profileState, setProfileState] = useState<ProfileState>('loading');
-  const [profileMessage, setProfileMessage] = useState('');
+  const [profileState, setProfileState] = useState<ProfileState>("loading");
+  const [profileMessage, setProfileMessage] = useState("");
   const [reloadToken, setReloadToken] = useState(0);
 
   // Which uid the current profile state belongs to.
@@ -46,8 +46,8 @@ export function LandlordProvider({ children }: { children: React.ReactNode }) {
         // New (or signed-out) identity: invalidate whatever we hold.
         loadedForRef.current = null;
         setProfile(null);
-        setProfileState(nextUser ? 'loading' : 'ok');
-        setProfileMessage('');
+        setProfileState(nextUser ? "loading" : "ok");
+        setProfileMessage("");
       }
       setUser(nextUser);
       setAuthLoading(false);
@@ -60,21 +60,21 @@ export function LandlordProvider({ children }: { children: React.ReactNode }) {
     let live = true;
     const uid = user.uid;
     loadedForRef.current = uid;
-    setProfileState('loading');
+    setProfileState("loading");
 
     void fetchLandlordProfile(uid).then((result: ProfileResult) => {
       if (!live || loadedForRef.current !== uid) return;
-      if (result.state === 'ok') {
+      if (result.state === "ok") {
         setProfile(result.profile);
-        setProfileState('ok');
-        setProfileMessage('');
-      } else if (result.state === 'missing') {
+        setProfileState("ok");
+        setProfileMessage("");
+      } else if (result.state === "missing") {
         setProfile(null);
-        setProfileState('missing');
-        setProfileMessage('');
+        setProfileState("missing");
+        setProfileMessage("");
       } else {
         setProfile(null);
-        setProfileState('unavailable');
+        setProfileState("unavailable");
         setProfileMessage(result.message);
       }
     });
@@ -105,7 +105,7 @@ export function LandlordProvider({ children }: { children: React.ReactNode }) {
 export function useLandlord(): LandlordContextType {
   const context = useContext(LandlordContext);
   if (!context) {
-    throw new Error('useLandlord must be used within a LandlordProvider');
+    throw new Error("useLandlord must be used within a LandlordProvider");
   }
   return context;
 }

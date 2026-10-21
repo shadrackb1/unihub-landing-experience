@@ -34,7 +34,8 @@ function ListingsPage() {
       if (!matchesCategory) return false;
       if (!q) return true;
       // Students search by campus town, room type, or a rent ceiling ("under 10k").
-      const haystack = `${listing.title} ${listing.location} ${listing.category} ${listing.price} ${listing.deposit}`.toLowerCase();
+      const haystack =
+        `${listing.title} ${listing.location} ${listing.category} ${listing.price} ${listing.deposit}`.toLowerCase();
       return q.split(/\s+/).every((token) => haystack.includes(token));
     });
   }, [listings, query, category]);
@@ -103,7 +104,10 @@ function ListingsPage() {
             </div>
           </Reveal>
 
-          <div className="mt-6 flex flex-wrap items-center justify-between gap-2 text-sm text-muted-foreground" aria-live="polite">
+          <div
+            className="mt-6 flex flex-wrap items-center justify-between gap-2 text-sm text-muted-foreground"
+            aria-live="polite"
+          >
             <span>
               {visible.length} {visible.length === 1 ? "home" : "homes"}
               {category !== "All" ? ` in ${category}` : ""}
@@ -112,7 +116,10 @@ function ListingsPage() {
             {activeFilters && (
               <button
                 type="button"
-                onClick={() => { setQuery(""); setCategory("All"); }}
+                onClick={() => {
+                  setQuery("");
+                  setCategory("All");
+                }}
                 className="text-xs font-medium underline underline-offset-4 hover:text-foreground"
               >
                 Clear filters
@@ -131,7 +138,10 @@ function ListingsPage() {
               <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
                 <button
                   type="button"
-                  onClick={() => { setQuery(""); setCategory("All"); }}
+                  onClick={() => {
+                    setQuery("");
+                    setCategory("All");
+                  }}
                   className="rounded-full border border-border px-5 py-2.5 text-sm font-semibold hover:bg-accent"
                 >
                   Clear filters
@@ -166,5 +176,3 @@ function ListingsPage() {
     </MarketingShell>
   );
 }
-
-

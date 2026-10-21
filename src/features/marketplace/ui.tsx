@@ -1,4 +1,9 @@
-import type { ReactNode, InputHTMLAttributes, TextareaHTMLAttributes, SelectHTMLAttributes } from "react";
+import type {
+  ReactNode,
+  InputHTMLAttributes,
+  TextareaHTMLAttributes,
+  SelectHTMLAttributes,
+} from "react";
 
 export const inputCls =
   "w-full min-h-11 rounded-xl border border-border bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:border-ring focus:outline-none";
@@ -9,7 +14,15 @@ export const btnGhost =
 export const btnDanger =
   "inline-flex min-h-10 items-center justify-center gap-2 rounded-full border border-destructive/40 px-4 text-sm font-medium text-destructive hover:bg-destructive/10 disabled:opacity-50";
 
-export function Field({ label, hint, children }: { label: string; hint?: string; children: ReactNode }) {
+export function Field({
+  label,
+  hint,
+  children,
+}: {
+  label: string;
+  hint?: string;
+  children: ReactNode;
+}) {
   return (
     <label className="block space-y-2">
       <span className="text-sm font-medium text-secondary-foreground">{label}</span>
@@ -19,11 +32,15 @@ export function Field({ label, hint, children }: { label: string; hint?: string;
   );
 }
 
-export const TextInput = (p: InputHTMLAttributes<HTMLInputElement>) => <input {...p} className={inputCls} />;
+export const TextInput = (p: InputHTMLAttributes<HTMLInputElement>) => (
+  <input {...p} className={inputCls} />
+);
 export const TextArea = (p: TextareaHTMLAttributes<HTMLTextAreaElement>) => (
   <textarea {...p} className={`${inputCls} min-h-28`} />
 );
-export const Select = (p: SelectHTMLAttributes<HTMLSelectElement>) => <select {...p} className={inputCls} />;
+export const Select = (p: SelectHTMLAttributes<HTMLSelectElement>) => (
+  <select {...p} className={inputCls} />
+);
 
 const tone: Record<string, string> = {
   approved: "bg-status text-status-foreground",
@@ -39,13 +56,21 @@ const tone: Record<string, string> = {
 
 export function StatusBadge({ status, label }: { status: string; label?: string }) {
   return (
-    <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold capitalize ${tone[status] ?? tone["none"]}`}>
+    <span
+      className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold capitalize ${tone[status] ?? tone["none"]}`}
+    >
       {label ?? status}
     </span>
   );
 }
 
-export function Notice({ kind = "info", children }: { kind?: "info" | "error"; children: ReactNode }) {
+export function Notice({
+  kind = "info",
+  children,
+}: {
+  kind?: "info" | "error";
+  children: ReactNode;
+}) {
   return (
     <div
       role={kind === "error" ? "alert" : "status"}
@@ -58,9 +83,12 @@ export function Notice({ kind = "info", children }: { kind?: "info" | "error"; c
 
 export function errMsg(e: unknown): string {
   const m = e instanceof Error ? e.message : String(e);
-  if (m.includes("permission")) return "You don't have permission for this action. Check the Firestore security rules.";
-  if (m.includes("email-already-in-use")) return "An account with this email already exists. Sign in instead.";
-  if (m.includes("invalid-credential") || m.includes("wrong-password")) return "Incorrect email or password.";
+  if (m.includes("permission"))
+    return "You don't have permission for this action. Check the Firestore security rules.";
+  if (m.includes("email-already-in-use"))
+    return "An account with this email already exists. Sign in instead.";
+  if (m.includes("invalid-credential") || m.includes("wrong-password"))
+    return "Incorrect email or password.";
   if (m.includes("weak-password")) return "Password must be at least 6 characters.";
   return m.replace(/^Firebase:\s*/, "");
 }

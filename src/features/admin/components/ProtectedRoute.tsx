@@ -1,8 +1,8 @@
-import { Navigate } from '@tanstack/react-router';
-import { Loader2, ShieldAlert } from 'lucide-react';
-import { useAuth } from '@/shared/context/AuthContext';
-import { isAdminEmail } from '../requireAdmin';
-import { AdminLayout } from './AdminLayout';
+import { Navigate } from "@tanstack/react-router";
+import { Loader2, ShieldAlert } from "lucide-react";
+import { useAuth } from "@/shared/context/AuthContext";
+import { isAdminEmail } from "../requireAdmin";
+import { AdminLayout } from "./AdminLayout";
 
 /**
  * Admin subtree guard.
@@ -21,7 +21,11 @@ export const ProtectedRoute = () => {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-background" role="status" aria-label="Checking admin access">
+      <div
+        className="flex min-h-screen items-center justify-center bg-background"
+        role="status"
+        aria-label="Checking admin access"
+      >
         <Loader2 className="h-8 w-8 animate-spin text-foreground" />
       </div>
     );

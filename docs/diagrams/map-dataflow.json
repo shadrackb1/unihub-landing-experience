@@ -1,0 +1,118 @@
+{
+  "version": "1",
+  "type": "flowchart",
+  "title": "Campus Map Data Flow — MapLibre GL + Tile Providers",
+  "description": "How campus map renders vector/satellite tiles and handles 8 Kenyan campus pins",
+  "nodes": [
+    {
+      "id": "mount",
+      "label": "CampusMap Component Mounts",
+      "description": "useEffect with empty dependency array",
+      "shape": "pill",
+      "color": "blue"
+    },
+    {
+      "id": "maplibre-init",
+      "label": "new maplibregl.Map()",
+      "description": "Container: #map, Style: custom JSON, Center: [-0.0236, -1.2921], Zoom: 6",
+      "shape": "rectangle",
+      "color": "cyan",
+      "emphasis": "strong"
+    },
+    {
+      "id": "style-json",
+      "label": "Map Style JSON",
+      "description": "Two sources: openfreemap (vector), esri (raster); Two layers",
+      "shape": "rectangle",
+      "color": "slate"
+    },
+    {
+      "id": "vector-source",
+      "label": "Vector Tile Source",
+      "description": "OpenFreeMap Dark: https://tiles.openfreemap.org/styles/liberty",
+      "shape": "rounded",
+      "color": "cyan"
+    },
+    {
+      "id": "raster-source",
+      "label": "Raster Tile Source",
+      "description": "Esri World Imagery: https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+      "shape": "rounded",
+      "color": "cyan"
+    },
+    {
+      "id": "layer-toggle",
+      "label": "Layer Toggle Control",
+      "description": "Button: 'Vector' ↔ 'Satellite' — map.setStyle()",
+      "shape": "rounded",
+      "color": "amber"
+    },
+    {
+      "id": "campus-data",
+      "label": "Campus Data (src/data/campuses.ts)",
+      "description": "8 campuses: name, coords, county, studentCount, listingsCount",
+      "shape": "rectangle",
+      "color": "blue"
+    },
+    {
+      "id": "add-pins",
+      "label": "Add Campus Pins (markers)",
+      "description": "maplibregl.Marker() × 8 — custom SVG, pulse animation",
+      "shape": "rectangle",
+      "color": "cyan"
+    },
+    {
+      "id": "pin-click",
+      "label": "Pin Click Handler",
+      "description": "Sets campus filter state → ListingGrid re-filters",
+      "shape": "diamond",
+      "color": "amber"
+    },
+    {
+      "id": "tile-request",
+      "label": "Tile Requests (continuous)",
+      "description": "Browser → Tile CDN (no auth, no user ID, no cookies)",
+      "shape": "rounded",
+      "color": "slate"
+    },
+    {
+      "id": "tile-cdn",
+      "label": "Tile CDNs",
+      "description": "OpenFreeMap (global), Esri (US) — keyless, public",
+      "shape": "pill",
+      "color": "cyan"
+    },
+    {
+      "id": "map-rendered",
+      "label": "Map Rendered + Interactive",
+      "description": "Pan, zoom, tilt, rotate; pins pulse on load",
+      "shape": "pill",
+      "color": "green",
+      "emphasis": "strong"
+    },
+    {
+      "id": "cleanup",
+      "label": "Cleanup on Unmount",
+      "description": "map.remove() — prevents memory leaks",
+      "shape": "rounded",
+      "color": "rose"
+    }
+  ],
+  "edges": [
+    { "from": "mount", "to": "maplibre-init" },
+    { "from": "maplibre-init", "to": "style-json" },
+    { "from": "style-json", "to": "vector-source" },
+    { "from": "style-json", "to": "raster-source" },
+    { "from": "vector-source", "to": "tile-request" },
+    { "from": "raster-source", "to": "tile-request" },
+    { "from": "tile-request", "to": "tile-cdn" },
+    { "from": "maplibre-init", "to": "layer-toggle" },
+    { "from": "layer-toggle", "to": "style-json", "label": "switches style" },
+    { "from": "campus-data", "to": "add-pins" },
+    { "from": "add-pins", "to": "maplibre-init" },
+    { "from": "add-pins", "to": "pin-click" },
+    { "from": "pin-click", "to": "map-rendered" },
+    { "from": "tile-cdn", "to": "map-rendered", "style": "dashed" },
+    { "from": "map-rendered", "to": "cleanup", "label": "on unmount" }
+  ]
+}

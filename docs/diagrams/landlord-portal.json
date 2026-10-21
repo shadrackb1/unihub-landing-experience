@@ -1,0 +1,165 @@
+{
+  "version": "1",
+  "type": "flowchart",
+  "title": "Landlord Portal — Registration, Sign-In & Status Routing",
+  "description": "Firebase Auth + Firestore flow with auth rollback on profile write failure",
+  "nodes": [
+    {
+      "id": "entry",
+      "label": "Landlord Visits /landlord/register",
+      "shape": "pill",
+      "color": "amber"
+    },
+    {
+      "id": "register-form",
+      "label": "Registration Form",
+      "description": "Email, password, fullName, businessName, phone, WhatsApp, nationalId, campuses, properties, reviewNote",
+      "shape": "rectangle",
+      "color": "amber"
+    },
+    {
+      "id": "create-auth",
+      "label": "createUserWithEmailAndPassword",
+      "description": "Firebase Auth account created",
+      "shape": "rectangle",
+      "color": "amber"
+    },
+    {
+      "id": "update-profile",
+      "label": "updateProfile(displayName)",
+      "description": "Sets Firebase Auth displayName",
+      "shape": "rounded",
+      "color": "amber"
+    },
+    {
+      "id": "write-firestore",
+      "label": "setDoc(landlords/{uid})",
+      "description": "Profile with status: 'pending', consent stamp, timestamps",
+      "shape": "rectangle",
+      "color": "amber"
+    },
+    {
+      "id": "write-success",
+      "label": "Profile Write Success?",
+      "shape": "diamond",
+      "color": "amber"
+    },
+    {
+      "id": "rollback-auth",
+      "label": "deleteUser(credential.user)",
+      "description": "Rollback auth account so email can be retried",
+      "shape": "rectangle",
+      "color": "rose"
+    },
+    {
+      "id": "rollback-fail",
+      "label": "Rollback Failed?",
+      "shape": "diamond",
+      "color": "rose"
+    },
+    {
+      "id": "throw-error",
+      "label": "Throw: 'Profile not saved, no account kept'",
+      "shape": "pill",
+      "color": "rose"
+    },
+    {
+      "id": "register-success",
+      "label": "Registration Complete",
+      "description": "Returns user credential",
+      "shape": "pill",
+      "color": "green",
+      "emphasis": "strong"
+    },
+    {
+      "id": "signin-entry",
+      "label": "Landlord Visits /landlord/login",
+      "shape": "pill",
+      "color": "amber"
+    },
+    {
+      "id": "signin-form",
+      "label": "Sign-In Form",
+      "description": "Email + password",
+      "shape": "rectangle",
+      "color": "amber"
+    },
+    {
+      "id": "signin-auth",
+      "label": "signInWithEmailAndPassword",
+      "description": "Firebase Auth credential",
+      "shape": "rectangle",
+      "color": "amber"
+    },
+    {
+      "id": "fetch-profile",
+      "label": "fetchLandlordProfile(uid)",
+      "description": "withTimeout(getDoc, 8000ms) — handles Firestore hangs",
+      "shape": "rectangle",
+      "color": "amber"
+    },
+    {
+      "id": "profile-state",
+      "label": "Profile State?",
+      "shape": "diamond",
+      "color": "amber"
+    },
+    {
+      "id": "state-ok",
+      "label": "state: 'ok' — profile found",
+      "shape": "rounded",
+      "color": "green"
+    },
+    {
+      "id": "state-missing",
+      "label": "state: 'missing' — no profile",
+      "shape": "rounded",
+      "color": "amber"
+    },
+    {
+      "id": "state-unavailable",
+      "label": "state: 'unavailable' — Firestore error",
+      "description": "Returns user-friendly message",
+      "shape": "rounded",
+      "color": "rose"
+    },
+    {
+      "id": "status-route",
+      "label": "homeForStatus(status)",
+      "description": "pending→/pending, approved→/, rejected→/rejected, suspended→/suspended",
+      "shape": "rectangle",
+      "color": "blue"
+    },
+    {
+      "id": "redirect-dashboard",
+      "label": "Redirect to Status Route",
+      "description": "Landlord sees appropriate dashboard",
+      "shape": "pill",
+      "color": "green",
+      "emphasis": "strong"
+    }
+  ],
+  "edges": [
+    { "from": "entry", "to": "register-form" },
+    { "from": "register-form", "to": "create-auth" },
+    { "from": "create-auth", "to": "update-profile" },
+    { "from": "update-profile", "to": "write-firestore" },
+    { "from": "write-firestore", "to": "write-success" },
+    { "from": "write-success", "to": "rollback-auth", "label": "no (error)" },
+    { "from": "rollback-auth", "to": "rollback-fail" },
+    { "from": "rollback-fail", "to": "throw-error", "label": "yes" },
+    { "from": "rollback-fail", "to": "throw-error", "label": "no (logged)" },
+    { "from": "write-success", "to": "register-success", "label": "yes" },
+    { "from": "signin-entry", "to": "signin-form" },
+    { "from": "signin-form", "to": "signin-auth" },
+    { "from": "signin-auth", "to": "fetch-profile" },
+    { "from": "fetch-profile", "to": "profile-state" },
+    { "from": "profile-state", "to": "state-ok", "label": "exists" },
+    { "from": "profile-state", "to": "state-missing", "label": "not found" },
+    { "from": "profile-state", "to": "state-unavailable", "label": "error/timeout" },
+    { "from": "state-ok", "to": "status-route" },
+    { "from": "state-missing", "to": "redirect-dashboard", "label": "→ /landlord/pending" },
+    { "from": "state-unavailable", "to": "redirect-dashboard", "label": "shows error message" },
+    { "from": "status-route", "to": "redirect-dashboard" }
+  ]
+}

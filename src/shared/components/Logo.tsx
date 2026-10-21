@@ -2,7 +2,13 @@ import * as React from "react";
 import { Link } from "@tanstack/react-router";
 import { LogoMark } from "@/shared/components/LogoMark";
 
-export const Logo = ({ className = "", showTagline = true }: { className?: string; showTagline?: boolean }) => {
+export const Logo = ({
+  className = "",
+  showTagline = true,
+}: {
+  className?: string;
+  showTagline?: boolean;
+}) => {
   return (
     <Link
       to="/"
@@ -23,4 +29,3 @@ export const Logo = ({ className = "", showTagline = true }: { className?: strin
     </Link>
   );
 };
-

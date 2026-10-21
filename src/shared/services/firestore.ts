@@ -1,60 +1,60 @@
-import { 
-  collection, 
-  doc, 
-  getDoc, 
-  getDocs, 
-  addDoc, 
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  addDoc,
   updateDoc,
   setDoc,
-  deleteDoc, 
-  query, 
-  where, 
-  orderBy, 
+  deleteDoc,
+  query,
+  where,
+  orderBy,
   limit,
   Timestamp,
   writeBatch,
   runTransaction,
-  serverTimestamp 
-} from 'firebase/firestore';
-import { db } from '@/shared/lib/firebase';
-import { cachedRead } from '@/shared/lib/offlineCache';
-import type { 
-  University, 
-  Hostel, 
-  HostelRoom, 
-  Apartment, 
-  Room, 
-  Agent, 
-  Category, 
-  Property, 
+  serverTimestamp,
+} from "firebase/firestore";
+import { db } from "@/shared/lib/firebase";
+import { cachedRead } from "@/shared/lib/offlineCache";
+import type {
+  University,
+  Hostel,
+  HostelRoom,
+  Apartment,
+  Room,
+  Agent,
+  Category,
+  Property,
   SiteSettings,
-  User 
-} from '@/shared/types/admin';
+  User,
+} from "@/shared/types/admin";
 
 const COLLECTIONS = {
-  universities: 'universities',
-  hostels: 'hostels',
-  hostelRooms: 'hostelRooms',
-  apartments: 'apartments',
-  rooms: 'rooms',
-  agents: 'agents',
-  categories: 'categories',
-  properties: 'properties',
-  siteSettings: 'siteSettings',
-  users: 'users',
-  listings: 'listings',
+  universities: "universities",
+  hostels: "hostels",
+  hostelRooms: "hostelRooms",
+  apartments: "apartments",
+  rooms: "rooms",
+  agents: "agents",
+  categories: "categories",
+  properties: "properties",
+  siteSettings: "siteSettings",
+  users: "users",
+  listings: "listings",
 } as const;
 
 function timestampToDate(data: any): any {
   if (!data) return data;
   if (Array.isArray(data)) return data.map(timestampToDate);
-  if (typeof data !== 'object' || data === null) return data;
-  
+  if (typeof data !== "object" || data === null) return data;
+
   const result: any = {};
   for (const [key, value] of Object.entries(data)) {
     if (value instanceof Timestamp) {
       result[key] = value.toDate();
-    } else if (value && typeof value === 'object') {
+    } else if (value && typeof value === "object") {
       result[key] = timestampToDate(value);
     } else {
       result[key] = value;
@@ -66,13 +66,13 @@ function timestampToDate(data: any): any {
 function dateToTimestamp(data: any): any {
   if (!data) return data;
   if (Array.isArray(data)) return data.map(dateToTimestamp);
-  if (typeof data !== 'object' || data === null) return data;
-  
+  if (typeof data !== "object" || data === null) return data;
+
   const result: any = {};
   for (const [key, value] of Object.entries(data)) {
     if (value instanceof Date) {
       result[key] = Timestamp.fromDate(value);
-    } else if (value && typeof value === 'object') {
+    } else if (value && typeof value === "object") {
       result[key] = dateToTimestamp(value);
     } else {
       result[key] = value;
@@ -83,16 +83,16 @@ function dateToTimestamp(data: any): any {
 
 // Site Settings
 export async function getSiteSettings(): Promise<any | null> {
-  return cachedRead('svc:settings:global', async (): Promise<any | null> => {
+  return cachedRead("svc:settings:global", async (): Promise<any | null> => {
     try {
-      const docRef = doc(db, COLLECTIONS.siteSettings, 'global');
+      const docRef = doc(db, COLLECTIONS.siteSettings, "global");
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         return timestampToDate(docSnap.data());
       }
       return null;
     } catch (error) {
-      console.error('Error getting site settings:', error);
+      console.error("Error getting site settings:", error);
       throw error;
     }
   });
@@ -100,24 +100,33 @@ export async function getSiteSettings(): Promise<any | null> {
 
 export async function updateSiteSettings(data: any): Promise<void> {
   try {
-    const docRef = doc(db, COLLECTIONS.siteSettings, 'global');
-    await updateDoc(docRef, dateToTimestamp({
-      ...data,
-      updatedAt: new Date()
-    }));
+    const docRef = doc(db, COLLECTIONS.siteSettings, "global");
+    await updateDoc(
+      docRef,
+      dateToTimestamp({
+        ...data,
+        updatedAt: new Date(),
+      }),
+    );
   } catch (error) {
-    console.error('Error updating site settings:', error);
+    console.error("Error updating site settings:", error);
     throw error;
   }
 }
 
 // Universities
 export async function getUniversities(): Promise<University[]> {
-  const result = await cachedRead('svc:universities', async (): Promise<University[] | null> => {
-    const q = query(collection(db, COLLECTIONS.universities), orderBy('name'));
-    const snapshot = await getDocs(q);
-    return snapshot.docs.map(doc => ({ id: doc.id, ...timestampToDate(doc.data()) } as University));
-  }, { isEmpty: (r: any) => !r || r.length === 0 });
+  const result = await cachedRead(
+    "svc:universities",
+    async (): Promise<University[] | null> => {
+      const q = query(collection(db, COLLECTIONS.universities), orderBy("name"));
+      const snapshot = await getDocs(q);
+      return snapshot.docs.map(
+        (doc) => ({ id: doc.id, ...timestampToDate(doc.data()) }) as University,
+      );
+    },
+    { isEmpty: (r: any) => !r || r.length === 0 },
+  );
   return result ?? [];
 }
 
@@ -130,13 +139,18 @@ export async function getUniversity(id: string): Promise<University | null> {
   return null;
 }
 
-export async function createUniversity(data: Omit<University, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
+export async function createUniversity(
+  data: Omit<University, "id" | "createdAt" | "updatedAt">,
+): Promise<string> {
   const dataWithTimestamps = {
     ...data,
     createdAt: new Date(),
-    updatedAt: new Date()
+    updatedAt: new Date(),
   };
-  const docRef = await addDoc(collection(db, COLLECTIONS.universities), dateToTimestamp(dataWithTimestamps));
+  const docRef = await addDoc(
+    collection(db, COLLECTIONS.universities),
+    dateToTimestamp(dataWithTimestamps),
+  );
   return docRef.id;
 }
 
@@ -152,14 +166,22 @@ export async function deleteUniversity(id: string): Promise<void> {
 
 // Hostels
 export async function getHostels(universityId?: string): Promise<Hostel[]> {
-  const result = await cachedRead(`svc:hostels:${universityId ?? 'all'}`, async (): Promise<Hostel[] | null> => {
-    let q = query(collection(db, COLLECTIONS.hostels), orderBy('name'));
-    if (universityId) {
-      q = query(collection(db, COLLECTIONS.hostels), where('universityId', '==', universityId), orderBy('name'));
-    }
-    const snapshot = await getDocs(q);
-    return snapshot.docs.map(doc => ({ id: doc.id, ...timestampToDate(doc.data()) } as Hostel));
-  }, { isEmpty: (r: any) => !r || r.length === 0 });
+  const result = await cachedRead(
+    `svc:hostels:${universityId ?? "all"}`,
+    async (): Promise<Hostel[] | null> => {
+      let q = query(collection(db, COLLECTIONS.hostels), orderBy("name"));
+      if (universityId) {
+        q = query(
+          collection(db, COLLECTIONS.hostels),
+          where("universityId", "==", universityId),
+          orderBy("name"),
+        );
+      }
+      const snapshot = await getDocs(q);
+      return snapshot.docs.map((doc) => ({ id: doc.id, ...timestampToDate(doc.data()) }) as Hostel);
+    },
+    { isEmpty: (r: any) => !r || r.length === 0 },
+  );
   return result ?? [];
 }
 
@@ -172,13 +194,18 @@ export async function getHostel(id: string): Promise<Hostel | null> {
   return null;
 }
 
-export async function createHostel(data: Omit<Hostel, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
+export async function createHostel(
+  data: Omit<Hostel, "id" | "createdAt" | "updatedAt">,
+): Promise<string> {
   const dataWithTimestamps = {
     ...data,
     createdAt: new Date(),
-    updatedAt: new Date()
+    updatedAt: new Date(),
   };
-  const docRef = await addDoc(collection(db, COLLECTIONS.hostels), dateToTimestamp(dataWithTimestamps));
+  const docRef = await addDoc(
+    collection(db, COLLECTIONS.hostels),
+    dateToTimestamp(dataWithTimestamps),
+  );
   return docRef.id;
 }
 
@@ -194,9 +221,9 @@ export async function deleteHostel(id: string): Promise<void> {
 
 // Hostel Rooms
 export async function getHostelRooms(hostelId: string): Promise<any[]> {
-  const q = query(collection(db, COLLECTIONS.hostelRooms), where('hostelId', '==', hostelId));
+  const q = query(collection(db, COLLECTIONS.hostelRooms), where("hostelId", "==", hostelId));
   const snapshot = await getDocs(q);
-  return snapshot.docs.map(doc => ({ id: doc.id, ...timestampToDate(doc.data()) }));
+  return snapshot.docs.map((doc) => ({ id: doc.id, ...timestampToDate(doc.data()) }));
 }
 
 export async function getHostelRoom(id: string): Promise<any | null> {
@@ -212,9 +239,12 @@ export async function createHostelRoom(data: any): Promise<string> {
   const dataWithTimestamps = {
     ...data,
     createdAt: new Date(),
-    updatedAt: new Date()
+    updatedAt: new Date(),
   };
-  const docRef = await addDoc(collection(db, COLLECTIONS.hostelRooms), dateToTimestamp(dataWithTimestamps));
+  const docRef = await addDoc(
+    collection(db, COLLECTIONS.hostelRooms),
+    dateToTimestamp(dataWithTimestamps),
+  );
   return docRef.id;
 }
 
@@ -230,12 +260,16 @@ export async function deleteHostelRoom(id: string): Promise<void> {
 
 // Apartments
 export async function getApartments(status?: string): Promise<Apartment[]> {
-  let q = query(collection(db, COLLECTIONS.apartments), orderBy('name'));
+  let q = query(collection(db, COLLECTIONS.apartments), orderBy("name"));
   if (status) {
-    q = query(collection(db, COLLECTIONS.apartments), where('status', '==', status), orderBy('name'));
+    q = query(
+      collection(db, COLLECTIONS.apartments),
+      where("status", "==", status),
+      orderBy("name"),
+    );
   }
   const snapshot = await getDocs(q);
-  return snapshot.docs.map(doc => ({ id: doc.id, ...timestampToDate(doc.data()) } as Apartment));
+  return snapshot.docs.map((doc) => ({ id: doc.id, ...timestampToDate(doc.data()) }) as Apartment);
 }
 
 export async function getApartment(id: string): Promise<Apartment | null> {
@@ -247,13 +281,18 @@ export async function getApartment(id: string): Promise<Apartment | null> {
   return null;
 }
 
-export async function createApartment(data: Omit<Apartment, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
+export async function createApartment(
+  data: Omit<Apartment, "id" | "createdAt" | "updatedAt">,
+): Promise<string> {
   const dataWithTimestamps = {
     ...data,
     createdAt: new Date(),
-    updatedAt: new Date()
+    updatedAt: new Date(),
   };
-  const docRef = await addDoc(collection(db, COLLECTIONS.apartments), dateToTimestamp(dataWithTimestamps));
+  const docRef = await addDoc(
+    collection(db, COLLECTIONS.apartments),
+    dateToTimestamp(dataWithTimestamps),
+  );
   return docRef.id;
 }
 
@@ -269,12 +308,16 @@ export async function deleteApartment(id: string): Promise<void> {
 
 // Rooms
 export async function getRooms(apartmentId?: string): Promise<Room[]> {
-  let q = query(collection(db, COLLECTIONS.rooms), orderBy('room_number'));
+  let q = query(collection(db, COLLECTIONS.rooms), orderBy("room_number"));
   if (apartmentId) {
-    q = query(collection(db, COLLECTIONS.rooms), where('apartmentId', '==', apartmentId), orderBy('room_number'));
+    q = query(
+      collection(db, COLLECTIONS.rooms),
+      where("apartmentId", "==", apartmentId),
+      orderBy("room_number"),
+    );
   }
   const snapshot = await getDocs(q);
-  return snapshot.docs.map(doc => ({ id: doc.id, ...timestampToDate(doc.data()) } as Room));
+  return snapshot.docs.map((doc) => ({ id: doc.id, ...timestampToDate(doc.data()) }) as Room);
 }
 
 export async function getRoom(id: string): Promise<Room | null> {
@@ -286,13 +329,18 @@ export async function getRoom(id: string): Promise<Room | null> {
   return null;
 }
 
-export async function createRoom(data: Omit<Room, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
+export async function createRoom(
+  data: Omit<Room, "id" | "createdAt" | "updatedAt">,
+): Promise<string> {
   const dataWithTimestamps = {
     ...data,
     createdAt: new Date(),
-    updatedAt: new Date()
+    updatedAt: new Date(),
   };
-  const docRef = await addDoc(collection(db, COLLECTIONS.rooms), dateToTimestamp(dataWithTimestamps));
+  const docRef = await addDoc(
+    collection(db, COLLECTIONS.rooms),
+    dateToTimestamp(dataWithTimestamps),
+  );
   return docRef.id;
 }
 
@@ -308,9 +356,9 @@ export async function deleteRoom(id: string): Promise<void> {
 
 // Agents
 export async function getAgents(): Promise<Agent[]> {
-  const q = query(collection(db, COLLECTIONS.agents), orderBy('name'));
+  const q = query(collection(db, COLLECTIONS.agents), orderBy("name"));
   const snapshot = await getDocs(q);
-  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Agent));
+  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }) as Agent);
 }
 
 export async function getAgent(id: string): Promise<Agent | null> {
@@ -322,7 +370,7 @@ export async function getAgent(id: string): Promise<Agent | null> {
   return null;
 }
 
-export async function createAgent(data: Omit<Agent, 'id'>): Promise<string> {
+export async function createAgent(data: Omit<Agent, "id">): Promise<string> {
   const docRef = await addDoc(collection(db, COLLECTIONS.agents), data);
   return docRef.id;
 }
@@ -339,12 +387,12 @@ export async function deleteAgent(id: string): Promise<void> {
 
 // Categories
 export async function getCategories(): Promise<Category[]> {
-  const q = query(collection(db, COLLECTIONS.categories), orderBy('order'));
+  const q = query(collection(db, COLLECTIONS.categories), orderBy("order"));
   const snapshot = await getDocs(q);
-  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Category));
+  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }) as Category);
 }
 
-export async function createCategory(data: Omit<Category, 'id'>): Promise<string> {
+export async function createCategory(data: Omit<Category, "id">): Promise<string> {
   const docRef = await addDoc(collection(db, COLLECTIONS.categories), data);
   return docRef.id;
 }
@@ -365,12 +413,16 @@ export const getAgentsList = getAgents;
 
 // Properties
 export async function getProperties(status?: string): Promise<Property[]> {
-  let q = query(collection(db, COLLECTIONS.properties), orderBy('createdAt', 'desc'));
+  let q = query(collection(db, COLLECTIONS.properties), orderBy("createdAt", "desc"));
   if (status) {
-    q = query(collection(db, COLLECTIONS.properties), where('status', '==', status), orderBy('createdAt', 'desc'));
+    q = query(
+      collection(db, COLLECTIONS.properties),
+      where("status", "==", status),
+      orderBy("createdAt", "desc"),
+    );
   }
   const snapshot = await getDocs(q);
-  return snapshot.docs.map(doc => ({ id: doc.id, ...timestampToDate(doc.data()) } as Property));
+  return snapshot.docs.map((doc) => ({ id: doc.id, ...timestampToDate(doc.data()) }) as Property);
 }
 
 export async function getProperty(id: string): Promise<Property | null> {
@@ -382,13 +434,18 @@ export async function getProperty(id: string): Promise<Property | null> {
   return null;
 }
 
-export async function createProperty(data: Omit<Property, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
+export async function createProperty(
+  data: Omit<Property, "id" | "createdAt" | "updatedAt">,
+): Promise<string> {
   const dataWithTimestamps = {
     ...data,
     createdAt: new Date(),
-    updatedAt: new Date()
+    updatedAt: new Date(),
   };
-  const docRef = await addDoc(collection(db, COLLECTIONS.properties), dateToTimestamp(dataWithTimestamps));
+  const docRef = await addDoc(
+    collection(db, COLLECTIONS.properties),
+    dateToTimestamp(dataWithTimestamps),
+  );
   return docRef.id;
 }
 
@@ -405,25 +462,25 @@ export async function deleteProperty(id: string): Promise<void> {
 // Site Settings
 export async function getSiteSettingsData(): Promise<any | null> {
   try {
-    const docRef = doc(db, COLLECTIONS.siteSettings, 'global');
+    const docRef = doc(db, COLLECTIONS.siteSettings, "global");
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       return docSnap.data();
     }
     return null;
   } catch (error) {
-    console.error('Error getting site settings:', error);
+    console.error("Error getting site settings:", error);
     throw error;
   }
 }
 
 export async function updateSiteSettingsData(data: any): Promise<void> {
   try {
-    const docRef = doc(db, COLLECTIONS.siteSettings, 'global');
+    const docRef = doc(db, COLLECTIONS.siteSettings, "global");
     // setDoc + merge: works even when the siteSettings/global doc does not exist yet
     await setDoc(docRef, { ...data, updatedAt: serverTimestamp() }, { merge: true });
   } catch (error) {
-    console.error('Error updating site settings:', error);
+    console.error("Error updating site settings:", error);
     throw error;
   }
 }
@@ -431,41 +488,65 @@ export async function updateSiteSettingsData(data: any): Promise<void> {
 // Seed Data
 export async function seedData(): Promise<void> {
   const batch = writeBatch(db);
-  
+
   // Add default universities
   const universities = [
-    { name: 'University of Nairobi', slug: 'uon', location: 'Nairobi', verified: true, status: 'active' },
-    { name: 'Jomo Kenyatta University', slug: 'jkuat', location: 'Juja', verified: true, status: 'active' },
-    { name: 'Kenyatta University', slug: 'ku', location: 'Kahawa', verified: true, status: 'active' },
-    { name: 'Strathmore University', slug: 'su', location: 'Madaraka', verified: true, status: 'active' },
-    { name: 'Moi University', slug: 'mu', location: 'Kesses', verified: true, status: 'active' },
+    {
+      name: "University of Nairobi",
+      slug: "uon",
+      location: "Nairobi",
+      verified: true,
+      status: "active",
+    },
+    {
+      name: "Jomo Kenyatta University",
+      slug: "jkuat",
+      location: "Juja",
+      verified: true,
+      status: "active",
+    },
+    {
+      name: "Kenyatta University",
+      slug: "ku",
+      location: "Kahawa",
+      verified: true,
+      status: "active",
+    },
+    {
+      name: "Strathmore University",
+      slug: "su",
+      location: "Madaraka",
+      verified: true,
+      status: "active",
+    },
+    { name: "Moi University", slug: "mu", location: "Kesses", verified: true, status: "active" },
   ];
-  
+
   for (const uni of universities) {
     const ref = doc(collection(db, COLLECTIONS.universities));
     batch.set(ref, { ...uni, createdAt: serverTimestamp(), updatedAt: serverTimestamp() });
   }
-  
+
   // Add default categories
   const categories = [
-    { name: 'Hostels', slug: 'hostels', isActive: true, order: 1 },
-    { name: 'Apartments', slug: 'apartments', isActive: true, order: 2 },
-    { name: 'Bedsitters', slug: 'bedsitters', isActive: true, order: 3 },
+    { name: "Hostels", slug: "hostels", isActive: true, order: 1 },
+    { name: "Apartments", slug: "apartments", isActive: true, order: 2 },
+    { name: "Bedsitters", slug: "bedsitters", isActive: true, order: 3 },
   ];
-  
+
   for (let i = 0; i < categories.length; i++) {
     const ref = doc(collection(db, COLLECTIONS.categories));
     batch.set(ref, { ...categories[i], order: i + 1 });
   }
-  
+
   await batch.commit();
 }
 
 // Push mock listings to live
 export async function pushMockListingsLive(): Promise<void> {
-  const { sampleListings } = await import('@/data/listings');
+  const { sampleListings } = await import("@/data/listings");
   const batch = writeBatch(db);
-  
+
   for (const listing of sampleListings) {
     const ref = doc(collection(db, COLLECTIONS.listings));
     batch.set(ref, {
@@ -474,6 +555,6 @@ export async function pushMockListingsLive(): Promise<void> {
       updatedAt: serverTimestamp(),
     });
   }
-  
+
   await batch.commit();
 }

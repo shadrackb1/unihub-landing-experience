@@ -1,0 +1,108 @@
+{
+  "version": "1",
+  "type": "graph",
+  "title": "Entity Relationship Diagram — Prisma Schema (SQLite via libsql)",
+  "description": "Core models for Better Auth + application data. Firebase/Firestore models (legacy) not shown.",
+  "nodes": [
+    {
+      "id": "user",
+      "label": "**User**",
+      "description": "id (PK), email (UK), password, role, name, image, emailVerified, createdAt, updatedAt",
+      "shape": "rectangle",
+      "color": "blue",
+      "emphasis": "strong"
+    },
+    {
+      "id": "landlord-profile",
+      "label": "**LandlordProfile**",
+      "description": "id (PK), userId (FK, UK), businessName, phone, whatsappNumber, nationalId, targetCampuses, estimatedProperties, status, reviewNote, consentGivenAt, consentVersion",
+      "shape": "rectangle",
+      "color": "blue"
+    },
+    {
+      "id": "listing",
+      "label": "**Listing**",
+      "description": "id (PK), title, description, price, deposit, category, location, lat/lng, images, amenities, genderRestriction, hasWifi, hasWater, videoUrl, status, isVerified, landlordId (FK), userId (FK), university, distanceFromCampus",
+      "shape": "rectangle",
+      "color": "blue"
+    },
+    {
+      "id": "favorite",
+      "label": "**Favorite**",
+      "description": "id (PK), userId (FK), listingId (FK), createdAt — UK(userId, listingId)",
+      "shape": "rectangle",
+      "color": "green"
+    },
+    {
+      "id": "university",
+      "label": "**University**",
+      "description": "id (PK), name, slug (UK), logoUrl, location, contactEmail, contactPhone, description, verified, adminUserId, status, foundedYear, studentCount",
+      "shape": "rectangle",
+      "color": "cyan"
+    },
+    {
+      "id": "hostel",
+      "label": "**Hostel**",
+      "description": "id (PK), universityId (FK), name, location, description, hostelType, images, amenities, wardenName/Phone/Email, status",
+      "shape": "rectangle",
+      "color": "cyan"
+    },
+    {
+      "id": "hostel-room",
+      "label": "**HostelRoom**",
+      "description": "id (PK), hostelId (FK), roomNumber, bedNumber, roomType, pricePerMonth/Semester/Year, status, currentOccupants, maxOccupants, occupancyPercentage, amenities, features, availableFrom/Until, bookingDeadline",
+      "shape": "rectangle",
+      "color": "cyan"
+    },
+    {
+      "id": "apartment",
+      "label": "**Apartment**",
+      "description": "id (PK), name, location, description, address, lat/lng, amenities, images, agentId, ownerType, ownerName, contactEmail, contactPhone, status",
+      "shape": "rectangle",
+      "color": "violet"
+    },
+    {
+      "id": "room",
+      "label": "**Room**",
+      "description": "id (PK), apartmentId (FK), roomNumber, roomType, price, deposit, description, features, images, status, maxOccupants, squareMeters, availabilityDate",
+      "shape": "rectangle",
+      "color": "violet"
+    },
+    {
+      "id": "session",
+      "label": "**Session** (Better Auth)",
+      "description": "id (PK), userId (FK), token (UK), expiresAt, ipAddress, userAgent",
+      "shape": "rectangle",
+      "color": "green",
+      "emphasis": "subtle"
+    },
+    {
+      "id": "account",
+      "label": "**Account** (Better Auth)",
+      "description": "id (PK), userId (FK), accountId, providerId, accessToken, refreshToken, scope, idToken, password — UK(providerId, accountId)",
+      "shape": "rectangle",
+      "color": "green",
+      "emphasis": "subtle"
+    },
+    {
+      "id": "verification-token",
+      "label": "**VerificationToken** (Better Auth)",
+      "description": "id (PK), identifier, token (UK), expiresAt — UK(identifier, token)",
+      "shape": "rectangle",
+      "color": "green",
+      "emphasis": "subtle"
+    }
+  ],
+  "edges": [
+    { "from": "user", "to": "landlord-profile", "label": "has (1—0..1)", "direction": "both" },
+    { "from": "user", "to": "listing", "label": "owns (1—N)", "direction": "both" },
+    { "from": "user", "to": "favorite", "label": "has (1—N)", "direction": "both" },
+    { "from": "user", "to": "session", "label": "has (1—N)", "direction": "both" },
+    { "from": "user", "to": "account", "label": "has (1—N)", "direction": "both" },
+    { "from": "landlord-profile", "to": "listing", "label": "owns (1—N)", "direction": "both" },
+    { "from": "listing", "to": "favorite", "label": "favorited by (1—N)", "direction": "both" },
+    { "from": "university", "to": "hostel", "label": "has (1—N)", "direction": "both" },
+    { "from": "hostel", "to": "hostel-room", "label": "contains (1—N)", "direction": "both" },
+    { "from": "apartment", "to": "room", "label": "contains (1—N)", "direction": "both" }
+  ]
+}

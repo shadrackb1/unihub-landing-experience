@@ -1,34 +1,26 @@
-import {
-  createFileRoute,
-  Outlet,
-  useRouterState,
-  useNavigate,
-} from '@tanstack/react-router';
-import { useEffect } from 'react';
-import { Loader2, MessageCircle } from 'lucide-react';
-import { AuthProvider, useAuth } from '@/shared/context/AuthContext';
-import { LandlordProvider, useLandlord } from '@/shared/context/LandlordContext';
-import { homeForStatus } from '@/features/landlord/services/landlordService';
-import { formatWhatsAppNumber, SUPPORT_LABEL } from '@/shared/contact';
-import { SupportLink } from '@/shared/components/SupportLink';
+import { createFileRoute, Outlet, useRouterState, useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
+import { Loader2, MessageCircle } from "lucide-react";
+import { AuthProvider, useAuth } from "@/shared/context/AuthContext";
+import { LandlordProvider, useLandlord } from "@/shared/context/LandlordContext";
+import { homeForStatus } from "@/features/landlord/services/landlordService";
+import { formatWhatsAppNumber, SUPPORT_LABEL } from "@/shared/contact";
+import { SupportLink } from "@/shared/components/SupportLink";
 
-export const Route = createFileRoute('/landlord')({
+export const Route = createFileRoute("/landlord")({
   head: () => ({
-    meta: [
-      { title: 'UniHub Landlord Portal' },
-      { name: 'robots', content: 'noindex' },
-    ],
+    meta: [{ title: "UniHub Landlord Portal" }, { name: "robots", content: "noindex" }],
   }),
   ssr: false,
   component: LandlordRoot,
 });
 
-const PUBLIC_PREFIXES = ['/landlord/login', '/landlord/register'];
-const STATUS_PAGES = ['/landlord/pending', '/landlord/rejected', '/landlord/suspended'];
+const PUBLIC_PREFIXES = ["/landlord/login", "/landlord/register"];
+const STATUS_PAGES = ["/landlord/pending", "/landlord/rejected", "/landlord/suspended"];
 
 function LandlordRoot() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const isPublic = PUBLIC_PREFIXES.some((p) => pathname === p || pathname.startsWith(p + '/'));
+  const isPublic = PUBLIC_PREFIXES.some((p) => pathname === p || pathname.startsWith(p + "/"));
 
   return (
     <AuthProvider>
@@ -72,7 +64,7 @@ function GateScreen({
         >
           <MessageCircle className="size-4" aria-hidden="true" />
           {SUPPORT_LABEL}
-          {formatWhatsAppNumber() ? ` (${formatWhatsAppNumber()})` : ''}
+          {formatWhatsAppNumber() ? ` (${formatWhatsAppNumber()})` : ""}
         </SupportLink>
       </div>
     </div>
@@ -83,7 +75,7 @@ function LandlordGate({ pathname }: { pathname: string }) {
   const { loading } = useAuth();
   const { user, profile, profileState, profileMessage, refreshProfile } = useLandlord();
 
-  if (loading || !user || profileState === 'loading') {
+  if (loading || !user || profileState === "loading") {
     if (!loading && !user) return <Redirect to="/landlord/login" />;
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
@@ -92,7 +84,7 @@ function LandlordGate({ pathname }: { pathname: string }) {
     );
   }
 
-  if (profileState === 'unavailable') {
+  if (profileState === "unavailable") {
     return (
       <GateScreen title="Can't verify your profile" body={profileMessage}>
         <button
@@ -105,7 +97,7 @@ function LandlordGate({ pathname }: { pathname: string }) {
     );
   }
 
-  if (profileState === 'missing' || !profile) {
+  if (profileState === "missing" || !profile) {
     return (
       <GateScreen
         title="No landlord profile found"
@@ -123,10 +115,10 @@ function LandlordGate({ pathname }: { pathname: string }) {
 
   const isStatusPage = STATUS_PAGES.includes(pathname);
 
-  if (profile.status !== 'approved' && !isStatusPage) {
+  if (profile.status !== "approved" && !isStatusPage) {
     return <Redirect to={homeForStatus(profile.status)} />;
   }
-  if (profile.status === 'approved' && isStatusPage) {
+  if (profile.status === "approved" && isStatusPage) {
     return <Redirect to="/landlord" />;
   }
 

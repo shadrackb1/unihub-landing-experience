@@ -40,7 +40,8 @@ const pillars = [
 
 function AboutPage() {
   const siteSettings = useSiteSettings();
-  const teamMembers: { name: string; role: string; photoUrl: string }[] = siteSettings?.teamMembers || [];
+  const teamMembers: { name: string; role: string; photoUrl: string }[] =
+    siteSettings?.teamMembers || [];
   return (
     <MarketingShell>
       <section className="section-shell">
@@ -72,10 +73,15 @@ function AboutPage() {
           {teamMembers.length > 0 && (
             <Reveal className="mt-12">
               <p className="eyebrow">The people behind it</p>
-              <h2 className="mt-3 font-display text-3xl font-medium leading-tight sm:text-4xl">Meet the team</h2>
+              <h2 className="mt-3 font-display text-3xl font-medium leading-tight sm:text-4xl">
+                Meet the team
+              </h2>
               <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                 {teamMembers.map((member, index) => (
-                  <div key={`${member.name}-${index}`} className="solid-card flex items-center gap-4 p-6">
+                  <div
+                    key={`${member.name}-${index}`}
+                    className="solid-card flex items-center gap-4 p-6"
+                  >
                     {member.photoUrl ? (
                       <img
                         src={member.photoUrl}

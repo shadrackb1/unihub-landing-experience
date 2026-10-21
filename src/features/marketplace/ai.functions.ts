@@ -24,10 +24,18 @@ export const draftListingDescription = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const { generateResponse, GatewayError } = await import("@lovable.dev/ai-gateway");
     const facts = [
-      ["Title", data.title], ["Type", data.type], ["Near campus", data.campus],
-      ["Location", data.location], ["Rent (KES/month)", data.price],
-      ["Deposit (KES)", data.deposit], ["Amenities", data.amenities], ["Landlord notes", data.notes],
-    ].filter(([, v]) => (v ?? "").trim()).map(([k, v]) => `${k}: ${v}`).join("\n");
+      ["Title", data.title],
+      ["Type", data.type],
+      ["Near campus", data.campus],
+      ["Location", data.location],
+      ["Rent (KES/month)", data.price],
+      ["Deposit (KES)", data.deposit],
+      ["Amenities", data.amenities],
+      ["Landlord notes", data.notes],
+    ]
+      .filter(([, v]) => (v ?? "").trim())
+      .map(([k, v]) => `${k}: ${v}`)
+      .join("\n");
     if (!facts) return { text: "", error: "Add a few property details first." };
     try {
       const res = await generateResponse({
@@ -39,14 +47,26 @@ export const draftListingDescription = createServerFn({ method: "POST" })
           "Never invent facts, prices, distances or amenities not given. No emojis, no hype, no all-caps. Output plain text only.",
         input: `Tone: ${TONES[data.tone]}\n\nProperty details:\n${facts}`,
       });
-      const r = res as unknown as { output_text?: string; output?: Array<{ content?: Array<{ type?: string; text?: string }> }> };
-      const text = r.output_text ?? (r.output ?? []).flatMap((o) => o.content ?? []).filter((c) => c.type === "output_text").map((c) => c.text ?? "").join("");
-      if (!text.trim()) return { text: "", error: "The assistant returned an empty draft. Please try again." };
+      const r = res as unknown as {
+        output_text?: string;
+        output?: Array<{ content?: Array<{ type?: string; text?: string }> }>;
+      };
+      const text =
+        r.output_text ??
+        (r.output ?? [])
+          .flatMap((o) => o.content ?? [])
+          .filter((c) => c.type === "output_text")
+          .map((c) => c.text ?? "")
+          .join("");
+      if (!text.trim())
+        return { text: "", error: "The assistant returned an empty draft. Please try again." };
       return { text: text.trim(), error: null as string | null };
     } catch (e) {
       console.error("draftListingDescription failed", e);
-      if (e instanceof GatewayError && e.httpStatus === 429) return { text: "", error: "Too many requests right now. Please wait a moment." };
-      if (e instanceof GatewayError && e.httpStatus === 402) return { text: "", error: "AI credits are used up. Please top up to keep drafting." };
+      if (e instanceof GatewayError && e.httpStatus === 429)
+        return { text: "", error: "Too many requests right now. Please wait a moment." };
+      if (e instanceof GatewayError && e.httpStatus === 402)
+        return { text: "", error: "AI credits are used up. Please top up to keep drafting." };
       return { text: "", error: "Couldn't draft a description. Please try again." };
     }
   });

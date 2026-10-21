@@ -1,0 +1,103 @@
+{
+  "version": "1",
+  "type": "flowchart",
+  "title": "Video Panel — Viewport-Aware Autoplay (IntersectionObserver)",
+  "description": "VideoPanel component autoplays when 25% visible, pauses on leave, respects prefers-reduced-motion",
+  "nodes": [
+    {
+      "id": "mount",
+      "label": "VideoPanel Mounts",
+      "description": "Receives videoSrc, poster, alt props",
+      "shape": "pill",
+      "color": "blue"
+    },
+    {
+      "id": "reduced-motion-check",
+      "label": "prefers-reduced-motion?",
+      "description": "window.matchMedia('(prefers-reduced-motion: reduce)')",
+      "shape": "diamond",
+      "color": "amber"
+    },
+    {
+      "id": "no-autoplay",
+      "label": "Show Poster + Play Button",
+      "description": "User must click to play — no auto behaviour",
+      "shape": "rounded",
+      "color": "slate"
+    },
+    {
+      "id": "create-observer",
+      "label": "Create IntersectionObserver",
+      "description": "threshold: 0.25, rootMargin: '0px 0px -10% 0px'",
+      "shape": "rectangle",
+      "color": "violet"
+    },
+    {
+      "id": "observe-video",
+      "label": "Observe Video Element",
+      "description": "observer.observe(videoRef.current)",
+      "shape": "rounded",
+      "color": "violet"
+    },
+    {
+      "id": "intersection-change",
+      "label": "Intersection Ratio ≥ 0.25?",
+      "shape": "diamond",
+      "color": "amber"
+    },
+    {
+      "id": "autoplay",
+      "label": "video.play()",
+      "description": "Muted, playsInline — browser allows autoplay",
+      "shape": "rounded",
+      "color": "green"
+    },
+    {
+      "id": "pause",
+      "label": "video.pause()",
+      "description": "When ratio < 0.25 or element leaves viewport",
+      "shape": "rounded",
+      "color": "amber"
+    },
+    {
+      "id": "user-interaction",
+      "label": "User Clicks Video",
+      "description": "Toggles play/pause, unmutes if playing",
+      "shape": "diamond",
+      "color": "blue"
+    },
+    {
+      "id": "cleanup",
+      "label": "Cleanup on Unmount",
+      "description": "observer.disconnect() — prevents memory leaks",
+      "shape": "rounded",
+      "color": "rose"
+    },
+    {
+      "id": "rendered",
+      "label": "Video Rendered & Responsive",
+      "description": "object-fit: cover, aspect-video, full width",
+      "shape": "pill",
+      "color": "green",
+      "emphasis": "strong"
+    }
+  ],
+  "edges": [
+    { "from": "mount", "to": "reduced-motion-check" },
+    { "from": "reduced-motion-check", "to": "no-autoplay", "label": "true" },
+    { "from": "reduced-motion-check", "to": "create-observer", "label": "false" },
+    { "from": "create-observer", "to": "observe-video" },
+    { "from": "observe-video", "to": "intersection-change" },
+    { "from": "intersection-change", "to": "autoplay", "label": "≥ 0.25 (entering)" },
+    { "from": "intersection-change", "to": "pause", "label": "< 0.25 (leaving)" },
+    { "from": "autoplay", "to": "user-interaction" },
+    { "from": "pause", "to": "user-interaction" },
+    { "from": "user-interaction", "to": "autoplay", "label": "click to play" },
+    { "from": "user-interaction", "to": "pause", "label": "click to pause" },
+    { "from": "no-autoplay", "to": "user-interaction" },
+    { "from": "mount", "to": "cleanup", "label": "on unmount" },
+    { "from": "autoplay", "to": "rendered" },
+    { "from": "pause", "to": "rendered" },
+    { "from": "no-autoplay", "to": "rendered" }
+  ]
+}

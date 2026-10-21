@@ -42,7 +42,11 @@ export function InstallAppButton() {
 
   return (
     <div className="fixed bottom-4 left-1/2 z-[60] -translate-x-1/2 sm:left-auto sm:right-4 sm:translate-x-0">
-      <div className="flex items-center gap-2 rounded-full bg-foreground/95 px-4 py-2 text-background shadow-xl backdrop-blur" role="region" aria-label="Install app">
+      <div
+        className="flex items-center gap-2 rounded-full bg-foreground/95 px-4 py-2 text-background shadow-xl backdrop-blur"
+        role="region"
+        aria-label="Install app"
+      >
         <button
           onClick={async () => {
             try {

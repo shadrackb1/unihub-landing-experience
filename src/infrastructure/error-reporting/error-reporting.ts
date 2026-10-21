@@ -19,8 +19,8 @@ export function reportError(error: unknown, context: Record<string, unknown> = {
     }
   } catch (e) {
     // Fallback to console if lovable integration fails
-    console.error('Error reporting failed:', e);
-    console.error('Original error:', error);
-    console.error('Context:', context);
+    console.error("Error reporting failed:", e);
+    console.error("Original error:", error);
+    console.error("Context:", context);
   }
 }

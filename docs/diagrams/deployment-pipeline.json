@@ -1,0 +1,143 @@
+{
+  "version": "1",
+  "type": "flowchart",
+  "title": "Deployment Pipeline — GitHub to Vercel",
+  "description": "CI/CD flow from code push to production deployment on Vercel",
+  "nodes": [
+    {
+      "id": "dev-local",
+      "label": "Local Development",
+      "description": "npm run dev (Vite HMR on :5173)",
+      "shape": "pill",
+      "color": "blue"
+    },
+    {
+      "id": "git-commit",
+      "label": "git commit + push",
+      "description": "Push to origin/main",
+      "shape": "rounded",
+      "color": "slate"
+    },
+    {
+      "id": "github-repo",
+      "label": "GitHub Repository",
+      "description": "Private repo: shadrackb1/unihub-landing-experience",
+      "shape": "rectangle",
+      "color": "violet"
+    },
+    {
+      "id": "vercel-detect",
+      "label": "Vercel Detects Push",
+      "description": "GitHub integration webhook",
+      "shape": "rounded",
+      "color": "violet"
+    },
+    {
+      "id": "vercel-install",
+      "label": "npm install",
+      "description": "Installs dependencies in build environment",
+      "shape": "rectangle",
+      "color": "slate"
+    },
+    {
+      "id": "prisma-generate",
+      "label": "npx prisma generate",
+      "description": "Generates Prisma Client for libsql",
+      "shape": "rectangle",
+      "color": "green"
+    },
+    {
+      "id": "build",
+      "label": "npm run build",
+      "description": "Vite 8 + Nitro 3 → .vercel/output",
+      "shape": "rectangle",
+      "color": "blue",
+      "emphasis": "strong"
+    },
+    {
+      "id": "type-check",
+      "label": "TypeScript Check",
+      "description": "tsc --noEmit (strict mode)",
+      "shape": "diamond",
+      "color": "amber"
+    },
+    {
+      "id": "lint",
+      "label": "ESLint + Prettier",
+      "description": "npm run lint (must pass)",
+      "shape": "diamond",
+      "color": "amber"
+    },
+    {
+      "id": "deploy-preview",
+      "label": "Deploy Preview",
+      "description": "Unique preview URL per commit",
+      "shape": "pill",
+      "color": "green"
+    },
+    {
+      "id": "deploy-production",
+      "label": "Deploy Production",
+      "description": "vercel.com/shadrackb1/unihub-landing-experience",
+      "shape": "pill",
+      "color": "green",
+      "emphasis": "strong"
+    },
+    {
+      "id": "vercel-config",
+      "label": "vercel.json Config",
+      "description": "framework: null, buildCommand, outputDirectory, regions: [iad1]",
+      "shape": "rectangle",
+      "color": "slate"
+    },
+    {
+      "id": "env-vars",
+      "label": "Environment Variables",
+      "description": "DATABASE_URL, BETTER_AUTH_SECRET, BETTER_AUTH_URL, VITE_*",
+      "shape": "rectangle",
+      "color": "amber"
+    },
+    {
+      "id": "edge-functions",
+      "label": "Vercel Edge Functions",
+      "description": "SSR handlers, API routes, createServerFn",
+      "shape": "rectangle",
+      "color": "violet"
+    },
+    {
+      "id": "static-assets",
+      "label": "Static Asset CDN",
+      "description": "Videos, images, fonts served from edge",
+      "shape": "rectangle",
+      "color": "slate"
+    },
+    {
+      "id": "production-url",
+      "label": "Production URL",
+      "description": "https://unihub.ke (or Vercel domain)",
+      "shape": "pill",
+      "color": "blue",
+      "emphasis": "strong"
+    }
+  ],
+  "edges": [
+    { "from": "dev-local", "to": "git-commit" },
+    { "from": "git-commit", "to": "github-repo" },
+    { "from": "github-repo", "to": "vercel-detect" },
+    { "from": "vercel-detect", "to": "vercel-install" },
+    { "from": "vercel-install", "to": "prisma-generate" },
+    { "from": "prisma-generate", "to": "build" },
+    { "from": "build", "to": "type-check" },
+    { "from": "type-check", "to": "lint", "label": "pass" },
+    { "from": "type-check", "to": "deploy-preview", "label": "fail", "style": "dashed", "color": "rose" },
+    { "from": "lint", "to": "deploy-preview", "label": "pass" },
+    { "from": "lint", "to": "deploy-preview", "label": "fail", "style": "dashed", "color": "rose" },
+    { "from": "deploy-preview", "to": "deploy-production", "label": "main branch" },
+    { "from": "vercel-config", "to": "build", "label": "configures" },
+    { "from": "env-vars", "to": "build", "label": "injected at build" },
+    { "from": "build", "to": "edge-functions", "label": "outputs" },
+    { "from": "build", "to": "static-assets", "label": "outputs" },
+    { "from": "edge-functions", "to": "production-url", "label": "serves" },
+    { "from": "static-assets", "to": "production-url", "label": "serves" }
+  ]
+}

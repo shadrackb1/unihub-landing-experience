@@ -21,7 +21,7 @@ export function reportLovableError(error: unknown, context: Record<string, unkno
 
   window.__lovableEvents?.captureException?.(
     error,
-    context['boundary'] ? { boundary: String(context['boundary']) } : undefined,
+    context["boundary"] ? { boundary: String(context["boundary"]) } : undefined,
   );
 
   window.__lovableReportRuntimeError?.({

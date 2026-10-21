@@ -11,4 +11,3 @@ export const Route = createFileRoute("/properties/$id")({
     throw redirect({ to: "/listings" });
   },
 });
-

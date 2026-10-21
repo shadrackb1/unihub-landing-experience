@@ -1,9 +1,25 @@
 // @ts-nocheck — ported legacy admin/map code; typed rewrite pending
-import { useLoaderData } from '@tanstack/react-router';
-import { LayoutDashboard, Home, Building, Users, Tag, Monitor, TrendingUp, Eye, Loader2 } from 'lucide-react';
-import { Link } from '@tanstack/react-router';
-import { getProperties, getHostels, getUniversities, getAgents, getCategories } from '@/shared/services/firestore';
-import { useEffect, useState } from 'react';
+import { useLoaderData } from "@tanstack/react-router";
+import {
+  LayoutDashboard,
+  Home,
+  Building,
+  Users,
+  Tag,
+  Monitor,
+  TrendingUp,
+  Eye,
+  Loader2,
+} from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import {
+  getProperties,
+  getHostels,
+  getUniversities,
+  getAgents,
+  getCategories,
+} from "@/shared/services/firestore";
+import { useEffect, useState } from "react";
 
 export const routeOptions = {
   loader: async () => {
@@ -30,13 +46,41 @@ export const routeOptions = {
 };
 
 export function AdminDashboard() {
-  const { stats, recentProperties, recentHostels } = (useLoaderData({ strict: false }) as any);
+  const { stats, recentProperties, recentHostels } = useLoaderData({ strict: false }) as any;
 
   const statCards = [
-    { label: 'Properties', value: stats.properties, icon: Home, color: 'text-blue-400', bg: 'bg-blue-500/10', href: '/admin/properties' },
-    { label: 'Hostels', value: stats.hostels, icon: Building, color: 'text-green-400', bg: 'bg-green-500/10', href: '/admin/hostels' },
-    { label: 'Universities', value: stats.universities, icon: Building, color: 'text-purple-400', bg: 'bg-purple-500/10', href: '/admin/universities' },
-    { label: 'Agents', value: stats.agents, icon: Users, color: 'text-orange-400', bg: 'bg-orange-500/10', href: '/admin/agents' },
+    {
+      label: "Properties",
+      value: stats.properties,
+      icon: Home,
+      color: "text-blue-400",
+      bg: "bg-blue-500/10",
+      href: "/admin/properties",
+    },
+    {
+      label: "Hostels",
+      value: stats.hostels,
+      icon: Building,
+      color: "text-green-400",
+      bg: "bg-green-500/10",
+      href: "/admin/hostels",
+    },
+    {
+      label: "Universities",
+      value: stats.universities,
+      icon: Building,
+      color: "text-purple-400",
+      bg: "bg-purple-500/10",
+      href: "/admin/universities",
+    },
+    {
+      label: "Agents",
+      value: stats.agents,
+      icon: Users,
+      color: "text-orange-400",
+      bg: "bg-orange-500/10",
+      href: "/admin/agents",
+    },
   ];
 
   return (
@@ -50,7 +94,10 @@ export function AdminDashboard() {
           <p className="text-zinc-400 mt-2">Welcome to the UniHub Admin Dashboard</p>
         </div>
         <div className="flex gap-4">
-          <a href="/admin/cms" className="px-4 py-2 flex items-center gap-2 rounded-xl border border-zinc-800 text-sm font-medium hover:bg-zinc-800 transition-all font-display">
+          <a
+            href="/admin/cms"
+            className="px-4 py-2 flex items-center gap-2 rounded-xl border border-zinc-800 text-sm font-medium hover:bg-zinc-800 transition-all font-display"
+          >
             <Eye className="w-4 h-4" /> Live Preview
           </a>
         </div>
@@ -79,14 +126,22 @@ export function AdminDashboard() {
               <Building className="w-5 h-5 text-brand-400" />
               Recent Properties
             </h2>
-            <a href="/admin/properties" className="text-sm text-brand-400 hover:text-brand-300 font-medium">View All</a>
+            <a
+              href="/admin/properties"
+              className="text-sm text-brand-400 hover:text-brand-300 font-medium"
+            >
+              View All
+            </a>
           </div>
           <div className="space-y-4">
             {recentProperties.length === 0 ? (
               <p className="text-zinc-500 text-center py-8">No properties yet</p>
             ) : (
               recentProperties.map((prop) => (
-                <div key={prop.id} className="flex items-center justify-between p-4 bg-zinc-900/50 border border-zinc-800 rounded-xl hover:border-zinc-700 transition-colors">
+                <div
+                  key={prop.id}
+                  className="flex items-center justify-between p-4 bg-zinc-900/50 border border-zinc-800 rounded-xl hover:border-zinc-700 transition-colors"
+                >
                   <div className="flex items-center gap-4">
                     <div className="w-12 h-12 rounded-lg bg-zinc-800 flex items-center justify-center">
                       <Home className="w-6 h-6 text-brand-400" />
@@ -97,9 +152,13 @@ export function AdminDashboard() {
                     </div>
                   </div>
                   <div className="text-right">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      prop.status === 'available' ? 'bg-green-500/20 text-green-400' : 'bg-zinc-700 text-zinc-400'
-                    }`}>
+                    <span
+                      className={`px-2 py-1 rounded-full text-xs font-medium ${
+                        prop.status === "available"
+                          ? "bg-green-500/20 text-green-400"
+                          : "bg-zinc-700 text-zinc-400"
+                      }`}
+                    >
                       {prop.status}
                     </span>
                     <p className="text-sm text-zinc-500 mt-1">KES {prop.price.toLocaleString()}</p>
@@ -116,14 +175,22 @@ export function AdminDashboard() {
               <Building className="w-5 h-5 text-green-400" />
               Recent Hostels
             </h2>
-            <a href="/admin/hostels" className="text-sm text-brand-400 hover:text-brand-300 font-medium">View All</a>
+            <a
+              href="/admin/hostels"
+              className="text-sm text-brand-400 hover:text-brand-300 font-medium"
+            >
+              View All
+            </a>
           </div>
           <div className="space-y-4">
             {recentHostels.length === 0 ? (
               <p className="text-zinc-500 text-center py-8">No hostels yet</p>
             ) : (
               recentHostels.map((hostel) => (
-                <div key={hostel.id} className="flex items-center justify-between p-4 bg-zinc-900/50 border border-zinc-800 rounded-xl hover:border-zinc-700 transition-colors">
+                <div
+                  key={hostel.id}
+                  className="flex items-center justify-between p-4 bg-zinc-900/50 border border-zinc-800 rounded-xl hover:border-zinc-700 transition-colors"
+                >
                   <div className="flex items-center gap-4">
                     <div className="w-12 h-12 rounded-lg bg-zinc-800 flex items-center justify-center">
                       <Building className="w-6 h-6 text-green-400" />
@@ -133,9 +200,13 @@ export function AdminDashboard() {
                       <p className="text-sm text-zinc-400">{hostel.location}</p>
                     </div>
                   </div>
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                    hostel.status === 'active' ? 'bg-green-500/20 text-green-400' : 'bg-zinc-700 text-zinc-400'
-                  }`}>
+                  <span
+                    className={`px-2 py-1 rounded-full text-xs font-medium ${
+                      hostel.status === "active"
+                        ? "bg-green-500/20 text-green-400"
+                        : "bg-zinc-700 text-zinc-400"
+                    }`}
+                  >
                     {hostel.status}
                   </span>
                 </div>

@@ -1,20 +1,33 @@
 // @ts-nocheck
-import { useEffect, useState } from 'react';
-import { Link } from '@tanstack/react-router';
-import { collection, query, where, getDocs } from 'firebase/firestore';
-import { auth, db } from '@/shared/lib/firebase';
-import { useApprovedLandlord } from '@/features/landlord/hooks/useApprovedLandlord';
-import { LandlordShell } from '@/features/landlord/components/LandlordShell';
+import { useEffect, useState } from "react";
+import { Link } from "@tanstack/react-router";
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { auth, db } from "@/shared/lib/firebase";
+import { useApprovedLandlord } from "@/features/landlord/hooks/useApprovedLandlord";
+import { LandlordShell } from "@/features/landlord/components/LandlordShell";
 import {
-  listLandlordListings, AD_PLANS, formatKes, requestAd, isAdLive, type MarketListing,
-} from '@/features/marketplace/services';
-import { cn } from '@/shared/lib/utils';
+  listLandlordListings,
+  AD_PLANS,
+  formatKes,
+  requestAd,
+  isAdLive,
+  type MarketListing,
+} from "@/features/marketplace/services";
+import { cn } from "@/shared/lib/utils";
 import {
-  Loader2, Building2, CheckCircle, XCircle, AlertTriangle, Plus,
-  ClipboardList, Zap, ImageIcon, ArrowRight,
-} from 'lucide-react';
+  Loader2,
+  Building2,
+  CheckCircle,
+  XCircle,
+  AlertTriangle,
+  Plus,
+  ClipboardList,
+  Zap,
+  ImageIcon,
+  ArrowRight,
+} from "lucide-react";
 
-type View = 'select-listing' | 'select-plan';
+type View = "select-listing" | "select-plan";
 
 function ListingOption({ listing }: { listing: MarketListing }) {
   return (
@@ -26,12 +39,12 @@ function ListingOption({ listing }: { listing: MarketListing }) {
         className="mt-0.5 h-4 w-4 rounded border-border text-primary focus:ring-ring"
       />
       <div>
-        <p className="font-medium truncate max-w-[20rem]">{listing.title ?? 'Untitled listing'}</p>
+        <p className="font-medium truncate max-w-[20rem]">{listing.title ?? "Untitled listing"}</p>
         <p className="mt-0.5 text-sm text-muted-foreground">
           {listing.category && listing.location
             ? `${listing.category} · ${listing.location}`
-            : listing.location ?? listing.category ?? 'No details'}
-          {listing.campus ? ` · Near ${listing.campus}` : ''}
+            : (listing.location ?? listing.category ?? "No details")}
+          {listing.campus ? ` · Near ${listing.campus}` : ""}
         </p>
         <p className="mt-1 text-sm font-medium">{formatKes(listing.price)}/month</p>
       </div>
@@ -44,11 +57,13 @@ export const LandlordAdsPage = () => {
   const [listings, setListings] = useState<MarketListing[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [view, setView] = useState<View>('select-listing');
+  const [view, setView] = useState<View>("select-listing");
   const [selectedListingId, setSelectedListingId] = useState<string | null>(null);
   const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null);
   const [actionInFlight, setActionInFlight] = useState<string | null>(null);
-  const [actionMsg, setActionMsg] = useState<{ kind: 'success' | 'error'; text: string } | null>(null);
+  const [actionMsg, setActionMsg] = useState<{ kind: "success" | "error"; text: string } | null>(
+    null,
+  );
 
   const loadListings = async () => {
     if (!auth.currentUser) return;
@@ -56,8 +71,8 @@ export const LandlordAdsPage = () => {
       const mine = await listLandlordListings(auth.currentUser.uid);
       setListings(mine);
     } catch (e) {
-      console.error('Failed to load listings:', e);
-      setError(e instanceof Error ? e.message : 'Could not load your listings.');
+      console.error("Failed to load listings:", e);
+      setError(e instanceof Error ? e.message : "Could not load your listings.");
     } finally {
       setIsLoading(false);
     }
@@ -68,13 +83,13 @@ export const LandlordAdsPage = () => {
   }, []);
 
   useEffect(() => {
-    if (view !== 'select-listing') setActionMsg(null);
+    if (view !== "select-listing") setActionMsg(null);
   }, [view]);
 
   const selectedListing = listings.find((l) => l.id === selectedListingId);
   const plansForListing = selectedListingId ? AD_PLANS : [];
   const activeBoosts = listings.filter(isAdLive);
-  const requested = listings.filter((l) => l.adStatus === 'requested');
+  const requested = listings.filter((l) => l.adStatus === "requested");
 
   const handleRequestAd = async () => {
     if (!selectedListingId || !selectedPlanId) return;
@@ -83,19 +98,25 @@ export const LandlordAdsPage = () => {
     try {
       await requestAd(selectedListingId, selectedPlanId);
       await loadListings();
-      setActionMsg({ kind: 'success', text: 'Boost request sent. We will confirm payment details on WhatsApp.' });
+      setActionMsg({
+        kind: "success",
+        text: "Boost request sent. We will confirm payment details on WhatsApp.",
+      });
       setSelectedListingId(null);
       setSelectedPlanId(null);
-      setView('select-listing');
+      setView("select-listing");
     } catch (e) {
-      console.error('Ad request failed:', e);
-      setActionMsg({ kind: 'error', text: e instanceof Error ? e.message : 'Could not request the boost. Try again.' });
+      console.error("Ad request failed:", e);
+      setActionMsg({
+        kind: "error",
+        text: e instanceof Error ? e.message : "Could not request the boost. Try again.",
+      });
     } finally {
       setActionInFlight(null);
     }
   };
 
-  if (!isApproved && profileStatus !== 'pending') {
+  if (!isApproved && profileStatus !== "pending") {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background p-6">
         <div className="solid-card p-6 max-w-sm text-center">
@@ -104,7 +125,8 @@ export const LandlordAdsPage = () => {
           </div>
           <h2 className="font-display text-lg font-medium">Portal access restricted</h2>
           <p className="mt-2 text-sm text-muted-foreground">
-            Your account is {profileStatus}. You will be able to use the portal once your status changes.
+            Your account is {profileStatus}. You will be able to use the portal once your status
+            changes.
           </p>
           <Link
             to="/landlord"
@@ -131,7 +153,7 @@ export const LandlordAdsPage = () => {
           onClick={() => {
             setSelectedListingId(null);
             setSelectedPlanId(null);
-            setView('select-listing');
+            setView("select-listing");
           }}
           className="inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-glow transition-colors hover:bg-primary/90"
         >
@@ -150,14 +172,14 @@ export const LandlordAdsPage = () => {
       {actionMsg && (
         <div
           className={cn(
-            'mb-5 flex items-start gap-3 rounded-xl p-4 text-sm transition-opacity',
-            actionMsg.kind === 'success'
-              ? 'border-border bg-accent text-secondary-foreground'
-              : 'border-destructive/30 bg-destructive/10 text-destructive'
+            "mb-5 flex items-start gap-3 rounded-xl p-4 text-sm transition-opacity",
+            actionMsg.kind === "success"
+              ? "border-border bg-accent text-secondary-foreground"
+              : "border-destructive/30 bg-destructive/10 text-destructive",
           )}
-          role={actionMsg.kind === 'error' ? 'alert' : 'status'}
+          role={actionMsg.kind === "error" ? "alert" : "status"}
         >
-          {actionMsg.kind === 'success' ? (
+          {actionMsg.kind === "success" ? (
             <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-status" />
           ) : (
             <XCircle className="mt-0.5 h-4 w-4 shrink-0" />
@@ -166,11 +188,13 @@ export const LandlordAdsPage = () => {
         </div>
       )}
 
-      {view === 'select-listing' && (
+      {view === "select-listing" && (
         <>
           <div className="mb-6">
             <h2 className="font-display text-lg font-medium">Choose a listing to boost</h2>
-            <p className="mt-1 text-sm text-muted-foreground">Only published listings can be boosted.</p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Only published listings can be boosted.
+            </p>
           </div>
 
           {isLoading ? (
@@ -182,7 +206,9 @@ export const LandlordAdsPage = () => {
               <div className="flex h-12 w-12 items-center justify-center rounded-full bg-accent">
                 <ClipboardList className="h-5 w-5" />
               </div>
-              <p className="text-sm text-muted-foreground">No listings yet. Create one first, then come back to boost it.</p>
+              <p className="text-sm text-muted-foreground">
+                No listings yet. Create one first, then come back to boost it.
+              </p>
               <Link
                 to="/landlord/listings/new"
                 className="cta-shine inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-glow transition-colors hover:bg-primary/90"
@@ -202,16 +228,16 @@ export const LandlordAdsPage = () => {
           {selectedListingId && (
             <div className="mt-6 flex items-center justify-between border-t border-border pt-4">
               <div className="text-sm text-muted-foreground">
-                Selected:{' '}
+                Selected:{" "}
                 <span className="font-medium text-foreground">
-                  {listings.find((l) => l.id === selectedListingId)?.title ?? 'this listing'}
+                  {listings.find((l) => l.id === selectedListingId)?.title ?? "this listing"}
                 </span>
               </div>
               <button
                 type="button"
                 onClick={() => {
                   setSelectedListingId(null);
-                  setView('select-plan');
+                  setView("select-plan");
                 }}
                 className="cta-shine inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-glow transition-colors hover:bg-primary/90"
               >
@@ -223,16 +249,18 @@ export const LandlordAdsPage = () => {
         </>
       )}
 
-      {view === 'select-plan' && (
+      {view === "select-plan" && (
         <>
           <div className="mb-6 flex items-center justify-between">
             <div>
               <h2 className="font-display text-lg font-medium">Choose a plan</h2>
-              <p className="mt-1 text-sm text-muted-foreground">Boosts run for the chosen period and stop automatically.</p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Boosts run for the chosen period and stop automatically.
+              </p>
             </div>
             <button
               type="button"
-              onClick={() => setView('select-listing')}
+              onClick={() => setView("select-listing")}
               className="text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
               Change listing
@@ -242,12 +270,12 @@ export const LandlordAdsPage = () => {
           {selectedListing && (
             <div className="mb-6 rounded-xl border border-border bg-card/60 p-4">
               <p className="text-sm text-muted-foreground">Boosting</p>
-              <p className="mt-0.5 font-medium">{selectedListing.title ?? 'Untitled listing'}</p>
+              <p className="mt-0.5 font-medium">{selectedListing.title ?? "Untitled listing"}</p>
               <p className="text-sm text-muted-foreground">
                 {selectedListing.category && selectedListing.location
                   ? `${selectedListing.category} · ${selectedListing.location}`
-                  : selectedListing.location ?? selectedListing.category ?? 'No details'}
-                {selectedListing.campus ? ` · Near ${selectedListing.campus}` : ''}
+                  : (selectedListing.location ?? selectedListing.category ?? "No details")}
+                {selectedListing.campus ? ` · Near ${selectedListing.campus}` : ""}
               </p>
             </div>
           )}
@@ -260,10 +288,10 @@ export const LandlordAdsPage = () => {
                 disabled={actionInFlight !== null}
                 onClick={() => setSelectedPlanId(plan.id)}
                 className={cn(
-                  'relative flex flex-col gap-3 rounded-xl border p-5 text-left transition-colors',
+                  "relative flex flex-col gap-3 rounded-xl border p-5 text-left transition-colors",
                   selectedPlanId === plan.id
-                    ? 'border-foreground bg-foreground/5 text-background'
-                    : 'border-border bg-card hover:border-foreground/50'
+                    ? "border-foreground bg-foreground/5 text-background"
+                    : "border-border bg-card hover:border-foreground/50",
                 )}
               >
                 <div className="flex items-center justify-between">
@@ -280,17 +308,17 @@ export const LandlordAdsPage = () => {
 
           <div className="mt-6 flex items-center justify-between border-t border-border pt-4">
             <div className="text-sm text-muted-foreground">
-              Total:{' '}
+              Total:{" "}
               <span className="font-medium text-foreground">
                 {selectedPlanId
                   ? formatKes(AD_PLANS.find((p) => p.id === selectedPlanId)?.price ?? 0)
-                  : '—'}
+                  : "—"}
               </span>
             </div>
             <div className="flex gap-2">
               <button
                 type="button"
-                onClick={() => setView('select-listing')}
+                onClick={() => setView("select-listing")}
                 className="rounded-full border border-border bg-card px-4 py-2 text-sm font-medium text-foreground hover:bg-accent"
               >
                 Back
@@ -300,8 +328,8 @@ export const LandlordAdsPage = () => {
                 disabled={!selectedPlanId || actionInFlight !== null}
                 onClick={handleRequestAd}
                 className={cn(
-                  'cta-shine inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-glow disabled:opacity-50',
-                  !selectedPlanId || actionInFlight !== null ? '' : 'hover:bg-primary/90'
+                  "cta-shine inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground shadow-glow disabled:opacity-50",
+                  !selectedPlanId || actionInFlight !== null ? "" : "hover:bg-primary/90",
                 )}
               >
                 {actionInFlight ? (
@@ -338,10 +366,16 @@ export const LandlordAdsPage = () => {
                     <li key={listing.id} className="py-3">
                       <div className="flex items-center justify-between gap-3">
                         <div>
-                          <p className="font-medium truncate max-w-sm">{listing.title ?? 'Untitled listing'}</p>
-                          <p className="text-sm text-muted-foreground">{plan ? `${plan.label}` : 'Unknown plan'}</p>
+                          <p className="font-medium truncate max-w-sm">
+                            {listing.title ?? "Untitled listing"}
+                          </p>
+                          <p className="text-sm text-muted-foreground">
+                            {plan ? `${plan.label}` : "Unknown plan"}
+                          </p>
                         </div>
-                        <span className="text-sm text-muted-foreground">{formatKes(plan?.price ?? 0)}</span>
+                        <span className="text-sm text-muted-foreground">
+                          {formatKes(plan?.price ?? 0)}
+                        </span>
                       </div>
                     </li>
                   );
@@ -363,14 +397,18 @@ export const LandlordAdsPage = () => {
                     <li key={listing.id} className="py-3">
                       <div className="flex items-center justify-between gap-3">
                         <div>
-                          <p className="font-medium truncate max-w-sm">{listing.title ?? 'Untitled listing'}</p>
+                          <p className="font-medium truncate max-w-sm">
+                            {listing.title ?? "Untitled listing"}
+                          </p>
                           <p className="text-sm text-muted-foreground">
                             {listing.adExpiresAt
-                              ? `Ends ${new Date(listing.adExpiresAt).toLocaleDateString('en-KE')}`
-                              : 'No end date'}
+                              ? `Ends ${new Date(listing.adExpiresAt).toLocaleDateString("en-KE")}`
+                              : "No end date"}
                           </p>
                         </div>
-                        <span className="text-sm text-muted-foreground">{formatKes(plan?.price ?? 0)}</span>
+                        <span className="text-sm text-muted-foreground">
+                          {formatKes(plan?.price ?? 0)}
+                        </span>
                       </div>
                     </li>
                   );

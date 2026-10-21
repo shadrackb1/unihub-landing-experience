@@ -130,13 +130,13 @@ story.append(HRFlowable(width="50%", thickness=1, color=ACCENT_GOLD, spaceAfter=
 
 # Document info table
 cover_info = [
-    ["Project", "UniHub — Verified Student Housing Platform"],
-    ["Course", "KLS 126 — Data Science for Lawyers"],
+    ["Project", "UniHub: Verified Student Housing Platform"],
+    ["Course", "KLS 126: Data Science for Lawyers"],
     ["Institution", "Kabarak University, School of Law"],
     ["Group", "Group 1"],
     ["Date", "21st October 2026"],
     ["Version", "1.0"],
-    ["Classification", "Internal — For CAT Submission"],
+    ["Classification", "Internal (For CAT Submission)"],
 ]
 cover_table = Table(cover_info, colWidths=[4*cm, 12*cm])
 cover_table.setStyle(TableStyle([
@@ -278,12 +278,12 @@ key_info = [
     [Paragraph("Data Controller", table_label_style), Paragraph("UniHub Kenya (operating as UniHub)", table_cell_style)],
     [Paragraph("Registered Address", table_label_style), Paragraph("Kabarak University, Nakuru County, Kenya", table_cell_style)],
     [Paragraph("Contact for Data Rights Requests", table_label_style), Paragraph("hello@unihub.ke | WhatsApp: +254 700 000 000", table_cell_style)],
-    [Paragraph("Data Protection Officer", table_label_style), Paragraph("Shadrack Baraka (Founder) — shadrack@unihub.ke", table_cell_style)],
+    [Paragraph("Data Protection Officer", table_label_style), Paragraph("Shadrack Baraka (Founder), shadrack@unihub.ke", table_cell_style)],
     [Paragraph("Lawful Basis", table_label_style), Paragraph("Legitimate Interest (s. 30(1)(f) DPA 2019) for listings; Consent (s. 32) for landlord registration", table_cell_style)],
     [Paragraph("Data Retention", table_label_style), Paragraph("Listings: until removed by admin. Landlord profile: until account closure or consent withdrawal.", table_cell_style)],
-    [Paragraph("International Transfers", table_label_style), Paragraph("Vercel (US / iad1), GitHub (US) — SCCs + supplementary measures in place", table_cell_style)],
+    [Paragraph("International Transfers", table_label_style), Paragraph("Vercel (US / iad1), GitHub (US), SCCs + supplementary measures in place", table_cell_style)],
     [Paragraph("Special Category Data", table_label_style), Paragraph("None processed", table_cell_style)],
-    [Paragraph("Automated Decisions", table_label_style), Paragraph("None — no profiling, scoring, or automated eligibility determinations", table_cell_style)],
+    [Paragraph("Automated Decisions", table_label_style), Paragraph("None: no profiling, scoring, or automated eligibility determinations", table_cell_style)],
     [Paragraph("Supervisory Authority", table_label_style), Paragraph("Office of the Data Protection Commissioner (ODPC), Kenya", table_cell_style)],
 ]
 
@@ -314,7 +314,7 @@ data_items = [
         "Full legal name",
         "Email address",
         "Phone number and WhatsApp number (for student contact)",
-        "National ID or passport number (for identity verification only — <b>never shown publicly</b>)",
+        "National ID or passport number (for identity verification only, <b>never shown publicly</b>)",
     ]),
     ("Business Data", [
         "Business or agency name (optional)",
@@ -331,7 +331,7 @@ data_items = [
         "Your public WhatsApp number and business email (displayed on listings for student contact)",
     ]),
     ("Technical Data (No Personal Data)", [
-        "Basic technical logs from hosting provider (request times, errors) — no personal data",
+        "Basic technical logs from hosting provider (request times, errors), no personal data",
     ]),
 ]
 
@@ -344,7 +344,7 @@ for category, items in data_items:
 story.append(Spacer(1, 0.5*cm))
 story.append(Paragraph(
     "<b>Important:</b> Students who only browse UniHub provide <b>no personal data</b>. No accounts, no cookies, "
-    "no analytics, no tracking. Contact links (WhatsApp/email) open external apps — UniHub does "
+    "no analytics, no tracking. Contact links (WhatsApp/email) open external apps. UniHub does "
     "not see or capture that communication.",
     body_style
 ))
@@ -365,7 +365,7 @@ purpose_data = [
      Paragraph("Name, email, phone, WhatsApp, national ID, business name", table_cell_style),
      Paragraph("Consent (s. 32) + Legitimate Interest (s. 30(1)(f))", table_cell_style)],
     [Paragraph("Publish property listings for student discovery", table_cell_style),
-     Paragraph("Listing details (no personal data — property attributes only)", table_cell_style),
+     Paragraph("Listing details (no personal data, property attributes only)", table_cell_style),
      Paragraph("Legitimate Interest (s. 30(1)(f))", table_cell_style)],
     [Paragraph("Enable student contact via WhatsApp/email", table_cell_style),
      Paragraph("Landlord's public WhatsApp/email (provided by landlord)", table_cell_style),
@@ -427,7 +427,7 @@ processor_data = [
     [Paragraph("OpenFreeMap / Esri", table_cell_style),
      Paragraph("Map tiles (public, keyless)", table_cell_style),
      Paragraph("Global CDN", table_cell_center),
-     Paragraph("Not processors — no personal data transmitted; public tile requests only", table_cell_style)],
+     Paragraph("Not processors: no personal data transmitted; public tile requests only", table_cell_style)],
 ]
 
 proc_table = Table(processor_data, colWidths=[2.8*cm, 3.5*cm, 2.2*cm, 7.5*cm])
@@ -447,7 +447,7 @@ story.append(proc_table)
 story.append(Spacer(1, 0.5*cm))
 story.append(Paragraph(
     "<b>Your WhatsApp number and business email are published on your listings</b> so students can "
-    "contact you directly. This is by design — UniHub facilitates contact but does not intermediate. "
+    "contact you directly. This is by design. UniHub facilitates contact but does not intermediate. "
     "Your national ID is <b>never</b> shown to students or published.",
     body_style
 ))
@@ -455,7 +455,7 @@ story.append(Paragraph(
 story.append(Paragraph(
     "<b>International Transfer Safeguards:</b> Transfers to Vercel (US) and GitHub (US) rely on "
     "Standard Contractual Clauses (SCCs) incorporated in their Data Processing Addenda, supplemented by: "
-    "(a) data minimisation — only public business listings and technical logs; "
+    "(a) data minimisation: only public business listings and technical logs; "
     "(b) encryption in transit (TLS 1.2+); "
     "(c) access controls (2FA, branch protection); "
     "(d) no special category data. The controller (UniHub Kenya) remains in Kenya and makes all processing decisions locally.",
@@ -481,7 +481,7 @@ story.append(Paragraph("7. Your Rights Under the Data Protection Act 2019", head
 story.append(HRFlowable(width="100%", thickness=1.5, color=ACCENT_GOLD, spaceAfter=10, spaceBefore=0))
 
 story.append(Paragraph(
-    "As a data subject, you have the following rights under Sections 26, 29–32 of the Data Protection Act 2019:",
+    "As a data subject, you have the following rights under Sections 26 and 29 to 32 of the Data Protection Act 2019:",
     body_style
 ))
 
@@ -503,7 +503,7 @@ for right_name, right_desc in rights:
 
 story.append(Paragraph(
     "All requests are handled by the Data Protection Officer (Founder) via the published contact channels. "
-    "Target response time: 48 hours for rectification/erasure, 30 days for access/portability — well within statutory timelines.",
+    "Target response time: 48 hours for rectification/erasure, 30 days for access/portability, well within statutory timelines.",
     body_style
 ))
 
