@@ -2,6 +2,9 @@
 
 Verified student housing platform for Kenyan university campuses.
 
+**Student:** TITUS KIMUTAI CHUKOR  
+**Reg No:** LAW/M/0227/01/23
+
 <p align="center">
   <a href="#quick-start"><img src="https://img.shields.io/badge/Quick_Start-4CAF50?style=for-the-badge&logo=rocket&logoColor=white" alt="Quick Start" /></a>
   <a href="#architecture"><img src="https://img.shields.io/badge/Architecture-2196F3?style=for-the-badge&logo=diagram&logoColor=white" alt="Architecture" /></a>
