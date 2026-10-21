@@ -2,7 +2,27 @@
 
 Verified student housing platform for Kenyan university campuses.
 
-TanStack Start · React 19 · Tailwind CSS v4 · MapLibre GL · Vercel
+<p align="center">
+  <a href="#quick-start"><img src="https://img.shields.io/badge/Quick_Start-4CAF50?style=for-the-badge&logo=rocket&logoColor=white" alt="Quick Start" /></a>
+  <a href="#architecture"><img src="https://img.shields.io/badge/Architecture-2196F3?style=for-the-badge&logo=diagram&logoColor=white" alt="Architecture" /></a>
+  <a href="#tech-stack"><img src="https://img.shields.io/badge/Tech_Stack-FF9800?style=for-the-badge&logo=layers&logoColor=white" alt="Tech Stack" /></a>
+  <a href="#deployment"><img src="https://img.shields.io/badge/Deploy-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Deploy to Vercel" /></a>
+  <a href="https://github.com/shadrackb1/unihub-landing-experience"><img src="https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub Repository" /></a>
+  <a href="#license--contact"><img src="https://img.shields.io/badge/License-Private-informational?style=for-the-badge" alt="License" /></a>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Node.js-20.x-339933?style=flat&logo=node.js&logoColor=white" alt="Node.js" />
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/React-19-61DAFB?style=flat&logo=react&logoColor=white" alt="React" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-v4-06B6D4?style=flat&logo=tailwindcss&logoColor=white" alt="Tailwind CSS" />
+  <img src="https://img.shields.io/badge/Vite-8-646CFF?style=flat&logo=vite&logoColor=white" alt="Vite" />
+  <img src="https://img.shields.io/badge/TanStack_Start-1.168-000000?style=flat&logo=tanstack&logoColor=white" alt="TanStack Start" />
+  <img src="https://img.shields.io/badge/Vercel-000000?style=flat&logo=vercel&logoColor=white" alt="Vercel" />
+  <img src="https://img.shields.io/badge/Prisma-7-2D3748?style=flat&logo=prisma&logoColor=white" alt="Prisma" />
+  <img src="https://img.shields.io/badge/Better_Auth-1.7-FF6B35?style=flat&logo=auth0&logoColor=white" alt="Better Auth" />
+  <img src="https://img.shields.io/badge/MapLibre_GL-5.24-FF6B00?style=flat&logo=maplibre&logoColor=white" alt="MapLibre GL" />
+</p>
 
 ---
 
@@ -213,6 +233,26 @@ unihub-landing-experience/
 
 ## Architecture
 
+<p align="center">
+  <a href="docs/routes-architecture.svg"><img src="https://img.shields.io/badge/View-Route_Architecture-2196F3?style=for-the-badge&logo=diagram&logoColor=white" alt="Route Architecture" /></a>
+  <a href="docs/backend-architecture.svg"><img src="https://img.shields.io/badge/View-Backend_Architecture-9C27B0?style=for-the-badge&logo=database&logoColor=white" alt="Backend Architecture" /></a>
+  <a href="docs/funnel-animated.svg"><img src="https://img.shields.io/badge/View-7_Act_Funnel-EC4899?style=for-the-badge&logo=chart&logoColor=white" alt="7-Act Funnel" /></a>
+  <a href="docs/map-dataflow-animated.svg"><img src="https://img.shields.io/badge/View-Campus_Map_Flow-06B6D4?style=for-the-badge&logo=map&logoColor=white" alt="Campus Map Flow" /></a>
+  <a href="docs/video-panel-animated.svg"><img src="https://img.shields.io/badge/View-Video_Panel-EC4899?style=for-the-badge&logo=video&logoColor=white" alt="Video Panel" /></a>
+</p>
+
+### Route Architecture
+
+![Route Architecture](docs/routes-architecture.svg)
+
+*Shows TanStack Start routes (SSR), Legacy SPA routes under `/app`, and infrastructure files. Click image for full-size SVG.*
+
+### Backend Architecture
+
+![Backend Architecture](docs/backend-architecture.svg)
+
+*Shows new app routes, legacy SPA services layer (firestore.ts, firebase.ts, storage.ts), and Firebase/Cloud services (Firestore DB, Auth, Storage, Cloudinary CDN). Click image for full-size SVG.*
+
 ### Auth Stack (Mid-Migration)
 
 | Layer | Technology | Status |
@@ -229,6 +269,24 @@ unihub-landing-experience/
 - Used by `LandlordContext.tsx`, `landlordService.ts`, `requireAdmin.ts`
 - Firestore for landlord profiles, site settings, legacy listings
 - Being phased out; new code should use Better Auth + Prisma
+
+### 7-Act Funnel — Homepage Experience
+
+![7-Act Funnel](docs/funnel-animated.svg)
+
+*The homepage guides users through 7 acts: Arrive → Orient → Believe → Witness → Choose → Place → Move. Each act has distinct visual treatment and staggered animations. Hover any act for glow effect. Click image for animated SVG.*
+
+### Interactive Campus Map — Data Flow
+
+![Campus Map Data Flow](docs/map-dataflow-animated.svg)
+
+*MapLibre GL renders keyless vector tiles (OpenFreeMap Dark) and satellite tiles (Esri World Imagery). 8 Kenyan campus pins pulse on load. Tile requests and pin data flow animate continuously. Click image for animated SVG.*
+
+### Video Panel — Viewport-Aware Autoplay
+
+![Video Panel](docs/video-panel-animated.svg)
+
+*VideoPanel component uses IntersectionObserver (threshold: 0.25, rootMargin: "0px 0px -10% 0px") to auto-play when 25% visible and pause on leave. Respects `prefers-reduced-motion`. Click image for animated SVG.*
 
 ### Routing
 
@@ -247,36 +305,43 @@ unihub-landing-experience/
 ## Tech Stack
 
 ### Frontend
-| Technology | Purpose |
-|------------|---------|
-| TanStack Start | Full-stack React framework with SSR |
-| React 19 | UI library |
-| TypeScript | Type-safe development |
-| Tailwind CSS v4 | Utility-first styling with OKLCH tokens |
-| MapLibre GL | Interactive campus map (no API keys) |
-| Radix UI | Accessible UI primitives |
-| Lucide Icons | Icon system |
-| Motion | Animations |
+
+| Technology | Purpose | Version |
+|------------|---------|---------|
+| TanStack Start | Full-stack React framework with SSR | 1.168 |
+| React | UI library | 19 |
+| TypeScript | Type-safe development | 5.8 |
+| Tailwind CSS | Utility-first styling with OKLCH tokens | v4 |
+| MapLibre GL | Interactive campus map (no API keys) | 5.24 |
+| Radix UI | Accessible UI primitives | 1.1-1.2 |
+| Lucide Icons | Icon system | 0.575 |
+| Motion | Animations | 14.0 |
 
 ### Authentication & Database
-| Technology | Purpose |
-|------------|---------|
-| Better Auth | Modern auth (email/password, admin plugin) |
-| Prisma ORM | Type-safe database access (SQLite) |
-| @prisma/adapter-libsql | Driver adapter for SQLite |
+
+| Technology | Purpose | Version |
+|------------|---------|---------|
+| Better Auth | Modern auth (email/password, admin plugin) | 1.7 |
+| Prisma ORM | Type-safe database access (SQLite) | 7.10 |
+| @prisma/adapter-libsql | Driver adapter for SQLite | 7.10 |
 
 ### Build & Infrastructure
-| Technology | Purpose |
-|------------|---------|
-| Vite 8 | Build tool and dev server |
-| Nitro 3 | Server output and deployment preset |
-| TanStack Router | File-based routing |
-| Vercel | Hosting and deployment |
-| ESLint + Prettier | Code quality and formatting |
+
+| Technology | Purpose | Version |
+|------------|---------|---------|
+| Vite | Build tool and dev server | 8.1 |
+| Nitro | Server output and deployment preset | 3.0 |
+| TanStack Router | File-based routing | 1.170 |
+| Vercel | Hosting and deployment | — |
+| ESLint + Prettier | Code quality and formatting | 9.32 / 3.7 |
 
 ---
 
 ## Deployment (Vercel)
+
+<p align="center">
+  <a href="https://vercel.com/new/clone?repository-url=https://github.com/shadrackb1/unihub-landing-experience"><img src="https://vercel.com/button" alt="Deploy with Vercel" /></a>
+</p>
 
 ```bash
 npm run build
@@ -304,13 +369,29 @@ Deploy steps:
 
 ---
 
+## Architecture Diagrams (All in `/docs`)
+
+| Diagram | Description | Format |
+|---------|-------------|--------|
+| `architecture-diagram.png` | System overview diagram | PNG |
+| `routes-architecture.svg` | TanStack Start + Legacy SPA route map | SVG |
+| `backend-architecture.svg` | Services layer + Firebase/Cloud | SVG |
+| `legacy-spa-architecture.svg` | Legacy SPA internal architecture | SVG |
+| `funnel-animated.svg` | 7-Act homepage funnel (animated) | SVG |
+| `map-dataflow-animated.svg` | Campus MapLibre data flow (animated) | SVG |
+| `video-panel-animated.svg` | VideoPanel IntersectionObserver logic (animated) | SVG |
+
+> All SVGs are interactive — open in browser for animations and hover effects.
+
+---
+
 ## Accessibility & Quality Gates
 
-- Semantic HTML — Proper landmarks (`header`, `main`, `section`, `nav`, `footer`)
-- Keyboard Navigation — Skip links, visible focus rings, full keyboard control
-- Motion Gated — All animations respect `prefers-reduced-motion`
-- Target Sizes — Interactive elements meet 44×44 px minimum
-- Code Quality — `npm run lint` and `npm run build` must pass
+- **Semantic HTML** — Proper landmarks (`header`, `main`, `section`, `nav`, `footer`)
+- **Keyboard Navigation** — Skip links, visible focus rings, full keyboard control
+- **Motion Gated** — All animations respect `prefers-reduced-motion`
+- **Target Sizes** — Interactive elements meet 44×44 px minimum
+- **Code Quality** — `npm run lint` and `npm run build` must pass
 
 ---
 
