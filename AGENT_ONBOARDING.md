@@ -111,7 +111,6 @@ npm run db:seed          # Seed test accounts
 # Code Quality
 npm run lint             # ESLint
 npm run format           # Prettier
-npm run typecheck        # TypeScript (if configured)
 
 # Utility
 npx tsx prisma/seed.ts   # Run seed directly with tsx
@@ -123,35 +122,72 @@ npx tsx prisma/seed.ts   # Run seed directly with tsx
 
 ```
 src/
-├── components/          # Shared UI components
-├── context/             # React contexts (Auth, Landlord)
-├── features/            # Feature modules (NEW structure)
-│   ├── admin/           # Admin dashboard
-│   ├── auth/            # Auth routes (login, register, landlord-register)
-│   ├── landlord/        # Landlord portal
-│   ├── listings/        # Browse & manage listings
-│   ├── marketplace/     # Properties marketplace
-│   └── residence/       # Hostels, apartments, rooms
-├── hooks/               # Shared hooks (use-mobile)
-├── lib/                 # Core utilities
-│   ├── auth/            # Better Auth config (server)
-│   ├── auth-client.ts   # Better Auth React client
-│   ├── auth/index.ts    # Auth server instance
-│   └── utils.ts         # cn() tailwind merge
-├── routes/              # TanStack Router (file-based)
-│   ├── __root.tsx       # Root layout
-│   ├── index.tsx        # Home (7-Act funnel)
-│   ├── listings.tsx     # Browse listings
-│   └── ...              # about, contact, list-property, etc.
-├── router.tsx           # Router instance
-├── server.ts            # Nitro server entry
-├── start.ts             # TanStack Start handler
-└── styles.css           # OKLCH tokens + Tailwind v4
+├── assets/                   # Local MP4 videos and listing images
+├── components/               # Shared UI components
+│   └── ui/                   # Reusable primitives (buttons, cards, dialogs)
+├── data/                     # Static data (listings, residence clips)
+├── features/                 # Feature modules
+│   ├── admin/                # Admin dashboard
+│   │   ├── components/
+│   │   ├── routes/
+│   │   └── requireAdmin.ts   # Auth guard for admin routes
+│   ├── auth/                 # Auth routes (login, register, landlord-register)
+│   │   ├── components/
+│   │   └── routes/
+│   ├── campus/               # Campus map & data
+│   │   └── components/
+│   ├── landlord/             # Landlord portal
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── routes/
+│   │   └── services/         # landlordService.ts (Firebase Auth + Firestore)
+│   ├── listings/             # Browse & manage listings
+│   │   ├── components/       # ListingGrid
+│   │   ├── hooks/            # useListings
+│   │   └── routes/
+│   ├── marketplace/          # Properties marketplace
+│   └── residence/            # Hostels, apartments, rooms
+│       └── components/       # ResidenceVideoGallery, CoolVideoCard
+├── hooks/                    # Custom React hooks
+│   └── use-mobile.tsx        # Responsive viewport detection hook
+├── lib/                      # Core utilities
+│   ├── auth/                 # Better Auth config (server)
+│   │   └── index.ts
+│   ├── auth-client.ts        # Better Auth React client
+│   ├── utils.ts              # cn() tailwind merge
+│   └── withTimeout.ts        # Promise timeout utility
+├── routes/                   # TanStack Router (file-based, legacy paths)
+│   ├── __root.tsx            # Root layout
+│   ├── index.tsx             # Homepage (7-Act experience)
+│   ├── listings.tsx          # Browse listings (legacy)
+│   └── ...                   # about, contact, list-property, etc.
+├── router.tsx                # Router instance
+├── server.ts                 # Nitro server entrypoint
+├── start.ts                  # TanStack Start handler
+└── styles.css                # OKLCH design tokens + Tailwind v4
+├── shared/
+│   ├── components/           # Shared components
+│   │   ├── Experience.tsx    # Journey timeline & act navigation
+│   │   ├── LetterReveal.tsx
+│   │   ├── MarketingChrome.tsx  # Header, Footer, MarketingShell
+│   │   ├── SupportLink.tsx
+│   │   └── VideoPanel.tsx    # Viewport-aware autoplay video
+│   ├── context/              # React contexts
+│   │   ├── AuthContext.tsx   # Better Auth state & methods
+│   │   └── LandlordContext.tsx
+│   ├── hooks/                # Shared hooks
+│   │   ├── useOnlineRefresh.ts
+│   │   └── useSiteSettings.ts
+│   ├── lib/                  # Shared lib
+│   │   └── firebase.ts       # Firebase config (legacy)
+│   ├── services/             # Shared services
+│   │   └── firestore.ts      # Legacy Firestore CRUD
+│   └── contact.ts            # WhatsApp/email constants
 
 prisma/
-├── schema.prisma        # Data models
-├── migrations/          # Migration history
-└── seed.ts              # TypeScript seeder
+├── schema.prisma             # Prisma data model (SQLite)
+├── migrations/               # Migration history
+└── seed.ts                   # TypeScript seeder
 ```
 
 ---
@@ -166,7 +202,7 @@ prisma/
 Key files:
 - `src/lib/auth/index.ts` — Server auth instance
 - `src/lib/auth-client.ts` — Client hooks (`useSession`, `signIn`, `signUp`, `signOut`)
-- `src/context/AuthContext.tsx` — React context wrapper
+- `src/shared/context/AuthContext.tsx` — React context wrapper
 
 ---
 
@@ -176,6 +212,8 @@ Key files:
 2. Account created with `status: PENDING`
 3. Admin approves/rejects/suspends via `/admin`
 4. Approved landlords access dashboard at `/landlord`
+
+**Note:** Landlord portal still uses Firebase Auth + Firestore (legacy). See `src/features/landlord/services/landlordService.ts`.
 
 ---
 
@@ -217,7 +255,7 @@ git status
 git add -A
 git commit -m "type: description
 
-Co-Authored-By: Claude Code <noreply@anthropic.com>"
+Co-Authored-By: Claude Fable 5 <noreply@anthropic.com>"
 
 # Push to origin/main
 git push origin main
@@ -254,6 +292,10 @@ sqlite3 dev.db "SELECT email, role FROM User;"
 | Change UI tokens | `src/styles.css` (OKLCH colors, spacing) |
 | Add a test account | `prisma/seed.ts` → `TEST_ACCOUNTS` array |
 | Debug landlord flow | `src/features/landlord/` |
+| Debug admin guard | `src/features/admin/requireAdmin.ts` |
+| Shared timeout utility | `src/shared/lib/withTimeout.ts` |
+| Static listing data | `src/data/listings.ts` |
+| Residence video clips | `src/data/residenceClips.ts` |
 
 ---
 
@@ -265,6 +307,7 @@ sqlite3 dev.db "SELECT email, role FROM User;"
 - **Feature-based routes live in `src/features/*/routes/`** — Legacy routes in `src/routes/` still work but new work goes in features
 - **Environment variables are Vite-prefixed** — `VITE_*` for client, non-prefixed for server (`.env` only)
 - **SQLite limitations** — No `String[]` arrays; use `String` + `JSON.stringify`/`parse`
+- **Auth is mid-migration** — Better Auth + Prisma is primary (seeded accounts, AuthContext). Landlord portal + admin guard + CMS settings still use Firebase Auth + Firestore.
 
 ---
 

@@ -20,18 +20,6 @@ import { Route as ListPropertyRouteImport } from './routes/list-property'
 import { Route as ListingsRouteImport } from './routes/listings'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as TermsRouteImport } from './routes/terms'
-import { Route as AdminIndexRouteImport } from './routes/admin/index'
-import { Route as AdminAdsRouteImport } from './routes/admin/ads'
-import { Route as AdminAgentsRouteImport } from './routes/admin/agents'
-import { Route as AdminCategoriesRouteImport } from './routes/admin/categories'
-import { Route as AdminCmsRouteImport } from './routes/admin/cms'
-import { Route as AdminHostelsRouteImport } from './routes/admin/hostels'
-import { Route as AdminLandlordsRouteImport } from './routes/admin/landlords'
-import { Route as AdminListingsRouteImport } from './routes/admin/listings'
-import { Route as AdminLoginRouteImport } from './routes/admin/login'
-import { Route as AdminPropertiesRouteImport } from './routes/admin/properties'
-import { Route as AdminSettingsRouteImport } from './routes/admin/settings'
-import { Route as AdminUniversitiesRouteImport } from './routes/admin/universities'
 import { Route as HostelsIdRouteImport } from './routes/hostels.$id'
 import { Route as LandlordIndexRouteImport } from './routes/landlord.index'
 import { Route as LandlordAdsRouteImport } from './routes/landlord.ads'
@@ -44,9 +32,6 @@ import { Route as LandlordSuspendedRouteImport } from './routes/landlord.suspend
 import { Route as ListingsIdRouteImport } from './routes/listings_.$id'
 import { Route as PropertiesIdRouteImport } from './routes/properties.$id'
 import { Route as PublicLandlordRegisterRouteImport } from './routes/public/landlord-register'
-import { Route as AdminHostelsNewRouteImport } from './routes/admin/hostels_.new'
-import { Route as AdminPropertiesIdRouteImport } from './routes/admin/properties_.$id'
-import { Route as AdminPropertiesNewRouteImport } from './routes/admin/properties_.new'
 import { Route as LandlordAdsNewRouteImport } from './routes/landlord.ads_.new'
 import { Route as LandlordListingsNewRouteImport } from './routes/landlord.listings_.new'
 
@@ -104,66 +89,6 @@ const TermsRoute = TermsRouteImport.update({
   id: '/terms',
   path: '/terms',
   getParentRoute: () => rootRouteImport,
-} as any)
-const AdminIndexRoute = AdminIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminAdsRoute = AdminAdsRouteImport.update({
-  id: '/ads',
-  path: '/ads',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminAgentsRoute = AdminAgentsRouteImport.update({
-  id: '/agents',
-  path: '/agents',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminCategoriesRoute = AdminCategoriesRouteImport.update({
-  id: '/categories',
-  path: '/categories',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminCmsRoute = AdminCmsRouteImport.update({
-  id: '/cms',
-  path: '/cms',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminHostelsRoute = AdminHostelsRouteImport.update({
-  id: '/hostels',
-  path: '/hostels',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminLandlordsRoute = AdminLandlordsRouteImport.update({
-  id: '/landlords',
-  path: '/landlords',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminListingsRoute = AdminListingsRouteImport.update({
-  id: '/listings',
-  path: '/listings',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminLoginRoute = AdminLoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminPropertiesRoute = AdminPropertiesRouteImport.update({
-  id: '/properties',
-  path: '/properties',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminSettingsRoute = AdminSettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminUniversitiesRoute = AdminUniversitiesRouteImport.update({
-  id: '/universities',
-  path: '/universities',
-  getParentRoute: () => AdminRoute,
 } as any)
 const HostelsIdRoute = HostelsIdRouteImport.update({
   id: '/$id',
@@ -225,21 +150,6 @@ const PublicLandlordRegisterRoute = PublicLandlordRegisterRouteImport.update({
   path: '/public/landlord-register',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminHostelsNewRoute = AdminHostelsNewRouteImport.update({
-  id: '/hostels_/new',
-  path: '/hostels/new',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminPropertiesIdRoute = AdminPropertiesIdRouteImport.update({
-  id: '/properties_/$id',
-  path: '/properties/$id',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminPropertiesNewRoute = AdminPropertiesNewRouteImport.update({
-  id: '/properties_/new',
-  path: '/properties/new',
-  getParentRoute: () => AdminRoute,
-} as any)
 const LandlordAdsNewRoute = LandlordAdsNewRouteImport.update({
   id: '/ads_/new',
   path: '/ads/new',
@@ -254,7 +164,7 @@ const LandlordListingsNewRoute = LandlordListingsNewRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/admin': typeof AdminRouteWithChildren
+  '/admin': typeof AdminRoute
   '/app': typeof AppRoute
   '/contact': typeof ContactRoute
   '/hostels': typeof HostelsRouteWithChildren
@@ -263,17 +173,6 @@ export interface FileRoutesByFullPath {
   '/listings': typeof ListingsRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
-  '/admin/ads': typeof AdminAdsRoute
-  '/admin/agents': typeof AdminAgentsRoute
-  '/admin/categories': typeof AdminCategoriesRoute
-  '/admin/cms': typeof AdminCmsRoute
-  '/admin/hostels': typeof AdminHostelsRoute
-  '/admin/landlords': typeof AdminLandlordsRoute
-  '/admin/listings': typeof AdminListingsRoute
-  '/admin/login': typeof AdminLoginRoute
-  '/admin/properties': typeof AdminPropertiesRoute
-  '/admin/settings': typeof AdminSettingsRoute
-  '/admin/universities': typeof AdminUniversitiesRoute
   '/hostels/$id': typeof HostelsIdRoute
   '/landlord/ads': typeof LandlordAdsRoute
   '/landlord/listings': typeof LandlordListingsRoute
@@ -285,17 +184,14 @@ export interface FileRoutesByFullPath {
   '/listings/$id': typeof ListingsIdRoute
   '/properties/$id': typeof PropertiesIdRoute
   '/public/landlord-register': typeof PublicLandlordRegisterRoute
-  '/admin/': typeof AdminIndexRoute
   '/landlord/': typeof LandlordIndexRoute
-  '/admin/hostels/new': typeof AdminHostelsNewRoute
-  '/admin/properties/$id': typeof AdminPropertiesIdRoute
-  '/admin/properties/new': typeof AdminPropertiesNewRoute
   '/landlord/ads/new': typeof LandlordAdsNewRoute
   '/landlord/listings/new': typeof LandlordListingsNewRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/admin': typeof AdminRoute
   '/app': typeof AppRoute
   '/contact': typeof ContactRoute
   '/hostels': typeof HostelsRouteWithChildren
@@ -303,17 +199,6 @@ export interface FileRoutesByTo {
   '/listings': typeof ListingsRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
-  '/admin/ads': typeof AdminAdsRoute
-  '/admin/agents': typeof AdminAgentsRoute
-  '/admin/categories': typeof AdminCategoriesRoute
-  '/admin/cms': typeof AdminCmsRoute
-  '/admin/hostels': typeof AdminHostelsRoute
-  '/admin/landlords': typeof AdminLandlordsRoute
-  '/admin/listings': typeof AdminListingsRoute
-  '/admin/login': typeof AdminLoginRoute
-  '/admin/properties': typeof AdminPropertiesRoute
-  '/admin/settings': typeof AdminSettingsRoute
-  '/admin/universities': typeof AdminUniversitiesRoute
   '/hostels/$id': typeof HostelsIdRoute
   '/landlord/ads': typeof LandlordAdsRoute
   '/landlord/listings': typeof LandlordListingsRoute
@@ -325,11 +210,7 @@ export interface FileRoutesByTo {
   '/listings/$id': typeof ListingsIdRoute
   '/properties/$id': typeof PropertiesIdRoute
   '/public/landlord-register': typeof PublicLandlordRegisterRoute
-  '/admin': typeof AdminIndexRoute
   '/landlord': typeof LandlordIndexRoute
-  '/admin/hostels/new': typeof AdminHostelsNewRoute
-  '/admin/properties/$id': typeof AdminPropertiesIdRoute
-  '/admin/properties/new': typeof AdminPropertiesNewRoute
   '/landlord/ads/new': typeof LandlordAdsNewRoute
   '/landlord/listings/new': typeof LandlordListingsNewRoute
 }
@@ -337,7 +218,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/admin': typeof AdminRouteWithChildren
+  '/admin': typeof AdminRoute
   '/app': typeof AppRoute
   '/contact': typeof ContactRoute
   '/hostels': typeof HostelsRouteWithChildren
@@ -346,17 +227,6 @@ export interface FileRoutesById {
   '/listings': typeof ListingsRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
-  '/admin/ads': typeof AdminAdsRoute
-  '/admin/agents': typeof AdminAgentsRoute
-  '/admin/categories': typeof AdminCategoriesRoute
-  '/admin/cms': typeof AdminCmsRoute
-  '/admin/hostels': typeof AdminHostelsRoute
-  '/admin/landlords': typeof AdminLandlordsRoute
-  '/admin/listings': typeof AdminListingsRoute
-  '/admin/login': typeof AdminLoginRoute
-  '/admin/properties': typeof AdminPropertiesRoute
-  '/admin/settings': typeof AdminSettingsRoute
-  '/admin/universities': typeof AdminUniversitiesRoute
   '/hostels/$id': typeof HostelsIdRoute
   '/landlord/ads': typeof LandlordAdsRoute
   '/landlord/listings': typeof LandlordListingsRoute
@@ -368,11 +238,7 @@ export interface FileRoutesById {
   '/listings_/$id': typeof ListingsIdRoute
   '/properties/$id': typeof PropertiesIdRoute
   '/public/landlord-register': typeof PublicLandlordRegisterRoute
-  '/admin/': typeof AdminIndexRoute
   '/landlord/': typeof LandlordIndexRoute
-  '/admin/hostels_/new': typeof AdminHostelsNewRoute
-  '/admin/properties_/$id': typeof AdminPropertiesIdRoute
-  '/admin/properties_/new': typeof AdminPropertiesNewRoute
   '/landlord/ads_/new': typeof LandlordAdsNewRoute
   '/landlord/listings_/new': typeof LandlordListingsNewRoute
 }
@@ -390,17 +256,6 @@ export interface FileRouteTypes {
     | '/listings'
     | '/privacy'
     | '/terms'
-    | '/admin/ads'
-    | '/admin/agents'
-    | '/admin/categories'
-    | '/admin/cms'
-    | '/admin/hostels'
-    | '/admin/landlords'
-    | '/admin/listings'
-    | '/admin/login'
-    | '/admin/properties'
-    | '/admin/settings'
-    | '/admin/universities'
     | '/hostels/$id'
     | '/landlord/ads'
     | '/landlord/listings'
@@ -412,17 +267,14 @@ export interface FileRouteTypes {
     | '/listings/$id'
     | '/properties/$id'
     | '/public/landlord-register'
-    | '/admin/'
     | '/landlord/'
-    | '/admin/hostels/new'
-    | '/admin/properties/$id'
-    | '/admin/properties/new'
     | '/landlord/ads/new'
     | '/landlord/listings/new'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
+    | '/admin'
     | '/app'
     | '/contact'
     | '/hostels'
@@ -430,17 +282,6 @@ export interface FileRouteTypes {
     | '/listings'
     | '/privacy'
     | '/terms'
-    | '/admin/ads'
-    | '/admin/agents'
-    | '/admin/categories'
-    | '/admin/cms'
-    | '/admin/hostels'
-    | '/admin/landlords'
-    | '/admin/listings'
-    | '/admin/login'
-    | '/admin/properties'
-    | '/admin/settings'
-    | '/admin/universities'
     | '/hostels/$id'
     | '/landlord/ads'
     | '/landlord/listings'
@@ -452,11 +293,7 @@ export interface FileRouteTypes {
     | '/listings/$id'
     | '/properties/$id'
     | '/public/landlord-register'
-    | '/admin'
     | '/landlord'
-    | '/admin/hostels/new'
-    | '/admin/properties/$id'
-    | '/admin/properties/new'
     | '/landlord/ads/new'
     | '/landlord/listings/new'
   id:
@@ -472,17 +309,6 @@ export interface FileRouteTypes {
     | '/listings'
     | '/privacy'
     | '/terms'
-    | '/admin/ads'
-    | '/admin/agents'
-    | '/admin/categories'
-    | '/admin/cms'
-    | '/admin/hostels'
-    | '/admin/landlords'
-    | '/admin/listings'
-    | '/admin/login'
-    | '/admin/properties'
-    | '/admin/settings'
-    | '/admin/universities'
     | '/hostels/$id'
     | '/landlord/ads'
     | '/landlord/listings'
@@ -494,11 +320,7 @@ export interface FileRouteTypes {
     | '/listings_/$id'
     | '/properties/$id'
     | '/public/landlord-register'
-    | '/admin/'
     | '/landlord/'
-    | '/admin/hostels_/new'
-    | '/admin/properties_/$id'
-    | '/admin/properties_/new'
     | '/landlord/ads_/new'
     | '/landlord/listings_/new'
   fileRoutesById: FileRoutesById
@@ -506,7 +328,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
-  AdminRoute: typeof AdminRouteWithChildren
+  AdminRoute: typeof AdminRoute
   AppRoute: typeof AppRoute
   ContactRoute: typeof ContactRoute
   HostelsRoute: typeof HostelsRouteWithChildren
@@ -599,90 +421,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin/': {
-      id: '/admin/'
-      path: '/'
-      fullPath: '/admin/'
-      preLoaderRoute: typeof AdminIndexRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/ads': {
-      id: '/admin/ads'
-      path: '/ads'
-      fullPath: '/admin/ads'
-      preLoaderRoute: typeof AdminAdsRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/agents': {
-      id: '/admin/agents'
-      path: '/agents'
-      fullPath: '/admin/agents'
-      preLoaderRoute: typeof AdminAgentsRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/categories': {
-      id: '/admin/categories'
-      path: '/categories'
-      fullPath: '/admin/categories'
-      preLoaderRoute: typeof AdminCategoriesRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/cms': {
-      id: '/admin/cms'
-      path: '/cms'
-      fullPath: '/admin/cms'
-      preLoaderRoute: typeof AdminCmsRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/hostels': {
-      id: '/admin/hostels'
-      path: '/hostels'
-      fullPath: '/admin/hostels'
-      preLoaderRoute: typeof AdminHostelsRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/landlords': {
-      id: '/admin/landlords'
-      path: '/landlords'
-      fullPath: '/admin/landlords'
-      preLoaderRoute: typeof AdminLandlordsRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/listings': {
-      id: '/admin/listings'
-      path: '/listings'
-      fullPath: '/admin/listings'
-      preLoaderRoute: typeof AdminListingsRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/login': {
-      id: '/admin/login'
-      path: '/login'
-      fullPath: '/admin/login'
-      preLoaderRoute: typeof AdminLoginRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/properties': {
-      id: '/admin/properties'
-      path: '/properties'
-      fullPath: '/admin/properties'
-      preLoaderRoute: typeof AdminPropertiesRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/settings': {
-      id: '/admin/settings'
-      path: '/settings'
-      fullPath: '/admin/settings'
-      preLoaderRoute: typeof AdminSettingsRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/universities': {
-      id: '/admin/universities'
-      path: '/universities'
-      fullPath: '/admin/universities'
-      preLoaderRoute: typeof AdminUniversitiesRouteImport
-      parentRoute: typeof AdminRoute
-    }
     '/hostels/$id': {
       id: '/hostels/$id'
       path: '/$id'
@@ -767,27 +505,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicLandlordRegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin/hostels_/new': {
-      id: '/admin/hostels_/new'
-      path: '/hostels/new'
-      fullPath: '/admin/hostels/new'
-      preLoaderRoute: typeof AdminHostelsNewRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/properties_/$id': {
-      id: '/admin/properties_/$id'
-      path: '/properties/$id'
-      fullPath: '/admin/properties/$id'
-      preLoaderRoute: typeof AdminPropertiesIdRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/properties_/new': {
-      id: '/admin/properties_/new'
-      path: '/properties/new'
-      fullPath: '/admin/properties/new'
-      preLoaderRoute: typeof AdminPropertiesNewRouteImport
-      parentRoute: typeof AdminRoute
-    }
     '/landlord/ads_/new': {
       id: '/landlord/ads_/new'
       path: '/ads/new'
@@ -804,44 +521,6 @@ declare module '@tanstack/react-router' {
     }
   }
 }
-
-interface AdminRouteChildren {
-  AdminAdsRoute: typeof AdminAdsRoute
-  AdminAgentsRoute: typeof AdminAgentsRoute
-  AdminCategoriesRoute: typeof AdminCategoriesRoute
-  AdminCmsRoute: typeof AdminCmsRoute
-  AdminHostelsRoute: typeof AdminHostelsRoute
-  AdminLandlordsRoute: typeof AdminLandlordsRoute
-  AdminListingsRoute: typeof AdminListingsRoute
-  AdminLoginRoute: typeof AdminLoginRoute
-  AdminPropertiesRoute: typeof AdminPropertiesRoute
-  AdminSettingsRoute: typeof AdminSettingsRoute
-  AdminUniversitiesRoute: typeof AdminUniversitiesRoute
-  AdminIndexRoute: typeof AdminIndexRoute
-  AdminHostelsNewRoute: typeof AdminHostelsNewRoute
-  AdminPropertiesIdRoute: typeof AdminPropertiesIdRoute
-  AdminPropertiesNewRoute: typeof AdminPropertiesNewRoute
-}
-
-const AdminRouteChildren: AdminRouteChildren = {
-  AdminAdsRoute: AdminAdsRoute,
-  AdminAgentsRoute: AdminAgentsRoute,
-  AdminCategoriesRoute: AdminCategoriesRoute,
-  AdminCmsRoute: AdminCmsRoute,
-  AdminHostelsRoute: AdminHostelsRoute,
-  AdminLandlordsRoute: AdminLandlordsRoute,
-  AdminListingsRoute: AdminListingsRoute,
-  AdminLoginRoute: AdminLoginRoute,
-  AdminPropertiesRoute: AdminPropertiesRoute,
-  AdminSettingsRoute: AdminSettingsRoute,
-  AdminUniversitiesRoute: AdminUniversitiesRoute,
-  AdminIndexRoute: AdminIndexRoute,
-  AdminHostelsNewRoute: AdminHostelsNewRoute,
-  AdminPropertiesIdRoute: AdminPropertiesIdRoute,
-  AdminPropertiesNewRoute: AdminPropertiesNewRoute,
-}
-
-const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface HostelsRouteChildren {
   HostelsIdRoute: typeof HostelsIdRoute
@@ -887,7 +566,7 @@ const LandlordRouteWithChildren = LandlordRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
-  AdminRoute: AdminRouteWithChildren,
+  AdminRoute: AdminRoute,
   AppRoute: AppRoute,
   ContactRoute: ContactRoute,
   HostelsRoute: HostelsRouteWithChildren,

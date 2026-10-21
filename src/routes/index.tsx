@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Link, createFileRoute } from "@tanstack/react-router";
 import {
   ArrowRight,
@@ -26,8 +26,8 @@ import { useSiteSettings } from "@/shared/hooks/useSiteSettings";
 import {
   CoolVideoCard,
   ResidenceVideoGallery,
-  type ResidenceClip,
 } from "@/features/residence/components/ResidenceVideoGallery";
+import { residenceClips } from "@/data/residenceClips";
 import { useListings } from "@/features/listings/hooks/useListings";
 import apartmentImage from "@/assets/listing-apartment.jpg";
 import heroImage from "@/assets/unihub-hero.jpg";
@@ -37,43 +37,6 @@ import walkthroughVideo from "@/assets/unihub-site-walkthrough.mp4";
 import walkthroughPoster from "@/assets/unihub-walkthrough-poster.jpg";
 import documentaryVideo from "@/assets/unihub-qwetu-documentary.mp4";
 import documentaryPoster from "@/assets/unihub-qwetu-poster.jpg";
-import studentRoomsVideo from "@/assets/listing-video-student-rooms.mp4";
-import studentRoomsPoster from "@/assets/listing-video-student-rooms-poster.jpg";
-import femaleHostelVideo from "@/assets/listing-video-female-hostel.mp4";
-import femaleHostelPoster from "@/assets/listing-video-female-hostel-poster.jpg";
-import maisonVideo from "@/assets/listing-video-maison.mp4";
-import maisonPoster from "@/assets/listing-video-maison-poster.jpg";
-
-const residenceClips: ResidenceClip[] = [
-  {
-    id: "student-rooms",
-    title: "Spacious student rooms",
-    meta: "From KES 15,000",
-    blurb: "Own kitchen and bathroom even when you share. Free gym and lounges for campus life.",
-    src: studentRoomsVideo,
-    poster: studentRoomsPoster,
-    ariaLabel: "Spacious student rooms tour with kitchen bathroom and gym",
-  },
-  {
-    id: "female-hostel",
-    title: "Female hostel in Kigamboni",
-    meta: "Student-focused",
-    blurb:
-      "Modern women’s hostel near ferry routes. Built for students around IFM, CBE, TIA, UTUMISHI, and nearby colleges. Free Wi‑Fi.",
-    src: femaleHostelVideo,
-    poster: femaleHostelPoster,
-    ariaLabel: "Luxury female hostel for students in Kigamboni",
-  },
-  {
-    id: "maison",
-    title: "Maison Bauchart suites",
-    meta: "Premium stays",
-    blurb: "Tailored suites for short stays above typical hostel budgets.",
-    src: maisonVideo,
-    poster: maisonPoster,
-    ariaLabel: "Maison Bauchart tailored suites hospitality video",
-  },
-];
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -179,14 +142,6 @@ function Index() {
   const siteSettings = useSiteSettings();
   const heroVideoRef = useRef<HTMLVideoElement>(null);
   const reduced = usePrefersReducedMotion();
-  const [residenceClips, setResidenceClips] = useState<ResidenceClip[] | null>(null);
-
-  // Load residence clips when the component mounts
-  useEffect(() => {
-    import("@/data/residenceClips").then((mod) => {
-      setResidenceClips(mod.residenceClips);
-    });
-  }, []);
 
   useEffect(() => {
     const video = heroVideoRef.current;
@@ -240,7 +195,9 @@ function Index() {
                   "Browse verified hostels, bedsitters, and rentals near campus. Message landlords on WhatsApp. No account needed to search."}
               </p>
               <div className="reveal reveal-4 mt-9 flex flex-wrap items-center gap-5">
-                <PrimaryLink href="/listings">{siteSettings?.ctaText || "Browse Listings"}</PrimaryLink>
+                <PrimaryLink href="/listings">
+                  {siteSettings?.ctaText || "Browse Listings"}
+                </PrimaryLink>
                 <a
                   href="#how-it-works"
                   className="group inline-flex items-center gap-2 text-sm font-medium text-foreground transition-colors hover:text-highlight"
@@ -722,5 +679,3 @@ function Index() {
     </div>
   );
 }
-
-
