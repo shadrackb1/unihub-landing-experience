@@ -97,7 +97,7 @@ doc_ctrl = [
     ("Legal Basis:", "Section 31, Data Protection Act No. 24 of 2019"),
     ("Guidance Note:", "ODPC Guidance Note on DPIA (Part 5 template)"),
     ("Course:", "KLS 126 — Data Science for Lawyers, Kabarak University"),
-    ("Group:", "Group 1"),
+    ("Group:", "Group 8"),
 ]
 
 # Insert after para 10 (index 10)

@@ -27,7 +27,7 @@ npx create-prisma@latest --help
 | `--package-manager` | `npm`, `pnpm`, `yarn`, `bun`, `deno` |
 | `--deploy` | Build and deploy after scaffolding |
 | `--workspace` | Workspace id or name to deploy into |
-| `--skills` | Agents to install package skills for (`claude,cursor,agents,devin`), or `none` |
+| `--skills` | Agents to install package skills for (`agent,cursor,agents,devin`), or `none` |
 | `--yes` | Accept defaults; does not deploy |
 | `--json` | One JSON result, non-interactive; deploys unless `--no-deploy` |
 

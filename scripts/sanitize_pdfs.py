@@ -15,9 +15,9 @@ import fitz  # pymupdf
 from pypdf import PdfReader, PdfWriter
 
 PDFS = [
-    "C:/Users/ADMIN/Desktop/CAT_UniHub_Materials/Group1_CAT2_Consent_BW.pdf",
-    "C:/Users/ADMIN/Desktop/CAT_UniHub_Materials/Group1_CAT2_Consent_Professional.pdf",
-    "C:/Users/ADMIN/Desktop/CAT_UniHub_Materials/Group1_CAT2_Consent.pdf",
+    "C:/Users/ADMIN/Desktop/CAT_UniHub_Materials/Group8_CAT2_Consent_BW.pdf",
+    "C:/Users/ADMIN/Desktop/CAT_UniHub_Materials/Group8_CAT2_Consent_Professional.pdf",
+    "C:/Users/ADMIN/Desktop/CAT_UniHub_Materials/Group8_CAT2_Consent.pdf",
 ]
 
 AUTHOR = "Shadrack Baraka Mwahanga"

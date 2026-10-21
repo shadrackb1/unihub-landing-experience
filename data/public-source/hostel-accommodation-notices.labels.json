@@ -1,0 +1,27 @@
+{
+  "sourceFile": "data/public-source/hostel-accommodation-notices.sample.txt",
+  "labelledBy": "Group 8 (manual annotation of the synthetic sample)",
+  "labelledOn": "2026-10-21",
+  "notes": [
+    "One label per genuinely available hostel record in the sample.",
+    "Line 10 is a duplicate of line 1 and is deliberately not labelled twice.",
+    "Line 11 has no hostel name and line 17 has no rent, so neither is a record.",
+    "Lines 12 (no distance) and 15 (rent written as 'KSh 7,500 per year') are labelled with the fields that are actually present."
+  ],
+  "records": [
+    { "hostelName": "Riverside Hostel", "category": "Hostel", "campus": "Main Campus", "rentKsh": 18500, "capacity": 350, "distanceKm": 2.1 },
+    { "hostelName": "Muthangari Hostel", "category": "Hostel", "campus": "Kikuyu Campus", "rentKsh": 15000, "capacity": 180, "distanceKm": 1.2 },
+    { "hostelName": "O-GIGIRI Hostel", "category": "Hostel", "campus": "Main Campus", "rentKsh": 12000, "capacity": 240, "distanceKm": 0.8 },
+    { "hostelName": "Riverside Annex", "category": "Hostel", "campus": "Main Campus", "rentKsh": 9500, "capacity": 60, "distanceKm": 2.3 },
+    { "hostelName": "Student Village", "category": "Hostel", "campus": "Main Campus", "rentKsh": 20000, "capacity": 400, "distanceKm": 3.0 },
+    { "hostelName": "Mkoa Hostel", "category": "Hostel", "campus": "Kikuyu Campus", "rentKsh": 14250, "capacity": 150, "distanceKm": 1.4 },
+    { "hostelName": "District Hostel", "category": "Hostel", "campus": "Upper Kabete Campus", "rentKsh": 11000, "capacity": 90, "distanceKm": 4.5 },
+    { "hostelName": "UZima Hostel", "category": "Hostel", "campus": "Mombasa Campus", "rentKsh": 13000, "capacity": 120, "distanceKm": 0.5 },
+    { "hostelName": "Thika Hostel", "category": "Hostel", "campus": "Main Campus", "rentKsh": 16000, "capacity": 200, "distanceKm": 2.0 },
+    { "hostelName": "Harbour Hostel", "category": "Hostel", "campus": "Mombasa Campus", "rentKsh": 13000, "capacity": 120, "distanceKm": null },
+    { "hostelName": "Karen Annex", "category": "Bedsitter", "campus": "Main Campus", "rentKsh": 8000, "capacity": 20, "distanceKm": 1.0 },
+    { "hostelName": "University Hostel", "category": "Hostel", "campus": "Main Campus", "rentKsh": 17500, "capacity": 320, "distanceKm": 2.5 },
+    { "hostelName": "Lower Kabete Hostel", "category": "Hostel", "campus": "Upper Kabete Campus", "rentKsh": 7500, "capacity": 70, "distanceKm": 4.8 },
+    { "hostelName": "Muthangari Annex", "category": "Hostel", "campus": "Kikuyu, Thika Road", "rentKsh": 15500, "capacity": 85, "distanceKm": 1.3 }
+  ]
+}

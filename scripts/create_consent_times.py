@@ -23,7 +23,7 @@ output_dir = "C:/Users/ADMIN/Desktop/CAT_UniHub_Materials"
 os.makedirs(output_dir, exist_ok=True)
 
 doc = SimpleDocTemplate(
-    os.path.join(output_dir, "Group1_CAT2_Consent.pdf"),
+    os.path.join(output_dir, "Group8_CAT2_Consent.pdf"),
     pagesize=A4,
     rightMargin=2.5*cm, leftMargin=2.5*cm,
     topMargin=2.5*cm, bottomMargin=2.5*cm
@@ -135,7 +135,7 @@ cover_info = [
     ["Project", "UniHub: Verified Student Housing Platform"],
     ["Course", "KLS 126: Data Science for Lawyers"],
     ["Institution", "Kabarak University, School of Law"],
-    ["Group", "Group 1"],
+    ["Group", "Group 8"],
     ["Date", "21st October 2026"],
     ["Version", "1.0"],
 ]
@@ -519,4 +519,4 @@ story.append(Paragraph(
 ))
 
 doc.build(story)
-print(f"Consent form created at {output_dir}/Group1_CAT2_Consent.pdf")
+print(f"Consent form created at {output_dir}/Group8_CAT2_Consent.pdf")

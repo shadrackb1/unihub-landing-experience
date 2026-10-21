@@ -16,6 +16,12 @@ import {
 import { Link, useNavigate } from "@tanstack/react-router";
 import { registerLandlord, homeForStatus } from "@/features/landlord/services/landlordService";
 import { useLandlord } from "@/shared/context/LandlordContext";
+import { ConsentDeclaration } from "@/shared/components/ConsentForm";
+import {
+  REQUIRED_DECLARATION_ITEM_IDS,
+  purposesFromDeclarationItems,
+} from "@/shared/consentPurposes";
+import { grantConsentItems } from "@/shared/services/consentClient";
 import { cn } from "@/shared/lib/utils";
 
 const STEP_LABELS = ["Account", "Profile", "Verification"];
@@ -44,11 +50,12 @@ export const LandlordRegisterPage = () => {
       void navigate({ to: homeForStatus(profile.status), replace: true });
     }
   }, [user, profile, profileState, navigate]);
-  const [consent, setConsent] = useState(false);
+  const [consentTicks, setConsentTicks] = useState<Record<string, boolean>>({});
   const [isLoading, setIsLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showError, setShowError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [consentRecorded, setConsentRecorded] = useState(true);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -90,15 +97,23 @@ export const LandlordRegisterPage = () => {
       return;
     }
 
-    if (!consent) {
+    const tickedItems = Object.entries(consentTicks)
+      .filter(([, value]) => value)
+      .map(([id]) => id);
+    const missing = REQUIRED_DECLARATION_ITEM_IDS.filter((id) => !tickedItems.includes(id));
+    if (missing.length > 0) {
       setShowError(true);
-      setErrorMessage("Please consent to storing your information to continue.");
+      setErrorMessage(
+        "Please read the consent declaration and tick every required statement before you continue.",
+      );
       return;
     }
 
+    const consentPurposes = purposesFromDeclarationItems(tickedItems);
+
     setIsLoading(true);
     try {
-      await registerLandlord({
+      const account = await registerLandlord({
         email: formData.email,
         password: formData.password,
         fullName: formData.fullName,
@@ -112,7 +127,22 @@ export const LandlordRegisterPage = () => {
           .filter(Boolean),
         estimatedProperties: parseInt(formData.estimatedProperties, 10) || 0,
         reviewNote: formData.reviewNote,
+        consentItems: tickedItems,
+        consentPurposes,
       });
+
+      // The account now exists, so the consent can be filed against a
+      // credential the server can verify. If this fails the account is still
+      // created and the person is told to finish the consent from the
+      // consent page.
+      try {
+        const idToken = await account.getIdToken();
+        await grantConsentItems(tickedItems, idToken);
+        setConsentRecorded(true);
+      } catch (consentError) {
+        console.error("Consent could not be recorded:", consentError);
+        setConsentRecorded(false);
+      }
 
       setShowSuccess(true);
       setTimeout(() => {
@@ -148,6 +178,16 @@ export const LandlordRegisterPage = () => {
             </p>
           </div>
           <div className="space-y-3 text-sm text-secondary-foreground">
+            {!consentRecorded ? (
+              <p className="flex items-start gap-2 rounded-xl border border-destructive/30 bg-destructive/10 p-3 text-destructive">
+                <XCircle className="mt-0.5 h-4 w-4 shrink-0" />
+                Your account was created, but we could not record your consent. Please open the{" "}
+                <Link to="/consent" className="underline underline-offset-2">
+                  consent page
+                </Link>{" "}
+                to complete it.
+              </p>
+            ) : null}
             <p className="flex items-start gap-2">
               <FileText className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
               Prepare your property photos and listing details so you are ready to go when approved.
@@ -580,24 +620,28 @@ export const LandlordRegisterPage = () => {
                   </div>
                 </div>
 
-                <div className="space-y-3 rounded-xl border border-border bg-card/40 p-4">
-                  <label className="flex items-start gap-3 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={consent}
-                      onChange={(e) => setConsent((e.target as HTMLInputElement).checked)}
-                      className="mt-0.5 h-4 w-4 rounded border-border text-primary focus:ring-ring"
-                    />
-                    <div>
-                      <span className="text-sm text-secondary-foreground">
-                        I consent to UniHub storing this information to verify my landlord
-                        application, and I confirm the details provided are accurate.
-                      </span>
-                      <p className="mt-1 text-xs text-muted-foreground">
-                        You can ask us to delete your data at any time by emailing hello@unihub.ke.
-                      </p>
-                    </div>
-                  </label>
+                <div className="space-y-3">
+                  <div>
+                    <h3 className="font-display text-base font-medium text-foreground">
+                      Consent declaration
+                    </h3>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      Each statement is separate and nothing is ticked for you. You can withdraw
+                      your consent at any time by emailing hello@unihub.ke. The full wording is at{" "}
+                      <Link to="/consent" className="text-primary hover:underline">
+                        /consent
+                      </Link>
+                      .
+                    </p>
+                  </div>
+                  <ConsentDeclaration
+                    ticked={consentTicks}
+                    onToggle={(id) =>
+                      setConsentTicks((previous) => ({ ...previous, [id]: !previous[id] }))
+                    }
+                    disabled={isLoading}
+                    showBasis={false}
+                  />
                 </div>
 
                 <div className="flex items-center justify-between pt-2">

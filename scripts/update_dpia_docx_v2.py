@@ -45,7 +45,7 @@ set_cell_text(t.cell(5, 1), "1.0 — Internal review prior to public launch")
 set_cell_text(t.cell(6, 1), "PRE-LAUNCH. No live student personal data has been collected. All development and testing uses synthetic data.")
 set_cell_text(t.cell(7, 1), "Before public launch; thereafter quarterly, and on any material change to dataset, platform, or purpose.")
 set_cell_text(t.cell(8, 1), "Internal — KLS 126 CAT Submission")
-set_cell_text(t.cell(9, 1), "Group 1 members, Course Instructor, ODPC on request")
+set_cell_text(t.cell(9, 1), "Group 8 members, Course Instructor, ODPC on request")
 
 # ===== TABLES 1 & 2: Screening Criteria (combined - 11 criteria total) =====
 # Table 1 has criteria I-III, Table 2 has IV-VIII

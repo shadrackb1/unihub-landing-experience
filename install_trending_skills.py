@@ -63,7 +63,7 @@ def main():
     print("=" * 60)
     
     # Sources to try (excluding 'official' and 'all' to avoid duplicates)
-    sources = ['skills-sh', 'clawhub', 'well-known', 'browse-sh', 'github', 'lobehub', 'nvidia', 'openai', 'anthropic', 'huggingface', 'voltagent', 'gstack', 'minimax']
+    sources = ['skills-sh', 'well-known', 'browse-sh', 'github', 'lobehub', 'nvidia', 'openai', 'huggingface', 'voltagent', 'gstack', 'minimax']
     
     all_skills = []
     for source in sources:

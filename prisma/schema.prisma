@@ -3,7 +3,7 @@
 
 generator client {
   provider = "prisma-client"
-  output   = "../node_modules/.prisma/client"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -15,6 +15,7 @@ enum UserRole {
   LANDLORD
   ADMIN
   UNIVERSITY_ADMIN
+  VIEWER
 }
 
 enum LandlordStatus {
@@ -46,6 +47,10 @@ model User {
   password      String?   // hashed with bcrypt
   role          UserRole  @default(TENANT)
   image         String?
+  // Fields required by the Better Auth admin plugin (ban / unban).
+  banned        Boolean   @default(false)
+  banReason     String?
+  banExpires    DateTime?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
@@ -230,6 +235,8 @@ model Session {
   expiresAt    DateTime
   ipAddress    String?
   userAgent    String?
+  // Set by the Better Auth admin plugin when an administrator impersonates a user.
+  impersonatedBy String?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }
@@ -256,9 +263,87 @@ model Account {
 model VerificationToken {
   id        String   @id @default(cuid())
   identifier String
-  token     String   @unique
+  token      String   @unique
   expiresAt DateTime
   createdAt DateTime @default(now())
 
   @@unique([identifier, token])
+}
+
+// Verification table used by Better Auth for email verification and password
+// reset tokens. It is required by the authentication layer at runtime.
+model Verification {
+  id         String   @id @default(cuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+}
+
+// ---------------------------------------------------------------------------
+// Consent capture (Data Protection Act, 2019 s.32; General Regulations, 2021
+// reg. 4). One row per purpose, per person. Purposes are never bundled: a
+// row exists only for a purpose the person actually ticked.
+// ---------------------------------------------------------------------------
+
+enum ConsentPurpose {
+  IDENTITY_VERIFICATION
+  LISTING_PUBLICATION
+  PUBLIC_CONTACT_DETAILS
+  PLATFORM_COMMUNICATIONS
+}
+
+enum ConsentStatus {
+  GRANTED
+  WITHDRAWN
+}
+
+model ConsentRecord {
+  id             String         @id @default(cuid())
+  userId         String? // Better Auth user id when the person is signed in
+  email          String
+  name           String
+  purpose        ConsentPurpose
+  purposeText    String // the exact wording shown to the person at the time
+  wordingVersion String // version of that wording (v1.0)
+  /// The consent declaration statements that were ticked when this record was
+  /// written, as comma separated ids. Kept so the record shows exactly what
+  /// the person agreed to, not only which purpose it was filed under.
+  acknowledgedItems String?
+  status         ConsentStatus  @default(GRANTED)
+  grantedAt      DateTime
+  withdrawnAt    DateTime?
+  source         String         @default("consent-screen")
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  @@index([email])
+  @@index([purpose])
+  @@index([status])
+}
+
+// ---------------------------------------------------------------------------
+// Records extracted from the public university hostel-notice source file.
+// Kept in the same relational data layer so they can be imported, exported,
+// searched, filtered and reported on.
+// ---------------------------------------------------------------------------
+
+model ExtractedHostelRecord {
+  id         String   @id @default(cuid())
+  hostelName String
+  campus     String
+  category   String
+  rentKsh    Int
+  capacity   Int
+  distanceKm Float?
+  sourceFile String
+  sourceLine String
+  confidence Float?
+  importedAt DateTime @default(now())
+
+  @@unique([hostelName, campus])
+  @@index([campus])
 }

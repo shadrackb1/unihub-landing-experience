@@ -23,8 +23,8 @@ import shutil
 import sys
 import zipfile
 
-SRC = "C:/Users/ADMIN/Desktop/CAT_UniHub_Materials/Group1_CAT3_DPIA.docx"
-BACKUP_DIR = "C:/Users/ADMIN/.claude/jobs/d5eade3d/tmp/docx_backup"
+SRC = "C:/Users/ADMIN/Desktop/CAT_UniHub_Materials/Group8_CAT3_DPIA.docx"
+BACKUP_DIR = "C:/Users/ADMIN/.agents/skills-completed/docx_backup"
 EM = "\u2014"
 EN = "\u2013"
 

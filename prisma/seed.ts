@@ -1,12 +1,12 @@
 import "dotenv/config";
-import { PrismaClient } from "../node_modules/.prisma/client/client";
+import { PrismaClient } from "../src/generated/prisma/client";
 import { PrismaLibSql } from "@prisma/adapter-libsql";
-import bcrypt from "bcryptjs";
+import { hashPassword } from "better-auth/crypto";
 
 const adapter = new PrismaLibSql({ url: process.env.DATABASE_URL! });
 const prisma = new PrismaClient({ adapter });
 
-const UserRole = { TENANT: "TENANT", LANDLORD: "LANDLORD", ADMIN: "ADMIN", UNIVERSITY_ADMIN: "UNIVERSITY_ADMIN" };
+const UserRole = { TENANT: "TENANT", LANDLORD: "LANDLORD", ADMIN: "ADMIN", UNIVERSITY_ADMIN: "UNIVERSITY_ADMIN", VIEWER: "VIEWER" };
 const LandlordStatus = { PENDING: "PENDING", APPROVED: "APPROVED", REJECTED: "REJECTED", SUSPENDED: "SUSPENDED" };
 const ListingCategory = { HOSTEL: "HOSTEL", BEDSITTER: "BEDSITTER", SINGLE_ROOM: "SINGLE_ROOM", STUDIO: "STUDIO", SHARED_APARTMENT: "SHARED_APARTMENT" };
 const ListingStatus = { AVAILABLE: "AVAILABLE", RENTED: "RENTED", HIDDEN: "HIDDEN" };
@@ -18,11 +18,14 @@ const TEST_ACCOUNTS = [
   { email: "landlord.rejected@unihub.ke", password: "TestLandlord2024!", name: "Peter Ochieng", role: UserRole.LANDLORD, landlordProfile: { businessName: "Ochieng Rentals", phone: "+254722333444", whatsappNumber: "+254722333444", nationalId: "34567890", targetCampuses: ["Moi University", "Eldoret"], estimatedProperties: 3, status: LandlordStatus.REJECTED, reviewNote: "Missing business registration documents", consentGivenAt: new Date(), consentVersion: "2026-07-01" } },
   { email: "landlord.suspended@unihub.ke", password: "TestLandlord2024!", name: "Mary Atieno", role: UserRole.LANDLORD, landlordProfile: { businessName: "Atieno Hostels", phone: "+254733444555", whatsappNumber: "+254733444555", nationalId: "45678901", targetCampuses: ["Maseno", "Kisumu"], estimatedProperties: 8, status: LandlordStatus.SUSPENDED, reviewNote: "Complaint investigation in progress", consentGivenAt: new Date(), consentVersion: "2026-07-01" } },
   { email: "student@unihub.ke", password: "TestStudent2024!", name: "Brian Kiprop", role: UserRole.TENANT, landlordProfile: null },
+  { email: "viewer@unihub.ke", password: "TestViewer2024!", name: "Grace Wanjiku", role: UserRole.VIEWER, landlordProfile: null },
   { email: "university@unihub.ke", password: "TestUniversity2024!", name: "Dr. Sarah Njeri", role: UserRole.UNIVERSITY_ADMIN, landlordProfile: null },
 ];
 
-async function hashPassword(password: string) {
-  return bcrypt.hash(password, 12);
+// The password hash is produced by the same routine Better Auth uses to
+// verify a sign-in, so the seeded accounts can actually sign in.
+async function hashPasswordForAccount(password: string) {
+  return hashPassword(password);
 }
 
 async function main() {
@@ -31,20 +34,38 @@ async function main() {
     try {
       console.log(`Creating: ${account.email} (${account.role})`);
       const existingUser = await prisma.user.findUnique({ where: { email: account.email } });
-      if (existingUser) { console.log(`  ⚠️  Already exists: ${account.email}`); continue; }
-      const hashedPassword = await hashPassword(account.password);
-      const user = await prisma.user.create({
-        data: { email: account.email, name: account.name, password: hashedPassword, role: account.role, emailVerified: new Date(), accounts: { create: { accountId: account.email, providerId: "email", password: hashedPassword } } },
+      const hashedPassword = await hashPasswordForAccount(account.password);
+      const user = existingUser
+        ? await prisma.user.update({
+            where: { id: existingUser.id },
+            data: { name: account.name, password: hashedPassword, role: account.role },
+          })
+        : await prisma.user.create({
+            data: { email: account.email, name: account.name, password: hashedPassword, role: account.role, emailVerified: new Date() },
+          });
+      console.log(`  ✅ User ready: ${user.id}`);
+
+      // The email-and-password credential is held by the `credential` account
+      // row, keyed by the user's id. This is the row the sign-in check reads.
+      await prisma.account.upsert({
+        where: { providerId_accountId: { providerId: "credential", accountId: user.id } },
+        create: { userId: user.id, accountId: user.id, providerId: "credential", password: hashedPassword },
+        update: { password: hashedPassword },
       });
-      console.log(`  ✅ User created: ${user.id}`);
       if (account.landlordProfile) {
-        await prisma.landlordProfile.create({
-          data: { userId: user.id, businessName: account.landlordProfile.businessName, phone: account.landlordProfile.phone, whatsappNumber: account.landlordProfile.whatsappNumber, nationalId: account.landlordProfile.nationalId, targetCampuses: JSON.stringify(account.landlordProfile.targetCampuses), estimatedProperties: account.landlordProfile.estimatedProperties, status: account.landlordProfile.status, reviewNote: account.landlordProfile.reviewNote, consentGivenAt: account.landlordProfile.consentGivenAt, consentVersion: account.landlordProfile.consentVersion },
+        await prisma.landlordProfile.upsert({
+          where: { userId: user.id },
+          create: { userId: user.id, businessName: account.landlordProfile.businessName, phone: account.landlordProfile.phone, whatsappNumber: account.landlordProfile.whatsappNumber, nationalId: account.landlordProfile.nationalId, targetCampuses: JSON.stringify(account.landlordProfile.targetCampuses), estimatedProperties: account.landlordProfile.estimatedProperties, status: account.landlordProfile.status, reviewNote: account.landlordProfile.reviewNote, consentGivenAt: account.landlordProfile.consentGivenAt, consentVersion: account.landlordProfile.consentVersion },
+          update: { businessName: account.landlordProfile.businessName, phone: account.landlordProfile.phone, whatsappNumber: account.landlordProfile.whatsappNumber, nationalId: account.landlordProfile.nationalId, targetCampuses: JSON.stringify(account.landlordProfile.targetCampuses), estimatedProperties: account.landlordProfile.estimatedProperties, status: account.landlordProfile.status, reviewNote: account.landlordProfile.reviewNote, consentGivenAt: account.landlordProfile.consentGivenAt, consentVersion: account.landlordProfile.consentVersion },
         });
-        console.log(`  ✅ Landlord profile created`);
+        console.log(`  ✅ Landlord profile ready`);
       }
-      await prisma.session.create({ data: { userId: user.id, token: `test-token-${user.id}`, expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), ipAddress: "127.0.0.1", userAgent: "TestSeeder/1.0" } });
-      console.log(`  ✅ Test session created`);
+      await prisma.session.upsert({
+        where: { token: `test-token-${user.id}` },
+        create: { userId: user.id, token: `test-token-${user.id}`, expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), ipAddress: "127.0.0.1", userAgent: "TestSeeder/1.0" },
+        update: { expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) },
+      });
+      console.log(`  ✅ Test session ready`);
     } catch (error) { console.error(`  ❌ Error: ${error.message}`); }
     console.log("");
   }
@@ -75,7 +96,16 @@ async function main() {
       { title: "Shared Apartment - Njoro", description: "Shared apartment near Egerton University with Wi-Fi, water included, and secure parking. Ideal for groups.", price: 850000, deposit: 850000, category: ListingCategory.SHARED_APARTMENT, location: "Njoro, near Egerton University", latitude: -0.3576, longitude: 35.9400, images: JSON.stringify(["/listing-shared.jpg", "/listing-apartment.jpg"]), amenities: JSON.stringify(["Wi-Fi Ready", "Water Included", "Parking", "Gated Community"]), genderRestriction: "none", hasWifi: true, hasWater: true, status: ListingStatus.AVAILABLE, isVerified: true, landlordId: approvedLandlord.id, userId: approvedLandlord.userId, university: "Egerton University", distanceFromCampus: "2.0 km" },
     ];
     for (const listing of listings) {
-      try { await prisma.listing.create({ data: listing }); console.log(`  ✅ Listing: ${listing.title}`); } catch (error) { console.error(`  ❌ Error: ${error.message}`); }
+      try {
+        const existing = await prisma.listing.findFirst({ where: { title: listing.title } });
+        if (existing) {
+          await prisma.listing.update({ where: { id: existing.id }, data: listing });
+          console.log(`  ✅ Listing updated: ${listing.title}`);
+        } else {
+          await prisma.listing.create({ data: listing });
+          console.log(`  ✅ Listing: ${listing.title}`);
+        }
+      } catch (error) { console.error(`  ❌ Error: ${error.message}`); }
     }
   }
   console.log("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
@@ -84,6 +114,7 @@ async function main() {
   console.log("🔐 ADMIN\n   Email: admin@unihub.ke\n   Password: TestAdmin2024!\n   Access: /admin (requires VITE_ADMIN_EMAILS=admin@unihub.ke in .env)\n");
   console.log("🏠 LANDLORDS\n   Pending:    landlord.pending@unihub.ke    / Password: TestLandlord2024!\n   Approved:   landlord.approved@unihub.ke   / Password: TestLandlord2024!\n   Rejected:   landlord.rejected@unihub.ke   / Password: TestLandlord2024!\n   Suspended:  landlord.suspended@unihub.ke  / Password: TestLandlord2024!\n");
   console.log("🎓 STUDENT/TENANT\n   Email: student@unihub.ke\n   Password: TestStudent2024!\n");
+  console.log("👁️  VIEWER (read-only)\n   Email: viewer@unihub.ke\n   Password: TestViewer2024!\n   Access: dashboard data only, no export, no admin write operations\n");
   console.log("🏛️ UNIVERSITY ADMIN\n   Email: university@unihub.ke\n   Password: TestUniversity2024!\n");
   console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
   console.log("⚠️  IMPORTANT: Change passwords after first login!");

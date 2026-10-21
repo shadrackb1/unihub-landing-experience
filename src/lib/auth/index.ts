@@ -1,7 +1,7 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { admin } from "better-auth/plugins";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@/generated/prisma/client";
 import { PrismaLibSql } from "@prisma/adapter-libsql";
 
 const adapter = new PrismaLibSql({ url: process.env.DATABASE_URL! });
@@ -41,7 +41,12 @@ export const auth = betterAuth({
       defaultRole: "TENANT",
     }),
   ],
-  trustedOrigins: ["http://localhost:5173", "http://localhost:3000"],
+  trustedOrigins: [
+    "http://localhost:5173",
+    "http://localhost:8080",
+    "http://localhost:3000",
+    ...(process.env.BETTER_AUTH_URL ? [process.env.BETTER_AUTH_URL] : []),
+  ],
 });
 
 export type Session = typeof auth.$Infer.Session;

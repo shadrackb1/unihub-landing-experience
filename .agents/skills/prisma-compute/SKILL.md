@@ -20,7 +20,7 @@ The installed packages ship their own agent skills, matched to the installed ver
 - `prisma-platform-core-concepts`, inside `prisma`: projects, branches, services, versions, env vars, deploy on push.
 - `prisma-composer-core-concepts`, inside `@prisma/composer`: declaring services, modules, databases, and builds; `dev`, `deploy`, and teardown.
 
-`npx prisma skills sync` copies them into the agent skill directories (`.claude/skills`, `.cursor/skills`, `.agents/skills`, `.devin/skills`), and `npx prisma skills list` shows what is installed. `npx prisma init` does the same and adds a `postinstall` hook that keeps them current. When those skills are installed, use them for API details. This skill covers the deploy and operations workflow and its pitfalls.
+`npx prisma skills sync` copies them into the agent skill directories (`.agent/skills`, `.cursor/skills`, `.agents/skills`, `.devin/skills`), and `npx prisma skills list` shows what is installed. `npx prisma init` does the same and adds a `postinstall` hook that keeps them current. When those skills are installed, use them for API details. This skill covers the deploy and operations workflow and its pitfalls.
 
 ## Removed Surface
 

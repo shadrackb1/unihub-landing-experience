@@ -34,7 +34,14 @@ export interface LandlordProfile {
   estimatedProperties: number;
   status: LandlordStatus;
   reviewNote?: string;
-  consent?: { givenAt: string; version: string };
+  consent?: {
+    givenAt: string;
+    version: string;
+    /** The consent declaration statements that were ticked. */
+    items?: string[];
+    /** The purposes the consent was recorded under. */
+    purposes?: string[];
+  };
   createdAt?: unknown;
   updatedAt?: unknown;
 }
@@ -55,9 +62,13 @@ export type RegisterLandlordInput = {
   targetCampuses: string[];
   estimatedProperties: number;
   reviewNote: string;
+  /** The consent declaration statements the person ticked. */
+  consentItems: string[];
+  /** The purposes those statements granted. */
+  consentPurposes: string[];
 };
 
-export const CONSENT_VERSION = "2026-07-01";
+export const CONSENT_VERSION = "1.0";
 
 /** Where to send a landlord once their profile status is known. */
 export function homeForStatus(
@@ -129,6 +140,8 @@ export async function registerLandlord(input: RegisterLandlordInput): Promise<Us
         consent: {
           givenAt: new Date().toISOString(),
           version: CONSENT_VERSION,
+          items: input.consentItems,
+          purposes: input.consentPurposes,
         },
         createdAt: new Date(),
         updatedAt: new Date(),

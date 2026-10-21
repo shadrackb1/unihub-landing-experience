@@ -200,6 +200,7 @@ export function SiteFooter() {
             links={[
               ["Privacy", "/privacy"],
               ["Terms", "/terms"],
+              ["Your consent", "/consent"],
               ["Email us", "/contact"],
             ]}
           />
