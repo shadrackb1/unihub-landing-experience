@@ -1,7 +1,7 @@
 # UniHub — Requirements Specification
 
 **Project:** UniHub — Verified Student Housing Discovery Platform  
-**Group:** Group 1  
+**Group:** Group 8  
 **Course:** KLS 126 — Data Science for Lawyers, Kabarak University  
 **Date:** 21st October 2026  
 **Version:** 1.0
@@ -181,4 +181,4 @@ No ODPC consultation required. Governance gate (Action A6) ensures DPIA review f
 - ODPC Guidance Note on Data Protection Impact Assessment (Part 5 template)
 - ODPC Guidance Note on Consent
 - KabarakAttend DPIA (KLS 126, September 2026) — sector reference
-- *UniHub DPIA (Group 1, CAT 3)* — this project's assessment
+- *UniHub DPIA (Group 8, CAT 3)* — this project's assessment

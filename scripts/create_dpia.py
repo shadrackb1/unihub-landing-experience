@@ -10,7 +10,7 @@ output_dir = "C:/Users/ADMIN/Desktop/CAT_UniHub_Materials"
 os.makedirs(output_dir, exist_ok=True)
 
 doc = SimpleDocTemplate(
-    os.path.join(output_dir, "Group1_CAT3_DPIA.pdf"),
+    os.path.join(output_dir, "Group8_CAT3_DPIA.pdf"),
     pagesize=A4,
     rightMargin=2*cm, leftMargin=2*cm,
     topMargin=2*cm, bottomMargin=2*cm
@@ -80,7 +80,7 @@ cover_info = [
     ["Legal Basis:", "Section 31, Data Protection Act No. 24 of 2019"],
     ["Guidance Note:", "ODPC Guidance Note on DPIA (Part 5 template)"],
     ["Course:", "KLS 126 — Data Science for Lawyers, Kabarak University"],
-    ["Group:", "Group 1"],
+    ["Group:", "Group 8"],
 ]
 cover_table = Table(cover_info, colWidths=[4.5*cm, 11.5*cm])
 cover_table.setStyle(TableStyle([
@@ -97,7 +97,7 @@ story.append(cover_table)
 
 story.append(Spacer(1, 1.5*cm))
 story.append(Paragraph("Prepared for: Kabarak University School of Law — CAT 3 Submission", small_style))
-story.append(Paragraph("Group 1 Members:", small_style))
+story.append(Paragraph("Group 8 Members:", small_style))
 
 members = [
     "Maureen Jepyator Kibet (LAW/M/1184/05/26)",
@@ -795,4 +795,4 @@ story.append(Paragraph(
 ))
 
 doc.build(story)
-print(f"DPIA PDF created at {output_dir}/Group1_CAT3_DPIA.pdf")
+print(f"DPIA PDF created at {output_dir}/Group8_CAT3_DPIA.pdf")

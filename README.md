@@ -26,6 +26,312 @@ Verified student housing platform for Kenyan university campuses.
 
 ---
 
+## Architecture Diagrams (Mermaid - Rendered on GitHub)
+
+### 1. System Architecture Overview
+
+```mermaid
+flowchart TB
+    subgraph Frontend["🌐 Frontend (Browser)"]
+        React[React 19 + TanStack Router]
+        MapLibre[MapLibre GL]
+        VideoPanel[VideoPanel Component]
+    end
+    
+    subgraph App["⚡ Application Layer (TanStack Start)"]
+        SSR[SSR + File-based Routes]
+        ServerFn[createServerFn]
+        StaticData[Static Listings TS]
+    end
+    
+    subgraph Auth["🔐 Authentication (Dual Stack)"]
+        BetterAuth[Better Auth + Prisma Adapter]
+        FirebaseAuth[Firebase Auth (Legacy)]
+        Firestore[Firestore (Legacy)]
+    end
+    
+    subgraph Data["💾 Data Layer"]
+        SQLite[(SQLite via libsql)]
+        Prisma[Prisma 7 ORM]
+    end
+    
+    subgraph External["☁️ External Services"]
+        Vercel[Vercel iad1]
+        GitHub[GitHub]
+        TileProviders[OpenFreeMap / Esri]
+    end
+    
+    React --> SSR
+    MapLibre --> TileProviders
+    VideoPanel --> React
+    SSR --> ServerFn
+    SSR --> StaticData
+    SSR --> BetterAuth
+    BetterAuth --> Prisma
+    Prisma --> SQLite
+    FirebaseAuth -.-> Firestore
+    Vercel --> React
+    GitHub --> Vercel
+    
+    classDef primary fill:#4CAF50,color:#fff;
+    classDef legacy fill:#FF9800,color:#fff;
+    classDef external fill:#2196F3,color:#fff;
+    class BetterAuth,Prisma,SQLite primary;
+    class FirebaseAuth,Firestore legacy;
+    class Vercel,GitHub,TileProviders external;
+```
+
+### 2. Authentication Flow (Better Auth Primary + Firebase Legacy)
+
+```mermaid
+flowchart TD
+    Start([User visits /admin or /landlord]) --> Path{Route path?}
+    
+    Path -->|/admin/*| AdminGuard[requireAdmin Guard]
+    Path -->|/landlord/*| LandlordGuard[LandlordContext Guard]
+    
+    AdminGuard --> WaitUser[waitForUser 8s timeout]
+    WaitUser --> FirebaseAuth[Firebase Auth State]
+    WaitUser --> Timeout[8s Fallback]
+    FirebaseAuth --> HasSession{Session valid?}
+    Timeout --> HasSession
+    
+    HasSession -->|No| RedirectLogin[Redirect /admin/login]
+    HasSession -->|Yes| AdminEmails{VITE_ADMIN_EMAILS?}
+    
+    AdminEmails -->|Not configured| DevAllow[Allow + Warn]
+    AdminEmails -->|Configured| EmailCheck{Email in list?}
+    
+    DevAllow --> AdminAccess[Admin Access Granted ✅]
+    EmailCheck -->|No| RedirectHome[Redirect /]
+    EmailCheck -->|Yes| AdminAccess
+    
+    LandlordGuard --> FirebaseAuth2[Firebase Auth State]
+    FirebaseAuth2 --> Authenticated{Authenticated?}
+    Authenticated -->|No| LandlordLogin[Redirect /landlord/login]
+    Authenticated -->|Yes| FetchProfile[fetchLandlordProfile 8s timeout]
+    
+    FetchProfile --> ProfileState{Profile state?}
+    ProfileState -->|ok| StatusRoute[homeForStatus]
+    ProfileState -->|missing| Pending[/landlord/pending]
+    ProfileState -->|unavailable| ErrorMsg[Show error]
+    
+    StatusRoute -->|pending| Pending
+    StatusRoute -->|approved| Dashboard[/landlord]
+    StatusRoute -->|rejected| Rejected[/landlord/rejected]
+    StatusRoute -->|suspended| Suspended[/landlord/suspended]
+    
+    classDef success fill:#4CAF50,color:#fff;
+    classDef warning fill:#FF9800,color:#fff;
+    classDef error fill:#F44336,color:#fff;
+    class AdminAccess,Dashboard success;
+    class DevAllow,Pending warning;
+    class RedirectLogin,RedirectHome,LandlordLogin,Rejected,Suspended,ErrorMsg error;
+```
+
+### 3. Data Flow - Static Listings to Browser
+
+```mermaid
+flowchart LR
+    subgraph Source["📁 Source Files"]
+        ListingsTS[src/data/listings.ts]
+        ClipsTS[src/data/residenceClips.ts]
+        CampusesTS[src/data/campuses.ts]
+    end
+    
+    subgraph Build["🔨 Build Time"]
+        StaticImport[Static Import]
+    end
+    
+    subgraph Components["🧩 TanStack Components"]
+        ListingGrid[ListingGrid]
+        FilterSort[Client Filter/Sort]
+        ListingCard[ListingCard]
+        ContactLinks[WhatsApp/Email Links]
+        CampusMap[CampusMap]
+        MapLibre[MapLibre GL]
+        VideoPanel[VideoPanel]
+    end
+    
+    subgraph Browser["🌐 Student Browser"]
+        Grid[Rendered Grid]
+        Map[Interactive Map]
+        Video[Auto-play Video]
+        External[External Apps]
+    end
+    
+    ListingsTS --> StaticImport
+    ClipsTS --> StaticImport
+    CampusesTS --> StaticImport
+    
+    StaticImport --> ListingGrid
+    ListingGrid --> FilterSort
+    FilterSort --> ListingCard
+    ListingCard --> ContactLinks
+    ContactLinks --> External
+    ListingGrid --> Grid
+    
+    CampusesTS --> CampusMap
+    CampusMap --> MapLibre
+    MapLibre --> TileProviders[Tile CDNs]
+    CampusMap --> CampusPins[8 Campus Pins]
+    CampusPins --> Grid
+    
+    ClipsTS --> VideoPanel
+    VideoPanel --> Assets[Static Assets]
+    VideoPanel --> Video
+    
+    classDef source fill:#E3F2FD;
+    classDef build fill:#FFF3E0;
+    classDef comp fill:#E8F5E9;
+    classDef browser fill:#F3E5F5;
+    class ListingsTS,ClipsTS,CampusesTS source;
+    class StaticImport build;
+    class ListingGrid,FilterSort,ListingCard,ContactLinks,CampusMap,MapLibre,VideoPanel comp;
+    class Grid,Map,Video,External browser;
+```
+
+### 4. Deployment Pipeline - GitHub to Vercel
+
+```mermaid
+flowchart TD
+    Dev[💻 Local Dev] --> Commit[git commit + push]
+    Commit --> GitHub[(GitHub Repo)]
+    GitHub --> Webhook[Vercel Webhook]
+    Webhook --> Install[npm install]
+    Install --> PrismaGen[npx prisma generate]
+    PrismaGen --> Build[npm run build]
+    
+    Build --> TypeCheck{TypeScript OK?}
+    TypeCheck -->|No| Fail[❌ Build Failed]
+    TypeCheck -->|Yes| Lint{ESLint Pass?}
+    Lint -->|No| Fail
+    Lint -->|Yes| Preview[🔗 Preview Deploy]
+    
+    Preview --> MainBranch{main branch?}
+    MainBranch -->|No| PreviewDone[Preview URL]
+    MainBranch -->|Yes| Production[🚀 Production Deploy]
+    
+    Production --> VercelURL[https://unihub.ke]
+    
+    VercelConfig[vercel.json config] -.-> Build
+    EnvVars[Env Variables] -.-> Build
+    
+    classDef success fill:#4CAF50,color:#fff;
+    classDef fail fill:#F44336,color:#fff;
+    classDef process fill:#E3F2FD;
+    class VercelURL,Production,PreviewDone success;
+    class Fail fail;
+    class Dev,Commit,GitHub,Webhook,Install,PrismaGen,Build,Preview,PreviewDone process;
+```
+
+### 5. 7-Act Funnel - Homepage Experience
+
+```mermaid
+flowchart TD
+    Entry([Student Lands]) --> Act1[Act 1: ARRIVE\nHero Video + Headline]
+    Act1 --> Scroll1{Scroll/IO}
+    Scroll1 --> Act2[Act 2: ORIENT\nCampus Map + Pins]
+    Act2 --> Scroll2{Scroll/IO}
+    Scroll2 --> Act3[Act 3: BELIEVE\nTrust Signals]
+    Act3 --> Scroll3{Scroll/IO}
+    Scroll3 --> Act4[Act 4: WITNESS\nVideo Gallery]
+    Act4 --> Scroll4{Scroll/IO}
+    Scroll4 --> Act5[Act 5: CHOOSE\nListing Grid + Filters]
+    Act5 --> Scroll5{Scroll/IO}
+    Scroll5 --> Act6[Act 6: PLACE\nListing Detail]
+    Act6 --> Scroll6{Scroll/IO}
+    Scroll6 --> Act7[Act 7: MOVE\nContact Links]
+    
+    Act2 --> PinClick[Click Pin → Filter]
+    Act4 --> VideoAuto[Video Autoplay 25%]
+    Act5 --> FilterChange[Instant Filter]
+    Act7 --> ContactClick[Click → External]
+    ContactClick --> Exit([In Conversation])
+    
+    Motion{prefers-reduced-motion?}
+    Motion -->|Yes| Static[Static Layout]
+    Motion -->|No| Animated[Staggered Animations]
+    
+    classDef act fill:#E8F5E9;
+    classDef decision fill:#FFF3E0;
+    classDef external fill:#F3E5F5;
+    class Act1,Act2,Act3,Act4,Act5,Act6,Act7 act;
+    class Scroll1,Scroll2,Scroll3,Scroll4,Scroll5,Scroll6,Motion decision;
+    class Static,Animated,PinClick,VideoAuto,FilterChange,ContactClick,Exit external;
+```
+
+### 6. Campus Map Data Flow - MapLibre GL
+
+```mermaid
+flowchart TB
+    Mount[Component Mount] --> Init[new maplibregl.Map]
+    Init --> Style[Custom Style JSON]
+    
+    Style --> VectorSource[Vector Source: OpenFreeMap]
+    Style --> RasterSource[Raster Source: Esri]
+    
+    VectorSource --> TileRequest[Tile Requests]
+    RasterSource --> TileRequest
+    TileRequest --> TileCDN[Tile CDNs]
+    
+    Init --> LayerToggle[Layer Toggle Control]
+    LayerToggle --> Style
+    
+    CampusData[Campus Data 8 pins] --> AddMarkers[Add Markers]
+    AddMarkers --> Init
+    AddMarkers --> PinClick{Pin Click?}
+    PinClick -->|Yes| FilterListings[Filter by Campus]
+    PinClick -->|No| Rendered[Map Rendered]
+    
+    TileCDN -.-> Rendered
+    Rendered --> Cleanup[Cleanup on Unmount]
+    
+    classDef process fill:#E3F2FD;
+    classDef external fill:#F3E5F5;
+    classDef interactive fill:#E8F5E9;
+    class Mount,Init,Style,VectorSource,RasterSource,TileRequest,AddMarkers,LayerToggle process;
+    class TileCDN,CampusData external;
+    class PinClick,FilterListings,Rendered interactive;
+```
+
+### 7. Video Panel - Viewport-Aware Autoplay
+
+```mermaid
+flowchart TD
+    Mount[VideoPanel Mounts] --> ReducedMotion{prefers-reduced-motion?}
+    
+    ReducedMotion -->|Yes| PosterOnly[Show Poster + Play Button]
+    ReducedMotion -->|No| CreateObserver[IntersectionObserver\nthreshold: 0.25\nrootMargin: 0px 0px -10% 0px]
+    
+    CreateObserver --> Observe[Observe Video Element]
+    Observe --> Intersection{Ratio ≥ 0.25?}
+    
+    Intersection -->|Entering| Autoplay[video.play\nmuted, playsInline]
+    Intersection -->|Leaving| Pause[video.pause]
+    
+    Autoplay --> UserClick{User Clicks?}
+    Pause --> UserClick
+    PosterOnly --> UserClick
+    
+    UserClick -->|Play| Autoplay
+    UserClick -->|Pause| Pause
+    UserClick -->|Unmute| Unmute[video.muted = false]
+    
+    Mount -.-> Cleanup[observer.disconnect]
+    
+    classDef autoplay fill:#4CAF50,color:#fff;
+    classDef pause fill:#FF9800,color:#fff;
+    classDef user fill:#2196F3,color:#fff;
+    classDef check fill:#FFF3E0;
+    class Autoplay,Unmute autoplay;
+    class Pause pause;
+    class UserClick user;
+    class ReducedMotion,Intersection check;
+```
+
+---
+
 ## Quick Start
 
 ### Prerequisites

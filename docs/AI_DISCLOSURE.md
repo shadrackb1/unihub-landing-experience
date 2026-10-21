@@ -1,9 +1,9 @@
 # UniHub — AI Disclosure Statement
 
 **Project:** UniHub — Verified Student Housing Discovery Platform  
-**Group:** Group 1  
+**Group:** Group 8  
 **Course:** KLS 126 — Data Science for Lawyers, Kabarak University  
-**Submitted by:** Group 1 Representative  
+**Submitted by:** Group 8 Representative  
 **Date:** 21st October 2026  
 **Version:** 1.0
 
@@ -62,7 +62,7 @@
 | `prisma/schema.prisma` | Validated schema matches `SampleListing` type; no sensitive fields; SQLite via libsql |
 | `src/features/admin/requireAdmin.ts` | Verified Firebase Auth guard logic; tested admin login flow; fixed `prefer-const` lint errors |
 | `src/shared/lib/withTimeout.ts` | Confirmed generic type signature; tested with Firestore reads in `landlordService.ts` |
-| `scripts/create_dpia.py` | Generated PDF; opened and verified all 14 Group 1 members on cover page; checked legal citations |
+| `scripts/create_dpia.py` | Generated PDF; opened and verified all 14 Group 8 members on cover page; checked legal citations |
 | `scripts/create_consent_*.py` | Generated consent PDFs; verified B&W Times New Roman; checked against DPA s.29,30,32 and Reg.4 |
 | `README.md` | Every path, command, badge URL, and diagram reference verified against repo |
 | `docs/REQUIREMENTS.md` | Cross-referenced with actual codebase, DPIA, and CAT 1 rubric |
@@ -85,7 +85,7 @@
 
 ## Declaration
 
-We, the members of Group 1, declare that:
+We, the members of Group 8, declare that:
 
 1. AI tools (Lovable for application scaffolding, Python for PDF generation scripts) were used as described above
 2. All AI-generated code and content was verified by human team members against primary sources
@@ -94,8 +94,8 @@ We, the members of Group 1, declare that:
 5. The repository contains no secrets, API keys, or real personal data
 6. Manual development (code review, refactoring, GitHub workflow, deployment) was performed by the team
 
-**Signed on behalf of Group 1:**
+**Signed on behalf of Group 8:**
 
 _________________________________  
-**Group 1 Representative**  
+**Group 8 Representative**  
 21st October 2026

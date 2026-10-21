@@ -1,9 +1,9 @@
 # UniHub — AI Prompt Log
 
 **Project:** UniHub — Verified Student Housing Discovery Platform  
-**Group:** Group 1  
+**Group:** Group 8  
 **Course:** KLS 126 — Data Science for Lawyers, Kabarak University  
-**Maintained by:** Group 1  
+**Maintained by:** Group 8  
 **Period:** Week 2 – Week 5 (September – October 2026)
 
 ---
@@ -28,7 +28,7 @@
 | 2026-10-18 | Claude Code | "Fix ESLint prefer-const errors in requireAdmin.ts (timer, unsubscribe)" | Reordered const declarations before use; ran `npm run lint` | 0 ESLint errors; 0 Prettier errors |
 | 2026-10-19 | Claude Code | "Rewrite README.md with accurate project structure, navigation guide, tech stack tables, architecture diagrams, badges, Vercel deploy button" | Cross-referenced actual file tree; verified all paths exist; checked badge URLs | Comprehensive README with diagrams, tables, navigation guide, deployment guide |
 | 2026-10-19 | Claude Code | "Update AGENT_ONBOARDING.md with corrected paths, auth migration note" | Verified all referenced files exist; checked against actual codebase | Onboarding doc accurate for AI agents |
-| 2026-10-19 | Claude Code | "Create DPIA PDF with Group 1 members including Titus Kimutai Chukor (LAW/M/0227/01/23)" | Generated PDF via `scripts/create_dpia.py`; opened and verified cover page members list | DPIA PDF at `/c/Users/ADMIN/Desktop/CAT_UniHub_Materials/Group1_CAT3_DPIA.pdf` |
+| 2026-10-19 | Claude Code | "Create DPIA PDF with Group 8 members including Titus Kimutai Chukor (LAW/M/0227/01/23)" | Generated PDF via `scripts/create_dpia.py`; opened and verified cover page members list | DPIA PDF at `/c/Users/ADMIN/Desktop/CAT_UniHub_Materials/Group8_CAT3_DPIA.pdf` |
 | 2026-10-19 | Claude Code | "Create REQUIREMENTS.md for CAT 1 submission with use case, users, inputs, outputs, acceptance tests, constraints, data dictionary, verification checklist, roles, lawful basis, retention, risk summary" | Cross-referenced actual codebase, DPIA, and CAT requirements | REQUIREMENTS.md created at `docs/REQUIREMENTS.md` |
 | 2026-10-20 | Claude Code | "Create PROMPT_LOG.md and AI_DISCLOSURE.md for CAT 1 docs folder" | Verified against actual AI usage history | This file and AI_DISCLOSURE.md created |
 | 2026-10-21 | Claude Code | "Verify all CAT submission files present: ZIP, Consent PDF, DPIA PDF, docs folder with REQUIREMENTS.md, PROMPT_LOG.md, AI_DISCLOSURE.md" | Checked `/c/Users/ADMIN/Desktop/CAT_UniHub_Materials/` and repo `docs/` | All files confirmed |
