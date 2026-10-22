@@ -13,6 +13,7 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "format": "prettier --write .",
+    "prisma:generate": "prisma generate",
     "db:seed": "tsx prisma/seed.ts",
     "test": "node --import tsx --import ./tests/setup.ts --test \"tests/*.test.ts\"",
     "test:extraction": "node --import tsx --test \"tests/extraction.test.ts\""
