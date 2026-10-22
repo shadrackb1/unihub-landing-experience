@@ -36,6 +36,8 @@ import { Route as PropertiesIdRouteImport } from './routes/properties.$id'
 import { Route as PublicLandlordRegisterRouteImport } from './routes/public/landlord-register'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as ApiConsentLedgerRouteImport } from './routes/api/consent.ledger'
+import { Route as ApiDataExportRouteImport } from './routes/api/data/export'
+import { Route as ApiDataImportRouteImport } from './routes/api/data/import'
 import { Route as LandlordAdsNewRouteImport } from './routes/landlord.ads_.new'
 import { Route as LandlordListingsNewRouteImport } from './routes/landlord.listings_.new'
 
@@ -174,6 +176,16 @@ const ApiConsentLedgerRoute = ApiConsentLedgerRouteImport.update({
   path: '/ledger',
   getParentRoute: () => ApiConsentRoute,
 } as any)
+const ApiDataExportRoute = ApiDataExportRouteImport.update({
+  id: '/api/data/export',
+  path: '/api/data/export',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiDataImportRoute = ApiDataImportRouteImport.update({
+  id: '/api/data/import',
+  path: '/api/data/import',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LandlordAdsNewRoute = LandlordAdsNewRouteImport.update({
   id: '/ads_/new',
   path: '/ads/new',
@@ -213,6 +225,8 @@ export interface FileRoutesByFullPath {
   '/landlord/': typeof LandlordIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/consent/ledger': typeof ApiConsentLedgerRoute
+  '/api/data/export': typeof ApiDataExportRoute
+  '/api/data/import': typeof ApiDataImportRoute
   '/landlord/ads/new': typeof LandlordAdsNewRoute
   '/landlord/listings/new': typeof LandlordListingsNewRoute
 }
@@ -243,6 +257,8 @@ export interface FileRoutesByTo {
   '/landlord': typeof LandlordIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/consent/ledger': typeof ApiConsentLedgerRoute
+  '/api/data/export': typeof ApiDataExportRoute
+  '/api/data/import': typeof ApiDataImportRoute
   '/landlord/ads/new': typeof LandlordAdsNewRoute
   '/landlord/listings/new': typeof LandlordListingsNewRoute
 }
@@ -275,6 +291,8 @@ export interface FileRoutesById {
   '/landlord/': typeof LandlordIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/consent/ledger': typeof ApiConsentLedgerRoute
+  '/api/data/export': typeof ApiDataExportRoute
+  '/api/data/import': typeof ApiDataImportRoute
   '/landlord/ads_/new': typeof LandlordAdsNewRoute
   '/landlord/listings_/new': typeof LandlordListingsNewRoute
 }
@@ -308,6 +326,8 @@ export interface FileRouteTypes {
     | '/landlord/'
     | '/api/auth/$'
     | '/api/consent/ledger'
+    | '/api/data/export'
+    | '/api/data/import'
     | '/landlord/ads/new'
     | '/landlord/listings/new'
   fileRoutesByTo: FileRoutesByTo
@@ -338,6 +358,8 @@ export interface FileRouteTypes {
     | '/landlord'
     | '/api/auth/$'
     | '/api/consent/ledger'
+    | '/api/data/export'
+    | '/api/data/import'
     | '/landlord/ads/new'
     | '/landlord/listings/new'
   id:
@@ -369,6 +391,8 @@ export interface FileRouteTypes {
     | '/landlord/'
     | '/api/auth/$'
     | '/api/consent/ledger'
+    | '/api/data/export'
+    | '/api/data/import'
     | '/landlord/ads_/new'
     | '/landlord/listings_/new'
   fileRoutesById: FileRoutesById
@@ -391,6 +415,8 @@ export interface RootRouteChildren {
   PropertiesIdRoute: typeof PropertiesIdRoute
   PublicLandlordRegisterRoute: typeof PublicLandlordRegisterRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  ApiDataExportRoute: typeof ApiDataExportRoute
+  ApiDataImportRoute: typeof ApiDataImportRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -584,6 +610,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiConsentLedgerRouteImport
       parentRoute: typeof ApiConsentRoute
     }
+    '/api/data/export': {
+      id: '/api/data/export'
+      path: '/api/data/export'
+      fullPath: '/api/data/export'
+      preLoaderRoute: typeof ApiDataExportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/data/import': {
+      id: '/api/data/import'
+      path: '/api/data/import'
+      fullPath: '/api/data/import'
+      preLoaderRoute: typeof ApiDataImportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/landlord/ads_/new': {
       id: '/landlord/ads_/new'
       path: '/ads/new'
@@ -672,6 +712,8 @@ const rootRouteChildren: RootRouteChildren = {
   PropertiesIdRoute: PropertiesIdRoute,
   PublicLandlordRegisterRoute: PublicLandlordRegisterRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
+  ApiDataExportRoute: ApiDataExportRoute,
+  ApiDataImportRoute: ApiDataImportRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
