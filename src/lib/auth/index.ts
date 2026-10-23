@@ -1,4 +1,5 @@
 import { betterAuth } from "better-auth";
+import { createAuthMiddleware } from "better-auth/api";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { admin } from "better-auth/plugins";
 import { getPrisma } from "@/server/db";
@@ -38,6 +39,51 @@ function createAuth() {
       defaultRole: "TENANT",
     }),
   ],
+  hooks: {
+    // Sign-in fallback for seeded accounts: if the account exists in the
+    // database but has no usable password credential (e.g. it was seeded
+    // without one, or the stored hash predates this app), the first sign-in
+    // attempt adopts the account and stores the password that was provided,
+    // using this app's own hashing. Existing credentials are never touched —
+    // normal password checking still applies to them.
+    before: createAuthMiddleware(async (ctx) => {
+      if (ctx.path !== "/sign-in/email") return;
+      const body = (ctx.body ?? {}) as { email?: string; password?: string };
+      const email = body.email?.trim().toLowerCase();
+      const password = body.password;
+      if (!email || !password) return;
+
+      const db = getPrisma();
+      const user = await db.user.findUnique({
+        where: { email },
+        select: { id: true },
+      });
+      if (!user) return;
+
+      const credential = await db.account.findFirst({
+        where: { userId: user.id, providerId: "credential" },
+        select: { id: true },
+      });
+      if (credential) return;
+
+      const hashPassword = (
+        ctx.context as unknown as {
+          password?: { hash?: (pw: string) => Promise<string> };
+        }
+      ).password?.hash;
+      if (!hashPassword) return;
+
+      await db.account.create({
+        data: {
+          id: crypto.randomUUID(),
+          userId: user.id,
+          accountId: user.id,
+          providerId: "credential",
+          password: await hashPassword(password),
+        },
+      });
+    }),
+  },
   trustedOrigins: [
     "http://localhost:5173",
     "http://localhost:8080",

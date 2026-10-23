@@ -1,5 +1,6 @@
 // TanStack Start + Vite config.
 // Compatible with the connected Lovable project (sandbox builds may pin their own Nitro preset).
+import "dotenv/config";
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 import tsconfigPaths from "vite-tsconfig-paths";
 
