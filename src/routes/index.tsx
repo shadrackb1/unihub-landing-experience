@@ -172,7 +172,7 @@ function Index() {
             muted
             loop
             playsInline
-            preload="auto"
+            preload="metadata"
             poster={siteSettings?.heroImage || heroPoster || heroImage}
             aria-hidden="true"
           >

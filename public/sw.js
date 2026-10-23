@@ -13,7 +13,7 @@
  *
  * The VERSION constant must be bumped whenever precache URLs change.
  */
-const VERSION = "unihub-v1.0.1";
+const VERSION = "unihub-v1.0.2";
 const SHELL_CACHE = `${VERSION}-shell`;
 const RUNTIME_CACHE = `${VERSION}-runtime`;
 
@@ -183,6 +183,19 @@ self.addEventListener("fetch", (event) => {
     url.hostname.endsWith("googleapis.com") || url.hostname === "firebasestorage.googleapis.com";
   if (url.pathname === "/sw.js" || isDevOnly(url) || isFirebase) return;
 
+  // Video and audio are never intercepted. Browsers stream them with byte-range requests
+  // (answered with 206), and replaying a cached full 200 response to a range request makes
+  // Safari and some Chrome versions refuse to play. It would also fill the cache with
+  // multi-megabyte files. The network and the CDN handle ranges correctly.
+  if (
+    request.destination === "video" ||
+    request.destination === "audio" ||
+    request.headers.has("range") ||
+    /\.(?:mp4|webm|m4v|mov|mp3|ogg)$/i.test(url.pathname)
+  ) {
+    return;
+  }
+
   // Same-origin navigations (page loads).
   if (request.mode === "navigate") {
     event.respondWith(handleNavigation(event, request, url));
@@ -192,7 +205,7 @@ self.addEventListener("fetch", (event) => {
   // Same-origin static assets.
   if (url.origin === self.location.origin) {
     if (
-      /\.(?:css|js|mjs|json|svg|png|jpg|jpeg|webp|avif|gif|woff2?|ttf|mp4|webm|ico|map)$/.test(
+      /\.(?:css|js|mjs|json|svg|png|jpg|jpeg|webp|avif|gif|woff2?|ttf|ico|map)$/.test(
         url.pathname,
       ) ||
       url.pathname.startsWith("/assets/") ||
