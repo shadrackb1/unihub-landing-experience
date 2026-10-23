@@ -1,5 +1,9 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
-import { authClient } from "@/lib/auth-client";
+import {
+  authClient,
+  isNetworkErrorMessage,
+  SERVER_UNREACHABLE_MESSAGE,
+} from "@/lib/auth-client";
 
 interface AuthContextType {
   user: User | null;
@@ -115,7 +119,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (email: string, password: string) => {
     const { error } = await authClient.signIn.email({ email, password });
-    if (error) throw new Error(error.message);
+    if (error) {
+      throw new Error(
+        isNetworkErrorMessage(error.message) ? SERVER_UNREACHABLE_MESSAGE : error.message,
+      );
+    }
     await refreshSession();
   };
 

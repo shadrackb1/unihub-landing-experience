@@ -44,3 +44,6 @@ dist-ssr
 *.sw?
 
 /src/generated/prisma
+
+# local copy of dev.db used to test the Vercel fallback
+/seed.db

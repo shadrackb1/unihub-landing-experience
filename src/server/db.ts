@@ -8,15 +8,57 @@
  */
 import { PrismaClient } from "@/generated/prisma/client";
 import { PrismaLibSql } from "@prisma/adapter-libsql";
+import { copyFileSync, existsSync } from "node:fs";
+import { dirname, join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
 
-function createClient(): PrismaClient {
-  const url = process.env["DATABASE_URL"];
-  if (!url) {
+/**
+ * Resolves the database URL.
+ *
+ * - A hosted libsql URL (libsql://..., https://...) is always used as given.
+ * - Locally, `file:` URLs are used as given.
+ * - On Vercel the deployed filesystem is read-only and does not contain
+ *   `dev.db`, so a `file:` URL (or a missing one) would leave the site with no
+ *   accounts and every write failing. The build copies the seeded database
+ *   next to the server function as `seed.db`; it is copied to /tmp (the only
+ *   writable location) on first use. That keeps the seeded accounts working
+ *   until a hosted database is configured. /tmp is per-instance and not
+ *   permanent, so set DATABASE_URL to a hosted libsql database for real data.
+ */
+function resolveDatabaseUrl(): string {
+  const configured = process.env["DATABASE_URL"];
+  const onVercel = Boolean(process.env["VERCEL"]);
+
+  if (configured && !(onVercel && configured.startsWith("file:"))) return configured;
+  if (!onVercel) {
     throw new Error("DATABASE_URL is not set. Server routes need the SQLite/libsql database URL.");
   }
-  const adapter = new PrismaLibSql({ url });
+
+  const target = "/tmp/unihub.db";
+  if (!existsSync(target)) {
+    const here = dirname(fileURLToPath(import.meta.url));
+    const candidates = [
+      resolve(process.cwd(), "seed.db"),
+      join(here, "seed.db"),
+      join(here, "..", "seed.db"),
+      join(here, "..", "..", "seed.db"),
+      "/var/task/seed.db",
+    ];
+    const seed = candidates.find((candidate) => existsSync(candidate));
+    if (!seed) {
+      throw new Error(
+        "No database available: DATABASE_URL is not a hosted libsql URL and the bundled seed.db was not found.",
+      );
+    }
+    copyFileSync(seed, target);
+  }
+  return `file:${target}`;
+}
+
+function createClient(): PrismaClient {
+  const adapter = new PrismaLibSql({ url: resolveDatabaseUrl() });
   return new PrismaClient({ adapter });
 }
 

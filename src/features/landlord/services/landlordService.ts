@@ -12,7 +12,11 @@
  *  - `fetchLandlordProfile` distinguishes "no profile" from "backend
  *    unreachable" so the portal gate can show the right message.
  */
-import { authClient } from "@/lib/auth-client";
+import {
+  authClient,
+  isNetworkErrorMessage,
+  SERVER_UNREACHABLE_MESSAGE,
+} from "@/lib/auth-client";
 import { withTimeout } from "@/shared/lib/withTimeout";
 
 export type LandlordStatus = "pending" | "approved" | "rejected" | "suspended";
@@ -163,6 +167,7 @@ export async function signInLandlord(
 ): Promise<{ profile: ProfileResult }> {
   const { error } = await authClient.signIn.email({ email, password });
   if (error) {
+    if (isNetworkErrorMessage(error.message)) throw new Error(SERVER_UNREACHABLE_MESSAGE);
     throw new Error(
       /invalid|credential|password/i.test(error.message ?? "")
         ? "That email and password did not match. Try again."

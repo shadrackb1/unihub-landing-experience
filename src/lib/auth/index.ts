@@ -4,6 +4,36 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import { admin } from "better-auth/plugins";
 import { getPrisma } from "@/server/db";
 
+/**
+ * Origins allowed to call the auth API. Better Auth rejects any sign-in whose
+ * Origin header is not listed here ("Invalid origin", HTTP 403), so every host
+ * the site is served from has to be covered: local dev, the configured app
+ * URL, and the hostnames Vercel injects for production, branch and preview
+ * deployments.
+ */
+function trustedOrigins(): string[] {
+  const origins = new Set<string>([
+    "http://localhost:5173",
+    "http://localhost:8080",
+    "http://localhost:3000",
+    "http://127.0.0.1:5173",
+    "http://127.0.0.1:8080",
+    "http://127.0.0.1:3000",
+    "https://unihub-landing-experience.vercel.app",
+  ]);
+  const add = (value: string | undefined) => {
+    const v = value?.trim();
+    if (!v) return;
+    origins.add(/^https?:\/\//i.test(v) ? v.replace(/\/+$/, "") : `https://${v}`);
+  };
+  add(process.env["BETTER_AUTH_URL"]);
+  add(process.env["VITE_APP_URL"]);
+  add(process.env["VERCEL_URL"]);
+  add(process.env["VERCEL_BRANCH_URL"]);
+  add(process.env["VERCEL_PROJECT_PRODUCTION_URL"]);
+  return [...origins];
+}
+
 function createAuth() {
   return betterAuth({
   database: prismaAdapter(getPrisma(), {
@@ -84,12 +114,7 @@ function createAuth() {
       });
     }),
   },
-  trustedOrigins: [
-    "http://localhost:5173",
-    "http://localhost:8080",
-    "http://localhost:3000",
-    ...(process.env["BETTER_AUTH_URL"] ? [process.env["BETTER_AUTH_URL"]] : []),
-  ],
+  trustedOrigins: trustedOrigins(),
 });
 }
 
