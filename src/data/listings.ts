@@ -13,6 +13,10 @@ export type SampleListing = {
   price: string;
   deposit: string;
   image: string;
+  /** Agent's WhatsApp number (any Kenyan format). Falls back to the UniHub line when empty. */
+  whatsapp?: string;
+  /** Agent's phone number for calls. */
+  phone?: string;
 };
 
 export const sampleListings: SampleListing[] = [

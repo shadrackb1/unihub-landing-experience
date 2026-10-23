@@ -1,7 +1,8 @@
-import { useLoaderData } from "@tanstack/react-router";
+import { useLoaderData, useRouter } from "@tanstack/react-router";
 import { Loader2, Search, Users } from "lucide-react";
-import { getAgents, deleteAgent } from "@/shared/services/firestore";
-import { useState } from "react";
+import { getAgents, deleteAgent, createAgent, updateAgent } from "@/shared/services/firestore";
+import { formatKenyanPhone, normalizeKenyanPhone } from "@/shared/contact";
+import { useState, type FormEvent } from "react";
 import type { Agent } from "@/shared/types/admin";
 
 export const routeOptions = {
@@ -11,7 +12,18 @@ export const routeOptions = {
   },
 };
 
+type AgentDraft = { name: string; phone: string; whatsappNumber: string; isActive: boolean };
+const EMPTY_DRAFT: AgentDraft = { name: "", phone: "", whatsappNumber: "", isActive: true };
+
+const fieldCls =
+  "w-full px-4 py-3 bg-zinc-900 border border-zinc-800 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-orange-500";
+
 export function AdminAgentsPage() {
+  const router = useRouter();
+  const [draft, setDraft] = useState<AgentDraft>(EMPTY_DRAFT);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
   const { agents } = useLoaderData({ strict: false }) as { agents: Agent[] };
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<"all" | "active" | "inactive">("all");
@@ -20,8 +32,8 @@ export function AdminAgentsPage() {
   const filteredAgents = agents.filter((agent) => {
     const matchesSearch =
       agent.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      agent.phone.includes(searchTerm) ||
-      agent.whatsappNumber.includes(searchTerm);
+      (agent.phone ?? "").includes(searchTerm) ||
+      (agent.whatsappNumber ?? "").includes(searchTerm);
     const matchesStatus =
       statusFilter === "all" ||
       (agent.isActive && statusFilter === "active") ||
@@ -42,6 +54,49 @@ export function AdminAgentsPage() {
     }
   };
 
+  const startEdit = (agent: Agent) => {
+    setEditingId(agent.id ?? null);
+    setDraft({
+      name: agent.name,
+      phone: agent.phone,
+      whatsappNumber: agent.whatsappNumber,
+      isActive: agent.isActive,
+    });
+    setFormError(null);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const resetForm = () => {
+    setEditingId(null);
+    setDraft(EMPTY_DRAFT);
+    setFormError(null);
+  };
+
+  const handleSave = async (e: FormEvent) => {
+    e.preventDefault();
+    setFormError(null);
+    const name = draft.name.trim();
+    const phone = normalizeKenyanPhone(draft.phone);
+    // The WhatsApp number defaults to the phone number when left empty.
+    const whatsapp = draft.whatsappNumber.trim() ? normalizeKenyanPhone(draft.whatsappNumber) : phone;
+    if (name.length < 2) return setFormError("Enter the agent's name.");
+    if (!phone) return setFormError("Enter a valid Kenyan phone number, e.g. 0746 063 175.");
+    if (!whatsapp) return setFormError("The WhatsApp number is not a valid Kenyan number.");
+    setSaving(true);
+    try {
+      const data = { name, phone, whatsappNumber: whatsapp, isActive: draft.isActive };
+      if (editingId) await updateAgent(editingId, data);
+      else await createAgent(data);
+      resetForm();
+      await router.invalidate();
+    } catch (error) {
+      console.error("Save agent failed:", error);
+      setFormError("Could not save the agent. Check your connection and try again.");
+    } finally {
+      setSaving(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between mb-8">
@@ -53,6 +108,90 @@ export function AdminAgentsPage() {
           <p className="text-zinc-400 mt-2">Manage property agents</p>
         </div>
       </div>
+
+      <form
+        onSubmit={handleSave}
+        className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6 shadow-xl"
+        aria-labelledby="agent-form-title"
+      >
+        <h2 id="agent-form-title" className="text-lg font-medium text-white">
+          {editingId ? "Edit agent" : "Add an agent"}
+        </h2>
+        <p className="mt-1 text-sm text-zinc-400">
+          Students contact the agent on these numbers. Type them the way you would dial, for example
+          0746 063 175.
+        </p>
+        <div className="mt-5 grid gap-4 sm:grid-cols-3">
+          <label className="block text-sm text-zinc-300">
+            <span className="mb-1 block">Name</span>
+            <input
+              className={fieldCls}
+              value={draft.name}
+              onChange={(e) => setDraft({ ...draft, name: e.target.value })}
+              autoComplete="off"
+              required
+            />
+          </label>
+          <label className="block text-sm text-zinc-300">
+            <span className="mb-1 block">Phone number</span>
+            <input
+              className={fieldCls}
+              type="tel"
+              inputMode="tel"
+              placeholder="0746 063 175"
+              value={draft.phone}
+              onChange={(e) => setDraft({ ...draft, phone: e.target.value })}
+              autoComplete="off"
+              required
+            />
+          </label>
+          <label className="block text-sm text-zinc-300">
+            <span className="mb-1 block">WhatsApp number (if different)</span>
+            <input
+              className={fieldCls}
+              type="tel"
+              inputMode="tel"
+              placeholder="Same as phone"
+              value={draft.whatsappNumber}
+              onChange={(e) => setDraft({ ...draft, whatsappNumber: e.target.value })}
+              autoComplete="off"
+            />
+          </label>
+        </div>
+        <label className="mt-4 flex items-center gap-2 text-sm text-zinc-300">
+          <input
+            type="checkbox"
+            checked={draft.isActive}
+            onChange={(e) => setDraft({ ...draft, isActive: e.target.checked })}
+          />
+          Active (shown to students)
+        </label>
+        {formError ? (
+          <p role="alert" className="mt-4 text-sm text-red-400">
+            {formError}
+          </p>
+        ) : null}
+        <div className="mt-5 flex flex-wrap gap-3">
+          <button
+            type="submit"
+            disabled={saving}
+            className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-orange-500 px-5 text-sm font-semibold text-black disabled:opacity-60"
+          >
+            {saving ? <Loader2 className="size-4 animate-spin" aria-hidden="true" /> : null}
+            {editingId ? "Save changes" : "Add agent"}
+          </button>
+          {editingId ? (
+            <button
+              type="button"
+              onClick={resetForm}
+              disabled={saving}
+              className="min-h-11 rounded-xl border border-zinc-700 px-5 text-sm text-zinc-300"
+            >
+              Cancel
+            </button>
+          ) : null}
+        </div>
+      </form>
 
       <div className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6 shadow-xl">
         <div className="flex flex-col sm:flex-row gap-4 mb-6">
@@ -125,12 +264,12 @@ export function AdminAgentsPage() {
                         </div>
                         <div>
                           <p className="font-medium text-white">{agent.name}</p>
-                          <p className="text-sm text-zinc-400">{agent.phone}</p>
+                          <p className="text-sm text-zinc-400">{formatKenyanPhone(agent.phone)}</p>
                         </div>
                       </div>
                     </td>
-                    <td className="py-4 text-zinc-300">{agent.phone}</td>
-                    <td className="py-4 text-zinc-300">{agent.whatsappNumber}</td>
+                    <td className="py-4 text-zinc-300">{formatKenyanPhone(agent.phone)}</td>
+                    <td className="py-4 text-zinc-300">{formatKenyanPhone(agent.whatsappNumber)}</td>
                     <td className="py-4">
                       <span
                         className={`px-2 py-1 rounded-full text-xs font-medium ${
@@ -144,6 +283,13 @@ export function AdminAgentsPage() {
                     </td>
                     <td className="py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
+                        <button
+                          type="button"
+                          onClick={() => startEdit(agent)}
+                          className="px-3 py-2 text-sm text-zinc-300 hover:text-white hover:bg-zinc-800 rounded-lg transition-colors"
+                        >
+                          Edit
+                        </button>
                         <button
                           onClick={() => agent.id && handleDelete(agent.id)}
                           disabled={deletingId === agent.id}

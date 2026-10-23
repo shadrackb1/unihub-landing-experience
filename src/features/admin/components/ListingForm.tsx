@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/shared/lib/utils";
+import { normalizeKenyanPhone } from "@/shared/contact";
 
 /**
  * Zod schema for a property listing form.
@@ -46,9 +47,9 @@ export const ListingFormSchema = z.object({
   amenities: z.string().optional(),
   whatsappNumber: z
     .string()
-    .regex(/^254[0-9]{9}$/, "WhatsApp number must be in format 2547XXXXXXXXX")
-    .optional()
-    .or(z.literal("")),
+    .transform((v) => (v.trim() === "" ? "" : (normalizeKenyanPhone(v) ?? v)))
+    .pipe(z.string().regex(/^(254[17][0-9]{8})?$/, "Enter a Kenyan mobile number, e.g. 0746 063 175"))
+    .optional(),
   email: z.string().email("Invalid email address").optional().or(z.literal("")),
   videoClip: z.string().optional(),
 });
@@ -242,7 +243,7 @@ export function ListingForm({
           <Input
             id="whatsappNumber"
             {...form.register("whatsappNumber")}
-            placeholder="2547XXXXXXXXX"
+            placeholder="0746 063 175"
             disabled={isLoading}
             aria-invalid={form.formState.errors.whatsappNumber ? "true" : "false"}
           />

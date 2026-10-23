@@ -28,6 +28,7 @@ import {
   ResidenceVideoGallery,
 } from "@/features/residence/components/ResidenceVideoGallery";
 import { residenceClips } from "@/data/residenceClips";
+import { ListingContact } from "@/features/listings/components/ListingContact";
 import { useListings } from "@/features/listings/hooks/useListings";
 import apartmentImage from "@/assets/listing-apartment.jpg";
 import heroImage from "@/assets/unihub-hero.jpg";
@@ -519,6 +520,9 @@ function Index() {
                             <ArrowRight className="size-4" aria-hidden="true" />
                           </Link>
                         )}
+                      </div>
+                      <div className="mt-5">
+                        <ListingContact listing={listing} />
                       </div>
                     </div>
                   </article>

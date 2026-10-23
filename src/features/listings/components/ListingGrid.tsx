@@ -1,17 +1,15 @@
 import { ArrowRight, MapPin, ShieldCheck } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { Reveal } from "@/shared/components/VideoPanel";
+import { ListingContact } from "./ListingContact";
 import type { SampleListing } from "@/data/listings";
 
 export function ListingGrid({ listings }: { listings: SampleListing[] }) {
   return (
     <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {listings.map((listing, index) => {
-        const card = (
-          <Reveal
-            delay={(index % 3) * 80}
-            className="listing-card group h-full overflow-hidden rounded-2xl border border-border bg-card"
-          >
+        const content = (
+          <>
             <div className="relative aspect-[4/3] overflow-hidden">
               <img
                 src={listing.image}
@@ -26,7 +24,7 @@ export function ListingGrid({ listings }: { listings: SampleListing[] }) {
                 <span className="size-1.5 rounded-full bg-status-dot" /> Available
               </span>
             </div>
-            <div className="p-6">
+            <div className="p-6 pb-4">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
                   <MapPin className="size-3.5" /> {listing.location}
@@ -54,23 +52,31 @@ export function ListingGrid({ listings }: { listings: SampleListing[] }) {
                 </span>
               </div>
             </div>
-          </Reveal>
+          </>
         );
 
-        return listing.id ? (
-          <Link
-            key={`${listing.id}-${listing.title}`}
-            to="/listings/$id"
-            params={{ id: listing.id }}
-            aria-label={`View details for ${listing.title}`}
-            className="block h-full"
+        return (
+          <Reveal
+            key={`${listing.id ?? "listing"}-${listing.title}`}
+            delay={(index % 3) * 80}
+            className="listing-card group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card"
           >
-            {card}
-          </Link>
-        ) : (
-          <div key={listing.title} className="h-full">
-            {card}
-          </div>
+            {listing.id ? (
+              <Link
+                to="/listings/$id"
+                params={{ id: listing.id }}
+                aria-label={`View details for ${listing.title}`}
+                className="block flex-1"
+              >
+                {content}
+              </Link>
+            ) : (
+              <div className="flex-1">{content}</div>
+            )}
+            <div className="px-6 pb-6">
+              <ListingContact listing={listing} />
+            </div>
+          </Reveal>
         );
       })}
     </div>

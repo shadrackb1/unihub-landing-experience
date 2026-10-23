@@ -5,6 +5,7 @@ import { MarketingShell } from "@/shared/components/MarketingChrome";
 import { Reveal } from "@/shared/components/VideoPanel";
 import { useListings } from "@/features/listings/hooks/useListings";
 import { SupportLink } from "@/shared/components/SupportLink";
+import { ListingContact } from "@/features/listings/components/ListingContact";
 import { WHATSAPP_CONFIGURED } from "@/shared/contact";
 
 export const Route = createFileRoute("/listings_/$id")({
@@ -116,13 +117,7 @@ function ListingDetailPage() {
               </ul>
 
               <div className="mt-7 flex flex-col gap-3">
-                <SupportLink
-                  message={message}
-                  className="cta-shine inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-primary px-6 text-sm font-semibold text-primary-foreground shadow-glow"
-                >
-                  <MessageCircle className="size-4" aria-hidden="true" />
-                  Ask about this place
-                </SupportLink>
+                <ListingContact listing={listing} size="detail" />
                 <Link
                   to="/listings"
                   className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-border bg-accent px-6 text-sm font-semibold text-foreground"
