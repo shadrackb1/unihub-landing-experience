@@ -57,7 +57,9 @@ self.addEventListener("install", (event) => {
   event.waitUntil(
     (async () => {
       const cache = await caches.open(SHELL_CACHE);
-      await Promise.allSettled(PRECACHE_URLS.map((u) => cache.add(new Request(u, { cache: "no-store" }))));
+      await Promise.allSettled(
+        PRECACHE_URLS.map((u) => cache.add(new Request(u, { cache: "no-store" }))),
+      );
       // Keep only entries whose response is usable.
       for (const u of PRECACHE_URLS) {
         const hit = await cache.match(u);
@@ -105,7 +107,8 @@ function networkFirstTimeout(request, timeoutMs) {
 async function trimRuntimeCache(maxEntries) {
   const cache = await caches.open(RUNTIME_CACHE);
   const keys = await cache.keys();
-  if (keys.length > maxEntries) await Promise.all(keys.slice(0, keys.length - maxEntries).map((k) => cache.delete(k)));
+  if (keys.length > maxEntries)
+    await Promise.all(keys.slice(0, keys.length - maxEntries).map((k) => cache.delete(k)));
 }
 
 async function handleNavigation(event, request, url) {
@@ -125,10 +128,13 @@ async function handleNavigation(event, request, url) {
   // SPA fallback: render the cached shell of the closest known page.
   const fallback = (await caches.match("/")) || (await caches.match("/listings"));
   if (fallback) return fallback;
-  return new Response("<h1>UniHub is offline</h1><p>This page was not cached yet. Reconnect once to cache it.</p>", {
-    status: 503,
-    headers: { "Content-Type": "text/html; charset=utf-8" },
-  });
+  return new Response(
+    "<h1>UniHub is offline</h1><p>This page was not cached yet. Reconnect once to cache it.</p>",
+    {
+      status: 503,
+      headers: { "Content-Type": "text/html; charset=utf-8" },
+    },
+  );
 }
 
 async function handleImmutableAsset(request, url) {
@@ -185,16 +191,24 @@ self.addEventListener("fetch", (event) => {
 
   // Same-origin static assets.
   if (url.origin === self.location.origin) {
-    if (/\.(?:css|js|mjs|json|svg|png|jpg|jpeg|webp|avif|gif|woff2?|ttf|mp4|webm|ico|map)$/.test(url.pathname) ||
-        url.pathname.startsWith("/assets/") ||
-        url.pathname.startsWith("/_static/")) {
+    if (
+      /\.(?:css|js|mjs|json|svg|png|jpg|jpeg|webp|avif|gif|woff2?|ttf|mp4|webm|ico|map)$/.test(
+        url.pathname,
+      ) ||
+      url.pathname.startsWith("/assets/") ||
+      url.pathname.startsWith("/_static/")
+    ) {
       event.respondWith(handleImmutableAsset(request, url));
     }
     return;
   }
 
   // Cross-origin images, fonts, tiles and stylesheets: cache-enabled reads.
-  if (request.destination === "image" || request.destination === "font" || request.destination === "style") {
+  if (
+    request.destination === "image" ||
+    request.destination === "font" ||
+    request.destination === "style"
+  ) {
     event.respondWith(handleStaleWhileRevalidate(request));
   }
 });

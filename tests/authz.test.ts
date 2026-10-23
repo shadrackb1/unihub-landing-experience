@@ -21,7 +21,7 @@ async function signIn(email: string, password: string): Promise<string> {
   }
   const setCookie = response.headers.get("set-cookie");
   if (!setCookie) throw new Error("no session cookie returned");
-  return setCookie.split(";")[0];
+  return setCookie.split(";")[0] ?? "";
 }
 
 function requestWithCookie(cookie: string): Request {
@@ -33,13 +33,15 @@ function requestWithCookie(cookie: string): Request {
 test("an anonymous request is refused with 401", async () => {
   await assert.rejects(
     () => requireRole(new Request("http://localhost/api/consent/ledger"), ["ADMIN"]),
-    (error: unknown) => error instanceof HttpError && error.status === 401,
+    (error: unknown): error is HttpError => error instanceof HttpError && error.status === 401,
   );
 });
 
 test("an anonymous request has no session user", async () => {
   const user = await getSessionUser(new Request("http://localhost/api/consent/ledger"));
   assert.equal(user, null);
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+  assert.ok(user === null);
 });
 
 test("a signed-in administrator is allowed to read the ledger", async () => {

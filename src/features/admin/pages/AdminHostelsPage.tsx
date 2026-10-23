@@ -1,9 +1,9 @@
-// @ts-nocheck — ported legacy admin/map code; typed rewrite pending
 import { useLoaderData } from "@tanstack/react-router";
 import { Loader2, Plus, Search, Building } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { getHostels, deleteHostel, getUniversities } from "@/shared/services/firestore";
 import { useState } from "react";
+import type { Hostel, University } from "@/shared/types/admin";
 
 export const routeOptions = {
   loader: async () => {
@@ -13,7 +13,10 @@ export const routeOptions = {
 };
 
 export function AdminHostelsPage() {
-  const { hostels, universities } = useLoaderData({ strict: false }) as any;
+  const { hostels, universities } = useLoaderData({ strict: false }) as {
+    hostels: Hostel[];
+    universities: University[];
+  };
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<"all" | "active" | "inactive">("all");
   const [universityFilter, setUniversityFilter] = useState<string>("all");
@@ -74,7 +77,7 @@ export function AdminHostelsPage() {
           </div>
           <select
             value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value as any)}
+            onChange={(e) => setStatusFilter(e.target.value as "all" | "active" | "inactive")}
             className="px-4 py-3 bg-zinc-900 border border-zinc-800 rounded-xl text-white focus:outline-none focus:border-green-500"
           >
             <option value="all">All Status</option>
@@ -162,27 +165,8 @@ export function AdminHostelsPage() {
                     </td>
                     <td className="py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <a
-                          href={`/admin/hostels/${hostel.id}`}
-                          className="p-2 text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition-colors"
-                          title="Edit"
-                        >
-                          <svg
-                            className="w-5 h-5"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5a2.121 2.121 0 013 3z"
-                            />
-                          </svg>
-                        </a>
                         <button
-                          onClick={() => handleDelete(hostel.id)}
+                          onClick={() => hostel.id && handleDelete(hostel.id)}
                           disabled={deletingId === hostel.id}
                           className="p-2 text-zinc-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
                           title="Delete"

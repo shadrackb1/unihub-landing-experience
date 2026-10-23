@@ -43,7 +43,8 @@ test("purposes are not bundled: one tick creates exactly one record", async () =
     purposes: ["LISTING_PUBLICATION"],
   });
   assert.equal(rows.length, 1);
-  assert.equal(rows[0].purpose, "LISTING_PUBLICATION");
+  assert.ok(rows[0]);
+  assert.equal(rows[0]!.purpose, "LISTING_PUBLICATION");
 });
 
 test("a repeated grant does not create a second open record", async () => {
@@ -62,6 +63,8 @@ test("a repeated grant does not create a second open record", async () => {
     (row) => row.purpose === "IDENTITY_VERIFICATION" && row.status === "GRANTED",
   );
   assert.equal(open.length, 1);
+  assert.ok(open[0]);
+  assert.equal(open[0]!.purpose, "IDENTITY_VERIFICATION");
 });
 
 test("an unknown purpose is rejected rather than stored", async () => {
@@ -78,8 +81,7 @@ test("an unknown purpose is rejected rather than stored", async () => {
 
 test("an empty selection is rejected", async () => {
   await assert.rejects(
-    () =>
-      grantConsent({ email: EMAIL, name: "Test Landlord", purposes: [] }),
+    () => grantConsent({ email: EMAIL, name: "Test Landlord", purposes: [] }),
     /At least one purpose/,
   );
 });
@@ -93,13 +95,15 @@ test("withdrawal marks the record withdrawn with a date and time and keeps the h
 
   const withdrawn = await withdrawConsent(EMAIL, ["PLATFORM_COMMUNICATIONS"]);
   assert.equal(withdrawn.length, 1);
-  assert.equal(withdrawn[0].status, "WITHDRAWN");
-  assert.ok(withdrawn[0].withdrawnAt);
+  assert.ok(withdrawn[0]);
+  assert.equal(withdrawn[0]!.status, "WITHDRAWN");
+  assert.ok(withdrawn[0]!.withdrawnAt);
 
   const all = await listConsentForEmail(EMAIL);
   const rows = all.filter((row) => row.purpose === "PLATFORM_COMMUNICATIONS");
   assert.equal(rows.length, 1);
-  assert.equal(rows[0].status, "WITHDRAWN");
+  assert.ok(rows[0]);
+  assert.equal(rows[0]!.status, "WITHDRAWN");
 });
 
 test("withdrawing everything closes every open purpose", async () => {
@@ -141,8 +145,8 @@ test("the CSV export carries the wording, the version and both timestamps", asyn
   const rows = await listConsentForEmail(EMAIL);
   const csv = consentToCsv(rows);
   const lines = csv.split("\n");
-  assert.ok(lines[0].includes("purposeText"));
-  assert.ok(lines[0].includes("withdrawnAt"));
+  assert.ok(lines[0]?.includes("purposeText"));
+  assert.ok(lines[0]?.includes("withdrawnAt"));
   assert.equal(lines.length, rows.length + 1);
   assert.ok(csv.includes("IDENTITY_VERIFICATION"));
 });

@@ -16,13 +16,13 @@ function toMarketplaceProfile(
 ): LandlordProfile | null {
   if (!p) return null;
   return {
-    id: p.uid,
+    id: p.userId,
     fullName: p.fullName,
     businessName: p.businessName ?? "",
     email: p.email,
     phone: p.phone,
     whatsapp: p.whatsappNumber,
-    idNumber: p.nationalId ?? "",
+    idNumber: "",
     areas: p.targetCampuses.join(", "),
     propertyCount: p.estimatedProperties,
     status: p.status,
@@ -33,8 +33,8 @@ function toMarketplaceProfile(
 /**
  * Approved-landlord hook for the landlord portal.
  *
- * LandlordContext exposes the upstream landlord-service shape
- * (uid, whatsappNumber, nationalId, targetCampuses, estimatedProperties…).
+ * LandlordContext exposes the landlord-service shape
+ * (userId, whatsappNumber, targetCampuses, estimatedProperties…).
  * The marketplace services expect their own LandlordProfile shape
  * (id, whatsapp, idNumber, areas, propertyCount…).
  *
@@ -56,7 +56,7 @@ export function useApprovedLandlord(): ApprovedLandlordReturn {
     profile: profileOrNull,
     isApproved,
     status: (profile?.status ?? "pending") as LandlordStatus,
-    uid: user?.uid ?? "",
+    uid: user?.id ?? "",
     profileState,
     profileMessage,
   };

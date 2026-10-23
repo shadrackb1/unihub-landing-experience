@@ -11,8 +11,10 @@ import { ListingFormSchema, type ListingFormData } from "@/features/admin/compon
  */
 export const createListing = createServerFn({ method: "POST" })
   .validator(ListingFormSchema)
-  .handler(async ({ data }) => {
-    const user = await requireRole(await fetch("/api/auth/session").then(r => r.headers), ["ADMIN"]);
+  .handler(async ({ data, context }) => {
+    const request =
+      (context as { request?: Request } | undefined)?.request ?? new Request("http://localhost");
+    const user = await requireRole(request, ["ADMIN"]);
 
     const listing = await prisma.listing.create({
       data: {
@@ -23,9 +25,11 @@ export const createListing = createServerFn({ method: "POST" })
         deposit: data.deposit ? data.deposit * 100 : 0,
         description: data.description,
         amenities: data.amenities ?? "[]",
-        whatsappNumber: data.whatsappNumber ?? "",
-        email: data.email ?? "",
-        videoClip: data.videoClip ?? "",
+        images: "[]",
+        videoUrl: data.videoClip ?? null,
+        genderRestriction: null,
+        hasWifi: false,
+        hasWater: false,
         status: "AVAILABLE",
         isVerified: false,
         landlordId: user.id,
@@ -41,12 +45,16 @@ export const createListing = createServerFn({ method: "POST" })
  * Only the listing owner or ADMIN can call this.
  */
 export const updateListing = createServerFn({ method: "POST" })
-  .validator(z.object({
-    id: z.string().cuid(),
-    ...ListingFormSchema.shape,
-  }))
-  .handler(async ({ data }) => {
-    const user = await requireRole(await fetch("/api/auth/session").then(r => r.headers), ["ADMIN", "LANDLORD"]);
+  .validator(
+    z.object({
+      id: z.string().cuid(),
+      ...ListingFormSchema.shape,
+    }),
+  )
+  .handler(async ({ data, context }) => {
+    const request =
+      (context as { request?: Request } | undefined)?.request ?? new Request("http://localhost");
+    const user = await requireRole(request, ["ADMIN", "LANDLORD"]);
 
     const existing = await prisma.listing.findUnique({ where: { id: data.id } });
     if (!existing) throw new Error("Listing not found");
@@ -66,9 +74,7 @@ export const updateListing = createServerFn({ method: "POST" })
         deposit: updateData.deposit ? updateData.deposit * 100 : 0,
         description: updateData.description,
         amenities: updateData.amenities ?? "[]",
-        whatsappNumber: updateData.whatsappNumber ?? "",
-        email: updateData.email ?? "",
-        videoClip: updateData.videoClip ?? "",
+        videoUrl: updateData.videoClip ?? null,
       },
     });
 

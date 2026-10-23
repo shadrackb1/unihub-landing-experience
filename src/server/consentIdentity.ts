@@ -48,7 +48,7 @@ function readApiKeyFromConfigFile(): string | null {
 }
 
 export function firebaseApiKey(): string | null {
-  const fromEnv = process.env.FIREBASE_API_KEY ?? process.env.VITE_FIREBASE_API_KEY;
+  const fromEnv = process.env["FIREBASE_API_KEY"] ?? process.env["VITE_FIREBASE_API_KEY"];
   if (fromEnv) return fromEnv;
   const fromBuild = import.meta.env?.["VITE_FIREBASE_API_KEY"] as string | undefined;
   if (fromBuild) return fromBuild;
@@ -56,8 +56,8 @@ export function firebaseApiKey(): string | null {
 }
 
 interface FirebaseAccount {
-  email?: string;
-  displayName?: string;
+  email?: string | undefined;
+  displayName?: string | undefined;
 }
 
 /**
@@ -65,9 +65,7 @@ interface FirebaseAccount {
  * belongs to. Returns null when the token is missing, expired, or not a
  * Firebase token at all.
  */
-export async function verifyFirebaseIdToken(
-  idToken: string,
-): Promise<FirebaseAccount | null> {
+export async function verifyFirebaseIdToken(idToken: string): Promise<FirebaseAccount | null> {
   const apiKey = firebaseApiKey();
   if (!apiKey) {
     console.error("No Firebase API key is configured, so a Firebase token cannot be verified.");
@@ -101,7 +99,7 @@ function bearerToken(request: Request): string | null {
   const header = request.headers.get("authorization");
   if (!header) return null;
   const [scheme, token] = header.split(" ");
-  if (!token || scheme.toLowerCase() !== "bearer") return null;
+  if (!token || !scheme || scheme.toLowerCase() !== "bearer") return null;
   const trimmed = token.trim();
   return trimmed.length > 0 ? trimmed : null;
 }
@@ -112,9 +110,7 @@ function bearerToken(request: Request): string | null {
  * The platform session is tried first, then a Firebase ID token. The email
  * that is stored is always one the server has verified.
  */
-export async function resolveConsentIdentity(
-  request: Request,
-): Promise<ConsentIdentity | null> {
+export async function resolveConsentIdentity(request: Request): Promise<ConsentIdentity | null> {
   const sessionUser = await getSessionUser(request);
   if (sessionUser) {
     return {

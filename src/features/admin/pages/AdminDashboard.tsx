@@ -1,4 +1,3 @@
-// @ts-nocheck — ported legacy admin/map code; typed rewrite pending
 import { useLoaderData } from "@tanstack/react-router";
 import {
   LayoutDashboard,
@@ -20,6 +19,7 @@ import {
   getCategories,
 } from "@/shared/services/firestore";
 import { useEffect, useState } from "react";
+import type { Property, Hostel } from "@/shared/types/admin";
 
 export const routeOptions = {
   loader: async () => {
@@ -46,7 +46,17 @@ export const routeOptions = {
 };
 
 export function AdminDashboard() {
-  const { stats, recentProperties, recentHostels } = useLoaderData({ strict: false }) as any;
+  const { stats, recentProperties, recentHostels } = useLoaderData({ strict: false }) as {
+    stats: {
+      properties: number;
+      hostels: number;
+      universities: number;
+      agents: number;
+      categories: number;
+    };
+    recentProperties: Property[];
+    recentHostels: Hostel[];
+  };
 
   const statCards = [
     {

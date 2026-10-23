@@ -3,6 +3,7 @@ import { Loader2, Mail, Lock, Eye, EyeOff, ArrowRight, ShieldCheck } from "lucid
 import { Link, useNavigate } from "@tanstack/react-router";
 import { signInLandlord, homeForStatus } from "@/features/landlord/services/landlordService";
 import { useLandlord } from "@/shared/context/LandlordContext";
+import { useAuth } from "@/shared/context/AuthContext";
 import { SupportLink } from "@/shared/components/SupportLink";
 
 const inputBase =
@@ -15,6 +16,7 @@ export const LandlordLoginPage = () => {
 
   const navigate = useNavigate();
   const { user, profile, profileState } = useLandlord();
+  const { refreshSession } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -42,6 +44,9 @@ export const LandlordLoginPage = () => {
         throw new Error(signedInProfile.message);
       }
 
+      // Publish the session to the AuthProvider before leaving the page, or
+      // the portal gate still sees a signed-out visitor.
+      await refreshSession();
       void navigate({ to: homeForStatus(signedInProfile.profile.status), replace: true });
     } catch (error) {
       setErrorMessage(

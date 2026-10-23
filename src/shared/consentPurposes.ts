@@ -125,7 +125,7 @@ export const DECLARATION_ITEMS: DeclarationItem[] = [
     id: "CORE_CONSENT_IDENTITY",
     number: "3a",
     title: "Core consent — verifying my identity",
-    text: CONSENT_PURPOSES[0].wording,
+    text: CONSENT_PURPOSES[0]?.wording ?? "",
     kind: "consent",
     purpose: "IDENTITY_VERIFICATION",
     required: true,
@@ -134,7 +134,7 @@ export const DECLARATION_ITEMS: DeclarationItem[] = [
     id: "CORE_CONSENT_PUBLICATION",
     number: "3b",
     title: "Core consent — publishing my listings",
-    text: CONSENT_PURPOSES[1].wording,
+    text: CONSENT_PURPOSES[1]?.wording ?? "",
     kind: "consent",
     purpose: "LISTING_PUBLICATION",
     required: true,
@@ -143,7 +143,7 @@ export const DECLARATION_ITEMS: DeclarationItem[] = [
     id: "CORE_CONSENT_ACCOUNT",
     number: "3c",
     title: "Core consent — administering my account",
-    text: CONSENT_PURPOSES[2].wording,
+    text: CONSENT_PURPOSES[2]?.wording ?? "",
     kind: "consent",
     purpose: "PLATFORM_COMMUNICATIONS",
     required: true,
@@ -152,7 +152,7 @@ export const DECLARATION_ITEMS: DeclarationItem[] = [
     id: "PUBLIC_CONTACT_DETAILS",
     number: "4",
     title: "Public contact details",
-    text: CONSENT_PURPOSES[3].wording,
+    text: CONSENT_PURPOSES[3]?.wording ?? "",
     kind: "consent",
     purpose: "PUBLIC_CONTACT_DETAILS",
     required: false,
@@ -218,9 +218,9 @@ export const REQUIRED_DECLARATION_ITEM_IDS: string[] = DECLARATION_ITEMS.filter(
 ).map((item) => item.id);
 
 export function purposeWording(id: ConsentPurposeId): string {
-  return (
-    CONSENT_PURPOSES.find((purpose) => purpose.id === id)?.wording ?? "Unknown purpose"
-  );
+  const purpose = CONSENT_PURPOSES.find((purpose) => purpose.id === id);
+  if (!purpose) return "Unknown purpose";
+  return purpose.wording;
 }
 
 export function isConsentPurposeId(value: string): value is ConsentPurposeId {
@@ -232,12 +232,26 @@ export function isDeclarationItemId(value: string): boolean {
 }
 
 /**
+ * Find a consent purpose by ID.
+ * Returns undefined if not found - callers must handle this.
+ */
+export function findConsentPurpose(id: ConsentPurposeId): ConsentPurpose | undefined {
+  return CONSENT_PURPOSES.find((purpose) => purpose.id === id);
+}
+
+/**
+ * Find a declaration item by ID.
+ * Returns undefined if not found - callers must handle this.
+ */
+export function findDeclarationItem(id: string): DeclarationItem | undefined {
+  return DECLARATION_ITEMS.find((item) => item.id === id);
+}
+
+/**
  * The purposes granted by a set of ticked declaration items.
  * Acknowledgement statements grant nothing and are not included.
  */
-export function purposesFromDeclarationItems(
-  itemIds: string[],
-): ConsentPurposeId[] {
+export function purposesFromDeclarationItems(itemIds: string[]): ConsentPurposeId[] {
   const purposes = new Set<ConsentPurposeId>();
   for (const item of DECLARATION_ITEMS) {
     if (item.kind !== "consent" || !item.purpose) continue;
@@ -247,9 +261,7 @@ export function purposesFromDeclarationItems(
 }
 
 /** The declaration items that must be ticked for the given purposes to be granted. */
-export function declarationItemsForPurposes(
-  purposes: ConsentPurposeId[],
-): DeclarationItem[] {
+export function declarationItemsForPurposes(purposes: ConsentPurposeId[]): DeclarationItem[] {
   return CONSENT_DECLARATION_ITEMS.filter(
     (item) => item.purpose && purposes.includes(item.purpose),
   );

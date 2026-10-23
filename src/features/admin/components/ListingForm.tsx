@@ -7,7 +7,13 @@ import { Loader2, Save, AlertCircle, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/shared/lib/utils";
 
@@ -22,11 +28,27 @@ export const ListingFormSchema = z.object({
   category: z.enum(["HOSTEL", "BEDSITTER", "SINGLE_ROOM", "STUDIO", "SHARED_APARTMENT"], {
     required_error: "Category is required",
   }),
-  price: z.coerce.number().int().positive("Price must be a positive number").max(1000000, "Price too high"),
-  deposit: z.coerce.number().int().min(0, "Deposit cannot be negative").max(1000000, "Deposit too high").optional(),
-  description: z.string().min(20, "Description must be at least 20 characters").max(2000, "Description too long"),
+  price: z.coerce
+    .number()
+    .int()
+    .positive("Price must be a positive number")
+    .max(1000000, "Price too high"),
+  deposit: z.coerce
+    .number()
+    .int()
+    .min(0, "Deposit cannot be negative")
+    .max(1000000, "Deposit too high")
+    .optional(),
+  description: z
+    .string()
+    .min(20, "Description must be at least 20 characters")
+    .max(2000, "Description too long"),
   amenities: z.string().optional(),
-  whatsappNumber: z.string().regex(/^254[0-9]{9}$/, "WhatsApp number must be in format 2547XXXXXXXXX").optional().or(z.literal("")),
+  whatsappNumber: z
+    .string()
+    .regex(/^254[0-9]{9}$/, "WhatsApp number must be in format 2547XXXXXXXXX")
+    .optional()
+    .or(z.literal("")),
   email: z.string().email("Invalid email address").optional().or(z.literal("")),
   videoClip: z.string().optional(),
 });
@@ -109,10 +131,15 @@ export function ListingForm({
           <Label htmlFor="category">Category *</Label>
           <Select
             value={form.watch("category")}
-            onValueChange={form.onChange("category")}
+            onValueChange={(
+              value: "HOSTEL" | "BEDSITTER" | "SINGLE_ROOM" | "STUDIO" | "SHARED_APARTMENT",
+            ) => form.setValue("category", value)}
             disabled={isLoading}
           >
-            <SelectTrigger id="category" aria-invalid={form.formState.errors.category ? "true" : "false"}>
+            <SelectTrigger
+              id="category"
+              aria-invalid={form.formState.errors.category ? "true" : "false"}
+            >
               <SelectValue placeholder="Select category" />
             </SelectTrigger>
             <SelectContent>
@@ -125,7 +152,8 @@ export function ListingForm({
           </Select>
           {form.formState.errors.category && (
             <p className="text-sm text-destructive" role="alert">
-              <AlertCircle className="inline size-3 mr-1" /> {form.formState.errors.category.message}
+              <AlertCircle className="inline size-3 mr-1" />{" "}
+              {form.formState.errors.category.message}
             </p>
           )}
         </div>
@@ -175,7 +203,8 @@ export function ListingForm({
           />
           {form.formState.errors.location && (
             <p className="text-sm text-destructive" role="alert">
-              <AlertCircle className="inline size-3 mr-1" /> {form.formState.errors.location.message}
+              <AlertCircle className="inline size-3 mr-1" />{" "}
+              {form.formState.errors.location.message}
             </p>
           )}
         </div>
@@ -192,7 +221,8 @@ export function ListingForm({
           />
           {form.formState.errors.description && (
             <p className="text-sm text-destructive" role="alert">
-              <AlertCircle className="inline size-3 mr-1" /> {form.formState.errors.description.message}
+              <AlertCircle className="inline size-3 mr-1" />{" "}
+              {form.formState.errors.description.message}
             </p>
           )}
         </div>
@@ -218,7 +248,8 @@ export function ListingForm({
           />
           {form.formState.errors.whatsappNumber && (
             <p className="text-sm text-destructive" role="alert">
-              <AlertCircle className="inline size-3 mr-1" /> {form.formState.errors.whatsappNumber.message}
+              <AlertCircle className="inline size-3 mr-1" />{" "}
+              {form.formState.errors.whatsappNumber.message}
             </p>
           )}
         </div>
@@ -245,10 +276,7 @@ export function ListingForm({
         <Button
           type="submit"
           disabled={isLoading || form.formState.isSubmitting}
-          className={cn(
-            "gap-2",
-            isLoading && "opacity-50 cursor-not-allowed"
-          )}
+          className={cn("gap-2", isLoading && "opacity-50 cursor-not-allowed")}
         >
           {isLoading || form.formState.isSubmitting ? (
             <>

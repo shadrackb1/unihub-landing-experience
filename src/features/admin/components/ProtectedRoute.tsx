@@ -1,7 +1,7 @@
 import { Navigate } from "@tanstack/react-router";
 import { Loader2, ShieldAlert } from "lucide-react";
 import { useAuth } from "@/shared/context/AuthContext";
-import { isAdminEmail } from "../requireAdmin";
+import { isAdminRole } from "../requireAdmin";
 import { AdminLayout } from "./AdminLayout";
 
 /**
@@ -11,13 +11,13 @@ import { AdminLayout } from "./AdminLayout";
  * It must render `<AdminLayout />`, which owns the admin chrome and the
  * `<Outlet />` for child routes.
  *
- * The admin check is synchronous (allowlist of emails from VITE_ADMIN_EMAILS)
- * and shares `isAdminEmail` with the route loaders, so the navigation a loader
- * permits and the navigation the layout permits can never disagree.
+ * The admin check reads the role the session was issued for and shares
+ * `isAdminRole` with the route loaders, so the navigation a loader permits and
+ * the navigation the layout permits can never disagree.
  */
 export const ProtectedRoute = () => {
   const { user, loading, logout } = useAuth();
-  const isAdmin = user ? isAdminEmail(user.email) : false;
+  const isAdmin = isAdminRole(user?.role);
 
   if (loading) {
     return (

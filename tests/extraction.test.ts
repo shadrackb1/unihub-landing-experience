@@ -13,11 +13,7 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import {
-  evaluateExtraction,
-  extractHostelRecords,
-  type LabelledRecord,
-} from "@/server/extraction";
+import { evaluateExtraction, extractHostelRecords, type LabelledRecord } from "@/server/extraction";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const samplePath = path.join(
@@ -48,29 +44,21 @@ test("rejects the duplicate entry, the nameless line and the rentless line", () 
 });
 
 test("reads the rent written as 'Ksh 17,500/-' and as 'KSh 7,500 per year'", () => {
-  const university = result.records.find(
-    (record) => record.hostelName === "University Hostel",
-  );
+  const university = result.records.find((record) => record.hostelName === "University Hostel");
   assert.equal(university?.rentKsh, 17500);
 
-  const lowerKabete = result.records.find(
-    (record) => record.hostelName === "Lower Kabete Hostel",
-  );
+  const lowerKabete = result.records.find((record) => record.hostelName === "Lower Kabete Hostel");
   assert.equal(lowerKabete?.rentKsh, 7500);
 });
 
 test("leaves a missing distance as null instead of guessing", () => {
-  const harbour = result.records.find(
-    (record) => record.hostelName === "Harbour Hostel",
-  );
+  const harbour = result.records.find((record) => record.hostelName === "Harbour Hostel");
   assert.equal(harbour?.distanceKm, null);
   assert.equal(harbour?.capacity, 120);
 });
 
 test("keeps a campus name that contains a comma", () => {
-  const annex = result.records.find(
-    (record) => record.hostelName === "Muthangari Annex",
-  );
+  const annex = result.records.find((record) => record.hostelName === "Muthangari Annex");
   assert.equal(annex?.campus, "Kikuyu, Thika Road");
 });
 
@@ -98,13 +86,20 @@ test("every field of every matched record is correct", () => {
 });
 
 test("a spurious prediction lowers precision and is reported", () => {
-  const withSpurious = [
+  const baseRecord = result.records[0];
+  if (!baseRecord) throw new Error("No base record available");
+  const withSpurious: typeof result.records = [
     ...result.records,
     {
-      ...result.records[0],
-      id: "spurious" as never,
       hostelName: "Ghost Hostel",
+      category: baseRecord.category,
       campus: "Nowhere Campus",
+      rentKsh: baseRecord.rentKsh,
+      capacity: baseRecord.capacity,
+      distanceKm: baseRecord.distanceKm,
+      sourceLine: baseRecord.sourceLine,
+      lineNumber: baseRecord.lineNumber,
+      confidence: baseRecord.confidence,
     },
   ];
   const report = evaluateExtraction(withSpurious, labels.records);
@@ -116,13 +111,11 @@ test("a spurious prediction lowers precision and is reported", () => {
 
 test("a record the extractor misses lowers recall and is reported", () => {
   // The extractor fails to find one of the labelled records.
-  const reduced = result.records.filter(
-    (record) => record.hostelName !== "Muthangari Annex",
-  );
+  const reduced = result.records.filter((record) => record.hostelName !== "Muthangari Annex");
   const report = evaluateExtraction(reduced, labels.records);
   assert.equal(report.falseNegatives, 1);
   assert.equal(report.falsePositives, 0);
   assert.ok(report.recall < 1);
   assert.equal(report.missedRecords.length, 1);
-  assert.ok(report.missedRecords[0].includes("Muthangari Annex"));
+  assert.ok(report.missedRecords[0]?.includes("Muthangari Annex"));
 });

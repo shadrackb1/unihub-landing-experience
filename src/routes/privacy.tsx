@@ -122,14 +122,14 @@ function PrivacyPage() {
                 . We reply within five working days and may ask you to confirm you control the
                 account.
               </p>
-          <p>
-            Withdrawing consent means we can no longer verify you, so your listings would come
-            down. You can see exactly what you have agreed to, and withdraw it, on the{" "}
-            <Link to="/consent" className="text-foreground underline underline-offset-4">
-              consent page
-            </Link>
-            .
-          </p>
+              <p>
+                Withdrawing consent means we can no longer verify you, so your listings would come
+                down. You can see exactly what you have agreed to, and withdraw it, on the{" "}
+                <Link to="/consent" className="text-foreground underline underline-offset-4">
+                  consent page
+                </Link>
+                .
+              </p>
             </>
           ),
         },

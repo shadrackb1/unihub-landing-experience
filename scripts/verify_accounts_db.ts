@@ -22,7 +22,10 @@ let passed = 0;
 let failed = 0;
 
 for (const acc of accounts) {
-  const user = await prisma.user.findUnique({ where: { email: acc.email }, include: { accounts: true } });
+  const user = await prisma.user.findUnique({
+    where: { email: acc.email },
+    include: { accounts: true },
+  });
   if (user) {
     const credAccount = user.accounts.find((a) => a.providerId === "email");
     if (credAccount && credAccount.password) {

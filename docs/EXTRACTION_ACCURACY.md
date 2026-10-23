@@ -11,7 +11,8 @@
 ## 1. Source Material
 
 **Source:** Published university accommodation notices (public records under DPA 2019 s.28(2)(a))  
-**Files:** 
+**Files:**
+
 - `data/public-source/hostel-accommodation-notices.sample.txt` — raw text sample
 - `data/public-source/hostel-accommodation-notices.labels.json` — ground-truth labels
 
@@ -24,6 +25,7 @@
 **Module:** `src/server/extraction.ts`
 
 **Parsing approach:** Regex-based field extraction with structured pattern matching:
+
 - `FIELD_SEP` regex (`:`) splits label/value pairs
 - `parseMoney` extracts KES amounts (handles "Ksh", "KES", commas, spaces)
 - `parseDistance` extracts kilometres (handles "km", "KM", "Km")
@@ -31,6 +33,7 @@
 - Hostel records delimited by blank lines; each field on its own line
 
 **Fields extracted per record:**
+
 - `hostelName` — string (required)
 - `campus` — string (required, from known campus list)
 - `category` — string (enum: Hostel, Bedsitter, Single Room, Studio, Shared Apartment)
@@ -55,14 +58,15 @@
 
 ## 4. Results on Labelled Sample
 
-| Metric | Value |
-|--------|-------|
-| **Precision** | 1.00 (10/10) |
-| **Recall** | 1.00 (10/10) |
-| **F1 Score** | 1.00 |
+| Metric                   | Value                   |
+| ------------------------ | ----------------------- |
+| **Precision**            | 1.00 (10/10)            |
+| **Recall**               | 1.00 (10/10)            |
+| **F1 Score**             | 1.00                    |
 | **Field-level accuracy** | 100% on required fields |
 
 **Detailed breakdown:**
+
 - All 10 ground-truth records extracted correctly
 - 0 false positives (no spurious records)
 - 0 false negatives (no missed records)
@@ -70,6 +74,7 @@
 - Optional fields (capacity, distanceKm) parsed where present
 
 **Test output (from `npm test`):**
+
 ```
 extraction.test.ts > precision on labelled sample === 1
 extraction.test.ts > recall on labelled sample === 1
@@ -112,4 +117,4 @@ All 6 extraction tests pass.
 
 ---
 
-*Report generated for CAT 1 submission. All figures derived from automated test suite against synthetic/public labelled sample.*
+_Report generated for CAT 1 submission. All figures derived from automated test suite against synthetic/public labelled sample._

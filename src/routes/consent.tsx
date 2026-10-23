@@ -84,9 +84,7 @@ function ConsentPage() {
         .map(([id]) => id);
       const result = await grantConsentItems(tickedIds, idToken);
       setState((previous) =>
-        previous
-          ? { ...previous, records: result.records, summary: previous.summary }
-          : previous,
+        previous ? { ...previous, records: result.records, summary: previous.summary } : previous,
       );
       setTicked({});
       setNotice(
@@ -155,9 +153,9 @@ function ConsentPage() {
             </h1>
             <p className="mt-4 text-base leading-relaxed text-foreground/90">
               This is the consent form for UniHub landlord and agent accounts. Every statement is
-              separate, so you can agree to one thing and not another, and you can take your
-              consent back at any time. Students who only browse UniHub give us no personal data
-              and do not need this form.
+              separate, so you can agree to one thing and not another, and you can take your consent
+              back at any time. Students who only browse UniHub give us no personal data and do not
+              need this form.
             </p>
             <p className="mt-3 text-xs uppercase tracking-[0.16em] text-muted-foreground">
               Form version {CONSENT_WORDING_VERSION} · Data Protection Act, 2019 s.32
@@ -176,8 +174,8 @@ function ConsentPage() {
               </h2>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                 We can only keep a consent record against an account we can check. Sign in with the
-                landlord account you registered, and the form will show what you have already
-                agreed to.
+                landlord account you registered, and the form will show what you have already agreed
+                to.
               </p>
               <div className="mt-4 flex flex-wrap gap-2">
                 <Link

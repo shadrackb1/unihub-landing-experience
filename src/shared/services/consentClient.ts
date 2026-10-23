@@ -48,7 +48,7 @@ export class ConsentRequestError extends Error {
 
 function headers(token: string | null): HeadersInit {
   const base: Record<string, string> = { "content-type": "application/json" };
-  if (token) base.authorization = `Bearer ${token}`;
+  if (token) base["authorization"] = `Bearer ${token}`;
   return base;
 }
 
@@ -73,8 +73,8 @@ async function call(
   const payload = await readJson(response);
   if (!response.ok) {
     const message =
-      typeof payload.error === "string"
-        ? payload.error
+      typeof payload["error"] === "string"
+        ? payload["error"]
         : "The request could not be completed. Please try again.";
     throw new ConsentRequestError(message, response.status);
   }
@@ -82,7 +82,7 @@ async function call(
 }
 
 export function loadConsent(token: string | null): Promise<ConsentState> {
-  return call("/api/consent", { method: "GET", token }) as Promise<ConsentState>;
+  return call("/api/consent", { method: "GET", token }) as unknown as Promise<ConsentState>;
 }
 
 export function grantConsentItems(
@@ -93,7 +93,7 @@ export function grantConsentItems(
     method: "POST",
     body: { action: "grant", declarationItems },
     token,
-  }) as Promise<{ created: ConsentRecordView[]; records: ConsentRecordView[] }>;
+  }) as unknown as Promise<{ created: ConsentRecordView[]; records: ConsentRecordView[] }>;
 }
 
 export function withdrawConsentItems(
@@ -103,9 +103,7 @@ export function withdrawConsentItems(
   return call("/api/consent", {
     method: "POST",
     body:
-      purposes === "all"
-        ? { action: "withdraw", scope: "all" }
-        : { action: "withdraw", purposes },
+      purposes === "all" ? { action: "withdraw", scope: "all" } : { action: "withdraw", purposes },
     token,
-  }) as Promise<{ withdrawn: ConsentRecordView[]; records: ConsentRecordView[] }>;
+  }) as unknown as Promise<{ withdrawn: ConsentRecordView[]; records: ConsentRecordView[] }>;
 }

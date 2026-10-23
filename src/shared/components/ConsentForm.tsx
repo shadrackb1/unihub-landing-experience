@@ -46,9 +46,7 @@ export function ConsentDeclaration({
             <label
               className={cn(
                 "flex cursor-pointer gap-3 rounded-xl border p-4 transition-colors",
-                checked
-                  ? "border-primary/50 bg-primary/5"
-                  : "border-border bg-card/40",
+                checked ? "border-primary/50 bg-primary/5" : "border-border bg-card/40",
                 disabled && "cursor-not-allowed opacity-60",
               )}
             >

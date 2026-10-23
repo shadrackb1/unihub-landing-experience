@@ -23,7 +23,7 @@ const testFile = process.argv[1] ?? "tests";
 const suffix = path.basename(testFile).replace(/\.[^.]+$/, "");
 const dbFile = path.join(repoRoot, "prisma", `test-${suffix}.db`);
 const dbPath = dbFile.replace(/\\/g, "/");
-process.env.DATABASE_URL = `file:${dbPath}`;
+process.env["DATABASE_URL"] = `file:${dbPath}`;
 
 const prismaCli = path.join(repoRoot, "node_modules", "prisma", "build", "index.js");
 const env = { ...process.env };

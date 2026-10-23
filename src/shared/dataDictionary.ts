@@ -192,8 +192,7 @@ export const DATA_DICTIONARY: DictionaryTable[] = [
       {
         table: "LandlordProfile",
         field: "status",
-        description:
-          "Review state of the landlord: pending, approved, rejected or suspended.",
+        description: "Review state of the landlord: pending, approved, rejected or suspended.",
         personalData: false,
         purpose: "To decide whether the landlord's listings may be published.",
         lawfulBasis: "s.30(1)(b)(ii) — compliance with a legal obligation",
@@ -335,8 +334,7 @@ export const DATA_DICTIONARY: DictionaryTable[] = [
         field: "purposeText",
         description: "The exact sentence the person agreed to.",
         personalData: false,
-        purpose:
-          "To show what was agreed if the wording is ever disputed (s.32(1) of the Act).",
+        purpose: "To show what was agreed if the wording is ever disputed (s.32(1) of the Act).",
         lawfulBasis: "s.30(1)(a) — consent",
         retention: "For the life of the account plus two years.",
         source: "Generated from the consent catalogue.",

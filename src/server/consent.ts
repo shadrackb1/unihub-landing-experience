@@ -128,7 +128,9 @@ export async function grantConsent(input: GrantInput): Promise<ConsentRow[]> {
     throw new Error(`Unknown consent purpose: ${rejected.join(", ")}`);
   }
 
-  const purposes = input.purposes.filter((id) => id && isConsentPurposeId(id)) as ConsentPurposeId[];
+  const purposes = input.purposes.filter(
+    (id) => id && isConsentPurposeId(id),
+  ) as ConsentPurposeId[];
   if (purposes.length === 0) {
     throw new Error("At least one purpose must be selected.");
   }
@@ -289,9 +291,7 @@ export function consentToCsv(records: ConsentRow[]): string {
   for (const record of records) {
     lines.push(
       CSV_COLUMNS.map((column) =>
-        escape(
-          (record as unknown as Record<string, unknown>)[column],
-        ),
+        escape((record as unknown as Record<string, unknown>)[column]),
       ).join(","),
     );
   }

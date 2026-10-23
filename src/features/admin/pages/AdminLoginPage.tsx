@@ -2,14 +2,15 @@ import { useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { Mail, Lock, Loader2, Eye, EyeOff, ArrowRight, ShieldCheck } from "lucide-react";
 import { useAuth } from "@/shared/context/AuthContext";
-import { isAdminEmail } from "@/features/admin/requireAdmin";
+import { isAdminRole } from "@/features/admin/requireAdmin";
 import { SupportLink } from "@/shared/components/SupportLink";
+import { authClient } from "@/lib/auth-client";
 
 const inputBase =
   "w-full rounded-xl border border-input bg-background py-3 pl-11 pr-4 text-sm text-foreground placeholder:text-muted-foreground focus:border-transparent focus:outline-none focus:ring-2 focus:ring-ring transition-shadow";
 
 export function AdminLoginPage() {
-  const { login, logout } = useAuth();
+  const { login, logout, refreshSession } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -23,10 +24,13 @@ export function AdminLoginPage() {
     setIsLoading(true);
     try {
       await login(email, password);
-      // Signing in is not the same as being an admin. Check the allowlist
-      // before routing so a non-admin never lands on the "Admins only" wall
-      // with an active session they did not want.
-      if (!isAdminEmail(email)) {
+      // Signing in is not the same as being an admin. Read the role from the
+      // session the server just issued, before routing, so a non-admin never
+      // lands on the "Admins only" wall with a session they did not want.
+      const { data } = await authClient.getSession();
+      const role = (data?.user as { role?: string } | undefined)?.role;
+      await refreshSession();
+      if (!isAdminRole(role)) {
         await logout().catch(() => {});
         setError(
           "This account does not have admin access. Use the landlord portal, or ask support for access.",

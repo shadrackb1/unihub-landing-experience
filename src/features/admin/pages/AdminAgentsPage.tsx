@@ -1,9 +1,8 @@
-// @ts-nocheck — ported legacy admin/map code; typed rewrite pending
 import { useLoaderData } from "@tanstack/react-router";
-import { Loader2, Plus, Search, Users } from "lucide-react";
-import { Link } from "@tanstack/react-router";
+import { Loader2, Search, Users } from "lucide-react";
 import { getAgents, deleteAgent } from "@/shared/services/firestore";
 import { useState } from "react";
+import type { Agent } from "@/shared/types/admin";
 
 export const routeOptions = {
   loader: async () => {
@@ -13,7 +12,7 @@ export const routeOptions = {
 };
 
 export function AdminAgentsPage() {
-  const { agents } = useLoaderData({ strict: false }) as any;
+  const { agents } = useLoaderData({ strict: false }) as { agents: Agent[] };
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<"all" | "active" | "inactive">("all");
   const [deletingId, setDeletingId] = useState<string | null>(null);
@@ -53,12 +52,6 @@ export function AdminAgentsPage() {
           </h1>
           <p className="text-zinc-400 mt-2">Manage property agents</p>
         </div>
-        <Link
-          to="/admin/agents/new"
-          className="px-6 py-3 flex items-center gap-2 rounded-xl bg-orange-500 text-black text-sm font-medium hover:bg-orange-400 hover:scale-105 transition-all font-display shadow-[0_0_20px_rgba(249,115,22,0.3)]"
-        >
-          <Plus className="w-4 h-4" /> Add Agent
-        </Link>
       </div>
 
       <div className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6 shadow-xl">
@@ -87,7 +80,7 @@ export function AdminAgentsPage() {
           </div>
           <select
             value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value as any)}
+            onChange={(e) => setStatusFilter(e.target.value as "all" | "active" | "inactive")}
             className="px-4 py-3 bg-zinc-900 border border-zinc-800 rounded-xl text-white focus:outline-none focus:border-orange-500"
           >
             <option value="all">All Status</option>
@@ -111,10 +104,7 @@ export function AdminAgentsPage() {
               {agents.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="text-center py-12 text-zinc-500">
-                    No agents yet.{" "}
-                    <Link to="/admin/agents/new" className="text-orange-400 hover:underline">
-                      Add your first agent
-                    </Link>
+                    No agents are on file yet.
                   </td>
                 </tr>
               ) : (
@@ -154,27 +144,8 @@ export function AdminAgentsPage() {
                     </td>
                     <td className="py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <Link
-                          to={`/admin/agents/${agent.id}`}
-                          className="p-2 text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition-colors"
-                          title="Edit"
-                        >
-                          <svg
-                            className="w-5 h-5"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5a2.121 2.121 0 013 3z"
-                            />
-                          </svg>
-                        </Link>
                         <button
-                          onClick={() => handleDelete(agent.id)}
+                          onClick={() => agent.id && handleDelete(agent.id)}
                           disabled={deletingId === agent.id}
                           className="p-2 text-zinc-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
                           title="Delete"

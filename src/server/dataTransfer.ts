@@ -13,6 +13,10 @@
  *      validation is reported and skipped; it is never stored half-made.
  */
 import { prisma } from "@/server/db";
+import { consentToCsv, listConsentForEmail } from "@/server/consent";
+
+// Re-export consent functions for the data export API
+export { consentToCsv, listConsentForEmail };
 
 const ESCAPE_NEEDED = /[",\n\r]/;
 
@@ -243,13 +247,14 @@ export async function importExtractedRecordsCsv(csv: string): Promise<ImportResu
     return result;
   }
 
-  const header = parseCsvLine(lines[0]).map((cell) => cell.toLowerCase());
+  const firstLine = lines[0] ?? "";
+  const header = parseCsvLine(firstLine).map((cell) => cell.toLowerCase());
   const missing = IMPORT_COLUMNS.filter((column) => !header.includes(column.toLowerCase()));
   if (missing.length > 0) {
     result.errors.push({
       line: 1,
       reason: `missing required column(s): ${missing.join(", ")}`,
-      value: lines[0],
+      value: firstLine,
     });
     result.rejected += 1;
     return result;
@@ -261,63 +266,79 @@ export async function importExtractedRecordsCsv(csv: string): Promise<ImportResu
     const lineNumber = offset + 1;
     const cells = parseCsvLine(lines[offset] ?? "");
 
-    const value = (column: string) => cells[indexOf(column)] ?? "";
+    const getValue = (column: string): string => cells[indexOf(column)] ?? "";
 
-    const hostelName = value("hostelName");
-    const campus = value("campus");
-    const category = value("category");
-    const rentKsh = toOptionalNumber(value("rentKsh"));
+    const hostelName = getValue("hostelName");
+    const campus = getValue("campus");
+    const category = getValue("category");
+    const rentKshValue = getValue("rentKsh");
+    const rentKsh = toOptionalNumber(rentKshValue);
 
     if (!hostelName) {
       result.rejected += 1;
-      result.errors.push({ line: lineNumber, reason: "the hostel name is missing", value: lines[offset] ?? "" });
+      const lineValue = lines[offset] ?? "";
+      result.errors.push({
+        line: lineNumber,
+        reason: "the hostel name is missing",
+        value: lineValue,
+      });
       continue;
     }
     if (!campus) {
       result.rejected += 1;
-      result.errors.push({ line: lineNumber, reason: "the campus is missing", value: lines[offset] ?? "" });
+      const lineValue = lines[offset] ?? "";
+      result.errors.push({ line: lineNumber, reason: "the campus is missing", value: lineValue });
       continue;
     }
     if (!VALID_CATEGORIES.has(category)) {
       result.rejected += 1;
+      const lineValue = lines[offset] ?? "";
       result.errors.push({
         line: lineNumber,
         reason: `unknown category "${category}"`,
-        value: lines[offset] ?? "",
+        value: lineValue,
       });
       continue;
     }
     if (rentKsh === null || rentKsh <= 0) {
       result.rejected += 1;
+      const lineValue = lines[offset] ?? "";
       result.errors.push({
         line: lineNumber,
         reason: "the rent is missing or is not a number",
-        value: lines[offset] ?? "",
+        value: lineValue,
       });
       continue;
     }
 
+    const capacityValue = toOptionalNumber(getValue("capacity"));
+    const distanceKmValue = toOptionalNumber(getValue("distanceKm"));
+
+    const createData: Record<string, unknown> = {
+      hostelName,
+      campus,
+      category,
+      rentKsh: Math.round(rentKsh),
+      sourceFile: getValue("sourceFile") || "import",
+      sourceLine: getValue("sourceLine") || `line ${lineNumber}`,
+      confidence: 1,
+    };
+    if (capacityValue !== null) createData["capacity"] = capacityValue;
+    if (distanceKmValue !== null) createData["distanceKm"] = distanceKmValue;
+
+    const updateData: Record<string, unknown> = {
+      category,
+      rentKsh: Math.round(rentKsh),
+      sourceFile: getValue("sourceFile") || "import",
+      sourceLine: getValue("sourceLine") || `line ${lineNumber}`,
+    };
+    if (capacityValue !== null) updateData["capacity"] = capacityValue;
+    if (distanceKmValue !== null) updateData["distanceKm"] = distanceKmValue;
+
     await prisma.extractedHostelRecord.upsert({
       where: { hostelName_campus: { hostelName, campus } },
-      create: {
-        hostelName,
-        campus,
-        category,
-        rentKsh: Math.round(rentKsh),
-        capacity: toOptionalNumber(value("capacity")),
-        distanceKm: toOptionalNumber(value("distanceKm")),
-        sourceFile: value("sourceFile") || "import",
-        sourceLine: value("sourceLine") || `line ${lineNumber}`,
-        confidence: 1,
-      },
-      update: {
-        category,
-        rentKsh: Math.round(rentKsh),
-        capacity: toOptionalNumber(value("capacity")),
-        distanceKm: toOptionalNumber(value("distanceKm")),
-        sourceFile: value("sourceFile") || "import",
-        sourceLine: value("sourceLine") || `line ${lineNumber}`,
-      },
+      create: createData as Parameters<typeof prisma.extractedHostelRecord.upsert>[0]["create"],
+      update: updateData as Parameters<typeof prisma.extractedHostelRecord.upsert>[0]["update"],
     });
 
     result.accepted += 1;

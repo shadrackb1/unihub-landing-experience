@@ -1,79 +1,65 @@
 import { redirect } from "@tanstack/react-router";
-import { onAuthStateChanged, type User } from "firebase/auth";
-import { auth } from "@/shared/lib/firebase";
+import { authClient } from "@/lib/auth-client";
 import { withTimeout } from "@/shared/lib/withTimeout";
 
 /**
- * Route-loader safe auth guard.
+ * Route-loader safe admin guard.
  *
- * IMPORTANT: loaders run OUTSIDE React rendering, so this must never call
- * hooks like useAuth()/useContext() — that throws an "invalid hook call"
- * which surfaces as the root error page ("This page didn't load").
- * Instead we await Firebase's own auth state resolution.
+ * Loaders run OUTSIDE React rendering, so this must never call hooks like
+ * useAuth()/useContext() — that throws an "invalid hook call" which surfaces
+ * as the root error page ("This page didn't load"). It asks the better-auth
+ * client for the session instead, which is a plain async call.
+ *
+ * The role comes from the user row the session was issued for, not from
+ * anything the browser can set, and it is the same check the API routes apply
+ * with requireRole().
  */
 
 const AUTH_WAIT_MS = 8000;
 /** Max time a guarded data fetch may take before we serve the empty fallback. */
 const DATA_WAIT_MS = 6000;
 
-function waitForUser(): Promise<User | null> {
-  return new Promise((resolve) => {
-    let settled = false;
-    const finish = (user: User | null) => {
-      if (settled) return;
-      settled = true;
-      clearTimeout(timer);
-      unsubscribe();
-      resolve(user);
-    };
-    const timer = setTimeout(() => finish(auth.currentUser), AUTH_WAIT_MS);
-    const unsubscribe = onAuthStateChanged(auth, finish, () => finish(auth.currentUser));
-  });
+export type AdminRole = "TENANT" | "LANDLORD" | "ADMIN" | "UNIVERSITY_ADMIN" | "VIEWER";
+
+export function isAdminRole(role: string | null | undefined): boolean {
+  return (role ?? "").toUpperCase() === "ADMIN";
 }
 
-export function getAdminEmails(): string[] {
-  const raw = (import.meta.env["VITE_ADMIN_EMAILS"] ?? "") as string;
-  return raw
-    .split(",")
-    .map((email: string) => email.trim().toLowerCase())
-    .filter((email: string) => email.length > 0);
+export interface AdminSessionUser {
+  id: string;
+  email: string;
+  name: string | null;
+  role: string;
 }
 
-/**
- * Single source of truth for "is this account an admin?".
- * Used by both the route loaders (requireAdmin) and the admin layout guard
- * so the sidebar cannot be rendered for an account the loaders would reject.
- *
- * With no VITE_ADMIN_EMAILS configured we allow any signed-in account in
- * development (matching requireAdmin) and log a warning.
- */
-export function isAdminEmail(email: string | null | undefined): boolean {
-  const adminEmails = getAdminEmails();
-  if (adminEmails.length === 0) return true;
-  return adminEmails.includes((email ?? "").toLowerCase());
+async function readSessionUser(): Promise<AdminSessionUser | null> {
+  const { data } = await authClient.getSession();
+  if (!data?.user) return null;
+  const user = data.user as { id: string; email: string; name?: string | null; role?: string };
+  return {
+    id: user.id,
+    email: user.email,
+    name: user.name ?? null,
+    role: user.role ?? "TENANT",
+  };
 }
 
-export const requireAdmin = async () => {
+export const requireAdmin = async (): Promise<{ user: AdminSessionUser | null }> => {
   // Admin subtree is client-only (ssr:false); skip during any server pass.
-  if (typeof window === "undefined") return { user: null as User | null };
+  if (typeof window === "undefined") return { user: null };
 
-  const user = await waitForUser();
+  let user: AdminSessionUser | null = null;
+  try {
+    user = await withTimeout(readSessionUser(), AUTH_WAIT_MS, "Checking your admin session");
+  } catch {
+    user = null;
+  }
 
   if (!user) {
     throw redirect({ to: "/admin/login" });
   }
 
-  const adminEmails = getAdminEmails();
-
-  // For development, if no admin emails are configured, allow access (but warn in console)
-  if (adminEmails.length === 0) {
-    console.warn(
-      "VITE_ADMIN_EMAILS not configured - allowing all authenticated users access to admin",
-    );
-    return { user };
-  }
-
-  if (!adminEmails.includes((user.email || "").toLowerCase())) {
+  if (!isAdminRole(user.role)) {
     throw redirect({ to: "/" });
   }
 
@@ -84,10 +70,9 @@ export const requireAdmin = async () => {
  * Run a route's data loader behind requireAdmin().
  *
  * requireAdmin() runs first and its redirect is thrown outside the try, so
- * auth redirects are never swallowed. If the data fetch itself fails or hangs
- * (e.g. Firestore unreachable — its "database not found" state hangs reads
- * forever), the route receives its empty fallback after DATA_WAIT_MS and the
- * screen degrades to an empty state instead of the root error page.
+ * auth redirects are never swallowed. If the data fetch itself fails or hangs,
+ * the route receives its empty fallback after DATA_WAIT_MS and the screen
+ * degrades to an empty state instead of the root error page.
  */
 export async function guardedLoader<T>(
   loader: (() => Promise<T>) | undefined,

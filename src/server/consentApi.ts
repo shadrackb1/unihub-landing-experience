@@ -129,9 +129,7 @@ export async function handleConsentRequest(request: Request): Promise<Response> 
   // Grant.
   const ticked = asStringArray(body["declarationItems"]);
   const purposes = asStringArray(body["purposes"]).filter((id) => isConsentPurposeId(id));
-  const unknownPurposes = asStringArray(body["purposes"]).filter(
-    (id) => !isConsentPurposeId(id),
-  );
+  const unknownPurposes = asStringArray(body["purposes"]).filter((id) => !isConsentPurposeId(id));
   if (unknownPurposes.length > 0) {
     return json({ error: `Unknown consent purpose: ${unknownPurposes.join(", ")}` }, 400);
   }
@@ -197,14 +195,14 @@ export async function handleConsentLedgerRequest(request: Request): Promise<Resp
   const url = new URL(request.url);
   const statusFilter = url.searchParams.get("status");
   const purposeFilter = url.searchParams.get("purpose");
-  const records = await listConsentLedger({
-    status:
-      statusFilter === "GRANTED" || statusFilter === "WITHDRAWN"
-        ? statusFilter
-        : undefined,
-    purpose:
-      purposeFilter && isConsentPurposeId(purposeFilter) ? purposeFilter : undefined,
-  });
+  const filters: { status?: "GRANTED" | "WITHDRAWN"; purpose?: ConsentPurposeId } = {};
+  if (statusFilter === "GRANTED" || statusFilter === "WITHDRAWN") {
+    filters.status = statusFilter;
+  }
+  if (purposeFilter && isConsentPurposeId(purposeFilter)) {
+    filters.purpose = purposeFilter;
+  }
+  const records = await listConsentLedger(filters);
 
   if (url.searchParams.get("format") === "csv") {
     return new Response(consentToCsv(records), {

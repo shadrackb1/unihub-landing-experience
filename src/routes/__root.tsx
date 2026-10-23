@@ -149,26 +149,33 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
+/**
+ * Applies the theme saved in the site builder.
+ *
+ * Nothing is touched until an administrator has actually saved settings
+ * (`updatedAt` is null otherwise), so a fresh install keeps the design system
+ * exactly as written in styles.css rather than the CMS defaults.
+ */
 function CmsTheme() {
   const onlineTick = useOnlineRefresh();
   useEffect(() => {
     let live = true;
-    import("@/shared/services/firestore")
+    import("@/shared/hooks/useSiteSettings")
       .then(async (m) => {
         try {
-          const settings = await m.getSiteSettings();
-          if (!live || !settings?.theme) return;
+          const settings = await m.fetchSiteSettings();
+          const theme = settings?.theme;
+          if (!live || !settings?.updatedAt || !theme) return;
           const root = document.documentElement;
-          const theme = settings.theme as any;
-          if (theme.primaryColor) root.style.setProperty("--color-brand-500", theme.primaryColor);
-          if (theme.backgroundColor)
-            root.style.setProperty("--color-surface-900", theme.backgroundColor);
-          if (theme.surfaceColor) root.style.setProperty("--color-surface-800", theme.surfaceColor);
-          if (theme.fontFamily)
-            root.style.setProperty("--CMS-font-family", `"${theme.fontFamily}", sans-serif`);
-          if (theme.borderRadius) root.style.setProperty("--CMS-border-radius", theme.borderRadius);
+          if (theme.primaryColor) root.style.setProperty("--primary", theme.primaryColor);
+          if (theme.backgroundColor) root.style.setProperty("--background", theme.backgroundColor);
+          if (theme.surfaceColor) root.style.setProperty("--card", theme.surfaceColor);
+          if (theme.borderRadius) root.style.setProperty("--radius", theme.borderRadius);
+          if (theme.fontFamily) {
+            root.style.setProperty("--font-sans", `"${theme.fontFamily}", sans-serif`);
+          }
         } catch {
-          // offline or no CMS settings — keep default theme
+          // Offline or no CMS settings — keep the default theme.
         }
       })
       .catch(() => {});

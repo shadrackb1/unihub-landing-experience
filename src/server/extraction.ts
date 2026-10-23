@@ -54,7 +54,7 @@ function parseMoney(raw: string): number | null {
 
 function parseDistance(raw: string): number | null {
   const match = /(\d+(?:\.\d+)?)\s*km/i.exec(raw);
-  if (!match) return null;
+  if (!match || !match[1]) return null;
   const value = Number.parseFloat(match[1]);
   return Number.isFinite(value) ? value : null;
 }
@@ -62,10 +62,7 @@ function parseDistance(raw: string): number | null {
 /**
  * Extract hostel records from the text of an accommodation notice.
  */
-export function extractHostelRecords(
-  text: string,
-  sourceFile: string,
-): ExtractionResult {
+export function extractHostelRecords(text: string, sourceFile: string): ExtractionResult {
   const records: ExtractedRecord[] = [];
   const rejected: RejectedLine[] = [];
   const seen = new Set<string>();
@@ -78,7 +75,7 @@ export function extractHostelRecords(
 
     // A record line starts with a list number, e.g. "12. Harbour Hostel - ..."
     const numbered = /^\d+[.)]\s+(.*)$/.exec(line);
-    if (!numbered) {
+    if (!numbered || !numbered[1]) {
       if (/\bhostel\b|\bstudent\b|\bnotice\b/i.test(line)) {
         rejected.push({ lineNumber, text: line, reason: "prose line, not a listing" });
       }
@@ -98,6 +95,10 @@ export function extractHostelRecords(
     }
 
     const [firstField, categoryRaw, campusRaw, ...rest] = parts;
+    if (!firstField || !categoryRaw || !campusRaw) {
+      rejected.push({ lineNumber, text: line, reason: "missing required field" });
+      return;
+    }
     const restText = rest.join(" - ");
 
     // A line whose name is missing begins with a bare "-", e.g.
@@ -109,9 +110,7 @@ export function extractHostelRecords(
       return;
     }
 
-    const category = CATEGORIES.find(
-      (known) => known.toLowerCase() === categoryRaw.toLowerCase(),
-    );
+    const category = CATEGORIES.find((known) => known.toLowerCase() === categoryRaw.toLowerCase());
     if (!category) {
       rejected.push({
         lineNumber,
@@ -129,14 +128,15 @@ export function extractHostelRecords(
     // The rent must carry the currency marker. Without that requirement a
     // line such as "Capacity 30 students" would be read as a KSh 30 rent.
     const rentMatch = /ksh\s*([0-9][0-9,.]*)/i.exec(restText);
-    const rentKsh = rentMatch ? parseMoney(rentMatch[1]) : null;
+    const rentKsh = rentMatch && rentMatch[1] ? parseMoney(rentMatch[1]) : null;
     if (rentKsh === null) {
       rejected.push({ lineNumber, text: line, reason: "missing or unreadable rent" });
       return;
     }
 
     const capacityMatch = /(\d+)\s*(?:students?|beds?|rooms?)/i.exec(restText);
-    const capacity = capacityMatch ? Number.parseInt(capacityMatch[1], 10) : null;
+    const capacity =
+      capacityMatch && capacityMatch[1] ? Number.parseInt(capacityMatch[1], 10) : null;
     const distanceKm = parseDistance(restText);
 
     const key = `${hostelName.toLowerCase()}::${campusRaw.toLowerCase()}`;
@@ -146,7 +146,8 @@ export function extractHostelRecords(
     }
     seen.add(key);
 
-    const filled = [hostelName, category, campusRaw, rentKsh].length +
+    const filled =
+      [hostelName, category, campusRaw, rentKsh].length +
       (capacity !== null ? 1 : 0) +
       (distanceKm !== null ? 1 : 0);
     const confidence = Math.round((filled / 6) * 100) / 100;
@@ -197,10 +198,7 @@ function sameText(a: string, b: string): boolean {
   return a.trim().toLowerCase() === b.trim().toLowerCase();
 }
 
-function sameNumber(
-  a: number | null,
-  b: number | null,
-): boolean | null {
+function sameNumber(a: number | null, b: number | null): boolean | null {
   if (a === null && b === null) return true;
   if (a === null || b === null) return false;
   return Math.abs(a - b) < 0.01;
@@ -250,6 +248,7 @@ export function evaluateExtraction(
     matchedLabels.add(index);
     truePositives += 1;
     const label = labels[index];
+    if (!label) continue;
 
     const checks: Array<[keyof LabelledRecord, boolean]> = [
       ["hostelName", sameText(label.hostelName, prediction.hostelName)],
@@ -273,13 +272,9 @@ export function evaluateExtraction(
   const falseNegatives = missedRecords.length;
 
   const precision =
-    truePositives + falsePositives === 0
-      ? 0
-      : truePositives / (truePositives + falsePositives);
+    truePositives + falsePositives === 0 ? 0 : truePositives / (truePositives + falsePositives);
   const recall =
-    truePositives + falseNegatives === 0
-      ? 0
-      : truePositives / (truePositives + falseNegatives);
+    truePositives + falseNegatives === 0 ? 0 : truePositives / (truePositives + falseNegatives);
   const f1 = precision + recall === 0 ? 0 : (2 * precision * recall) / (precision + recall);
 
   return {

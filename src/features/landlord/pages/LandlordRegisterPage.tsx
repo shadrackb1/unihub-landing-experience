@@ -1,30 +1,29 @@
-// @ts-nocheck
 import { useEffect, useState } from "react";
 import {
   Loader2,
-  Building2,
   CheckCircle,
   XCircle,
   ShieldCheck,
   Phone,
   MapPin,
   Users,
-  FileText,
   Mail,
   ArrowRight,
+  ArrowLeft,
 } from "lucide-react";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { registerLandlord, homeForStatus } from "@/features/landlord/services/landlordService";
-import { useLandlord } from "@/shared/context/LandlordContext";
-import { ConsentDeclaration } from "@/shared/components/ConsentForm";
 import {
-  REQUIRED_DECLARATION_ITEM_IDS,
-  purposesFromDeclarationItems,
-} from "@/shared/consentPurposes";
-import { grantConsentItems } from "@/shared/services/consentClient";
+  registerLandlord,
+  homeForStatus,
+  type RegisteredLandlord,
+} from "@/features/landlord/services/landlordService";
+import { useLandlord } from "@/shared/context/LandlordContext";
+import { useAuth } from "@/shared/context/AuthContext";
+import { ConsentDeclaration } from "@/shared/components/ConsentForm";
+import { REQUIRED_DECLARATION_ITEM_IDS } from "@/shared/consentPurposes";
 import { cn } from "@/shared/lib/utils";
 
-const STEP_LABELS = ["Account", "Profile", "Verification"];
+const STEP_LABELS = ["Account", "Profile", "Verification"] as const;
 
 const CAMPUS_OPTIONS = [
   "Nairobi",
@@ -39,170 +38,221 @@ const CAMPUS_OPTIONS = [
   "Eldoret",
 ];
 
+const MIN_PASSWORD_LENGTH = 8;
+
+const inputBase =
+  "w-full rounded-xl border border-input bg-background px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground transition-shadow focus:border-transparent focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-60";
+
+const labelClass = "mb-1.5 block text-sm font-medium text-secondary-foreground";
+const hintClass = "text-xs leading-relaxed text-muted-foreground";
+
+interface FormState {
+  email: string;
+  password: string;
+  confirmPassword: string;
+  fullName: string;
+  businessName: string;
+  phone: string;
+  whatsappNumber: string;
+  nationalId: string;
+  estimatedProperties: string;
+  reviewNote: string;
+}
+
+const EMPTY_FORM: FormState = {
+  email: "",
+  password: "",
+  confirmPassword: "",
+  fullName: "",
+  businessName: "",
+  phone: "",
+  whatsappNumber: "",
+  nationalId: "",
+  estimatedProperties: "",
+  reviewNote: "",
+};
+
+/** Kenyan mobile numbers, accepted as 07…, 01…, or with a +254 prefix. */
+function isPhone(value: string): boolean {
+  const digits = value.replace(/[\s-]/g, "");
+  return /^(?:\+?254|0)?[17]\d{8}$/.test(digits);
+}
+
 export const LandlordRegisterPage = () => {
   const navigate = useNavigate();
-  const { user, profile, profileState } = useLandlord();
-  const [step, setStep] = useState(1);
+  const { user, profile, profileState, authLoading } = useLandlord();
+  const { refreshSession } = useAuth();
 
-  // Returning landlords who already have a profile skip registration.
+  const [step, setStep] = useState(1);
+  const [form, setForm] = useState<FormState>(EMPTY_FORM);
+  const [campuses, setCampuses] = useState<string[]>([]);
+  const [consentTicks, setConsentTicks] = useState<Record<string, boolean>>({});
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [consentRecorded, setConsentRecorded] = useState(true);
+  const [registered, setRegistered] = useState<RegisteredLandlord | null>(null);
+
+  // A landlord who is already signed in and has a profile skips registration.
   useEffect(() => {
-    if (user && profileState === "ok" && profile) {
+    if (!authLoading && user && profileState === "ok" && profile) {
       void navigate({ to: homeForStatus(profile.status), replace: true });
     }
-  }, [user, profile, profileState, navigate]);
-  const [consentTicks, setConsentTicks] = useState<Record<string, boolean>>({});
-  const [isLoading, setIsLoading] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
-  const [showError, setShowError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [consentRecorded, setConsentRecorded] = useState(true);
+  }, [authLoading, user, profile, profileState, navigate]);
 
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-    confirmPassword: "",
-    fullName: "",
-    businessName: "",
-    phone: "",
-    whatsappNumber: "",
-    nationalId: "",
-    targetCampuses: "",
-    estimatedProperties: "",
-    reviewNote: "",
-  });
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value, type } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? (e.target as HTMLInputElement).checked : value,
-    }));
+  const setField = (name: keyof FormState, value: string) => {
+    setForm((previous) => ({ ...previous, [name]: value }));
+    setErrorMessage("");
   };
 
-  const setField = (name: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [name]: value }));
+  const toggleCampus = (campus: string) => {
+    setCampuses((previous) =>
+      previous.includes(campus) ? previous.filter((c) => c !== campus) : [...previous, campus],
+    );
+    setErrorMessage("");
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setShowError(false);
+  const toggleConsent = (id: string) => {
+    setConsentTicks((previous) => ({ ...previous, [id]: !previous[id] }));
+    setErrorMessage("");
+  };
 
-    if (step < 3) {
-      if (step === 1 && formData.password !== formData.confirmPassword) {
-        setShowError(true);
-        setErrorMessage("Passwords do not match");
-        return;
+  /** Validate only the fields on the step being left. */
+  const validateStep = (current: number): string => {
+    if (current === 1) {
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) {
+        return "Enter a valid email address.";
       }
-      setStep((s) => s + 1);
+      if (form.password.length < MIN_PASSWORD_LENGTH) {
+        return `Use a password of at least ${MIN_PASSWORD_LENGTH} characters.`;
+      }
+      if (form.password !== form.confirmPassword) {
+        return "The two passwords do not match.";
+      }
+    }
+    if (current === 2) {
+      if (form.fullName.trim().length < 3) {
+        return "Enter your full name as it appears on your ID.";
+      }
+      if (!isPhone(form.phone)) {
+        return "Enter a valid Kenyan phone number, for example 0712 345 678.";
+      }
+      if (!isPhone(form.whatsappNumber)) {
+        return "Enter a valid WhatsApp number, for example 0712 345 678.";
+      }
+    }
+    return "";
+  };
+
+  const goNext = () => {
+    const problem = validateStep(step);
+    if (problem) {
+      setErrorMessage(problem);
+      return;
+    }
+    setErrorMessage("");
+    setStep((current) => Math.min(current + 1, STEP_LABELS.length));
+  };
+
+  const goBack = () => {
+    setErrorMessage("");
+    setStep((current) => Math.max(current - 1, 1));
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (step < STEP_LABELS.length) {
+      goNext();
       return;
     }
 
-    const tickedItems = Object.entries(consentTicks)
+    // Last step: everything that was not re-checked on the way here.
+    const earlier = validateStep(1) || validateStep(2);
+    if (earlier) {
+      setErrorMessage(earlier);
+      return;
+    }
+    if (campuses.length === 0) {
+      setErrorMessage("Choose at least one area you let property in.");
+      return;
+    }
+    const estimated = Number(form.estimatedProperties);
+    if (!form.estimatedProperties.trim() || !Number.isFinite(estimated) || estimated < 0) {
+      setErrorMessage("Enter how many properties you manage, for example 3.");
+      return;
+    }
+    const ticked = Object.entries(consentTicks)
       .filter(([, value]) => value)
       .map(([id]) => id);
-    const missing = REQUIRED_DECLARATION_ITEM_IDS.filter((id) => !tickedItems.includes(id));
+    const missing = REQUIRED_DECLARATION_ITEM_IDS.filter((id) => !ticked.includes(id));
     if (missing.length > 0) {
-      setShowError(true);
       setErrorMessage(
-        "Please read the consent declaration and tick every required statement before you continue.",
+        "Tick every required consent statement. Nothing is ticked for you, and each statement is separate.",
       );
       return;
     }
 
-    const consentPurposes = purposesFromDeclarationItems(tickedItems);
-
     setIsLoading(true);
+    setErrorMessage("");
     try {
-      const account = await registerLandlord({
-        email: formData.email,
-        password: formData.password,
-        fullName: formData.fullName,
-        businessName: formData.businessName,
-        phone: formData.phone,
-        whatsappNumber: formData.whatsappNumber,
-        nationalId: formData.nationalId,
-        targetCampuses: formData.targetCampuses
-          .split(",")
-          .map((c) => c.trim())
-          .filter(Boolean),
-        estimatedProperties: parseInt(formData.estimatedProperties, 10) || 0,
-        reviewNote: formData.reviewNote,
-        consentItems: tickedItems,
-        consentPurposes,
+      const created = await registerLandlord({
+        email: form.email.trim(),
+        password: form.password,
+        fullName: form.fullName.trim(),
+        businessName: form.businessName.trim(),
+        phone: form.phone.trim(),
+        whatsappNumber: form.whatsappNumber.trim(),
+        nationalId: form.nationalId.trim(),
+        targetCampuses: campuses,
+        estimatedProperties: Math.trunc(estimated),
+        reviewNote: form.reviewNote.trim(),
+        consentItems: ticked,
       });
+      // Publish the new session to the AuthProvider before navigating, so the
+      // portal gate reads the account that was just created instead of the
+      // signed-out frame it still holds.
+      await refreshSession();
 
-      // The account now exists, so the consent can be filed against a
-      // credential the server can verify. If this fails the account is still
-      // created and the person is told to finish the consent from the
-      // consent page.
-      try {
-        const idToken = await account.getIdToken();
-        await grantConsentItems(tickedItems, idToken);
-        setConsentRecorded(true);
-      } catch (consentError) {
-        console.error("Consent could not be recorded:", consentError);
-        setConsentRecorded(false);
-      }
-
-      setShowSuccess(true);
-      setTimeout(() => {
+      setConsentRecorded(created.consentRecorded);
+      setRegistered(created);
+      if (created.consentRecorded) {
         void navigate({ to: "/landlord/pending", replace: true });
-      }, 2000);
+      }
     } catch (error) {
-      console.error("Registration failed:", error);
-      setShowError(true);
-      setErrorMessage(error instanceof Error ? error.message : "Registration failed");
+      setErrorMessage(
+        error instanceof Error && error.message
+          ? error.message
+          : "We could not create your account. Please try again.",
+      );
     } finally {
       setIsLoading(false);
     }
   };
 
-  const inputBase =
-    "w-full px-4 py-3 rounded-xl border border-input bg-background text-foreground placeholder:text-muted-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-shadow";
-
-  const labelClass = "block text-sm font-medium text-secondary-foreground mb-1.5";
-
-  if (showSuccess) {
+  // The account exists but its consent could not be recorded: the honest
+  // outcome is to send the person to the consent page, not to pretend the
+  // application is complete.
+  if (registered && !consentRecorded) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-6 bg-background">
-        <div className="solid-card p-8 w-full max-w-md">
-          <div className="text-center mb-6">
-            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-status/20">
-              <CheckCircle className="h-6 w-6 text-status" />
-            </div>
-            <h2 className="text-2xl font-display font-medium text-foreground">
-              Application Submitted
-            </h2>
-            <p className="mt-2 text-sm text-muted-foreground">
-              Our team will review your details and get back to you, usually within 24 hours.
-            </p>
-          </div>
-          <div className="space-y-3 text-sm text-secondary-foreground">
-            {!consentRecorded ? (
-              <p className="flex items-start gap-2 rounded-xl border border-destructive/30 bg-destructive/10 p-3 text-destructive">
-                <XCircle className="mt-0.5 h-4 w-4 shrink-0" />
-                Your account was created, but we could not record your consent. Please open the{" "}
-                <Link to="/consent" className="underline underline-offset-2">
-                  consent page
-                </Link>{" "}
-                to complete it.
-              </p>
-            ) : null}
-            <p className="flex items-start gap-2">
-              <FileText className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
-              Prepare your property photos and listing details so you are ready to go when approved.
-            </p>
-            <p className="flex items-start gap-2">
-              <Phone className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
-              Keep an eye on the WhatsApp number you provided — that is how we will reach you.
-            </p>
-          </div>
+      <div className="flex min-h-screen items-center justify-center bg-background px-5 py-12">
+        <div className="w-full max-w-md rounded-2xl border border-destructive/30 bg-card p-6 sm:p-8">
+          <XCircle className="size-8 text-destructive" aria-hidden="true" />
+          <h1 className="mt-4 font-display text-2xl font-medium">Finish your consent</h1>
+          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+            Your account and landlord profile were created, but we could not record your consent.
+            Nothing is published until it is recorded.
+          </p>
           <div className="mt-6 flex flex-col gap-3">
             <Link
-              to="/"
-              className="cta-shine block w-full rounded-full bg-primary px-4 py-3 text-center text-sm font-semibold text-primary-foreground shadow-glow transition-colors hover:bg-primary/90"
+              to="/consent"
+              className="inline-flex min-h-11 items-center justify-center rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground shadow-glow"
             >
-              Back to homepage
+              Open the consent page
+            </Link>
+            <Link
+              to="/landlord/pending"
+              className="inline-flex min-h-11 items-center justify-center rounded-full border border-border px-5 text-sm font-semibold hover:bg-accent"
+            >
+              Go to my application status
             </Link>
           </div>
         </div>
@@ -211,87 +261,89 @@ export const LandlordRegisterPage = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
-      {/* Top accent bar */}
+    <div className="flex min-h-screen flex-col bg-background text-foreground">
       <div className="h-1 w-full bg-gradient-to-r from-highlight via-primary to-highlight opacity-40" />
 
-      <div className="flex-1 flex items-center justify-center p-4 sm:p-6">
+      <div className="flex flex-1 items-center justify-center px-4 py-10 sm:px-6">
         <div className="w-full max-w-xl">
-          {/* Header */}
-          <div className="mb-6 text-center sm:text-left">
-            <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-3 py-1 text-xs font-medium text-muted-foreground mb-4">
-              <ShieldCheck className="h-3.5 w-3.5 text-highlight" />
+          <div className="mb-6">
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-3 py-1 text-xs font-medium text-muted-foreground">
+              <ShieldCheck className="size-3.5 text-highlight" aria-hidden="true" />
               Verified landlords only
             </div>
-            <h1 className="font-display text-2xl sm:text-3xl font-medium tracking-tight text-foreground">
+            <h1 className="font-display text-2xl font-medium leading-tight tracking-tight sm:text-3xl">
               Become a verified landlord
             </h1>
-            <p className="mt-2 text-sm text-muted-foreground max-w-md">
-              Join landlords who list student housing on UniHub. We verify every account so students
-              can trust who they are dealing with.
+            <p className="mt-2 max-w-md text-sm leading-relaxed text-muted-foreground">
+              List student housing on UniHub. We check every account before a listing goes live, so
+              students know who they are talking to.
             </p>
           </div>
 
           {/* Progress */}
-          <div className="mb-6 flex items-center gap-2">
-            {STEP_LABELS.map((label, i) => {
-              const idx = i + 1;
-              const isActive = idx === step;
-              const isDone = idx < step;
+          <ol className="mb-6 flex items-center gap-2" aria-label="Registration progress">
+            {STEP_LABELS.map((label, index) => {
+              const number = index + 1;
+              const isActive = number === step;
+              const isDone = number < step;
               return (
-                <div key={label} className="flex items-center gap-2 flex-1">
-                  <div
+                <li key={label} className="flex flex-1 items-center gap-2">
+                  <span
+                    aria-current={isActive ? "step" : undefined}
                     className={cn(
-                      "flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-semibold transition-colors",
+                      "flex size-7 shrink-0 items-center justify-center rounded-full text-xs font-semibold",
                       isDone
-                        ? "rounded-full bg-status/20 text-status"
+                        ? "bg-status/20 text-status"
                         : isActive
-                          ? "rounded-full bg-primary text-primary-foreground shadow-glow"
-                          : "rounded-full border border-border bg-card text-muted-foreground",
+                          ? "bg-primary text-primary-foreground shadow-glow"
+                          : "border border-border bg-card text-muted-foreground",
                     )}
                   >
-                    {isDone ? <CheckCircle className="h-4 w-4" /> : idx}
-                  </div>
+                    {isDone ? <CheckCircle className="size-4" aria-hidden="true" /> : number}
+                  </span>
                   <span
                     className={cn(
                       "text-xs font-medium sm:text-sm",
-                      isActive
-                        ? "text-foreground"
-                        : isDone
-                          ? "text-muted-foreground"
-                          : "text-muted-foreground",
+                      isActive ? "text-foreground" : "text-muted-foreground",
                     )}
                   >
                     {label}
                   </span>
-                  {i < STEP_LABELS.length - 1 && (
-                    <div className={cn("flex-1 h-px", isDone ? "bg-status/40" : "bg-border")} />
-                  )}
-                </div>
+                  {index < STEP_LABELS.length - 1 ? (
+                    <span
+                      aria-hidden="true"
+                      className={cn("h-px flex-1", isDone ? "bg-status/40" : "bg-border")}
+                    />
+                  ) : null}
+                </li>
               );
             })}
-          </div>
+          </ol>
 
-          {/* Error banner */}
-          {showError && (
-            <div className="mb-5 flex items-start gap-3 rounded-xl border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive">
-              <XCircle className="mt-0.5 h-4 w-4 shrink-0" />
+          {errorMessage ? (
+            <div
+              id="registration-error"
+              role="alert"
+              className="mb-5 flex items-start gap-3 rounded-xl border border-destructive/30 bg-destructive/5 p-4 text-sm text-destructive"
+            >
+              <XCircle className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
               <span>{errorMessage}</span>
             </div>
-          )}
+          ) : null}
 
-          <form onSubmit={handleSubmit} className="solid-card p-5 sm:p-7">
-            {/* Step 1: Account */}
-            {step === 1 && (
+          <form
+            onSubmit={handleSubmit}
+            noValidate
+            className="rounded-2xl border border-border bg-card p-5 sm:p-7"
+          >
+            {step === 1 ? (
               <div className="space-y-5">
-                <div className="flex items-center gap-2 mb-1">
-                  <Mail className="h-4 w-4 text-muted-foreground" />
-                  <h2 className="font-display text-lg font-medium text-foreground">
-                    Account details
-                  </h2>
+                <div className="flex items-center gap-2">
+                  <Mail className="size-4 text-muted-foreground" aria-hidden="true" />
+                  <h2 className="font-display text-lg font-medium">Account details</h2>
                 </div>
 
-                <div className="space-y-1.5">
+                <div>
                   <label className={labelClass} htmlFor="email">
                     Email address
                   </label>
@@ -299,16 +351,22 @@ export const LandlordRegisterPage = () => {
                     id="email"
                     type="email"
                     name="email"
-                    value={formData.email}
-                    onChange={handleChange}
+                    value={form.email}
+                    onChange={(event) => setField("email", event.target.value)}
                     className={inputBase}
                     placeholder="you@example.com"
-                    required
                     autoComplete="email"
+                    aria-invalid={Boolean(errorMessage && !form.email.includes("@"))}
+                    aria-describedby={errorMessage ? "registration-error" : undefined}
+                    disabled={isLoading}
+                    required
                   />
+                  <p className={`mt-1.5 ${hintClass}`}>
+                    We use this for your status updates and sign-in.
+                  </p>
                 </div>
 
-                <div className="space-y-1.5">
+                <div>
                   <label className={labelClass} htmlFor="password">
                     Password
                   </label>
@@ -316,17 +374,19 @@ export const LandlordRegisterPage = () => {
                     id="password"
                     type="password"
                     name="password"
-                    value={formData.password}
-                    onChange={handleChange}
+                    value={form.password}
+                    onChange={(event) => setField("password", event.target.value)}
                     className={inputBase}
-                    placeholder="At least 6 characters"
-                    required
-                    minLength={6}
+                    placeholder={`At least ${MIN_PASSWORD_LENGTH} characters`}
                     autoComplete="new-password"
+                    minLength={MIN_PASSWORD_LENGTH}
+                    aria-describedby={errorMessage ? "registration-error" : undefined}
+                    disabled={isLoading}
+                    required
                   />
                 </div>
 
-                <div className="space-y-1.5">
+                <div>
                   <label className={labelClass} htmlFor="confirmPassword">
                     Confirm password
                   </label>
@@ -334,52 +394,29 @@ export const LandlordRegisterPage = () => {
                     id="confirmPassword"
                     type="password"
                     name="confirmPassword"
-                    value={formData.confirmPassword}
-                    onChange={handleChange}
+                    value={form.confirmPassword}
+                    onChange={(event) => setField("confirmPassword", event.target.value)}
                     className={inputBase}
                     placeholder="Repeat your password"
-                    required
-                    minLength={6}
                     autoComplete="new-password"
+                    minLength={MIN_PASSWORD_LENGTH}
+                    aria-describedby={errorMessage ? "registration-error" : undefined}
+                    disabled={isLoading}
+                    required
                   />
                 </div>
-
-                <div className="flex items-center justify-between pt-2">
-                  <div></div>
-                  <button
-                    type="submit"
-                    disabled={isLoading}
-                    className={cn(
-                      "cta-shine inline-flex items-center justify-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-glow transition-colors disabled:opacity-50",
-                      isLoading ? "hover:bg-primary/90" : "",
-                    )}
-                  >
-                    {isLoading ? (
-                      <>
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                        Creating account…
-                      </>
-                    ) : (
-                      <>
-                        Next: Profile info
-                        <ArrowRight className="h-4 w-4" />
-                      </>
-                    )}
-                  </button>
-                </div>
               </div>
-            )}
+            ) : null}
 
-            {/* Step 2: Profile */}
-            {step === 2 && (
+            {step === 2 ? (
               <div className="space-y-5">
-                <div className="flex items-center gap-2 mb-1">
-                  <Users className="h-4 w-4 text-muted-foreground" />
-                  <h2 className="font-display text-lg font-medium text-foreground">Who you are</h2>
+                <div className="flex items-center gap-2">
+                  <Users className="size-4 text-muted-foreground" aria-hidden="true" />
+                  <h2 className="font-display text-lg font-medium">Who you are</h2>
                 </div>
 
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="space-y-1.5 sm:col-span-2">
+                  <div className="sm:col-span-2">
                     <label className={labelClass} htmlFor="fullName">
                       Full name
                     </label>
@@ -387,16 +424,17 @@ export const LandlordRegisterPage = () => {
                       id="fullName"
                       type="text"
                       name="fullName"
-                      value={formData.fullName}
-                      onChange={handleChange}
+                      value={form.fullName}
+                      onChange={(event) => setField("fullName", event.target.value)}
                       className={inputBase}
                       placeholder="Jane Otieno"
-                      required
                       autoComplete="name"
+                      disabled={isLoading}
+                      required
                     />
                   </div>
 
-                  <div className="space-y-1.5">
+                  <div>
                     <label className={labelClass} htmlFor="businessName">
                       Business or agency name
                     </label>
@@ -404,115 +442,69 @@ export const LandlordRegisterPage = () => {
                       id="businessName"
                       type="text"
                       name="businessName"
-                      value={formData.businessName}
-                      onChange={handleChange}
+                      value={form.businessName}
+                      onChange={(event) => setField("businessName", event.target.value)}
                       className={inputBase}
                       placeholder="Joy Homes Real Estate"
+                      autoComplete="organization"
+                      disabled={isLoading}
                     />
-                    <p className="text-xs text-muted-foreground">
+                    <p className={`mt-1.5 ${hintClass}`}>
                       Optional — leave blank if you list as an individual.
                     </p>
                   </div>
 
-                  <div className="space-y-1.5">
+                  <div>
                     <label className={labelClass} htmlFor="phone">
                       Phone number
                     </label>
-                    <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">
-                        +254
-                      </span>
-                      <input
-                        id="phone"
-                        type="tel"
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleChange}
-                        className={cn(inputBase, "pl-10")}
-                        placeholder="7XX XXX XXX"
-                        required
-                        autoComplete="tel-national"
-                      />
-                    </div>
+                    <input
+                      id="phone"
+                      type="tel"
+                      name="phone"
+                      inputMode="tel"
+                      value={form.phone}
+                      onChange={(event) => setField("phone", event.target.value)}
+                      className={inputBase}
+                      placeholder="0712 345 678"
+                      autoComplete="tel"
+                      disabled={isLoading}
+                      required
+                    />
                   </div>
 
-                  <div className="space-y-1.5">
+                  <div>
                     <label className={labelClass} htmlFor="whatsappNumber">
                       WhatsApp number
                     </label>
-                    <div className="relative">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">
-                        +254
-                      </span>
-                      <input
-                        id="whatsappNumber"
-                        type="tel"
-                        name="whatsappNumber"
-                        value={formData.whatsappNumber}
-                        onChange={handleChange}
-                        className={cn(inputBase, "pl-10")}
-                        placeholder="7XX XXX XXX"
-                        required
-                        autoComplete="tel-national"
-                      />
-                    </div>
-                    <p className="text-xs text-muted-foreground">Students will contact you here.</p>
+                    <input
+                      id="whatsappNumber"
+                      type="tel"
+                      name="whatsappNumber"
+                      inputMode="tel"
+                      value={form.whatsappNumber}
+                      onChange={(event) => setField("whatsappNumber", event.target.value)}
+                      className={inputBase}
+                      placeholder="0712 345 678"
+                      autoComplete="tel"
+                      disabled={isLoading}
+                      required
+                    />
+                    <p className={`mt-1.5 ${hintClass}`}>Students will reach you here.</p>
                   </div>
                 </div>
-
-                <div className="flex items-center justify-between pt-2">
-                  <button
-                    type="button"
-                    onClick={() => setStep(1)}
-                    className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    <svg
-                      className="h-4 w-4"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={2}
-                    >
-                      <path d="M15 18l-6-6 6-6" />
-                    </svg>
-                    Back
-                  </button>
-                  <button
-                    type="submit"
-                    disabled={isLoading}
-                    className={cn(
-                      "cta-shine inline-flex items-center justify-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-glow transition-colors disabled:opacity-50",
-                      isLoading ? "" : "hover:bg-primary/90",
-                    )}
-                  >
-                    {isLoading ? (
-                      <>
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                        Saving…
-                      </>
-                    ) : (
-                      <>
-                        Next: Verification
-                        <ArrowRight className="h-4 w-4" />
-                      </>
-                    )}
-                  </button>
-                </div>
               </div>
-            )}
+            ) : null}
 
-            {/* Step 3: Verification */}
-            {step === 3 && (
-              <div className="space-y-5">
-                <div className="flex items-center gap-2 mb-1">
-                  <ShieldCheck className="h-4 w-4 text-muted-foreground" />
-                  <h2 className="font-display text-lg font-medium text-foreground">
-                    Verification details
-                  </h2>
+            {step === 3 ? (
+              <div className="space-y-6">
+                <div className="flex items-center gap-2">
+                  <ShieldCheck className="size-4 text-muted-foreground" aria-hidden="true" />
+                  <h2 className="font-display text-lg font-medium">Verification details</h2>
                 </div>
 
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="space-y-1.5 sm:col-span-2">
+                  <div className="sm:col-span-2">
                     <label className={labelClass} htmlFor="nationalId">
                       National ID or passport number
                     </label>
@@ -520,197 +512,181 @@ export const LandlordRegisterPage = () => {
                       id="nationalId"
                       type="text"
                       name="nationalId"
-                      value={formData.nationalId}
-                      onChange={handleChange}
+                      value={form.nationalId}
+                      onChange={(event) => setField("nationalId", event.target.value)}
                       className={inputBase}
                       placeholder="12345678"
-                      required
                       autoComplete="off"
+                      disabled={isLoading}
                     />
-                    <p className="text-xs text-muted-foreground">
-                      Used for verification only. Never shown publicly.
+                    <p className={`mt-1.5 ${hintClass}`}>
+                      Used for verification only, never shown publicly. You can add it later if you
+                      prefer.
                     </p>
                   </div>
 
-                  <div className="space-y-1.5 sm:col-span-2">
-                    <label className={labelClass} htmlFor="targetCampuses">
-                      Areas you serve
-                    </label>
-                    <div className="flex flex-wrap gap-2">
-                      {CAMPUS_OPTIONS.map((campus) => (
-                        <button
-                          key={campus}
-                          type="button"
-                          onClick={() => {
-                            const current = formData.targetCampuses
-                              .split(",")
-                              .map((c) => c.trim())
-                              .filter(Boolean);
-                            const exists = current.includes(campus);
-                            const next = exists
-                              ? current.filter((c) => c !== campus)
-                              : [...current, campus];
-                            setField("targetCampuses", next.join(", "));
-                          }}
-                          className={cn(
-                            "inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors",
-                            formData.targetCampuses
-                              .split(",")
-                              .map((c) => c.trim())
-                              .filter(Boolean)
-                              .includes(campus)
-                              ? "border-foreground bg-foreground text-background"
-                              : "border-border bg-card text-secondary-foreground hover:border-foreground/50",
-                          )}
-                          aria-pressed={formData.targetCampuses
-                            .split(",")
-                            .map((c) => c.trim())
-                            .filter(Boolean)
-                            .includes(campus)}
-                        >
-                          {campus}
-                        </button>
-                      ))}
-                    </div>
-                    <input
-                      id="targetCampuses"
-                      type="text"
-                      name="targetCampuses"
-                      value={formData.targetCampuses}
-                      onChange={handleChange}
-                      className="sr-only"
-                      required
-                    />
-                    <p className="text-xs text-muted-foreground">
-                      Tap the areas you list properties in, or type them comma-separated.
-                    </p>
+                  <div className="sm:col-span-2">
+                    <fieldset>
+                      <legend className={labelClass}>Areas you let property in</legend>
+                      <div className="flex flex-wrap gap-2">
+                        {CAMPUS_OPTIONS.map((campus) => {
+                          const selected = campuses.includes(campus);
+                          return (
+                            <button
+                              key={campus}
+                              type="button"
+                              onClick={() => toggleCampus(campus)}
+                              aria-pressed={selected}
+                              disabled={isLoading}
+                              className={cn(
+                                "inline-flex min-h-9 items-center rounded-full border px-3 text-xs font-medium transition-colors disabled:opacity-60",
+                                selected
+                                  ? "border-foreground bg-foreground text-background"
+                                  : "border-border bg-card text-secondary-foreground hover:border-foreground/50",
+                              )}
+                            >
+                              {campus}
+                            </button>
+                          );
+                        })}
+                      </div>
+                      <p className={`mt-2 ${hintClass}`}>
+                        {campuses.length === 0
+                          ? "Tap every area you list in."
+                          : `${campuses.length} area${campuses.length === 1 ? "" : "s"} selected.`}
+                      </p>
+                    </fieldset>
                   </div>
 
-                  <div className="space-y-1.5">
+                  <div>
                     <label className={labelClass} htmlFor="estimatedProperties">
-                      Estimated properties you manage
+                      Properties you manage
                     </label>
                     <input
                       id="estimatedProperties"
                       type="number"
                       name="estimatedProperties"
-                      value={formData.estimatedProperties}
-                      onChange={handleChange}
+                      inputMode="numeric"
+                      min={0}
+                      value={form.estimatedProperties}
+                      onChange={(event) => setField("estimatedProperties", event.target.value)}
                       className={inputBase}
                       placeholder="5"
-                      required
-                      min={0}
                       autoComplete="off"
+                      disabled={isLoading}
+                      required
                     />
                   </div>
 
-                  <div className="space-y-1.5 sm:col-span-2">
+                  <div className="sm:col-span-2">
                     <label className={labelClass} htmlFor="reviewNote">
                       Anything else for our review team?
                     </label>
                     <textarea
                       id="reviewNote"
                       name="reviewNote"
-                      value={formData.reviewNote}
-                      onChange={handleChange}
+                      value={form.reviewNote}
+                      onChange={(event) => setField("reviewNote", event.target.value)}
                       className={inputBase}
-                      rows={4}
-                      placeholder="Specializations, certifications, or notes for the review team…"
+                      rows={3}
+                      placeholder="Specialisations, certifications, or notes for the review team…"
+                      disabled={isLoading}
                     />
                   </div>
                 </div>
 
-                <div className="space-y-3">
-                  <div>
-                    <h3 className="font-display text-base font-medium text-foreground">
-                      Consent declaration
-                    </h3>
-                    <p className="mt-1 text-xs text-muted-foreground">
-                      Each statement is separate and nothing is ticked for you. You can withdraw
-                      your consent at any time by emailing hello@unihub.ke. The full wording is at{" "}
-                      <Link to="/consent" className="text-primary hover:underline">
-                        /consent
-                      </Link>
-                      .
-                    </p>
+                <div>
+                  <h3 className="font-display text-base font-medium">Consent declaration</h3>
+                  <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+                    Each statement is separate and nothing is ticked for you. You can withdraw
+                    consent at any time. The full wording is at{" "}
+                    <Link to="/consent" className="text-highlight hover:underline">
+                      /consent
+                    </Link>
+                    .
+                  </p>
+                  <div className="mt-3">
+                    <ConsentDeclaration
+                      ticked={consentTicks}
+                      onToggle={toggleConsent}
+                      disabled={isLoading}
+                      showBasis={false}
+                    />
                   </div>
-                  <ConsentDeclaration
-                    ticked={consentTicks}
-                    onToggle={(id) =>
-                      setConsentTicks((previous) => ({ ...previous, [id]: !previous[id] }))
-                    }
-                    disabled={isLoading}
-                    showBasis={false}
-                  />
-                </div>
-
-                <div className="flex items-center justify-between pt-2">
-                  <button
-                    type="button"
-                    onClick={() => setStep(2)}
-                    className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    <svg
-                      className="h-4 w-4"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={2}
-                    >
-                      <path d="M15 18l-6-6 6-6" />
-                    </svg>
-                    Back
-                  </button>
-                  <button
-                    type="submit"
-                    disabled={isLoading}
-                    className={cn(
-                      "cta-shine inline-flex items-center justify-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-glow transition-colors disabled:opacity-50",
-                      isLoading ? "" : "hover:bg-primary/90",
-                    )}
-                  >
-                    {isLoading ? (
-                      <>
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                        Submitting…
-                      </>
-                    ) : (
-                      <>
-                        Complete registration
-                        <CheckCircle className="h-4 w-4" />
-                      </>
-                    )}
-                  </button>
                 </div>
               </div>
-            )}
+            ) : null}
+
+            <div className="mt-6 flex items-center justify-between gap-3 border-t border-border pt-5">
+              {step > 1 ? (
+                <button
+                  type="button"
+                  onClick={goBack}
+                  disabled={isLoading}
+                  className="inline-flex min-h-11 items-center gap-1.5 rounded-full px-3 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground disabled:opacity-60"
+                >
+                  <ArrowLeft className="size-4" aria-hidden="true" />
+                  Back
+                </button>
+              ) : (
+                <Link
+                  to="/landlord/login"
+                  className="inline-flex min-h-11 items-center rounded-full px-3 text-sm font-medium text-muted-foreground hover:text-foreground"
+                >
+                  Already registered?
+                </Link>
+              )}
+
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="cta-shine inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-primary px-5 text-sm font-semibold text-primary-foreground shadow-glow transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 className="size-4 animate-spin" aria-hidden="true" />
+                    Creating your account…
+                  </>
+                ) : step === STEP_LABELS.length ? (
+                  <>
+                    Complete registration
+                    <CheckCircle className="size-4" aria-hidden="true" />
+                  </>
+                ) : (
+                  <>
+                    Continue
+                    <ArrowRight className="size-4" aria-hidden="true" />
+                  </>
+                )}
+              </button>
+            </div>
           </form>
 
-          {/* Footer */}
-          <div className="mt-5 rounded-xl border border-border bg-card/40 p-4 text-center sm:text-left">
+          <div className="mt-5 rounded-2xl border border-border bg-card/40 p-4">
             <p className="text-sm text-muted-foreground">
               Already have an account?{" "}
               <Link
                 to="/landlord/login"
-                className="text-primary font-medium hover:underline underline-offset-2"
+                className="font-medium text-foreground underline-offset-4 hover:underline"
               >
                 Sign in
               </Link>
             </p>
           </div>
 
-          {/* Trust strip */}
-          <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-muted-foreground">
+          <p className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-muted-foreground">
             <span className="flex items-center gap-1.5">
-              <ShieldCheck className="h-3.5 w-3.5 text-highlight" /> Verified listings
+              <ShieldCheck className="size-3.5 text-highlight" aria-hidden="true" /> Verified
+              listings
             </span>
             <span className="flex items-center gap-1.5">
-              <Phone className="h-3.5 w-3.5 text-highlight" /> WhatsApp-first contact
+              <Phone className="size-3.5 text-highlight" aria-hidden="true" /> WhatsApp-first
+              contact
             </span>
             <span className="flex items-center gap-1.5">
-              <MapPin className="h-3.5 w-3.5 text-highlight" /> Campus-focused areas
+              <MapPin className="size-3.5 text-highlight" aria-hidden="true" /> Campus-focused areas
             </span>
-          </div>
+          </p>
         </div>
       </div>
     </div>

@@ -37,12 +37,15 @@ enum ListingStatus {
   AVAILABLE
   RENTED
   HIDDEN
+  PENDING
+  PUBLISHED
+  REJECTED
 }
 
 model User {
   id            String    @id @default(cuid())
   email         String    @unique
-  emailVerified DateTime?
+  emailVerified Boolean   @default(false)
   name          String?
   password      String?   // hashed with bcrypt
   role          UserRole  @default(TENANT)
@@ -99,6 +102,13 @@ model Listing {
   videoUrl        String?
   status          ListingStatus   @default(AVAILABLE)
   isVerified      Boolean         @default(false)
+  reviewNote      String?
+  featured        Boolean         @default(false)
+  inquiries       Int             @default(0)
+  // Boost state, moved here from the retired Firestore listing documents.
+  adStatus        String          @default("inactive")
+  adPlan          String?
+  adExpiresAt     DateTime?
   landlordId      String
   landlord        LandlordProfile @relation(fields: [landlordId], references: [id], onDelete: Cascade)
   userId          String
@@ -346,4 +356,26 @@ model ExtractedHostelRecord {
 
   @@unique([hostelName, campus])
   @@index([campus])
+}
+
+// ---------------------------------------------------------------------------
+// Site content managed from the admin site builder. One row (`global`) holds
+// the hero copy, the featured listings, the theme, the feature flags and the
+// team shown on the public site. JSON columns keep the shape identical to the
+// SiteSettings type the marketing pages already consume.
+// ---------------------------------------------------------------------------
+
+model SiteSettings {
+  id                 String   @id @default("global")
+  heroTitle          String
+  heroSubtitle       String
+  heroImage          String?
+  ctaText            String
+  featuredProperties String   @default("[]") // JSON string array of listing ids
+  theme              String   @default("{}") // JSON of theme tokens
+  features           String   @default("{}") // JSON of feature flags
+  teamMembers        String   @default("[]") // JSON string array of team members
+  updatedBy          String?
+  updatedAt          DateTime @updatedAt
+  createdAt          DateTime @default(now())
 }

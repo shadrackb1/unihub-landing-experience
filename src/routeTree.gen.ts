@@ -21,7 +21,20 @@ import { Route as ListPropertyRouteImport } from './routes/list-property'
 import { Route as ListingsRouteImport } from './routes/listings'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as AdminAdsRouteImport } from './routes/admin/ads'
+import { Route as AdminAgentsRouteImport } from './routes/admin/agents'
+import { Route as AdminCategoriesRouteImport } from './routes/admin/categories'
+import { Route as AdminCmsRouteImport } from './routes/admin/cms'
+import { Route as AdminHostelsRouteImport } from './routes/admin/hostels'
+import { Route as AdminLandlordsRouteImport } from './routes/admin/landlords'
+import { Route as AdminListingsRouteImport } from './routes/admin/listings'
+import { Route as AdminLoginRouteImport } from './routes/admin/login'
+import { Route as AdminPropertiesRouteImport } from './routes/admin/properties'
+import { Route as AdminSettingsRouteImport } from './routes/admin/settings'
+import { Route as AdminUniversitiesRouteImport } from './routes/admin/universities'
 import { Route as ApiConsentRouteImport } from './routes/api/consent'
+import { Route as ApiSiteSettingsRouteImport } from './routes/api/site-settings'
 import { Route as HostelsIdRouteImport } from './routes/hostels.$id'
 import { Route as LandlordIndexRouteImport } from './routes/landlord.index'
 import { Route as LandlordAdsRouteImport } from './routes/landlord.ads'
@@ -34,12 +47,23 @@ import { Route as LandlordSuspendedRouteImport } from './routes/landlord.suspend
 import { Route as ListingsIdRouteImport } from './routes/listings_.$id'
 import { Route as PropertiesIdRouteImport } from './routes/properties.$id'
 import { Route as PublicLandlordRegisterRouteImport } from './routes/public/landlord-register'
+import { Route as AdminHostelsNewRouteImport } from './routes/admin/hostels_.new'
+import { Route as AdminPropertiesIdRouteImport } from './routes/admin/properties_.$id'
+import { Route as AdminPropertiesNewRouteImport } from './routes/admin/properties_.new'
+import { Route as ApiAdminLandlordsRouteImport } from './routes/api/admin/landlords'
+import { Route as ApiAdminListingsRouteImport } from './routes/api/admin/listings'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as ApiConsentLedgerRouteImport } from './routes/api/consent.ledger'
 import { Route as ApiDataExportRouteImport } from './routes/api/data/export'
 import { Route as ApiDataImportRouteImport } from './routes/api/data/import'
+import { Route as ApiLandlordListingsRouteImport } from './routes/api/landlord/listings'
+import { Route as ApiLandlordProfileRouteImport } from './routes/api/landlord/profile'
+import { Route as ApiLandlordRegisterRouteImport } from './routes/api/landlord/register'
 import { Route as LandlordAdsNewRouteImport } from './routes/landlord.ads_.new'
 import { Route as LandlordListingsNewRouteImport } from './routes/landlord.listings_.new'
+import { Route as ApiAdminLandlordsIdRouteImport } from './routes/api/admin/landlords.$id'
+import { Route as ApiAdminListingsIdRouteImport } from './routes/api/admin/listings.$id'
+import { Route as ApiLandlordListingsIdRouteImport } from './routes/api/landlord/listings.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -101,9 +125,74 @@ const TermsRoute = TermsRouteImport.update({
   path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminAdsRoute = AdminAdsRouteImport.update({
+  id: '/ads',
+  path: '/ads',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminAgentsRoute = AdminAgentsRouteImport.update({
+  id: '/agents',
+  path: '/agents',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCategoriesRoute = AdminCategoriesRouteImport.update({
+  id: '/categories',
+  path: '/categories',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCmsRoute = AdminCmsRouteImport.update({
+  id: '/cms',
+  path: '/cms',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminHostelsRoute = AdminHostelsRouteImport.update({
+  id: '/hostels',
+  path: '/hostels',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminLandlordsRoute = AdminLandlordsRouteImport.update({
+  id: '/landlords',
+  path: '/landlords',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminListingsRoute = AdminListingsRouteImport.update({
+  id: '/listings',
+  path: '/listings',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPropertiesRoute = AdminPropertiesRouteImport.update({
+  id: '/properties',
+  path: '/properties',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminSettingsRoute = AdminSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminUniversitiesRoute = AdminUniversitiesRouteImport.update({
+  id: '/universities',
+  path: '/universities',
+  getParentRoute: () => AdminRoute,
+} as any)
 const ApiConsentRoute = ApiConsentRouteImport.update({
   id: '/api/consent',
   path: '/api/consent',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiSiteSettingsRoute = ApiSiteSettingsRouteImport.update({
+  id: '/api/site-settings',
+  path: '/api/site-settings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HostelsIdRoute = HostelsIdRouteImport.update({
@@ -166,6 +255,31 @@ const PublicLandlordRegisterRoute = PublicLandlordRegisterRouteImport.update({
   path: '/public/landlord-register',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminHostelsNewRoute = AdminHostelsNewRouteImport.update({
+  id: '/hostels_/new',
+  path: '/hostels/new',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPropertiesIdRoute = AdminPropertiesIdRouteImport.update({
+  id: '/properties_/$id',
+  path: '/properties/$id',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPropertiesNewRoute = AdminPropertiesNewRouteImport.update({
+  id: '/properties_/new',
+  path: '/properties/new',
+  getParentRoute: () => AdminRoute,
+} as any)
+const ApiAdminLandlordsRoute = ApiAdminLandlordsRouteImport.update({
+  id: '/api/admin/landlords',
+  path: '/api/admin/landlords',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAdminListingsRoute = ApiAdminListingsRouteImport.update({
+  id: '/api/admin/listings',
+  path: '/api/admin/listings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -186,6 +300,21 @@ const ApiDataImportRoute = ApiDataImportRouteImport.update({
   path: '/api/data/import',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiLandlordListingsRoute = ApiLandlordListingsRouteImport.update({
+  id: '/api/landlord/listings',
+  path: '/api/landlord/listings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiLandlordProfileRoute = ApiLandlordProfileRouteImport.update({
+  id: '/api/landlord/profile',
+  path: '/api/landlord/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiLandlordRegisterRoute = ApiLandlordRegisterRouteImport.update({
+  id: '/api/landlord/register',
+  path: '/api/landlord/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LandlordAdsNewRoute = LandlordAdsNewRouteImport.update({
   id: '/ads_/new',
   path: '/ads/new',
@@ -196,11 +325,26 @@ const LandlordListingsNewRoute = LandlordListingsNewRouteImport.update({
   path: '/listings/new',
   getParentRoute: () => LandlordRoute,
 } as any)
+const ApiAdminLandlordsIdRoute = ApiAdminLandlordsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ApiAdminLandlordsRoute,
+} as any)
+const ApiAdminListingsIdRoute = ApiAdminListingsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ApiAdminListingsRoute,
+} as any)
+const ApiLandlordListingsIdRoute = ApiLandlordListingsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ApiLandlordListingsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/app': typeof AppRoute
   '/consent': typeof ConsentRoute
   '/contact': typeof ContactRoute
@@ -210,7 +354,19 @@ export interface FileRoutesByFullPath {
   '/listings': typeof ListingsRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
+  '/admin/ads': typeof AdminAdsRoute
+  '/admin/agents': typeof AdminAgentsRoute
+  '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/cms': typeof AdminCmsRoute
+  '/admin/hostels': typeof AdminHostelsRoute
+  '/admin/landlords': typeof AdminLandlordsRoute
+  '/admin/listings': typeof AdminListingsRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/admin/properties': typeof AdminPropertiesRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/universities': typeof AdminUniversitiesRoute
   '/api/consent': typeof ApiConsentRouteWithChildren
+  '/api/site-settings': typeof ApiSiteSettingsRoute
   '/hostels/$id': typeof HostelsIdRoute
   '/landlord/ads': typeof LandlordAdsRoute
   '/landlord/listings': typeof LandlordListingsRoute
@@ -222,18 +378,29 @@ export interface FileRoutesByFullPath {
   '/listings/$id': typeof ListingsIdRoute
   '/properties/$id': typeof PropertiesIdRoute
   '/public/landlord-register': typeof PublicLandlordRegisterRoute
+  '/admin/': typeof AdminIndexRoute
   '/landlord/': typeof LandlordIndexRoute
+  '/admin/hostels/new': typeof AdminHostelsNewRoute
+  '/admin/properties/$id': typeof AdminPropertiesIdRoute
+  '/admin/properties/new': typeof AdminPropertiesNewRoute
+  '/api/admin/landlords': typeof ApiAdminLandlordsRouteWithChildren
+  '/api/admin/listings': typeof ApiAdminListingsRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/consent/ledger': typeof ApiConsentLedgerRoute
   '/api/data/export': typeof ApiDataExportRoute
   '/api/data/import': typeof ApiDataImportRoute
+  '/api/landlord/listings': typeof ApiLandlordListingsRouteWithChildren
+  '/api/landlord/profile': typeof ApiLandlordProfileRoute
+  '/api/landlord/register': typeof ApiLandlordRegisterRoute
   '/landlord/ads/new': typeof LandlordAdsNewRoute
   '/landlord/listings/new': typeof LandlordListingsNewRoute
+  '/api/admin/landlords/$id': typeof ApiAdminLandlordsIdRoute
+  '/api/admin/listings/$id': typeof ApiAdminListingsIdRoute
+  '/api/landlord/listings/$id': typeof ApiLandlordListingsIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/admin': typeof AdminRoute
   '/app': typeof AppRoute
   '/consent': typeof ConsentRoute
   '/contact': typeof ContactRoute
@@ -242,7 +409,19 @@ export interface FileRoutesByTo {
   '/listings': typeof ListingsRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
+  '/admin/ads': typeof AdminAdsRoute
+  '/admin/agents': typeof AdminAgentsRoute
+  '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/cms': typeof AdminCmsRoute
+  '/admin/hostels': typeof AdminHostelsRoute
+  '/admin/landlords': typeof AdminLandlordsRoute
+  '/admin/listings': typeof AdminListingsRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/admin/properties': typeof AdminPropertiesRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/universities': typeof AdminUniversitiesRoute
   '/api/consent': typeof ApiConsentRouteWithChildren
+  '/api/site-settings': typeof ApiSiteSettingsRoute
   '/hostels/$id': typeof HostelsIdRoute
   '/landlord/ads': typeof LandlordAdsRoute
   '/landlord/listings': typeof LandlordListingsRoute
@@ -254,19 +433,31 @@ export interface FileRoutesByTo {
   '/listings/$id': typeof ListingsIdRoute
   '/properties/$id': typeof PropertiesIdRoute
   '/public/landlord-register': typeof PublicLandlordRegisterRoute
+  '/admin': typeof AdminIndexRoute
   '/landlord': typeof LandlordIndexRoute
+  '/admin/hostels/new': typeof AdminHostelsNewRoute
+  '/admin/properties/$id': typeof AdminPropertiesIdRoute
+  '/admin/properties/new': typeof AdminPropertiesNewRoute
+  '/api/admin/landlords': typeof ApiAdminLandlordsRouteWithChildren
+  '/api/admin/listings': typeof ApiAdminListingsRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/consent/ledger': typeof ApiConsentLedgerRoute
   '/api/data/export': typeof ApiDataExportRoute
   '/api/data/import': typeof ApiDataImportRoute
+  '/api/landlord/listings': typeof ApiLandlordListingsRouteWithChildren
+  '/api/landlord/profile': typeof ApiLandlordProfileRoute
+  '/api/landlord/register': typeof ApiLandlordRegisterRoute
   '/landlord/ads/new': typeof LandlordAdsNewRoute
   '/landlord/listings/new': typeof LandlordListingsNewRoute
+  '/api/admin/landlords/$id': typeof ApiAdminLandlordsIdRoute
+  '/api/admin/listings/$id': typeof ApiAdminListingsIdRoute
+  '/api/landlord/listings/$id': typeof ApiLandlordListingsIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
-  '/admin': typeof AdminRoute
+  '/admin': typeof AdminRouteWithChildren
   '/app': typeof AppRoute
   '/consent': typeof ConsentRoute
   '/contact': typeof ContactRoute
@@ -276,7 +467,19 @@ export interface FileRoutesById {
   '/listings': typeof ListingsRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
+  '/admin/ads': typeof AdminAdsRoute
+  '/admin/agents': typeof AdminAgentsRoute
+  '/admin/categories': typeof AdminCategoriesRoute
+  '/admin/cms': typeof AdminCmsRoute
+  '/admin/hostels': typeof AdminHostelsRoute
+  '/admin/landlords': typeof AdminLandlordsRoute
+  '/admin/listings': typeof AdminListingsRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/admin/properties': typeof AdminPropertiesRoute
+  '/admin/settings': typeof AdminSettingsRoute
+  '/admin/universities': typeof AdminUniversitiesRoute
   '/api/consent': typeof ApiConsentRouteWithChildren
+  '/api/site-settings': typeof ApiSiteSettingsRoute
   '/hostels/$id': typeof HostelsIdRoute
   '/landlord/ads': typeof LandlordAdsRoute
   '/landlord/listings': typeof LandlordListingsRoute
@@ -288,13 +491,25 @@ export interface FileRoutesById {
   '/listings_/$id': typeof ListingsIdRoute
   '/properties/$id': typeof PropertiesIdRoute
   '/public/landlord-register': typeof PublicLandlordRegisterRoute
+  '/admin/': typeof AdminIndexRoute
   '/landlord/': typeof LandlordIndexRoute
+  '/admin/hostels_/new': typeof AdminHostelsNewRoute
+  '/admin/properties_/$id': typeof AdminPropertiesIdRoute
+  '/admin/properties_/new': typeof AdminPropertiesNewRoute
+  '/api/admin/landlords': typeof ApiAdminLandlordsRouteWithChildren
+  '/api/admin/listings': typeof ApiAdminListingsRouteWithChildren
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/consent/ledger': typeof ApiConsentLedgerRoute
   '/api/data/export': typeof ApiDataExportRoute
   '/api/data/import': typeof ApiDataImportRoute
+  '/api/landlord/listings': typeof ApiLandlordListingsRouteWithChildren
+  '/api/landlord/profile': typeof ApiLandlordProfileRoute
+  '/api/landlord/register': typeof ApiLandlordRegisterRoute
   '/landlord/ads_/new': typeof LandlordAdsNewRoute
   '/landlord/listings_/new': typeof LandlordListingsNewRoute
+  '/api/admin/landlords/$id': typeof ApiAdminLandlordsIdRoute
+  '/api/admin/listings/$id': typeof ApiAdminListingsIdRoute
+  '/api/landlord/listings/$id': typeof ApiLandlordListingsIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -311,7 +526,19 @@ export interface FileRouteTypes {
     | '/listings'
     | '/privacy'
     | '/terms'
+    | '/admin/ads'
+    | '/admin/agents'
+    | '/admin/categories'
+    | '/admin/cms'
+    | '/admin/hostels'
+    | '/admin/landlords'
+    | '/admin/listings'
+    | '/admin/login'
+    | '/admin/properties'
+    | '/admin/settings'
+    | '/admin/universities'
     | '/api/consent'
+    | '/api/site-settings'
     | '/hostels/$id'
     | '/landlord/ads'
     | '/landlord/listings'
@@ -323,18 +550,29 @@ export interface FileRouteTypes {
     | '/listings/$id'
     | '/properties/$id'
     | '/public/landlord-register'
+    | '/admin/'
     | '/landlord/'
+    | '/admin/hostels/new'
+    | '/admin/properties/$id'
+    | '/admin/properties/new'
+    | '/api/admin/landlords'
+    | '/api/admin/listings'
     | '/api/auth/$'
     | '/api/consent/ledger'
     | '/api/data/export'
     | '/api/data/import'
+    | '/api/landlord/listings'
+    | '/api/landlord/profile'
+    | '/api/landlord/register'
     | '/landlord/ads/new'
     | '/landlord/listings/new'
+    | '/api/admin/landlords/$id'
+    | '/api/admin/listings/$id'
+    | '/api/landlord/listings/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
-    | '/admin'
     | '/app'
     | '/consent'
     | '/contact'
@@ -343,7 +581,19 @@ export interface FileRouteTypes {
     | '/listings'
     | '/privacy'
     | '/terms'
+    | '/admin/ads'
+    | '/admin/agents'
+    | '/admin/categories'
+    | '/admin/cms'
+    | '/admin/hostels'
+    | '/admin/landlords'
+    | '/admin/listings'
+    | '/admin/login'
+    | '/admin/properties'
+    | '/admin/settings'
+    | '/admin/universities'
     | '/api/consent'
+    | '/api/site-settings'
     | '/hostels/$id'
     | '/landlord/ads'
     | '/landlord/listings'
@@ -355,13 +605,25 @@ export interface FileRouteTypes {
     | '/listings/$id'
     | '/properties/$id'
     | '/public/landlord-register'
+    | '/admin'
     | '/landlord'
+    | '/admin/hostels/new'
+    | '/admin/properties/$id'
+    | '/admin/properties/new'
+    | '/api/admin/landlords'
+    | '/api/admin/listings'
     | '/api/auth/$'
     | '/api/consent/ledger'
     | '/api/data/export'
     | '/api/data/import'
+    | '/api/landlord/listings'
+    | '/api/landlord/profile'
+    | '/api/landlord/register'
     | '/landlord/ads/new'
     | '/landlord/listings/new'
+    | '/api/admin/landlords/$id'
+    | '/api/admin/listings/$id'
+    | '/api/landlord/listings/$id'
   id:
     | '__root__'
     | '/'
@@ -376,7 +638,19 @@ export interface FileRouteTypes {
     | '/listings'
     | '/privacy'
     | '/terms'
+    | '/admin/ads'
+    | '/admin/agents'
+    | '/admin/categories'
+    | '/admin/cms'
+    | '/admin/hostels'
+    | '/admin/landlords'
+    | '/admin/listings'
+    | '/admin/login'
+    | '/admin/properties'
+    | '/admin/settings'
+    | '/admin/universities'
     | '/api/consent'
+    | '/api/site-settings'
     | '/hostels/$id'
     | '/landlord/ads'
     | '/landlord/listings'
@@ -388,19 +662,31 @@ export interface FileRouteTypes {
     | '/listings_/$id'
     | '/properties/$id'
     | '/public/landlord-register'
+    | '/admin/'
     | '/landlord/'
+    | '/admin/hostels_/new'
+    | '/admin/properties_/$id'
+    | '/admin/properties_/new'
+    | '/api/admin/landlords'
+    | '/api/admin/listings'
     | '/api/auth/$'
     | '/api/consent/ledger'
     | '/api/data/export'
     | '/api/data/import'
+    | '/api/landlord/listings'
+    | '/api/landlord/profile'
+    | '/api/landlord/register'
     | '/landlord/ads_/new'
     | '/landlord/listings_/new'
+    | '/api/admin/landlords/$id'
+    | '/api/admin/listings/$id'
+    | '/api/landlord/listings/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
-  AdminRoute: typeof AdminRoute
+  AdminRoute: typeof AdminRouteWithChildren
   AppRoute: typeof AppRoute
   ConsentRoute: typeof ConsentRoute
   ContactRoute: typeof ContactRoute
@@ -411,12 +697,18 @@ export interface RootRouteChildren {
   PrivacyRoute: typeof PrivacyRoute
   TermsRoute: typeof TermsRoute
   ApiConsentRoute: typeof ApiConsentRouteWithChildren
+  ApiSiteSettingsRoute: typeof ApiSiteSettingsRoute
   ListingsIdRoute: typeof ListingsIdRoute
   PropertiesIdRoute: typeof PropertiesIdRoute
   PublicLandlordRegisterRoute: typeof PublicLandlordRegisterRoute
+  ApiAdminLandlordsRoute: typeof ApiAdminLandlordsRouteWithChildren
+  ApiAdminListingsRoute: typeof ApiAdminListingsRouteWithChildren
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiDataExportRoute: typeof ApiDataExportRoute
   ApiDataImportRoute: typeof ApiDataImportRoute
+  ApiLandlordListingsRoute: typeof ApiLandlordListingsRouteWithChildren
+  ApiLandlordProfileRoute: typeof ApiLandlordProfileRoute
+  ApiLandlordRegisterRoute: typeof ApiLandlordRegisterRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -505,11 +797,102 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/ads': {
+      id: '/admin/ads'
+      path: '/ads'
+      fullPath: '/admin/ads'
+      preLoaderRoute: typeof AdminAdsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/agents': {
+      id: '/admin/agents'
+      path: '/agents'
+      fullPath: '/admin/agents'
+      preLoaderRoute: typeof AdminAgentsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/categories': {
+      id: '/admin/categories'
+      path: '/categories'
+      fullPath: '/admin/categories'
+      preLoaderRoute: typeof AdminCategoriesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/cms': {
+      id: '/admin/cms'
+      path: '/cms'
+      fullPath: '/admin/cms'
+      preLoaderRoute: typeof AdminCmsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/hostels': {
+      id: '/admin/hostels'
+      path: '/hostels'
+      fullPath: '/admin/hostels'
+      preLoaderRoute: typeof AdminHostelsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/landlords': {
+      id: '/admin/landlords'
+      path: '/landlords'
+      fullPath: '/admin/landlords'
+      preLoaderRoute: typeof AdminLandlordsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/listings': {
+      id: '/admin/listings'
+      path: '/listings'
+      fullPath: '/admin/listings'
+      preLoaderRoute: typeof AdminListingsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/login': {
+      id: '/admin/login'
+      path: '/login'
+      fullPath: '/admin/login'
+      preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/properties': {
+      id: '/admin/properties'
+      path: '/properties'
+      fullPath: '/admin/properties'
+      preLoaderRoute: typeof AdminPropertiesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/settings': {
+      id: '/admin/settings'
+      path: '/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AdminSettingsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/universities': {
+      id: '/admin/universities'
+      path: '/universities'
+      fullPath: '/admin/universities'
+      preLoaderRoute: typeof AdminUniversitiesRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/api/consent': {
       id: '/api/consent'
       path: '/api/consent'
       fullPath: '/api/consent'
       preLoaderRoute: typeof ApiConsentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/site-settings': {
+      id: '/api/site-settings'
+      path: '/api/site-settings'
+      fullPath: '/api/site-settings'
+      preLoaderRoute: typeof ApiSiteSettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/hostels/$id': {
@@ -596,6 +979,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PublicLandlordRegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/hostels_/new': {
+      id: '/admin/hostels_/new'
+      path: '/hostels/new'
+      fullPath: '/admin/hostels/new'
+      preLoaderRoute: typeof AdminHostelsNewRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/properties_/$id': {
+      id: '/admin/properties_/$id'
+      path: '/properties/$id'
+      fullPath: '/admin/properties/$id'
+      preLoaderRoute: typeof AdminPropertiesIdRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/properties_/new': {
+      id: '/admin/properties_/new'
+      path: '/properties/new'
+      fullPath: '/admin/properties/new'
+      preLoaderRoute: typeof AdminPropertiesNewRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/api/admin/landlords': {
+      id: '/api/admin/landlords'
+      path: '/api/admin/landlords'
+      fullPath: '/api/admin/landlords'
+      preLoaderRoute: typeof ApiAdminLandlordsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/admin/listings': {
+      id: '/api/admin/listings'
+      path: '/api/admin/listings'
+      fullPath: '/api/admin/listings'
+      preLoaderRoute: typeof ApiAdminListingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
@@ -624,6 +1042,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiDataImportRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/landlord/listings': {
+      id: '/api/landlord/listings'
+      path: '/api/landlord/listings'
+      fullPath: '/api/landlord/listings'
+      preLoaderRoute: typeof ApiLandlordListingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/landlord/profile': {
+      id: '/api/landlord/profile'
+      path: '/api/landlord/profile'
+      fullPath: '/api/landlord/profile'
+      preLoaderRoute: typeof ApiLandlordProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/landlord/register': {
+      id: '/api/landlord/register'
+      path: '/api/landlord/register'
+      fullPath: '/api/landlord/register'
+      preLoaderRoute: typeof ApiLandlordRegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/landlord/ads_/new': {
       id: '/landlord/ads_/new'
       path: '/ads/new'
@@ -638,8 +1077,67 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LandlordListingsNewRouteImport
       parentRoute: typeof LandlordRoute
     }
+    '/api/admin/landlords/$id': {
+      id: '/api/admin/landlords/$id'
+      path: '/$id'
+      fullPath: '/api/admin/landlords/$id'
+      preLoaderRoute: typeof ApiAdminLandlordsIdRouteImport
+      parentRoute: typeof ApiAdminLandlordsRoute
+    }
+    '/api/admin/listings/$id': {
+      id: '/api/admin/listings/$id'
+      path: '/$id'
+      fullPath: '/api/admin/listings/$id'
+      preLoaderRoute: typeof ApiAdminListingsIdRouteImport
+      parentRoute: typeof ApiAdminListingsRoute
+    }
+    '/api/landlord/listings/$id': {
+      id: '/api/landlord/listings/$id'
+      path: '/$id'
+      fullPath: '/api/landlord/listings/$id'
+      preLoaderRoute: typeof ApiLandlordListingsIdRouteImport
+      parentRoute: typeof ApiLandlordListingsRoute
+    }
   }
 }
+
+interface AdminRouteChildren {
+  AdminAdsRoute: typeof AdminAdsRoute
+  AdminAgentsRoute: typeof AdminAgentsRoute
+  AdminCategoriesRoute: typeof AdminCategoriesRoute
+  AdminCmsRoute: typeof AdminCmsRoute
+  AdminHostelsRoute: typeof AdminHostelsRoute
+  AdminLandlordsRoute: typeof AdminLandlordsRoute
+  AdminListingsRoute: typeof AdminListingsRoute
+  AdminLoginRoute: typeof AdminLoginRoute
+  AdminPropertiesRoute: typeof AdminPropertiesRoute
+  AdminSettingsRoute: typeof AdminSettingsRoute
+  AdminUniversitiesRoute: typeof AdminUniversitiesRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+  AdminHostelsNewRoute: typeof AdminHostelsNewRoute
+  AdminPropertiesIdRoute: typeof AdminPropertiesIdRoute
+  AdminPropertiesNewRoute: typeof AdminPropertiesNewRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminAdsRoute: AdminAdsRoute,
+  AdminAgentsRoute: AdminAgentsRoute,
+  AdminCategoriesRoute: AdminCategoriesRoute,
+  AdminCmsRoute: AdminCmsRoute,
+  AdminHostelsRoute: AdminHostelsRoute,
+  AdminLandlordsRoute: AdminLandlordsRoute,
+  AdminListingsRoute: AdminListingsRoute,
+  AdminLoginRoute: AdminLoginRoute,
+  AdminPropertiesRoute: AdminPropertiesRoute,
+  AdminSettingsRoute: AdminSettingsRoute,
+  AdminUniversitiesRoute: AdminUniversitiesRoute,
+  AdminIndexRoute: AdminIndexRoute,
+  AdminHostelsNewRoute: AdminHostelsNewRoute,
+  AdminPropertiesIdRoute: AdminPropertiesIdRoute,
+  AdminPropertiesNewRoute: AdminPropertiesNewRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface HostelsRouteChildren {
   HostelsIdRoute: typeof HostelsIdRoute
@@ -694,10 +1192,43 @@ const ApiConsentRouteWithChildren = ApiConsentRoute._addFileChildren(
   ApiConsentRouteChildren,
 )
 
+interface ApiAdminLandlordsRouteChildren {
+  ApiAdminLandlordsIdRoute: typeof ApiAdminLandlordsIdRoute
+}
+
+const ApiAdminLandlordsRouteChildren: ApiAdminLandlordsRouteChildren = {
+  ApiAdminLandlordsIdRoute: ApiAdminLandlordsIdRoute,
+}
+
+const ApiAdminLandlordsRouteWithChildren =
+  ApiAdminLandlordsRoute._addFileChildren(ApiAdminLandlordsRouteChildren)
+
+interface ApiAdminListingsRouteChildren {
+  ApiAdminListingsIdRoute: typeof ApiAdminListingsIdRoute
+}
+
+const ApiAdminListingsRouteChildren: ApiAdminListingsRouteChildren = {
+  ApiAdminListingsIdRoute: ApiAdminListingsIdRoute,
+}
+
+const ApiAdminListingsRouteWithChildren =
+  ApiAdminListingsRoute._addFileChildren(ApiAdminListingsRouteChildren)
+
+interface ApiLandlordListingsRouteChildren {
+  ApiLandlordListingsIdRoute: typeof ApiLandlordListingsIdRoute
+}
+
+const ApiLandlordListingsRouteChildren: ApiLandlordListingsRouteChildren = {
+  ApiLandlordListingsIdRoute: ApiLandlordListingsIdRoute,
+}
+
+const ApiLandlordListingsRouteWithChildren =
+  ApiLandlordListingsRoute._addFileChildren(ApiLandlordListingsRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
-  AdminRoute: AdminRoute,
+  AdminRoute: AdminRouteWithChildren,
   AppRoute: AppRoute,
   ConsentRoute: ConsentRoute,
   ContactRoute: ContactRoute,
@@ -708,12 +1239,18 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyRoute: PrivacyRoute,
   TermsRoute: TermsRoute,
   ApiConsentRoute: ApiConsentRouteWithChildren,
+  ApiSiteSettingsRoute: ApiSiteSettingsRoute,
   ListingsIdRoute: ListingsIdRoute,
   PropertiesIdRoute: PropertiesIdRoute,
   PublicLandlordRegisterRoute: PublicLandlordRegisterRoute,
+  ApiAdminLandlordsRoute: ApiAdminLandlordsRouteWithChildren,
+  ApiAdminListingsRoute: ApiAdminListingsRouteWithChildren,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiDataExportRoute: ApiDataExportRoute,
   ApiDataImportRoute: ApiDataImportRoute,
+  ApiLandlordListingsRoute: ApiLandlordListingsRouteWithChildren,
+  ApiLandlordProfileRoute: ApiLandlordProfileRoute,
+  ApiLandlordRegisterRoute: ApiLandlordRegisterRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

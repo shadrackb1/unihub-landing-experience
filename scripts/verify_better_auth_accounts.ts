@@ -14,13 +14,48 @@ interface TestAccount {
 }
 
 const TEST_ACCOUNTS: TestAccount[] = [
-  { email: "admin@unihub.ke", password: "TestAdmin2024!", role: "ADMIN", description: "Platform admin" },
-  { email: "landlord.pending@unihub.ke", password: "TestLandlord2024!", role: "LANDLORD", description: "Pending landlord" },
-  { email: "landlord.approved@unihub.ke", password: "TestLandlord2024!", role: "LANDLORD", description: "Approved landlord" },
-  { email: "landlord.rejected@unihub.ke", password: "TestLandlord2024!", role: "LANDLORD", description: "Rejected landlord" },
-  { email: "landlord.suspended@unihub.ke", password: "TestLandlord2024!", role: "LANDLORD", description: "Suspended landlord" },
-  { email: "student@unihub.ke", password: "TestStudent2024!", role: "TENANT", description: "Student tenant" },
-  { email: "university@unihub.ke", password: "TestUniversity2024!", role: "UNIVERSITY_ADMIN", description: "University admin" },
+  {
+    email: "admin@unihub.ke",
+    password: "TestAdmin2024!",
+    role: "ADMIN",
+    description: "Platform admin",
+  },
+  {
+    email: "landlord.pending@unihub.ke",
+    password: "TestLandlord2024!",
+    role: "LANDLORD",
+    description: "Pending landlord",
+  },
+  {
+    email: "landlord.approved@unihub.ke",
+    password: "TestLandlord2024!",
+    role: "LANDLORD",
+    description: "Approved landlord",
+  },
+  {
+    email: "landlord.rejected@unihub.ke",
+    password: "TestLandlord2024!",
+    role: "LANDLORD",
+    description: "Rejected landlord",
+  },
+  {
+    email: "landlord.suspended@unihub.ke",
+    password: "TestLandlord2024!",
+    role: "LANDLORD",
+    description: "Suspended landlord",
+  },
+  {
+    email: "student@unihub.ke",
+    password: "TestStudent2024!",
+    role: "TENANT",
+    description: "Student tenant",
+  },
+  {
+    email: "university@unihub.ke",
+    password: "TestUniversity2024!",
+    role: "UNIVERSITY_ADMIN",
+    description: "University admin",
+  },
 ];
 
 async function verifyAccount(account: TestAccount) {
@@ -60,7 +95,9 @@ async function verifyAccount(account: TestAccount) {
 
 async function main() {
   console.log("=== UniHub Better Auth Account Verification ===\n");
-  console.log(`Verifying ${TEST_ACCOUNTS.length} test accounts against Better Auth (Prisma/SQLite)...\n`);
+  console.log(
+    `Verifying ${TEST_ACCOUNTS.length} test accounts against Better Auth (Prisma/SQLite)...\n`,
+  );
 
   const results = [];
   for (const account of TEST_ACCOUNTS) {
@@ -76,16 +113,16 @@ async function main() {
     console.log("");
   }
 
-  const passed = results.filter(r => r.status === "OK").length;
-  const failed = results.filter(r => r.status === "FAIL").length;
+  const passed = results.filter((r) => r.status === "OK").length;
+  const failed = results.filter((r) => r.status === "FAIL").length;
 
   console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
   console.log(`Summary: ${passed}/${TEST_ACCOUNTS.length} accounts verified`);
   if (failed > 0) {
     console.log(`Failures: ${failed}`);
-    results.filter(r => r.status === "FAIL").forEach(r =>
-      console.log(`  ✗ ${r.email}: ${r.error}`)
-    );
+    results
+      .filter((r) => r.status === "FAIL")
+      .forEach((r) => console.log(`  ✗ ${r.email}: ${r.error}`));
   }
   console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
 

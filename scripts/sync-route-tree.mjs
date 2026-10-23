@@ -42,9 +42,7 @@ if (candidates.length === 0) {
 
 const source = candidates[0].file;
 const generated = fs.readFileSync(source, "utf8");
-const current = fs.existsSync(destination)
-  ? fs.readFileSync(destination, "utf8")
-  : "";
+const current = fs.existsSync(destination) ? fs.readFileSync(destination, "utf8") : "";
 
 if (generated === current) {
   console.log("Route tree is already up to date.");

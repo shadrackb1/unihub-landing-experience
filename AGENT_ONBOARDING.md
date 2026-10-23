@@ -6,11 +6,11 @@ Quick-start reference for AI agents setting up and running the UniHub landing ex
 
 ## Prerequisites
 
-| Tool | Version | Install |
-|------|---------|---------|
+| Tool    | Version  | Install                                                            |
+| ------- | -------- | ------------------------------------------------------------------ |
 | Node.js | 20.11.0+ | `winget install OpenJS.NodeJS` or [nodejs.org](https://nodejs.org) |
-| npm | 10+ | Included with Node |
-| Git | latest | `winget install Git.Git` |
+| npm     | 10+      | Included with Node                                                 |
+| Git     | latest   | `winget install Git.Git`                                           |
 
 **Windows note:** This project is developed in Git Bash (POSIX shell). Use `/c/Users/ADMIN/...` paths, not `C:\Users\ADMIN\...`.
 
@@ -68,15 +68,15 @@ npm run db:seed
 
 **Seeded test accounts:**
 
-| Role | Email | Password |
-|------|-------|----------|
-| Admin | admin@unihub.ke | TestAdmin2024! |
-| Landlord (Pending) | landlord.pending@unihub.ke | TestLandlord2024! |
-| Landlord (Approved) | landlord.approved@unihub.ke | TestLandlord2024! |
-| Landlord (Rejected) | landlord.rejected@unihub.ke | TestLandlord2024! |
-| Landlord (Suspended) | landlord.suspended@unihub.ke | TestLandlord2024! |
-| Student/Tenant | student@unihub.ke | TestStudent2024! |
-| University Admin | university@unihub.ke | TestUniversity2024! |
+| Role                 | Email                        | Password            |
+| -------------------- | ---------------------------- | ------------------- |
+| Admin                | admin@unihub.ke              | TestAdmin2024!      |
+| Landlord (Pending)   | landlord.pending@unihub.ke   | TestLandlord2024!   |
+| Landlord (Approved)  | landlord.approved@unihub.ke  | TestLandlord2024!   |
+| Landlord (Rejected)  | landlord.rejected@unihub.ke  | TestLandlord2024!   |
+| Landlord (Suspended) | landlord.suspended@unihub.ke | TestLandlord2024!   |
+| Student/Tenant       | student@unihub.ke            | TestStudent2024!    |
+| University Admin     | university@unihub.ke         | TestUniversity2024! |
 
 > ⚠️ Change passwords after first login.
 
@@ -200,6 +200,7 @@ prisma/
 - **Database adapter:** Prisma + libsql (SQLite driver adapter for Prisma 7)
 
 Key files:
+
 - `src/lib/auth/index.ts` — Server auth instance
 - `src/lib/auth-client.ts` — Client hooks (`useSession`, `signIn`, `signUp`, `signOut`)
 - `src/shared/context/AuthContext.tsx` — React context wrapper
@@ -219,29 +220,29 @@ Key files:
 
 ## 9. Common Issues & Fixes
 
-| Issue | Fix |
-|-------|-----|
-| `Cannot find module '.prisma/client/default'` | Run `npx prisma generate` — ensures client output matches schema's `output` path |
+| Issue                                               | Fix                                                                                                         |
+| --------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `Cannot find module '.prisma/client/default'`       | Run `npx prisma generate` — ensures client output matches schema's `output` path                            |
 | `PrismaClient was instantiated without any options` | Prisma 7 requires driver adapter. `src/lib/auth/index.ts` and `prisma/seed.ts` use `@prisma/adapter-libsql` |
-| `tsx: command not found` | `npm install -D tsx` (in devDependencies) |
-| Port 5173 in use | Kill existing process: `lsof -ti:5173 \| xargs kill -9` |
-| SQLite lock / migration fails | Delete `dev.db` and `prisma/migrations/`, re-run `npx prisma migrate dev` |
-| Better Auth "trustedOrigins" error | Add `http://localhost:5173` to `trustedOrigins` in `src/lib/auth/index.ts` |
+| `tsx: command not found`                            | `npm install -D tsx` (in devDependencies)                                                                   |
+| Port 5173 in use                                    | Kill existing process: `lsof -ti:5173 \| xargs kill -9`                                                     |
+| SQLite lock / migration fails                       | Delete `dev.db` and `prisma/migrations/`, re-run `npx prisma migrate dev`                                   |
+| Better Auth "trustedOrigins" error                  | Add `http://localhost:5173` to `trustedOrigins` in `src/lib/auth/index.ts`                                  |
 
 ---
 
 ## 10. Useful Endpoints
 
-| Route | Purpose |
-|-------|---------|
-| `/` | Homepage (7-Act funnel) |
-| `/listings` | Browse all listings |
-| `/listings/:id` | Listing detail |
-| `/landlord-register` | Landlord onboarding |
-| `/landlord` | Landlord dashboard (role-gated) |
-| `/admin` | Admin console (email-gated) |
-| `/contact` | WhatsApp/email contact |
-| `/about`, `/privacy`, `/terms` | Static pages |
+| Route                          | Purpose                         |
+| ------------------------------ | ------------------------------- |
+| `/`                            | Homepage (7-Act funnel)         |
+| `/listings`                    | Browse all listings             |
+| `/listings/:id`                | Listing detail                  |
+| `/landlord-register`           | Landlord onboarding             |
+| `/landlord`                    | Landlord dashboard (role-gated) |
+| `/admin`                       | Admin console (email-gated)     |
+| `/contact`                     | WhatsApp/email contact          |
+| `/about`, `/privacy`, `/terms` | Static pages                    |
 
 ---
 
@@ -281,19 +282,19 @@ sqlite3 dev.db "SELECT email, role FROM User;"
 
 ## 13. Where to Look First
 
-| Task | File |
-|------|------|
-| Add a new page | `src/routes/` or `src/features/*/routes/` |
-| Add a new API endpoint | `src/routes/api/` |
-| Modify auth | `src/lib/auth/index.ts` |
-| Modify DB schema | `prisma/schema.prisma` |
-| Change UI tokens | `src/styles.css` (OKLCH colors, spacing) |
-| Add a test account | `prisma/seed.ts` → `TEST_ACCOUNTS` array |
-| Debug landlord flow | `src/features/landlord/` |
-| Debug admin guard | `src/features/admin/requireAdmin.ts` |
-| Shared timeout utility | `src/shared/lib/withTimeout.ts` |
-| Static listing data | `src/data/listings.ts` |
-| Residence video clips | `src/data/residenceClips.ts` |
+| Task                   | File                                      |
+| ---------------------- | ----------------------------------------- |
+| Add a new page         | `src/routes/` or `src/features/*/routes/` |
+| Add a new API endpoint | `src/routes/api/`                         |
+| Modify auth            | `src/lib/auth/index.ts`                   |
+| Modify DB schema       | `prisma/schema.prisma`                    |
+| Change UI tokens       | `src/styles.css` (OKLCH colors, spacing)  |
+| Add a test account     | `prisma/seed.ts` → `TEST_ACCOUNTS` array  |
+| Debug landlord flow    | `src/features/landlord/`                  |
+| Debug admin guard      | `src/features/admin/requireAdmin.ts`      |
+| Shared timeout utility | `src/shared/lib/withTimeout.ts`           |
+| Static listing data    | `src/data/listings.ts`                    |
+| Residence video clips  | `src/data/residenceClips.ts`              |
 
 ---
 
@@ -317,4 +318,4 @@ sqlite3 dev.db "SELECT email, role FROM User;"
 
 ---
 
-*Generated for AI agent onboarding. Keep this file updated as the project evolves.*
+_Generated for AI agent onboarding. Keep this file updated as the project evolves._

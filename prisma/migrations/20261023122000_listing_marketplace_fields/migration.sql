@@ -1,0 +1,7 @@
+-- AlterTable
+ALTER TABLE "Listing" ADD COLUMN "reviewNote" TEXT;
+ALTER TABLE "Listing" ADD COLUMN "featured" BOOLEAN NOT NULL DEFAULT false;
+ALTER TABLE "Listing" ADD COLUMN "inquiries" INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE "Listing" ADD COLUMN "adStatus" TEXT NOT NULL DEFAULT 'inactive';
+ALTER TABLE "Listing" ADD COLUMN "adPlan" TEXT;
+ALTER TABLE "Listing" ADD COLUMN "adExpiresAt" DATETIME;

@@ -61,10 +61,7 @@ export async function getSessionUser(request: Request): Promise<SessionUser | nu
 }
 
 /** Require a signed-in user with one of the given roles. */
-export async function requireRole(
-  request: Request,
-  roles: AppRole[],
-): Promise<SessionUser> {
+export async function requireRole(request: Request, roles: AppRole[]): Promise<SessionUser> {
   const user = await getSessionUser(request);
   if (!user) {
     throw new HttpError(401, "Sign in to use this endpoint.");

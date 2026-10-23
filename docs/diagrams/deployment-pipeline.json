@@ -129,7 +129,13 @@
     { "from": "prisma-generate", "to": "build" },
     { "from": "build", "to": "type-check" },
     { "from": "type-check", "to": "lint", "label": "pass" },
-    { "from": "type-check", "to": "deploy-preview", "label": "fail", "style": "dashed", "color": "rose" },
+    {
+      "from": "type-check",
+      "to": "deploy-preview",
+      "label": "fail",
+      "style": "dashed",
+      "color": "rose"
+    },
     { "from": "lint", "to": "deploy-preview", "label": "pass" },
     { "from": "lint", "to": "deploy-preview", "label": "fail", "style": "dashed", "color": "rose" },
     { "from": "deploy-preview", "to": "deploy-production", "label": "main branch" },

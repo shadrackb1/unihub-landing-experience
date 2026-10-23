@@ -34,19 +34,29 @@ export const Route = createFileRoute("/api/data/import")({
 
         const contentType = request.headers.get("content-type") ?? "";
         if (!contentType.includes("multipart/form-data")) {
-          return json({ error: "Request must be multipart/form-data with a file field named 'file'" }, 400);
+          return json(
+            { error: "Request must be multipart/form-data with a file field named 'file'" },
+            400,
+          );
         }
 
         const formData = await request.formData();
         const file = formData.get("file");
         if (!file || typeof file === "string") {
-          return json({ error: "No file uploaded. Use a 'file' field in the multipart form." }, 400);
+          return json(
+            { error: "No file uploaded. Use a 'file' field in the multipart form." },
+            400,
+          );
         }
 
         const csv = await file.text();
         const result: ImportResult = await importExtractedRecordsCsv(csv);
 
-        return json({ imported: result.accepted, rejected: result.rejected, errors: result.errors });
+        return json({
+          imported: result.accepted,
+          rejected: result.rejected,
+          errors: result.errors,
+        });
       },
     },
   },

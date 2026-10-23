@@ -12,11 +12,9 @@ import { PrismaLibSql } from "@prisma/adapter-libsql";
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
 
 function createClient(): PrismaClient {
-  const url = process.env.DATABASE_URL;
+  const url = process.env["DATABASE_URL"];
   if (!url) {
-    throw new Error(
-      "DATABASE_URL is not set. Server routes need the SQLite/libsql database URL.",
-    );
+    throw new Error("DATABASE_URL is not set. Server routes need the SQLite/libsql database URL.");
   }
   const adapter = new PrismaLibSql({ url });
   return new PrismaClient({ adapter });
@@ -24,6 +22,6 @@ function createClient(): PrismaClient {
 
 export const prisma: PrismaClient = globalForPrisma.prisma ?? createClient();
 
-if (process.env.NODE_ENV !== "production") {
+if (process.env["NODE_ENV"] !== "production") {
   globalForPrisma.prisma = prisma;
 }

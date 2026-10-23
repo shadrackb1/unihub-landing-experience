@@ -16,7 +16,7 @@ interface User {
   email: string;
   name: string | null;
   role: "TENANT" | "LANDLORD" | "ADMIN" | "UNIVERSITY_ADMIN";
-  image?: string;
+  image?: string | undefined;
   emailVerified: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -65,15 +65,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       const { data } = await authClient.getSession();
       if (data?.user) {
+        // Better Auth user doesn't include custom role field by default
+        // We need to fetch it from the server or use the session data
+        const userData = data.user as {
+          id: string;
+          email: string;
+          name: string | null;
+          image?: string | null;
+          emailVerified: boolean;
+          createdAt: string | Date;
+          updatedAt: string | Date;
+          role?: "TENANT" | "LANDLORD" | "ADMIN" | "UNIVERSITY_ADMIN";
+        };
         setUser({
-          id: data.user.id,
-          email: data.user.email,
-          name: data.user.name,
-          role: data.user.role as User["role"],
-          image: data.user.image,
-          emailVerified: data.user.emailVerified,
-          createdAt: new Date(data.user.createdAt),
-          updatedAt: new Date(data.user.updatedAt),
+          id: userData.id,
+          email: userData.email,
+          name: userData.name,
+          role: userData.role ?? "TENANT",
+          image: userData.image ?? undefined,
+          emailVerified: userData.emailVerified,
+          createdAt: new Date(userData.createdAt),
+          updatedAt: new Date(userData.updatedAt),
         });
         setSession({
           id: data.session.id,
@@ -94,12 +106,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  // Read the session once on mount. Hooks cannot be called from an effect
+  // callback (it runs outside render), so the session is resolved through the
+  // plain client call; every sign-in/sign-out path refreshes it explicitly.
   useEffect(() => {
-    refreshSession();
-
-    // Listen for auth changes
-    const unsubscribe = authClient.useSession(refreshSession);
-    return () => unsubscribe?.();
+    void refreshSession();
   }, []);
 
   const login = async (email: string, password: string) => {
@@ -113,7 +124,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       email: data.email,
       password: data.password,
       name: data.name,
-      role: data.role || "TENANT",
+      // Note: role is a custom field, may need to be handled via metadata or plugin
     });
     if (error) throw new Error(error.message);
     await refreshSession();

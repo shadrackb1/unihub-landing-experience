@@ -108,9 +108,27 @@
     { "from": "tanstack-start", "to": "static-data", "label": "imports", "direction": "forward" },
     { "from": "tanstack-start", "to": "assets", "label": "serves", "direction": "forward" },
     { "from": "tanstack-start", "to": "maplibre", "label": "renders", "direction": "forward" },
-    { "from": "maplibre", "to": "tile-providers", "label": "fetches tiles", "direction": "forward", "style": "dashed" },
-    { "from": "browser", "to": "firebase-auth", "label": "legacy auth", "direction": "both", "style": "dotted" },
-    { "from": "firebase-auth", "to": "firestore", "label": "legacy data", "direction": "both", "style": "dotted" },
+    {
+      "from": "maplibre",
+      "to": "tile-providers",
+      "label": "fetches tiles",
+      "direction": "forward",
+      "style": "dashed"
+    },
+    {
+      "from": "browser",
+      "to": "firebase-auth",
+      "label": "legacy auth",
+      "direction": "both",
+      "style": "dotted"
+    },
+    {
+      "from": "firebase-auth",
+      "to": "firestore",
+      "label": "legacy data",
+      "direction": "both",
+      "style": "dotted"
+    },
     { "from": "vite", "to": "vercel", "label": "deploys to", "direction": "forward" },
     { "from": "github", "to": "vercel", "label": "triggers deploy", "direction": "forward" },
     { "from": "vercel", "to": "browser", "label": "serves", "direction": "forward" }

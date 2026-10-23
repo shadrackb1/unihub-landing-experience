@@ -46,8 +46,7 @@ export const PRE_PUBLICATION_CHECKLIST: ChecklistItem[] = [
   },
   {
     id: "data-minimisation",
-    requirement:
-      "Only the personal data that is necessary for the stated purpose is collected.",
+    requirement: "Only the personal data that is necessary for the stated purpose is collected.",
     authority: "Act s.25(d)",
     control:
       "The national ID number is held for verification only, is never published, and is excluded from every export.",
@@ -106,8 +105,7 @@ export const PRE_PUBLICATION_CHECKLIST: ChecklistItem[] = [
   },
   {
     id: "consent-proof",
-    requirement:
-      "The controller can show that consent was given, and when.",
+    requirement: "The controller can show that consent was given, and when.",
     authority: "Act s.32(1); s.32(3)",
     control:
       "Each record stores the exact wording shown, the version of that wording, the date and time of the grant, and the date and time of any withdrawal. A withdrawal is recorded rather than deleted.",
@@ -146,8 +144,7 @@ export const PRE_PUBLICATION_CHECKLIST: ChecklistItem[] = [
   },
   {
     id: "complaint",
-    requirement:
-      "The person can complain to the Data Commissioner.",
+    requirement: "The person can complain to the Data Commissioner.",
     authority: "Act s.56",
     control:
       "The privacy policy and the consent form name the Office of the Data Protection Commissioner and how to reach it.",
@@ -176,8 +173,7 @@ export const PRE_PUBLICATION_CHECKLIST: ChecklistItem[] = [
   },
   {
     id: "no-automated-decisions",
-    requirement:
-      "No decision is taken about a person by automated means alone.",
+    requirement: "No decision is taken about a person by automated means alone.",
     authority: "Act s.35",
     control:
       "The platform does not profile, score or auto-approve a landlord; every approval is a human decision recorded in the review note.",
@@ -186,8 +182,7 @@ export const PRE_PUBLICATION_CHECKLIST: ChecklistItem[] = [
   },
   {
     id: "children",
-    requirement:
-      "A child's data is not processed without the parent's or guardian's consent.",
+    requirement: "A child's data is not processed without the parent's or guardian's consent.",
     authority: "Act s.33",
     control:
       "The consent screen asks the person to confirm they are 18 or over, and the platform refuses to accept a consent from anyone under 18.",
@@ -196,8 +191,7 @@ export const PRE_PUBLICATION_CHECKLIST: ChecklistItem[] = [
   },
   {
     id: "children-not-targeted",
-    requirement:
-      "The service is not directed at children and no child is knowingly onboarded.",
+    requirement: "The service is not directed at children and no child is knowingly onboarded.",
     authority: "Act s.33(1); Regulations reg. 13",
     control:
       "The platform is a student housing service for university students; the age confirmation is a required tick box, not an optional one.",
@@ -206,8 +200,7 @@ export const PRE_PUBLICATION_CHECKLIST: ChecklistItem[] = [
   },
   {
     id: "public-source-collection",
-    requirement:
-      "Data collected from a source other than the person is justified.",
+    requirement: "Data collected from a source other than the person is justified.",
     authority: "Act s.28(2)–(3)",
     control:
       "The only indirect collection is from published university accommodation notices, which are public records under s.28(2)(a). The importer keeps the source file and line for every value it stores.",
@@ -216,8 +209,7 @@ export const PRE_PUBLICATION_CHECKLIST: ChecklistItem[] = [
   },
   {
     id: "secrets",
-    requirement:
-      "No secret is committed to the repository.",
+    requirement: "No secret is committed to the repository.",
     authority: "Act s.41",
     control:
       "The environment file is ignored, an example file lists the variables without values, and the secret scan runs as part of the checks.",
