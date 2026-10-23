@@ -1,10 +1,10 @@
-// @ts-nocheck — ported legacy admin/map code; typed rewrite pending
 import { useLoaderData } from "@tanstack/react-router";
 import { Loader2, Plus, Search, Settings, Save } from "lucide-react";
 import { useState, useEffect } from "react";
-import { getSiteSettingsData, updateSiteSettingsData } from "@/shared/services/firestore";
+import { getSiteSettingsData, updateSiteSettingsData } from "@/shared/services/adminContent";
 import { cn } from "@/shared/utils/cn";
 import { motion } from "motion/react";
+import type { SiteSettings } from "@/shared/types/admin";
 
 export const routeOptions = {
   loader: async () => {
@@ -14,7 +14,7 @@ export const routeOptions = {
 };
 
 export function AdminSettingsPage() {
-  const { settings } = useLoaderData({ strict: false }) as any;
+  const { settings } = useLoaderData({ strict: false }) as { settings: SiteSettings | null };
   const [isSaving, setIsSaving] = useState(false);
   const [activeTab, setActiveTab] = useState<"general" | "features" | "advanced">("general");
   const [formData, setFormData] = useState({
@@ -26,34 +26,11 @@ export function AdminSettingsPage() {
       settings?.maintenanceMessage || "We are currently performing scheduled maintenance.",
   });
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
-  ) => {
-    const { name, value, type } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: type === "checkbox" ? e.target.checked : value }));
-  };
-
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
     try {
-      await updateSiteSettingsData({
-        ...formData,
-        updatedAt: new Date().toISOString(),
-      });
-      if (formData.theme) {
-        const root = document.documentElement;
-        if (formData.primaryColor)
-          root.style.setProperty("--color-brand-500", formData.primaryColor);
-        if (formData.backgroundColor)
-          root.style.setProperty("--color-surface-900", formData.backgroundColor);
-        if (formData.surfaceColor)
-          root.style.setProperty("--color-surface-800", formData.surfaceColor);
-        if (formData.fontFamily)
-          root.style.setProperty("--CMS-font-family", `"${formData.fontFamily}", sans-serif`);
-        if (formData.borderRadius)
-          root.style.setProperty("--CMS-border-radius", formData.borderRadius);
-      }
+      await updateSiteSettingsData(formData);
       alert("Settings saved successfully!");
     } catch (error) {
       console.error("Save failed:", error);
@@ -277,7 +254,7 @@ export function AdminSettingsPage() {
               <button
                 type="button"
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
+                onClick={() => setActiveTab(tab.id as "general" | "features" | "advanced")}
                 className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all text-sm w-full text-left ${
                   activeTab === tab.id
                     ? "bg-zinc-800 text-white shadow-inner border border-zinc-700"

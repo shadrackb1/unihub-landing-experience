@@ -1,9 +1,9 @@
-// @ts-nocheck — ported legacy admin/map code; typed rewrite pending
 import { useLoaderData } from "@tanstack/react-router";
 import { Loader2, Plus, Search, Filter, MoreHorizontal } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { getProperties, deleteProperty } from "@/shared/services/firestore";
+import { getProperties, deleteProperty } from "@/shared/services/adminContent";
 import { useState } from "react";
+import type { Property } from "@/shared/types/admin";
 
 export const routeOptions = {
   loader: async () => {
@@ -13,7 +13,7 @@ export const routeOptions = {
 };
 
 export function AdminPropertiesPage() {
-  const { properties } = useLoaderData({ strict: false }) as any;
+  const { properties } = useLoaderData({ strict: false }) as { properties: Property[] };
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<"all" | "available" | "occupied" | "hidden">(
     "all",
@@ -74,7 +74,9 @@ export function AdminPropertiesPage() {
           </div>
           <select
             value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value as any)}
+            onChange={(e) =>
+              setStatusFilter(e.target.value as "all" | "available" | "occupied" | "hidden")
+            }
             className="px-4 py-3 bg-zinc-900 border border-zinc-800 rounded-xl text-white focus:outline-none focus:border-brand-500"
           >
             <option value="all">All Status</option>
@@ -149,7 +151,8 @@ export function AdminPropertiesPage() {
                     <td className="py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
                         <Link
-                          to={`/admin/properties/${prop.id}`}
+                          to="/admin/properties/$id"
+                          params={{ id: prop.id ?? "" }}
                           className="p-2 text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition-colors"
                           title="Edit"
                         >
@@ -168,7 +171,7 @@ export function AdminPropertiesPage() {
                           </svg>
                         </Link>
                         <button
-                          onClick={() => handleDelete(prop.id)}
+                          onClick={() => prop.id && handleDelete(prop.id)}
                           disabled={deletingId === prop.id}
                           className="p-2 text-zinc-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
                           title="Delete"

@@ -1,4 +1,5 @@
 import { getOptimizedUrl, getThumbnailUrl } from "./storage";
+import { getCloudinaryUrl } from "./cloudinary";
 
 export function optimizeMedia(
   url: string,
@@ -15,6 +16,5 @@ export function getMediaUrl(
   publicId: string,
   options?: { width?: number; height?: number; crop?: string; quality?: string },
 ): string {
-  const { getCloudinaryUrl } = require("./cloudinary");
   return getCloudinaryUrl(publicId, options);
 }

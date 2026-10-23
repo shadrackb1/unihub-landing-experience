@@ -40,7 +40,7 @@ test("an anonymous request is refused with 401", async () => {
 test("an anonymous request has no session user", async () => {
   const user = await getSessionUser(new Request("http://localhost/api/consent/ledger"));
   assert.equal(user, null);
-  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+
   assert.ok(user === null);
 });
 

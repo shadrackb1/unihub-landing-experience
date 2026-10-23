@@ -1,4 +1,3 @@
-// @ts-nocheck — ported legacy admin/map code; typed rewrite pending
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/shared/utils/cn";
 
@@ -120,9 +119,26 @@ export function CampusMap({ className = "" }: { className?: string }) {
   const [basemap, setBasemap] = useState<BasemapId>("dark");
   const mapRef = useRef<import("maplibre-gl").Map | null>(null);
 
+  /**
+   * With no network the tile servers cannot be reached, so the live map would
+   * paint an empty rectangle. The same view is bundled as a still image and
+   * used instead, which is what keeps the offline copy visually identical.
+   */
+  const [offline, setOffline] = useState(true);
+
+  useEffect(() => {
+    const update = () => setOffline(navigator.onLine === false);
+    window.addEventListener("online", update);
+    window.addEventListener("offline", update);
+    return () => {
+      window.removeEventListener("online", update);
+      window.removeEventListener("offline", update);
+    };
+  }, []);
+
   useEffect(() => {
     const container = containerRef.current;
-    if (!container) return;
+    if (!container || offline) return;
 
     let cancelled = false;
     let map: import("maplibre-gl").Map | null = null;
@@ -132,7 +148,7 @@ export function CampusMap({ className = "" }: { className?: string }) {
     void (async () => {
       const maplibregl = (await import("maplibre-gl")).default;
       await import("maplibre-gl/dist/maplibre-gl.css");
-      if (cancelled || !container) return;
+      if (cancelled || !container || offline) return;
 
       const cfg = BASEMAPS.dark;
       map = new maplibregl.Map({
@@ -145,6 +161,8 @@ export function CampusMap({ className = "" }: { className?: string }) {
         maxPitch: 55,
         attributionControl: false,
       });
+      if (!map) return;
+      const mapInstance = map;
       mapRef.current = map;
 
       map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-right");
@@ -186,14 +204,14 @@ export function CampusMap({ className = "" }: { className?: string }) {
         const marker = new maplibregl.Marker({ element: el, anchor: "bottom" })
           .setLngLat([pin.lng, pin.lat])
           .setPopup(popup)
-          .addTo(map);
+          .addTo(mapInstance);
         markers.push(marker);
 
         bounds.extend([pin.lng, pin.lat]);
       });
 
-      map.on("load", () => {
-        map.fitBounds(bounds, {
+      mapInstance.on("load", () => {
+        mapInstance.fitBounds(bounds, {
           padding: { top: 48, bottom: 72, left: 40, right: 40 },
           duration: 0,
           maxZoom: 8.2,
@@ -207,18 +225,15 @@ export function CampusMap({ className = "" }: { className?: string }) {
       markers.forEach((marker) => marker.remove());
       // Clean up popups
       popups.forEach((popup) => popup.remove());
-      // Remove all event listeners
-      map?.off("load");
-      map?.off("style.load");
       // Remove the map
       map?.remove();
       mapRef.current = null;
     };
-  }, []);
+  }, [offline]);
 
   useEffect(() => {
     const map = mapRef.current;
-    if (!map) return;
+    if (!map || offline) return;
     const cfg = BASEMAPS[basemap];
     map.setStyle(cfg.style as never);
     const handleStyleLoad = () => {
@@ -229,7 +244,7 @@ export function CampusMap({ className = "" }: { className?: string }) {
     return () => {
       map.off("style.load", handleStyleLoad);
     };
-  }, [basemap]);
+  }, [basemap, offline]);
 
   return (
     <div className={cn("relative", className)}>
@@ -254,12 +269,20 @@ export function CampusMap({ className = "" }: { className?: string }) {
           );
         })}
       </div>
-      <div
-        ref={containerRef}
-        className="unihub-map min-h-[28rem] overflow-hidden rounded-3xl border border-border bg-card"
-        role="region"
-        aria-label="Campus housing map of Kenya"
-      />
+      {offline ? (
+        <img
+          src={basemap === "dark" ? "/map-dark.png" : "/map-satellite.png"}
+          alt="Campus housing map of Kenya"
+          className="unihub-map min-h-[28rem] w-full overflow-hidden rounded-3xl border border-border bg-card object-cover"
+        />
+      ) : (
+        <div
+          ref={containerRef}
+          className="unihub-map min-h-[28rem] overflow-hidden rounded-3xl border border-border bg-card"
+          role="region"
+          aria-label="Campus housing map of Kenya"
+        />
+      )}
       <p className="sr-only">{BASEMAPS[basemap].attribution.replace(/<[^>]+>/g, "")}</p>
     </div>
   );

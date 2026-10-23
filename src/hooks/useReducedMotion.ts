@@ -17,7 +17,7 @@ if (typeof window !== "undefined") {
   media.addEventListener("change", handleChange);
 
   // Cleanup function (for testing or if needed)
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   const cleanup = () => media.removeEventListener("change", handleChange);
 }
 

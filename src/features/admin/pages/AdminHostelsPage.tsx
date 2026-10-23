@@ -1,7 +1,7 @@
 import { useLoaderData } from "@tanstack/react-router";
 import { Loader2, Plus, Search, Building } from "lucide-react";
 import { Link } from "@tanstack/react-router";
-import { getHostels, deleteHostel, getUniversities } from "@/shared/services/firestore";
+import { getHostels, deleteHostel, getUniversities } from "@/shared/services/adminContent";
 import { useState } from "react";
 import type { Hostel, University } from "@/shared/types/admin";
 

@@ -220,6 +220,11 @@ export interface TeamMember {
 }
 
 export interface SiteSettings {
+  siteName: string;
+  siteUrl: string;
+  adminEmail: string;
+  maintenanceMode: boolean;
+  maintenanceMessage: string;
   heroTitle: string;
   heroSubtitle: string;
   heroImage?: string;

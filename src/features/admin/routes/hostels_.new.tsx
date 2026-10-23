@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { AdminPropertyForm } from "@features/admin/pages/AdminPropertyForm";
 import { requireAdmin } from "@features/admin/requireAdmin";
 
-export const Route = createFileRoute("/admin/hostels_/new")({
+export const Route = createFileRoute("/admin/hostels_/new" as any)({
   head: () => ({
     meta: [{ title: "New hostel · UniHub Admin" }, { name: "robots", content: "noindex" }],
   }),

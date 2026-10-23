@@ -16,6 +16,7 @@ This skill covers the systematic process of completing architecture restructure 
 ## Trigger
 
 Use when the user says things like:
+
 - "Check the app progress"
 - "Fix the architecture restructure TODO items"
 - "Complete the domain layer"
@@ -67,6 +68,7 @@ mkdir -p src/domain/types src/domain/schemas src/domain/constants src/domain/uti
 ```
 
 **Create barrel exports** for each new index:
+
 - `src/domain/types/index.ts` — export core interfaces (e.g., `SampleListing`, `CampusPin`, `ResidenceClip`)
 - `src/domain/schemas/index.ts` — Zod validation schemas if applicable
 - `src/domain/constants/index.ts` — app-wide constants, enums, config (e.g., `WHATSAPP_URL`)
@@ -75,10 +77,10 @@ mkdir -p src/domain/types src/domain/schemas src/domain/constants src/domain/uti
 **Create `src/domain/index.ts` barrel** exporting only what exists:
 
 ```typescript
-export * from './types';
-export * from './schemas';
-export * from './constants';
-export * from './utils';
+export * from "./types";
+export * from "./schemas";
+export * from "./constants";
+export * from "./utils";
 ```
 
 **Why:** The domain layer is the foundation — other layers (infrastructure, features) import from it. Missing directories cause `TS2307: Cannot find module` errors.
@@ -146,20 +148,21 @@ npm run lint      # verify lint passes (or address top errors)
 ```
 
 **Then:**
+
 - Update README structure section to reflect final layout
 - Consolidate progress/summary markdown files into one
 
 ## Common Pitfalls & Fixes
 
-| Pitfall | Fix |
-|---------|-----|
-| `TS2307: Cannot find module` | Create the missing directory and/or barrel export; verify the path alias `@/...` resolves correctly in `tsconfig.json` |
-| `TS2308: Module ... has already exported a member` | In the barrel export, explicitly re-export to resolve ambiguity, or remove the duplicate from one module |
-| `TS2345: Type ... is not assignable to type ...` | Narrow the type (add `| undefined` checks, use definite assignment assertions, or adjust the function signature) |
-| `TS2694: Namespace has no exported member` (Radix UI) | Check the `@radix-ui/react-*` version compatibility; may need to update imports or use the correct export name |
-| `context.boundary ? ... : undefined` (boundary is undefined) | Use `context.boundary !== undefined ? ... : undefined` to satisfy the type checker |
-| `Property 'className' does not exist on type 'IntrinsicAttributes'` | Ensure the component's props type is correct; add `className` to IntrinsicAttributes if extending a native element |
-| `Argument of type 'string | undefined' is not assignable to parameter of type 'string'` | Add a guard `ready ||= ''` or use `?? ''` / `String(ready)` before passing to the expected type |
+| Pitfall                                                             | Fix                                                                                                                    |
+| ------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `TS2307: Cannot find module`                                        | Create the missing directory and/or barrel export; verify the path alias `@/...` resolves correctly in `tsconfig.json` |
+| `TS2308: Module ... has already exported a member`                  | In the barrel export, explicitly re-export to resolve ambiguity, or remove the duplicate from one module               |
+| `TS2345: Type ... is not assignable to type ...`                    | Narrow the type (add `                                                                                                 | undefined` checks, use definite assignment assertions, or adjust the function signature) |
+| `TS2694: Namespace has no exported member` (Radix UI)               | Check the `@radix-ui/react-*` version compatibility; may need to update imports or use the correct export name         |
+| `context.boundary ? ... : undefined` (boundary is undefined)        | Use `context.boundary !== undefined ? ... : undefined` to satisfy the type checker                                     |
+| `Property 'className' does not exist on type 'IntrinsicAttributes'` | Ensure the component's props type is correct; add `className` to IntrinsicAttributes if extending a native element     |
+| `Argument of type 'string                                           | undefined' is not assignable to parameter of type 'string'`                                                            | Add a guard `ready                                                                       |     | = ''`or use`?? ''`/`String(ready)` before passing to the expected type |
 
 ## Verification Commands
 

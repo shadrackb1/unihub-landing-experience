@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { collection, query, where, getDocs } from "firebase/firestore";
@@ -46,7 +45,7 @@ function ListingOption({ listing }: { listing: MarketListing }) {
             : (listing.location ?? listing.category ?? "No details")}
           {listing.campus ? ` · Near ${listing.campus}` : ""}
         </p>
-        <p className="mt-1 text-sm font-medium">{formatKes(listing.price)}/month</p>
+        <p className="mt-1 text-sm font-medium">{formatKes(listing.price ?? 0)}/month</p>
       </div>
     </label>
   );
@@ -402,7 +401,7 @@ export const LandlordAdsPage = () => {
                           </p>
                           <p className="text-sm text-muted-foreground">
                             {listing.adExpiresAt
-                              ? `Ends ${new Date(listing.adExpiresAt).toLocaleDateString("en-KE")}`
+                              ? `Ends ${new Date(String(listing.adExpiresAt)).toLocaleDateString("en-KE")}`
                               : "No end date"}
                           </p>
                         </div>

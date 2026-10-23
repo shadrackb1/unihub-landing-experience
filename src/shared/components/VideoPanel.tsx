@@ -73,7 +73,7 @@ function useAutoplayInView() {
     if (video) {
       video.muted = true;
     }
-  }, []);
+  }, [videoRef]);
 
   return { videoRef, wrapRef: elementRef };
 }

@@ -1,13 +1,13 @@
-// @ts-nocheck — ported legacy admin/map code; typed rewrite pending
 import { useLoaderData } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { Loader2, Save, ArrowLeft, Image as ImageIcon, Plus, Trash2, X } from "lucide-react";
 import { Link, useNavigate, useParams } from "@tanstack/react-router";
-import { getProperty, createProperty, updateProperty } from "@/shared/services/firestore";
-import { getCategories, getAgents } from "@/shared/services/firestore";
+import { getProperty, createProperty, updateProperty } from "@/shared/services/adminContent";
+import { getCategories, getAgents } from "@/shared/services/adminContent";
 import { uploadMedia } from "@/shared/lib/storage";
 import { cn } from "@/shared/utils/cn";
 import { motion } from "motion/react";
+import type { Property, Agent, Category, MediaItem } from "@/shared/types/admin";
 
 export const routeOptions = {
   loader: async ({ params }: { params: { id?: string } }) => {
@@ -30,9 +30,13 @@ export const routeOptions = {
 };
 
 export function AdminPropertyForm() {
-  const { property, categories, agents } = useLoaderData({ strict: false }) as any;
+  const { property, categories, agents } = useLoaderData({ strict: false }) as {
+    property: Property | null;
+    categories: Category[];
+    agents: Agent[];
+  };
   const navigate = useNavigate();
-  const params = useParams({ strict: false }) as any;
+  const params = useParams({ strict: false }) as { id?: string };
   const isNew = params.id === "new";
 
   const [isSaving, setIsSaving] = useState(false);
@@ -117,11 +121,17 @@ export function AdminPropertyForm() {
     e.preventDefault();
     setIsSaving(true);
     try {
+      const [rawLat, rawLng] = formData.coordinates.split(",");
+      const lat = Number(rawLat);
+      const lng = Number(rawLng);
+      const coordinates = Number.isFinite(lat) && Number.isFinite(lng) ? { lat, lng } : undefined;
+      const { coordinates: _coordinates, deposit: _deposit, ...rest } = formData;
+
       const data = {
-        ...formData,
+        ...rest,
         price: Number(formData.price),
-        deposit: formData.deposit ? Number(formData.deposit) : undefined,
-        coordinates: formData.coordinates ? formData.coordinates.split(",").map(Number) : undefined,
+        ...(formData.deposit ? { deposit: Number(formData.deposit) } : {}),
+        ...(coordinates ? { coordinates } : {}),
         features: formData.features
           .split(",")
           .map((f) => f.trim())
@@ -131,10 +141,10 @@ export function AdminPropertyForm() {
 
       if (isNew) {
         await createProperty(data);
-      } else {
+      } else if (params.id) {
         await updateProperty(params.id, data);
       }
-      navigate({ to: "/admin/properties" });
+      navigate({ to: "/admin/properties/new" });
     } catch (error) {
       console.error("Save failed:", error);
       alert("Failed to save property");
@@ -154,7 +164,7 @@ export function AdminPropertyForm() {
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-4">
           <Link
-            to="/admin/properties"
+            to="/admin/properties/new"
             className="p-2 text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
@@ -171,7 +181,7 @@ export function AdminPropertyForm() {
         </div>
         <div className="flex gap-4">
           <Link
-            to="/admin/properties"
+            to="/admin/properties/new"
             className="px-4 py-2 flex items-center gap-2 rounded-xl border border-zinc-800 text-sm font-medium hover:bg-zinc-800 transition-all font-display"
           >
             <ArrowLeft className="w-4 h-4" /> Back

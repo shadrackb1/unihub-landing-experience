@@ -17,7 +17,7 @@ import {
   getUniversities,
   getAgents,
   getCategories,
-} from "@/shared/services/firestore";
+} from "@/shared/services/adminContent";
 import { useEffect, useState } from "react";
 import type { Property, Hostel } from "@/shared/types/admin";
 

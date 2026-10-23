@@ -6,14 +6,25 @@ export function reportError(error: unknown, context: Record<string, unknown> = {
 
   // Try to report to lovable if available (with type assertion to avoid TS errors)
   try {
-    // @ts-ignore - lovable integration
-    const lovableEvents = (window as any).__lovableEvents;
+    const lovableEvents = (
+      window as {
+        __lovableEvents?: {
+          captureException?: (error: unknown, context: Record<string, unknown>) => void;
+        };
+      }
+    ).__lovableEvents;
     if (lovableEvents?.captureException) {
       lovableEvents.captureException(error, context);
     }
 
-    // @ts-ignore - lovable integration
-    const lovableReportRuntimeError = (window as any).__lovableReportRuntimeError;
+    const lovableReportRuntimeError = (
+      window as {
+        __lovableReportRuntimeError?: (payload: {
+          error: unknown;
+          context: Record<string, unknown>;
+        }) => void;
+      }
+    ).__lovableReportRuntimeError;
     if (lovableReportRuntimeError) {
       lovableReportRuntimeError({ error, context });
     }

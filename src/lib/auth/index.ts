@@ -45,6 +45,15 @@ function createAuth() {
     minPasswordLength: 8,
     maxPasswordLength: 128,
   },
+  /**
+   * The offline kit signs in and out of seven accounts in quick succession
+   * while demonstrating the roles, which trips the credential rate limit.
+   * start.bat opts out for that copy only; deployed instances keep it on.
+   */
+  rateLimit:
+    process.env["DISABLE_AUTH_RATE_LIMIT"] === "1"
+      ? { enabled: false }
+      : { enabled: true, window: 60, max: 100 },
   session: {
     expiresIn: 60 * 60 * 24 * 7, // 7 days
     updateAge: 60 * 60 * 24, // 1 day

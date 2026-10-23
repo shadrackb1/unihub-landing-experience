@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { AdminPropertyForm, routeOptions } from "@/features/admin/pages/AdminPropertyForm";
 import { guardedLoader } from "@/features/admin/requireAdmin";
 
-export const Route = createFileRoute("/admin/properties_/new")({
+export const Route = createFileRoute("/admin/properties_/new" as any)({
   head: () => ({
     meta: [{ title: "New property · UniHub Admin" }, { name: "robots", content: "noindex" }],
   }),

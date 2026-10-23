@@ -365,8 +365,54 @@ model ExtractedHostelRecord {
 // SiteSettings type the marketing pages already consume.
 // ---------------------------------------------------------------------------
 
+// Admin content models. These used to live in Firestore; they are plain
+// SQLite tables now so the administrator console works without a network.
+model Agent {
+  id              String   @id @default(cuid())
+  name            String
+  phone           String
+  whatsappNumber  String
+  profilePhotoUrl String?
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Category {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  isActive  Boolean  @default(true)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Property {
+  id          String   @id @default(cuid())
+  title       String
+  categoryId  String
+  price       Int
+  deposit     Int?
+  location    String
+  latitude    Float?
+  longitude   Float?
+  description String
+  features    String   @default("[]")
+  agentId     String
+  status      String   @default("available")
+  media       String   @default("[]")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
 model SiteSettings {
   id                 String   @id @default("global")
+  siteName           String   @default("UniHub")
+  siteUrl            String   @default("")
+  adminEmail         String   @default("")
+  maintenanceMode    Boolean  @default(false)
+  maintenanceMessage String   @default("We are currently performing scheduled maintenance.")
   heroTitle          String
   heroSubtitle       String
   heroImage          String?

@@ -26,7 +26,7 @@ const PAID_PLANS = AD_PLANS.filter((plan) => plan.price > 0);
 export const LandlordNewAdsPage = () => {
   const { uid, profileState } = useApprovedLandlord();
   const navigate = useNavigate();
-  const { listingId: preselectedId } = useSearch({ from: "/landlord/ads_/new" });
+  const { listingId: preselectedId } = (useSearch({ from: "/landlord/ads/new" }) as { listingId?: string });
 
   const [listings, setListings] = useState<MarketListing[] | null>(null);
   const [loadError, setLoadError] = useState("");

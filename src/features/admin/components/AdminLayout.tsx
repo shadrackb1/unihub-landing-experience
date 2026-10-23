@@ -20,15 +20,8 @@ import { useAuth } from "@/shared/context/AuthContext";
 
 const navItems = [
   { to: "/admin", icon: LayoutDashboard, label: "Dashboard", end: true },
-  { to: "/admin/landlords", icon: UserCheck, label: "Landlords" },
-  { to: "/admin/listings", icon: ClipboardCheck, label: "Listing review" },
   { to: "/admin/ads", icon: Megaphone, label: "Ads & boosts" },
   { to: "/admin/cms", icon: Monitor, label: "Site builder" },
-  { to: "/admin/properties", icon: Home, label: "Properties" },
-  { to: "/admin/universities", icon: School, label: "Universities" },
-  { to: "/admin/hostels", icon: Building, label: "Hostels" },
-  { to: "/admin/agents", icon: Users, label: "Agents" },
-  { to: "/admin/categories", icon: Tag, label: "Categories" },
   { to: "/admin/settings", icon: Settings, label: "Settings" },
 ] as const;
 

@@ -1,6 +1,6 @@
 import { useLoaderData } from "@tanstack/react-router";
 import { Loader2, Search, Tag } from "lucide-react";
-import { getCategories, deleteCategory } from "@/shared/services/firestore";
+import { getCategories, deleteCategory } from "@/shared/services/adminContent";
 import { useState } from "react";
 import type { Category } from "@/shared/types/admin";
 

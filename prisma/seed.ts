@@ -458,6 +458,288 @@ async function main() {
       }
     }
   }
+  // ---------------------------------------------------------------- admin
+  // content: agents, categories, properties, hostels and the settings row.
+  // These used to be Firestore documents, so nothing existed in SQLite and the
+  // administrator console opened on empty tables.
+  console.log("\n🧑‍💼  Seeding agents, categories and properties...\n");
+
+  const agents = [
+    {
+      name: "Grace Njoki",
+      phone: "+254712345678",
+      whatsappNumber: "254712345678",
+      profilePhotoUrl: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200",
+      isActive: true,
+    },
+    {
+      name: "Samuel Kiptoo",
+      phone: "+254723456789",
+      whatsappNumber: "254723456789",
+      profilePhotoUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200",
+      isActive: true,
+    },
+    {
+      name: "Faith Wambui",
+      phone: "+254734567890",
+      whatsappNumber: "254734567890",
+      profilePhotoUrl: null,
+      isActive: false,
+    },
+  ];
+
+  const agentIds: string[] = [];
+  for (const agent of agents) {
+    try {
+      const existing = await prisma.agent.findFirst({ where: { name: agent.name } });
+      const row = existing
+        ? await prisma.agent.update({ where: { id: existing.id }, data: agent })
+        : await prisma.agent.create({ data: agent });
+      agentIds.push(row.id);
+      console.log(`  ✅ Agent: ${row.name}`);
+    } catch (error) {
+      console.error(`  ❌ Agent error: ${error.message}`);
+    }
+  }
+
+  const categories = [
+    { name: "Hostels", slug: "hostels", isActive: true, sortOrder: 1 },
+    { name: "Bedsitters", slug: "bedsitters", isActive: true, sortOrder: 2 },
+    { name: "Studio Apartments", slug: "studio-apartments", isActive: true, sortOrder: 3 },
+    { name: "Shared Apartments", slug: "shared-apartments", isActive: true, sortOrder: 4 },
+  ];
+
+  const categoryIds: Record<string, string> = {};
+  for (const category of categories) {
+    try {
+      const row = await prisma.category.upsert({
+        where: { slug: category.slug },
+        update: category,
+        create: category,
+      });
+      categoryIds[category.slug] = row.id;
+      console.log(`  ✅ Category: ${row.name}`);
+    } catch (error) {
+      console.error(`  ❌ Category error: ${error.message}`);
+    }
+  }
+
+  const properties = [
+    {
+      title: "Sunrise Hostel — JKUAT Gate A",
+      categorySlug: "hostels",
+      price: 12000,
+      deposit: 12000,
+      location: "Juja, near JKUAT Gate A",
+      latitude: -1.0967,
+      longitude: 37.0076,
+      description:
+        "Twin and single hostel rooms with hot showers, 24/7 water and fibre internet. Gated compound with a resident warden.",
+      features: ["WiFi", "Hot water", "Security", "Study room", "Laundry"],
+      status: "available",
+      media: [
+        {
+          public_id: "seed/hostel-1",
+          secure_url: "/listing-hostel.jpg",
+          resource_type: "image",
+          format: "jpg",
+          order: 0,
+        },
+        {
+          public_id: "seed/twin-1",
+          secure_url: "/listing-twin-hostel.jpg",
+          resource_type: "image",
+          format: "jpg",
+          order: 1,
+        },
+      ],
+    },
+    {
+      title: "Riverside Bedsitter — KU",
+      categorySlug: "bedsitters",
+      price: 15000,
+      deposit: 15000,
+      location: "Kahawa Wendani, near Kenyatta University",
+      latitude: -1.1715,
+      longitude: 36.9556,
+      description:
+        "Self-contained bedsitter with a separate kitchen and bathroom, five minutes from the KU main gate.",
+      features: ["Private kitchen", "Water", "Parking", "Security"],
+      status: "available",
+      media: [
+        {
+          public_id: "seed/bedsitter-1",
+          secure_url: "/listing-bedsitter.jpg",
+          resource_type: "image",
+          format: "jpg",
+          order: 0,
+        },
+      ],
+    },
+    {
+      title: "Studio 9 — Strathmore",
+      categorySlug: "studio-apartments",
+      price: 28000,
+      deposit: 28000,
+      location: "Madaraka, near Strathmore University",
+      latitude: -1.31,
+      longitude: 36.813,
+      description:
+        "Furnished studio with a work desk and fast internet, ideal for postgraduates on placement in Nairobi.",
+      features: ["Furnished", "WiFi", "Backup power", "Lift"],
+      status: "occupied",
+      media: [
+        {
+          public_id: "seed/studio-1",
+          secure_url: "/listing-studio.jpg",
+          resource_type: "image",
+          format: "jpg",
+          order: 0,
+        },
+      ],
+    },
+    {
+      title: "Riverside Shared Apartment — Moi",
+      categorySlug: "shared-apartments",
+      price: 9000,
+      deposit: 9000,
+      location: "Kesses, near Moi University",
+      latitude: 0.0678,
+      longitude: 35.2817,
+      description:
+        "Three-bedroom shared apartment with per-student pricing, a shared kitchen and a study lounge.",
+      features: ["Shared kitchen", "WiFi", "Water", "Parking"],
+      status: "available",
+      media: [
+        {
+          public_id: "seed/shared-1",
+          secure_url: "/listing-shared.jpg",
+          resource_type: "image",
+          format: "jpg",
+          order: 0,
+        },
+      ],
+    },
+  ];
+
+  for (const property of properties) {
+    try {
+      const { categorySlug, ...rest } = property;
+      const payload = {
+        title: rest.title,
+        categoryId: categoryIds[categorySlug] ?? "",
+        price: rest.price,
+        deposit: rest.deposit,
+        location: rest.location,
+        latitude: rest.latitude,
+        longitude: rest.longitude,
+        description: rest.description,
+        features: JSON.stringify(rest.features),
+        agentId: agentIds[0] ?? "",
+        status: rest.status,
+        media: JSON.stringify(rest.media),
+      };
+      const existing = await prisma.property.findFirst({ where: { title: payload.title } });
+      if (existing) {
+        await prisma.property.update({ where: { id: existing.id }, data: payload });
+      } else {
+        await prisma.property.create({ data: payload });
+      }
+      console.log(`  ✅ Property: ${payload.title}`);
+    } catch (error) {
+      console.error(`  ❌ Property error: ${error.message}`);
+    }
+  }
+
+  console.log("\n🏨  Seeding hostels...\n");
+  const jkuat = await prisma.university.findUnique({ where: { slug: "jkuat" } });
+  const uon = await prisma.university.findUnique({ where: { slug: "uon" } });
+  const hostels = [
+    {
+      universityId: jkuat?.id ?? "",
+      name: "Sunrise Hostel",
+      location: "Juja, Gate A",
+      description: "Twin and single rooms with hot water, WiFi and a resident warden.",
+      hostelType: "mixed",
+      images: JSON.stringify([
+        {
+          public_id: "seed/hostel-1",
+          secure_url: "/listing-hostel.jpg",
+          resource_type: "image",
+          format: "jpg",
+          order: 0,
+        },
+      ]),
+      amenities: JSON.stringify(["WiFi", "Hot water", "Security", "Laundry"]),
+      wardenName: "Mr. Kamau",
+      wardenPhone: "+254711000111",
+      wardenEmail: "warden@sunrisehostel.co.ke",
+      status: "active",
+    },
+    {
+      universityId: uon?.id ?? "",
+      name: "Madaraka Girls Hostel",
+      location: "Madaraka, Nairobi",
+      description: "Girls-only hostel with a study room, CCTV and standby power.",
+      hostelType: "girls",
+      images: JSON.stringify([
+        {
+          public_id: "seed/hostel-2",
+          secure_url: "/listing-video-female-hostel-poster.jpg",
+          resource_type: "image",
+          format: "jpg",
+          order: 0,
+        },
+      ]),
+      amenities: JSON.stringify(["WiFi", "CCTV", "Study room", "Backup power"]),
+      wardenName: "Mrs. Otieno",
+      wardenPhone: "+254722000222",
+      wardenEmail: "warden@madarakagirls.co.ke",
+      status: "active",
+    },
+  ];
+
+  for (const hostel of hostels) {
+    try {
+      if (!hostel.universityId) continue;
+      const existing = await prisma.hostel.findFirst({ where: { name: hostel.name } });
+      if (existing) {
+        await prisma.hostel.update({ where: { id: existing.id }, data: hostel });
+      } else {
+        await prisma.hostel.create({ data: hostel });
+      }
+      console.log(`  ✅ Hostel: ${hostel.name}`);
+    } catch (error) {
+      console.error(`  ❌ Hostel error: ${error.message}`);
+    }
+  }
+
+  console.log("\n⚙️   Seeding site settings...\n");
+  try {
+    await prisma.siteSettings.upsert({
+      where: { id: "global" },
+      update: {
+        siteName: "UniHub",
+        siteUrl: "http://localhost:8080",
+        adminEmail: "admin@unihub.ke",
+      },
+      create: {
+        id: "global",
+        siteName: "UniHub",
+        siteUrl: "http://localhost:8080",
+        adminEmail: "admin@unihub.ke",
+        maintenanceMode: false,
+        maintenanceMessage: "We are currently performing scheduled maintenance.",
+        heroTitle: "Find student housing near your campus",
+        heroSubtitle: "Verified hostels, bedsitters and apartments across Kenya.",
+        ctaText: "Browse listings",
+      },
+    });
+    console.log("  ✅ Site settings ready");
+  } catch (error) {
+    console.error(`  ❌ Settings error: ${error.message}`);
+  }
+
   console.log("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
   console.log("📋 TEST ACCOUNT CREDENTIALS");
   console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");

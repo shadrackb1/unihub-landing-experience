@@ -65,7 +65,7 @@ async function verifyAccount(account: TestAccount) {
     });
 
     if (result.user) {
-      const userRole = (result.user as any).role;
+      const userRole = (result.user as { role?: string } | undefined)?.role;
       return {
         email: account.email,
         status: "OK",
@@ -81,8 +81,11 @@ async function verifyAccount(account: TestAccount) {
       description: account.description,
       error: "No user returned",
     };
-  } catch (error: any) {
-    const msg = error?.message || error?.body?.message || String(error);
+  } catch (error: unknown) {
+    const msg =
+      (error as { message?: string; body?: { message?: string } } | undefined)?.message ||
+      (error as { body?: { message?: string } } | undefined)?.body?.message ||
+      String(error);
     return {
       email: account.email,
       status: "FAIL",
