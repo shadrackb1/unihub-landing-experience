@@ -1,14 +1,11 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { admin } from "better-auth/plugins";
-import { PrismaClient } from "@/generated/prisma/client";
-import { PrismaLibSql } from "@prisma/adapter-libsql";
+import { getPrisma } from "@/server/db";
 
-const adapter = new PrismaLibSql({ url: process.env["DATABASE_URL"]! });
-const prisma = new PrismaClient({ adapter });
-
-export const auth = betterAuth({
-  database: prismaAdapter(prisma, {
+function createAuth() {
+  return betterAuth({
+  database: prismaAdapter(getPrisma(), {
     provider: "sqlite",
   }),
   emailAndPassword: {
@@ -48,6 +45,25 @@ export const auth = betterAuth({
     ...(process.env["BETTER_AUTH_URL"] ? [process.env["BETTER_AUTH_URL"]] : []),
   ],
 });
+}
 
-export type Session = typeof auth.$Infer.Session.session;
-export type User = typeof auth.$Infer.Session.user;
+type AuthInstance = ReturnType<typeof createAuth>;
+
+let instance: AuthInstance | undefined;
+
+/** Built on first use so importing this module never needs the database to be reachable. */
+export function getAuth(): AuthInstance {
+  if (!instance) instance = createAuth();
+  return instance;
+}
+
+export const auth: AuthInstance = new Proxy({} as AuthInstance, {
+  get(_target, prop) {
+    const real = getAuth() as unknown as Record<string | symbol, unknown>;
+    const value = real[prop];
+    return typeof value === "function" ? (value as (...a: unknown[]) => unknown).bind(real) : value;
+  },
+});
+
+export type Session = AuthInstance["$Infer"]["Session"]["session"];
+export type User = AuthInstance["$Infer"]["Session"]["user"];

@@ -26,7 +26,7 @@ export const ListingFormSchema = z.object({
   title: z.string().min(5, "Title must be at least 5 characters").max(100, "Title too long"),
   location: z.string().min(3, "Location is required").max(100, "Location too long"),
   category: z.enum(["HOSTEL", "BEDSITTER", "SINGLE_ROOM", "STUDIO", "SHARED_APARTMENT"], {
-    required_error: "Category is required",
+    error: "Category is required",
   }),
   price: z.coerce
     .number()
@@ -81,7 +81,7 @@ export function ListingForm({
   submitLabel = "Save Listing",
   isLoading = false,
 }: ListingFormProps) {
-  const form = useForm<ListingFormData>({
+  const form = useForm<z.input<typeof ListingFormSchema>, unknown, ListingFormData>({
     resolver: zodResolver(ListingFormSchema),
     defaultValues: {
       title: "",

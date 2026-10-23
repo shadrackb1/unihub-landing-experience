@@ -20,8 +20,21 @@ function createClient(): PrismaClient {
   return new PrismaClient({ adapter });
 }
 
-export const prisma: PrismaClient = globalForPrisma.prisma ?? createClient();
-
-if (process.env["NODE_ENV"] !== "production") {
-  globalForPrisma.prisma = prisma;
+/**
+ * The client is created on first use, not when this module is imported. The module is
+ * pulled into the server bundle that renders every page, so connecting (or throwing on a
+ * missing DATABASE_URL) at import time took the whole site down. Now only the routes that
+ * actually query the database fail when it is misconfigured.
+ */
+export function getPrisma(): PrismaClient {
+  if (!globalForPrisma.prisma) globalForPrisma.prisma = createClient();
+  return globalForPrisma.prisma;
 }
+
+export const prisma: PrismaClient = new Proxy({} as PrismaClient, {
+  get(_target, prop) {
+    const client = getPrisma() as unknown as Record<string | symbol, unknown>;
+    const value = client[prop];
+    return typeof value === "function" ? (value as (...a: unknown[]) => unknown).bind(client) : value;
+  },
+});
