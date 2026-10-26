@@ -1,4 +1,5 @@
 import { Link, useNavigate } from "@tanstack/react-router";
+import { useState, useEffect } from "react";
 import { Mail, Menu, MessageCircle, X, LogIn, UserCircle2 } from "lucide-react";
 import { Logo } from "@/shared/components/Logo";
 import { useAuth } from "@/shared/context/AuthContext";
@@ -31,7 +32,7 @@ export function SiteHeader() {
   }, [open]);
 
   const handleLoginClick = () => {
-    navigate("/admin/login");
+    navigate({ to: "/admin/login" });
   };
 
   return (

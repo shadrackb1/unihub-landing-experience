@@ -3,6 +3,7 @@ import { Loader2, Plus, Search, Users } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
 import { getAgentsList, deleteAgent } from '@/shared/services/firestore';
 import { useState } from 'react';
+import type { Agent } from '@/shared/types/admin';
 
 export const Route = createFileRoute('/admin/agents')({
   loader: async () => {
@@ -13,7 +14,7 @@ export const Route = createFileRoute('/admin/agents')({
 });
 
 export function AdminAgentsPage() {
-  const { agents } = Route.useLoaderData();
+  const { agents } = Route.useLoaderData() as { agents: Agent[] };
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('all');
   const [deletingId, setDeletingId] = useState<string | null>(null);
@@ -96,7 +97,7 @@ export function AdminAgentsPage() {
                   </td>
                 </tr>
               ) : (
-                agents.map((agent) => (
+                agents.map((agent: Agent) => (
                   <tr key={agent.id} className="hover:bg-zinc-900/50 transition-colors">
                     <td className="py-4">
                       <div className="flex items-center gap-3">
@@ -124,7 +125,7 @@ export function AdminAgentsPage() {
                     </td>
                     <td className="py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <Link to={`/admin/agents/${agent.id}`} className="p-2 text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition-colors" title="Edit">
+                        <Link to="/admin/agents/$id" params={{ id: agent.id }} className="p-2 text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition-colors" title="Edit">
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5a2.121 2.121 0 013 3z" /></svg>
                         </Link>
                         <button

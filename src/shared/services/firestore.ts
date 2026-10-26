@@ -334,6 +334,15 @@ export async function getCategories(): Promise<Category[]> {
   return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Category));
 }
 
+export async function getCategory(id: string): Promise<Category | null> {
+  const docRef = doc(db, COLLECTIONS.categories, id);
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) {
+    return { id: docSnap.id, ...docSnap.data() } as Category;
+  }
+  return null;
+}
+
 export async function createCategory(data: Omit<Category, 'id'>): Promise<string> {
   const docRef = await addDoc(collection(db, COLLECTIONS.categories), data);
   return docRef.id;

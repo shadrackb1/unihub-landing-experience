@@ -23,7 +23,7 @@ export function AdminLoginPage() {
     setIsLoading(true);
     try {
       await login(email, password);
-      navigate('/admin');
+      navigate({ to: '/admin' });
     } catch (err: any) {
       setError(err.message || 'Invalid credentials');
     } finally {
@@ -113,10 +113,7 @@ export function AdminLoginPage() {
           </form>
 
           <p className="mt-6 text-center text-sm text-zinc-500">
-            Don&apos;t have an account?{' '}
-            <Link to="/admin/register" className="text-brand-400 hover:text-brand-300 font-medium">
-              Contact admin
-            </Link>
+            Don&apos;t have an account? Contact admin
           </p>
         </div>
       </div>

@@ -3,6 +3,7 @@ import { Loader2, Plus, Search, Building } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
 import { getUniversities, deleteUniversity } from '@/shared/services/firestore';
 import { useState } from 'react';
+import type { University } from '@/shared/types/admin';
 
 export const Route = createFileRoute('/admin/universities')({
   loader: async () => {
@@ -13,12 +14,12 @@ export const Route = createFileRoute('/admin/universities')({
 });
 
 export function AdminUniversitiesPage() {
-  const { universities } = Route.useLoaderData();
+  const { universities } = Route.useLoaderData() as { universities: University[] };
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('all');
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
-  const filteredUniversities = universities.filter(uni => {
+  const filteredUniversities = universities.filter((uni: University) => {
     const matchesSearch = uni.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       uni.location.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === 'all' || uni.status === statusFilter;
@@ -128,7 +129,7 @@ export function AdminUniversitiesPage() {
                     </td>
                     <td className="py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <Link to={`/admin/universities/${uni.id}`} className="p-2 text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition-colors" title="Edit">
+                        <Link to="/admin/universities/$id" params={{ id: uni.id }} className="p-2 text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition-colors" title="Edit">
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5a2.121 2.121 0 013 3z" /></svg>
                         </Link>
                         <button

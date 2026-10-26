@@ -3,6 +3,7 @@ import { Loader2, Plus, Search, Tag } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
 import { getCategoriesList, deleteCategory } from '@/shared/services/firestore';
 import { useState } from 'react';
+import type { Category } from '@/shared/types/admin';
 
 export const Route = createFileRoute('/admin/categories')({
   loader: async () => {
@@ -13,11 +14,11 @@ export const Route = createFileRoute('/admin/categories')({
 });
 
 export function AdminCategoriesPage() {
-  const { categories } = Route.useLoaderData();
+  const { categories } = Route.useLoaderData() as { categories: Category[] };
   const [searchTerm, setSearchTerm] = useState('');
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
-  const filteredCategories = categories.filter(category =>
+  const filteredCategories = categories.filter((category: Category) =>
     category.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     category.slug.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -106,7 +107,7 @@ export function AdminCategoriesPage() {
                     <td className="py-4 text-zinc-300">{category.order}</td>
                     <td className="py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <Link to={`/admin/categories/${category.id}`} className="p-2 text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition-colors" title="Edit">
+                        <Link to="/admin/categories/$id" params={{ id: category.id }} className="p-2 text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition-colors" title="Edit">
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5a2.121 2.121 0 013 3z" /></svg>
                         </Link>
                         <button

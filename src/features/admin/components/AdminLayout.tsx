@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Outlet, NavLink, useNavigate } from '@tanstack/react-router';
-import { 
-  LayoutDashboard, Home, Users, Tag, Settings, LogOut, Menu, X, Monitor, School, Building, Palette, Layout, MousePointerClick, Users as UsersIcon 
+import { Outlet, Link, useNavigate } from '@tanstack/react-router';
+import {
+  LayoutDashboard, Home, Users, Tag, Settings, LogOut, Menu, X, Monitor, School, Building, Palette, Layout, MousePointerClick, Users as UsersIcon
 } from 'lucide-react';
 import { useAuth } from '@/shared/context/AuthContext';
 import { cn } from '@/shared/lib/utils';
@@ -23,9 +23,8 @@ export const AdminLayout = () => {
   ];
 
   const handleLogout = async () => {
-    // This would need the actual logout function from auth
-    // For now, just navigate to login
-    navigate('/admin/login');
+    await logout();
+    navigate({ to: '/admin/login' });
   };
 
   return (
@@ -50,22 +49,21 @@ export const AdminLayout = () => {
 
         <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
           {navItems.map((item) => (
-            <a
+            <Link
               key={item.to}
-              href={item.to}
+              to={item.to}
               end={item.end}
               onClick={() => setMobileMenuOpen(false)}
-              className={({ isActive }) =>
-                `flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors ${
-                  item.to === window.location.pathname
-                    ? 'bg-zinc-800 text-white'
-                    : 'text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-200'
-                }`
+              className={({ isActive }: { isActive: boolean }) =>
+                cn(
+                  'flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors',
+                  isActive ? 'bg-zinc-800 text-white' : 'text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-200'
+                )
               }
             >
               <item.icon className="w-5 h-5" />
               {item.label}
-            </a>
+            </Link>
           ))}
         </nav>
 
@@ -82,8 +80,8 @@ export const AdminLayout = () => {
 
       {/* Mobile backdrop */}
       {mobileMenuOpen && (
-        <div 
-          className="fixed inset-0 bg-black/50 z-30 md:hidden" 
+        <div
+          className="fixed inset-0 bg-black/50 z-30 md:hidden"
           onClick={() => setMobileMenuOpen(false)}
         />
       )}
@@ -97,8 +95,3 @@ export const AdminLayout = () => {
     </div>
   );
 };
-
-function handleLogout() {
-  // This will be replaced by the actual logout function
-  window.location.href = '/admin/login';
-}

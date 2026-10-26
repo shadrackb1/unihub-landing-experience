@@ -3,6 +3,7 @@ import { Loader2, Plus, Search, Filter, MoreHorizontal } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
 import { getProperties, deleteProperty } from '@/shared/services/firestore';
 import { useState } from 'react';
+import type { Property } from '@/shared/types/admin';
 
 export const Route = createFileRoute('/admin/properties')({
   loader: async () => {
@@ -13,12 +14,12 @@ export const Route = createFileRoute('/admin/properties')({
 });
 
 export function AdminPropertiesPage() {
-  const { properties } = Route.useLoaderData();
+  const { properties } = Route.useLoaderData() as { properties: Property[] };
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'available' | 'occupied' | 'hidden'>('all');
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
-  const filteredProperties = properties.filter(prop => {
+  const filteredProperties = properties.filter((prop: Property) => {
     const matchesSearch = prop.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       prop.location.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === 'all' || prop.status === statusFilter;
@@ -129,7 +130,7 @@ export function AdminPropertiesPage() {
                     <td className="py-4 text-zinc-300">{prop.agentId}</td>
                     <td className="py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <Link to={`/admin/properties/${prop.id}`} className="p-2 text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition-colors" title="Edit">
+                        <Link to="/admin/properties/$id" params={{ id: prop.id }} className="p-2 text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition-colors" title="Edit">
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5a2.121 2.121 0 013 3z" /></svg>
                         </Link>
                         <button

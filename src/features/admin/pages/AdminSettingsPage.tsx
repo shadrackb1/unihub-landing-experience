@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { getSiteSettingsData, updateSiteSettingsData } from '@/shared/services/firestore';
 import { cn } from '@/shared/lib/utils';
 import { motion } from 'motion/react';
+import type { SiteSettings } from '@/shared/types/admin';
 
 export const Route = createFileRoute('/admin/settings')({
   loader: async () => {
@@ -14,7 +15,7 @@ export const Route = createFileRoute('/admin/settings')({
 });
 
 export function AdminSettingsPage() {
-  const { settings } = Route.useLoaderData();
+  const { settings } = Route.useLoaderData() as { settings: SiteSettings | undefined };
   const [isSaving, setIsSaving] = useState(false);
   const [activeTab, setActiveTab] = useState<'general' | 'features' | 'advanced'>('general');
   const [formData, setFormData] = useState({

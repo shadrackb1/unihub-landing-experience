@@ -7,6 +7,7 @@ import { getCategoriesList, getAgentsList } from '@/shared/services/firestore';
 import { uploadMedia } from '@/shared/lib/storage';
 import { cn } from '@/shared/lib/utils';
 import { motion } from 'motion/react';
+import type { MediaItem } from '@/shared/types/admin';
 
 export const Route = createFileRoute('/admin/properties/$id')({
   loader: async ({ params }) => {
@@ -27,9 +28,9 @@ export const Route = createFileRoute('/admin/properties/$id')({
 });
 
 export function AdminPropertyForm() {
-  const { property, categories, agents } = Route.useLoaderData();
+  const { property, categories, agents } = Route.useLoaderData<{ property: any | null; categories: any[]; agents: any[] }>();
   const navigate = useNavigate();
-  const params = useParams();
+  const params = useParams<{ id: string }>();
   const isNew = params.id === 'new';
   
   const [isSaving, setIsSaving] = useState(false);
