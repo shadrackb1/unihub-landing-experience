@@ -1,12 +1,11 @@
-// @ts-nocheck
-import React, { useState, useEffect } from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import { useNavigate, useParams, Link } from 'react-router-dom';
-import { HostelRoom } from '../../types';
-import { getHostelRoom, createHostelRoom, updateHostelRoom } from '../../services/firestore';
-import { Upload, X, Video, Image as ImageIcon, ArrowLeft } from 'lucide-react';
-import toast from 'react-hot-toast';
-import { motion, AnimatePresence } from 'motion/react';
+import React, { useState, useEffect } from "react";
+import { useForm, Controller } from "react-hook-form";
+import { useNavigate, useParams, Link } from "react-router-dom";
+import { HostelRoom } from "../../types";
+import { getHostelRoom, createHostelRoom, updateHostelRoom } from "../../services/firestore";
+import { Upload, X, Video, Image as ImageIcon, ArrowLeft } from "lucide-react";
+import toast from "react-hot-toast";
+import { motion, AnimatePresence } from "motion/react";
 
 export const AdminHostelRoomForm = () => {
   const { id: hostelId, roomId } = useParams();
@@ -16,44 +15,51 @@ export const AdminHostelRoomForm = () => {
   const [mediaItems, setMediaItems] = useState<any[]>([]);
   const [uploadingMedia, setUploadingMedia] = useState(false);
 
-  const { control, handleSubmit, formState: { errors }, reset } = useForm({
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
     defaultValues: {
-      room_number: '',
-      room_type: 'single',
-      bed_number: '',
+      room_number: "",
+      room_type: "single",
+      bed_number: "",
       max_occupants: 1,
       current_occupants: 0,
       pricing_per_month: 0,
       pricing_per_semester: 0,
       pricing_per_year: 0,
-      status: 'available',
-      amenities: '',
+      status: "available",
+      amenities: "",
     },
   });
 
   useEffect(() => {
     if (roomId) {
-      getHostelRoom(roomId).then(data => {
-        if (data) {
-          reset({
-            room_number: data.room_number,
-            room_type: data.room_type,
-            bed_number: data.bed_number || '',
-            max_occupants: data.occupancy?.max_occupants || 1,
-            current_occupants: data.occupancy?.current_occupants || 0,
-            pricing_per_month: data.pricing?.per_month || 0,
-            pricing_per_semester: data.pricing?.per_semester || 0,
-            pricing_per_year: data.pricing?.per_year || 0,
-            status: data.status,
-            amenities: data.amenities?.join(', ') || '',
-          });
-          setMediaItems(data.media || []);
-        }
-        setLoading(false);
-      }).catch(err => {
-        toast.error('Failed to load room details');
-        navigate(`/admin/hostels/${hostelId}/rooms`);
-      });
+      getHostelRoom(roomId)
+        .then((data) => {
+          if (data) {
+            reset({
+              room_number: data.room_number,
+              room_type: data.room_type,
+              bed_number: data.bed_number || "",
+              max_occupants: data.occupancy?.max_occupants || 1,
+              current_occupants: data.occupancy?.current_occupants || 0,
+              pricing_per_month: data.pricing?.per_month || 0,
+              pricing_per_semester: data.pricing?.per_semester || 0,
+              pricing_per_year: data.pricing?.per_year || 0,
+              status: data.status,
+              amenities: data.amenities?.join(", ") || "",
+            });
+            setMediaItems(data.media || []);
+          }
+          setLoading(false);
+        })
+        .catch((err) => {
+          toast.error("Failed to load room details");
+          navigate(`/admin/hostels/${hostelId}/rooms`);
+        });
     }
   }, [roomId, hostelId, navigate, reset]);
 
@@ -62,28 +68,28 @@ export const AdminHostelRoomForm = () => {
     if (!files) return;
 
     setUploadingMedia(true);
-    const loadingId = toast.loading('Uploading media...');
+    const loadingId = toast.loading("Uploading media...");
 
     try {
-      const { uploadToCloudinary } = await import('../../lib/cloudinary');
-      
+      const { uploadToCloudinary } = await import("../../lib/cloudinary");
+
       const newItems = [];
       for (const file of Array.from(files) as File[]) {
-        const isVideo = file.type.startsWith('video');
+        const isVideo = file.type.startsWith("video");
         const url = await uploadToCloudinary(file);
         newItems.push({
-          type: isVideo ? 'video' : 'image',
+          type: isVideo ? "video" : "image",
           url: url,
-          caption: '',
+          caption: "",
           order: mediaItems.length + newItems.length,
           ...(isVideo && { duration: 0, thumbnail: url }),
         });
       }
 
       setMediaItems([...mediaItems, ...newItems]);
-      toast.success('Media added', { id: loadingId });
+      toast.success("Media added", { id: loadingId });
     } catch (err) {
-      toast.error('Upload failed', { id: loadingId });
+      toast.error("Upload failed", { id: loadingId });
     } finally {
       setUploadingMedia(false);
     }
@@ -94,7 +100,7 @@ export const AdminHostelRoomForm = () => {
     setIsSubmitting(true);
 
     try {
-      const roomData: Omit<HostelRoom, 'id' | 'createdAt' | 'updatedAt'> = {
+      const roomData: Omit<HostelRoom, "id" | "createdAt" | "updatedAt"> = {
         hostelId,
         room_number: data.room_number,
         room_type: data.room_type as any,
@@ -108,24 +114,28 @@ export const AdminHostelRoomForm = () => {
         occupancy: {
           current_occupants: parseInt(data.current_occupants),
           max_occupants: parseInt(data.max_occupants),
-          occupancy_percentage: (parseInt(data.current_occupants) / parseInt(data.max_occupants)) * 100,
+          occupancy_percentage:
+            (parseInt(data.current_occupants) / parseInt(data.max_occupants)) * 100,
         },
-        amenities: data.amenities.split(',').map((a: string) => a.trim()).filter((a: string) => a),
+        amenities: data.amenities
+          .split(",")
+          .map((a: string) => a.trim())
+          .filter((a: string) => a),
         media: mediaItems,
       };
 
       if (roomId) {
         await updateHostelRoom(roomId, roomData);
-        toast.success('Room updated');
+        toast.success("Room updated");
       } else {
         await createHostelRoom(roomData);
-        toast.success('Room created');
+        toast.success("Room created");
       }
 
       navigate(`/admin/hostels/${hostelId}/rooms`);
     } catch (error) {
-      console.error('Error:', error);
-      toast.error('Failed to save room');
+      console.error("Error:", error);
+      toast.error("Failed to save room");
     } finally {
       setIsSubmitting(false);
     }
@@ -135,15 +145,16 @@ export const AdminHostelRoomForm = () => {
 
   return (
     <div className="p-8 max-w-4xl mx-auto">
-      <Link to={`/admin/hostels/${hostelId}/rooms`} className="inline-flex items-center gap-2 text-zinc-400 hover:text-white mb-6 transition-colors">
+      <Link
+        to={`/admin/hostels/${hostelId}/rooms`}
+        className="inline-flex items-center gap-2 text-zinc-400 hover:text-white mb-6 transition-colors"
+      >
         <ArrowLeft className="w-4 h-4" /> Back to Rooms
       </Link>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-white">
-            {roomId ? 'Edit Room' : 'Add New Room'}
-          </h2>
+          <h2 className="text-2xl font-bold text-white">{roomId ? "Edit Room" : "Add New Room"}</h2>
         </div>
 
         {/* Basic Info */}
@@ -156,7 +167,7 @@ export const AdminHostelRoomForm = () => {
               <Controller
                 name="room_number"
                 control={control}
-                rules={{ required: 'Required' }}
+                rules={{ required: "Required" }}
                 render={({ field }) => (
                   <input
                     {...field}
@@ -177,7 +188,10 @@ export const AdminHostelRoomForm = () => {
                 name="room_type"
                 control={control}
                 render={({ field }) => (
-                  <select {...field} className="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand-500">
+                  <select
+                    {...field}
+                    className="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand-500"
+                  >
                     <option value="single">Single</option>
                     <option value="shared_double">Shared Double</option>
                     <option value="shared_quad">Shared Quad</option>
@@ -211,7 +225,10 @@ export const AdminHostelRoomForm = () => {
                 name="status"
                 control={control}
                 render={({ field }) => (
-                  <select {...field} className="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand-500">
+                  <select
+                    {...field}
+                    className="w-full bg-zinc-950 border border-zinc-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand-500"
+                  >
                     <option value="available">Available</option>
                     <option value="booked">Booked</option>
                     <option value="maintenance">Maintenance</option>
@@ -244,7 +261,9 @@ export const AdminHostelRoomForm = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-zinc-400 mb-2">Current Occupants</label>
+              <label className="block text-sm font-medium text-zinc-400 mb-2">
+                Current Occupants
+              </label>
               <Controller
                 name="current_occupants"
                 control={control}
@@ -335,7 +354,7 @@ export const AdminHostelRoomForm = () => {
         {/* Media Upload */}
         <div className="bg-zinc-900 border border-zinc-800 p-6 rounded-xl space-y-4">
           <h3 className="font-semibold text-white mb-4">Room Media</h3>
-          
+
           <div className="border-2 border-dashed border-zinc-800 rounded-xl p-8 text-center cursor-pointer hover:bg-zinc-800/50 transition-colors relative">
             <input
               type="file"
@@ -346,7 +365,9 @@ export const AdminHostelRoomForm = () => {
               className="absolute inset-0 opacity-0 cursor-pointer"
             />
             <Upload className="w-8 h-8 mx-auto mb-2 text-zinc-500" />
-            <p className="font-medium text-white">{uploadingMedia ? 'Uploading...' : 'Click or Drag to upload media'}</p>
+            <p className="font-medium text-white">
+              {uploadingMedia ? "Uploading..." : "Click or Drag to upload media"}
+            </p>
             <p className="text-sm text-zinc-500">Videos and photos supported</p>
           </div>
 
@@ -359,7 +380,7 @@ export const AdminHostelRoomForm = () => {
                     className="flex items-center gap-3 p-3 bg-zinc-950 border border-zinc-800 rounded-lg group"
                   >
                     <div className="flex-shrink-0 w-12 h-12 bg-zinc-800 rounded overflow-hidden">
-                      {item.type === 'video' ? (
+                      {item.type === "video" ? (
                         <div className="w-full h-full flex items-center justify-center bg-zinc-700">
                           <Video className="w-6 h-6 text-white" />
                         </div>
@@ -370,12 +391,12 @@ export const AdminHostelRoomForm = () => {
 
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium truncate text-white">
-                        {item.type === 'video' ? 'Video' : 'Photo'}
+                        {item.type === "video" ? "Video" : "Photo"}
                       </p>
                       <input
                         type="text"
                         placeholder="Add caption..."
-                        value={item.caption || ''}
+                        value={item.caption || ""}
                         onChange={(e) => {
                           const updated = [...mediaItems];
                           updated[idx].caption = e.target.value;
@@ -412,11 +433,10 @@ export const AdminHostelRoomForm = () => {
             disabled={isSubmitting}
             className="px-6 py-3 bg-brand-500 text-black rounded-lg font-semibold hover:bg-white disabled:opacity-50 transition"
           >
-            {isSubmitting ? 'Saving...' : 'Save Room'}
+            {isSubmitting ? "Saving..." : "Save Room"}
           </button>
         </div>
       </form>
     </div>
   );
 };
-

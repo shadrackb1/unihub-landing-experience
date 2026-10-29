@@ -1,6 +1,6 @@
-import { createFileRoute } from '@tanstack/react-router';
-import { AdminPropertyForm } from '@/features/admin/pages/AdminPropertyForm';
+import { createFileRoute } from "@tanstack/react-router";
+import { AdminPropertyForm } from "@/features/admin/pages/AdminPropertyForm";
 
-export const Route = createFileRoute('/admin/properties/new')({
+export const Route = createFileRoute("/admin/properties/new")({
   component: AdminPropertyForm,
 });

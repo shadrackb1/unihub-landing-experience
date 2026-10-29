@@ -12,7 +12,7 @@ export const ACTS = [
   { id: "close", label: "VII · Move" },
 ] as const;
 
-export type ActId = typeof ACTS[number]['id'];
+export type ActId = (typeof ACTS)[number]["id"];
 
 export function ScrollProgress() {
   const [progress, setProgress] = useState(0);

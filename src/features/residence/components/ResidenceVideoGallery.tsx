@@ -49,9 +49,7 @@ export function CoolVideoCard({
         <h4 className="font-display text-xl font-medium leading-snug text-foreground">
           {clip.title}
         </h4>
-        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-          {clip.blurb}
-        </p>
+        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{clip.blurb}</p>
       </div>
     </Reveal>
   );

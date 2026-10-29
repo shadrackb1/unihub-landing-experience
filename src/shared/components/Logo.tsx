@@ -14,7 +14,11 @@ export const Logo = ({
   className = "",
   showTagline = true,
   size = "md",
-}: { className?: string; showTagline?: boolean; size?: LogoSize }) => {
+}: {
+  className?: string;
+  showTagline?: boolean;
+  size?: LogoSize;
+}) => {
   const s = logoSizes[size];
   return (
     <Link
@@ -36,4 +40,3 @@ export const Logo = ({
     </Link>
   );
 };
-

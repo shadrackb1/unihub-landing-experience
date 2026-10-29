@@ -1,4 +1,3 @@
-// @ts-nocheck
 export interface FileUploadResult {
   public_id: string;
   secure_url: string;
@@ -9,11 +8,11 @@ export interface FileUploadResult {
 export async function uploadToStorage(
   file: File,
   folder: string,
-  onProgress?: (progress: number) => void
+  onProgress?: (progress: number) => void,
 ): Promise<FileUploadResult> {
-  const CLOUDINARY_CLOUD_NAME = 'dilrcexxe';
-  const CLOUDINARY_UPLOAD_PRESET = 'MingleKe';
-  
+  const CLOUDINARY_CLOUD_NAME = "dilrcexxe";
+  const CLOUDINARY_UPLOAD_PRESET = "MingleKe";
+
   const resourceType = file.type.startsWith("video/") ? "video" : "image";
   const endpoint = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/${resourceType}/upload`;
 
@@ -63,4 +62,3 @@ export async function uploadToStorage(
     xhr.send(formData);
   });
 }
-

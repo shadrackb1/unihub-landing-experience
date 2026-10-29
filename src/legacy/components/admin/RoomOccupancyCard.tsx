@@ -1,8 +1,7 @@
-// @ts-nocheck
-import React from 'react';
-import { HostelRoom } from '../../types';
-import { motion } from 'motion/react';
-import { Edit2, Trash2, Video, Image as ImageIcon } from 'lucide-react';
+import React from "react";
+import { HostelRoom } from "../../types";
+import { motion } from "motion/react";
+import { Edit2, Trash2, Video, Image as ImageIcon } from "lucide-react";
 
 interface RoomOccupancyCardProps {
   key?: string | number;
@@ -10,7 +9,7 @@ interface RoomOccupancyCardProps {
   index: number;
   onEdit: () => void;
   onDelete: () => void;
-  onStatusChange: (status: HostelRoom['status']) => void;
+  onStatusChange: (status: HostelRoom["status"]) => void;
 }
 
 export default function RoomOccupancyCard({
@@ -22,16 +21,16 @@ export default function RoomOccupancyCard({
 }: RoomOccupancyCardProps) {
   const occupancyPercentage = room.occupancy?.occupancy_percentage ?? 0;
 
-  const getStatusColor = (status: HostelRoom['status']) => {
+  const getStatusColor = (status: HostelRoom["status"]) => {
     switch (status) {
-      case 'available':
-        return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400';
-      case 'booked':
-        return 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400';
-      case 'maintenance':
-        return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400';
+      case "available":
+        return "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400";
+      case "booked":
+        return "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400";
+      case "maintenance":
+        return "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400";
       default:
-        return 'bg-gray-100 text-gray-800';
+        return "bg-gray-100 text-gray-800";
     }
   };
 
@@ -48,9 +47,7 @@ export default function RoomOccupancyCard({
         <div className="flex items-center justify-between mb-2">
           <div>
             <h3 className="text-lg font-bold">Room {room.room_number}</h3>
-            {room.bed_number && (
-              <p className="text-sm text-neutral-500">{room.bed_number}</p>
-            )}
+            {room.bed_number && <p className="text-sm text-neutral-500">{room.bed_number}</p>}
           </div>
           <div className="flex gap-2">
             <motion.button
@@ -72,7 +69,7 @@ export default function RoomOccupancyCard({
           </div>
         </div>
         <p className="text-sm text-neutral-600 dark:text-neutral-400">
-          {room.room_type.replace('_', ' ')}
+          {room.room_type.replace("_", " ")}
         </p>
       </div>
 
@@ -104,7 +101,7 @@ export default function RoomOccupancyCard({
           <div className="w-full h-3 bg-neutral-200 dark:bg-neutral-700 rounded-full overflow-hidden">
             <motion.div
               className={`h-full rounded-full transition-all ${
-                occupancyPercentage === 100 ? 'bg-red-600' : 'bg-green-600'
+                occupancyPercentage === 100 ? "bg-red-600" : "bg-green-600"
               }`}
               initial={{ width: 0 }}
               animate={{ width: `${occupancyPercentage}%` }}
@@ -128,7 +125,9 @@ export default function RoomOccupancyCard({
             {room.pricing.per_semester ? (
               <div className="flex justify-between text-sm">
                 <span className="text-neutral-600 dark:text-neutral-400">Semester</span>
-                <span className="font-semibold">KES {room.pricing.per_semester.toLocaleString()}</span>
+                <span className="font-semibold">
+                  KES {room.pricing.per_semester.toLocaleString()}
+                </span>
               </div>
             ) : null}
             {room.pricing.per_year ? (
@@ -145,21 +144,21 @@ export default function RoomOccupancyCard({
           <div className="border-t border-neutral-200 dark:border-neutral-800 pt-4">
             <p className="text-sm font-medium mb-2">Media</p>
             <div className="flex gap-4">
-              {room.media.filter(m => m.type === 'video').length > 0 && (
+              {room.media.filter((m) => m.type === "video").length > 0 && (
                 <div className="flex items-center gap-2 text-sm">
                   <Video className="w-4 h-4 text-blue-600" />
                   <span>
-                    {room.media.filter(m => m.type === 'video').length} video
-                    {room.media.filter(m => m.type === 'video').length > 1 ? 's' : ''}
+                    {room.media.filter((m) => m.type === "video").length} video
+                    {room.media.filter((m) => m.type === "video").length > 1 ? "s" : ""}
                   </span>
                 </div>
               )}
-              {room.media.filter(m => m.type === 'image').length > 0 && (
+              {room.media.filter((m) => m.type === "image").length > 0 && (
                 <div className="flex items-center gap-2 text-sm">
                   <ImageIcon className="w-4 h-4 text-green-600" />
                   <span>
-                    {room.media.filter(m => m.type === 'image').length} photo
-                    {room.media.filter(m => m.type === 'image').length > 1 ? 's' : ''}
+                    {room.media.filter((m) => m.type === "image").length} photo
+                    {room.media.filter((m) => m.type === "image").length > 1 ? "s" : ""}
                   </span>
                 </div>
               )}
@@ -187,4 +186,3 @@ export default function RoomOccupancyCard({
     </motion.div>
   );
 }
-

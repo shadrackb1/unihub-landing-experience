@@ -34,7 +34,7 @@ function NotFoundComponent() {
   );
 }
 
-function ErrorComponent({ error, reset }: { error: any; reset: () => void }) {
+function ErrorComponent({ error, reset }: { error: unknown; reset: () => void }) {
   console.error(error);
   const router = useRouter();
   useEffect(() => {
@@ -116,23 +116,37 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
+interface ThemeSettings {
+  primaryColor?: string;
+  backgroundColor?: string;
+  surfaceColor?: string;
+  fontFamily?: string;
+  borderRadius?: string;
+}
+
+interface SiteSettingsWithTheme {
+  theme?: ThemeSettings;
+}
+
 function CmsTheme() {
   useEffect(() => {
     let live = true;
     import("@/legacy/services/firestore")
       .then(async (m) => {
         try {
-          const settings = await m.getSiteSettings();
+          const settings = (await m.getSiteSettings()) as SiteSettingsWithTheme | null;
           if (!live || !settings?.theme) return;
           const root = document.documentElement;
-          const theme = settings.theme as any;
+          const theme = settings.theme;
           if (theme.primaryColor) root.style.setProperty("--color-brand-500", theme.primaryColor);
-          if (theme.backgroundColor) root.style.setProperty("--color-surface-900", theme.backgroundColor);
+          if (theme.backgroundColor)
+            root.style.setProperty("--color-surface-900", theme.backgroundColor);
           if (theme.surfaceColor) root.style.setProperty("--color-surface-800", theme.surfaceColor);
-          if (theme.fontFamily) root.style.setProperty("--CMS-font-family", `"${theme.fontFamily}", sans-serif`);
+          if (theme.fontFamily)
+            root.style.setProperty("--CMS-font-family", `"${theme.fontFamily}", sans-serif`);
           if (theme.borderRadius) root.style.setProperty("--CMS-border-radius", theme.borderRadius);
         } catch {
-          // offline or no CMS settings ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â keep default theme
+          // offline or no CMS settings — keep default theme
         }
       })
       .catch(() => {});

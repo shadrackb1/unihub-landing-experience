@@ -1,11 +1,10 @@
-// @ts-nocheck
-import React, { useState, useEffect } from 'react';
-import { motion } from 'motion/react';
-import { Plus, Edit2, Trash2, Building } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { University } from '../../types';
-import { getUniversities, deleteUniversity } from '../../services/firestore';
-import toast from 'react-hot-toast';
+import React, { useState, useEffect } from "react";
+import { motion } from "motion/react";
+import { Plus, Edit2, Trash2, Building } from "lucide-react";
+import { Link } from "react-router-dom";
+import { University } from "../../types";
+import { getUniversities, deleteUniversity } from "../../services/firestore";
+import toast from "react-hot-toast";
 
 export const AdminUniversitiesPage = () => {
   const [universities, setUniversities] = useState<University[]>([]);
@@ -16,7 +15,7 @@ export const AdminUniversitiesPage = () => {
       const data = await getUniversities();
       setUniversities(data);
     } catch (err) {
-      toast.error('Failed to load universities');
+      toast.error("Failed to load universities");
     } finally {
       setLoading(false);
     }
@@ -30,10 +29,10 @@ export const AdminUniversitiesPage = () => {
     if (!window.confirm(`Are you sure you want to delete ${name}?`)) return;
     try {
       await deleteUniversity(id);
-      toast.success('University deleted successfully');
-      setUniversities(universities.filter(u => u.id !== id));
+      toast.success("University deleted successfully");
+      setUniversities(universities.filter((u) => u.id !== id));
     } catch (err) {
-      toast.error('Failed to delete university');
+      toast.error("Failed to delete university");
     }
   };
 
@@ -46,8 +45,8 @@ export const AdminUniversitiesPage = () => {
           <h1 className="text-3xl font-display font-medium text-white mb-2">Universities</h1>
           <p className="text-zinc-400">Manage university partners and their profile pages.</p>
         </div>
-        <Link 
-          to="/admin/universities/new" 
+        <Link
+          to="/admin/universities/new"
           className="flex items-center gap-2 bg-brand-500 text-black px-4 py-2 rounded-lg font-medium hover:bg-white transition-colors"
         >
           <Plus className="w-5 h-5" /> Add University
@@ -66,12 +65,16 @@ export const AdminUniversitiesPage = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-800">
-              {universities.map(uni => (
+              {universities.map((uni) => (
                 <tr key={uni.id} className="hover:bg-zinc-800/50 transition-colors">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-lg bg-zinc-800 flex items-center justify-center shrink-0">
-                        {uni.logo_url ? <img src={uni.logo_url} className="w-full h-full object-contain p-1" /> : <Building className="w-5 h-5 text-zinc-500" />}
+                        {uni.logo_url ? (
+                          <img src={uni.logo_url} className="w-full h-full object-contain p-1" />
+                        ) : (
+                          <Building className="w-5 h-5 text-zinc-500" />
+                        )}
                       </div>
                       <div>
                         <p className="font-medium text-white">{uni.name}</p>
@@ -81,16 +84,24 @@ export const AdminUniversitiesPage = () => {
                   </td>
                   <td className="px-6 py-4 text-zinc-300">{uni.location}</td>
                   <td className="px-6 py-4">
-                    <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${uni.status === 'active' ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500'}`}>
+                    <span
+                      className={`px-2.5 py-1 rounded-full text-xs font-medium ${uni.status === "active" ? "bg-green-500/10 text-green-500" : "bg-red-500/10 text-red-500"}`}
+                    >
                       {uni.status}
                     </span>
                   </td>
                   <td className="px-6 py-4 text-right">
                     <div className="flex items-center justify-end gap-2">
-                      <Link to={`/admin/universities/${uni.id}`} className="p-2 text-zinc-400 hover:text-white bg-zinc-800 rounded-lg transition-colors">
+                      <Link
+                        to={`/admin/universities/${uni.id}`}
+                        className="p-2 text-zinc-400 hover:text-white bg-zinc-800 rounded-lg transition-colors"
+                      >
                         <Edit2 className="w-4 h-4" />
                       </Link>
-                      <button onClick={() => handleDelete(uni.id!, uni.name)} className="p-2 text-zinc-400 hover:text-red-500 bg-zinc-800 rounded-lg transition-colors">
+                      <button
+                        onClick={() => handleDelete(uni.id!, uni.name)}
+                        className="p-2 text-zinc-400 hover:text-red-500 bg-zinc-800 rounded-lg transition-colors"
+                      >
                         <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
@@ -98,9 +109,11 @@ export const AdminUniversitiesPage = () => {
                 </tr>
               ))}
               {universities.length === 0 && (
-                 <tr>
-                    <td colSpan={4} className="px-6 py-8 text-center text-zinc-500">No universities found.</td>
-                 </tr>
+                <tr>
+                  <td colSpan={4} className="px-6 py-8 text-center text-zinc-500">
+                    No universities found.
+                  </td>
+                </tr>
               )}
             </tbody>
           </table>
@@ -109,4 +122,3 @@ export const AdminUniversitiesPage = () => {
     </div>
   );
 };
-

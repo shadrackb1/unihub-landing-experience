@@ -11,11 +11,9 @@ function LegacyAppRoute() {
 
   useEffect(() => {
     let mounted = true;
-    Promise.all([import("@/legacy/App"), import("@/legacy/index.css")]).then(
-      ([mod]) => {
-        if (mounted) setApp(() => mod.default);
-      },
-    );
+    Promise.all([import("@/legacy/App"), import("@/legacy/index.css")]).then(([mod]) => {
+      if (mounted) setApp(() => mod.default);
+    });
     return () => {
       mounted = false;
     };
@@ -23,4 +21,3 @@ function LegacyAppRoute() {
 
   return App ? <App /> : null;
 }
-

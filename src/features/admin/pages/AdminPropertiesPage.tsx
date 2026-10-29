@@ -1,11 +1,11 @@
-import { createFileRoute } from '@tanstack/react-router';
-import { Loader2, Plus, Search, Filter, MoreHorizontal } from 'lucide-react';
-import { Link } from '@tanstack/react-router';
-import { getProperties, deleteProperty } from '@/shared/services/firestore';
-import { useState } from 'react';
-import type { Property } from '@/shared/types/admin';
+import { createFileRoute } from "@tanstack/react-router";
+import { Loader2, Plus, Search, Filter, MoreHorizontal } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { getProperties, deleteProperty } from "@/shared/services/firestore";
+import { useState } from "react";
+import type { Property } from "@/shared/types/admin";
 
-export const Route = createFileRoute('/admin/properties')({
+export const Route = createFileRoute("/admin/properties")({
   loader: async () => {
     const properties = await getProperties();
     return { properties };
@@ -15,26 +15,29 @@ export const Route = createFileRoute('/admin/properties')({
 
 export function AdminPropertiesPage() {
   const { properties } = Route.useLoaderData() as { properties: Property[] };
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<'all' | 'available' | 'occupied' | 'hidden'>('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState<"all" | "available" | "occupied" | "hidden">(
+    "all",
+  );
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const filteredProperties = properties.filter((prop: Property) => {
-    const matchesSearch = prop.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    const matchesSearch =
+      prop.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       prop.location.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || prop.status === statusFilter;
+    const matchesStatus = statusFilter === "all" || prop.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this property?')) return;
+    if (!confirm("Are you sure you want to delete this property?")) return;
     setDeletingId(id);
     try {
       await deleteProperty(id);
       // The list will refresh via the loader
     } catch (error) {
-      console.error('Delete failed:', error);
-      alert('Failed to delete property');
+      console.error("Delete failed:", error);
+      alert("Failed to delete property");
     } finally {
       setDeletingId(null);
     }
@@ -50,7 +53,10 @@ export function AdminPropertiesPage() {
           </h1>
           <p className="text-zinc-400 mt-2">Manage property listings</p>
         </div>
-        <Link to="/admin/properties/new" className="px-6 py-3 flex items-center gap-2 rounded-xl bg-brand-500 text-black text-sm font-medium hover:bg-white hover:scale-105 transition-all font-display shadow-[0_0_20px_var(--color-brand-500)]">
+        <Link
+          to="/admin/properties/new"
+          className="px-6 py-3 flex items-center gap-2 rounded-xl bg-brand-500 text-black text-sm font-medium hover:bg-white hover:scale-105 transition-all font-display shadow-[0_0_20px_var(--color-brand-500)]"
+        >
           <Plus className="w-4 h-4" /> Add Property
         </Link>
       </div>
@@ -69,7 +75,9 @@ export function AdminPropertiesPage() {
           </div>
           <select
             value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value as any)}
+            onChange={(e) =>
+              setStatusFilter(e.target.value as "all" | "available" | "occupied" | "hidden")
+            }
             className="px-4 py-3 bg-zinc-900 border border-zinc-800 rounded-xl text-white focus:outline-none focus:border-brand-500"
           >
             <option value="all">All Status</option>
@@ -95,7 +103,10 @@ export function AdminPropertiesPage() {
               {properties.length === 0 ? (
                 <tr>
                   <td colSpan={6} className="text-center py-12 text-zinc-500">
-                    No properties found. <Link to="/admin/properties/new" className="text-brand-400 hover:underline">Add your first property</Link>
+                    No properties found.{" "}
+                    <Link to="/admin/properties/new" className="text-brand-400 hover:underline">
+                      Add your first property
+                    </Link>
                   </td>
                 </tr>
               ) : (
@@ -105,7 +116,11 @@ export function AdminPropertiesPage() {
                       <div className="flex items-center gap-3">
                         <div className="w-12 h-12 rounded-lg bg-zinc-800 flex items-center justify-center overflow-hidden">
                           {prop.media?.[0] ? (
-                            <img src={prop.media[0].secure_url} alt={prop.title} className="w-full h-full object-cover" />
+                            <img
+                              src={prop.media[0].secure_url}
+                              alt={prop.title}
+                              className="w-full h-full object-cover"
+                            />
                           ) : (
                             <span className="text-2xl">🏠</span>
                           )}
@@ -117,21 +132,44 @@ export function AdminPropertiesPage() {
                       </div>
                     </td>
                     <td className="py-4 text-zinc-300">{prop.location}</td>
-                    <td className="py-4 font-medium text-white">KES {prop.price.toLocaleString()}</td>
+                    <td className="py-4 font-medium text-white">
+                      KES {prop.price.toLocaleString()}
+                    </td>
                     <td className="py-4">
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        prop.status === 'available' ? 'bg-green-500/20 text-green-400' :
-                        prop.status === 'occupied' ? 'bg-blue-500/20 text-blue-400' :
-                        'bg-zinc-700 text-zinc-400'
-                      }`}>
+                      <span
+                        className={`px-2 py-1 rounded-full text-xs font-medium ${
+                          prop.status === "available"
+                            ? "bg-green-500/20 text-green-400"
+                            : prop.status === "occupied"
+                              ? "bg-blue-500/20 text-blue-400"
+                              : "bg-zinc-700 text-zinc-400"
+                        }`}
+                      >
                         {prop.status}
                       </span>
                     </td>
                     <td className="py-4 text-zinc-300">{prop.agentId}</td>
                     <td className="py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <Link to="/admin/properties/$id" params={{ id: prop.id }} className="p-2 text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition-colors" title="Edit">
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5a2.121 2.121 0 013 3z" /></svg>
+                        <Link
+                          to="/admin/properties/$id"
+                          params={{ id: prop.id }}
+                          className="p-2 text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition-colors"
+                          title="Edit"
+                        >
+                          <svg
+                            className="w-5 h-5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5a2.121 2.121 0 013 3z"
+                            />
+                          </svg>
                         </Link>
                         <button
                           onClick={() => handleDelete(prop.id)}
@@ -142,7 +180,19 @@ export function AdminPropertiesPage() {
                           {deletingId === prop.id ? (
                             <Loader2 className="w-5 h-5 animate-spin" />
                           ) : (
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                            <svg
+                              className="w-5 h-5"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                              />
+                            </svg>
                           )}
                         </button>
                       </div>

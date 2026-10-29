@@ -1,5 +1,4 @@
-// @ts-nocheck
-import { Timestamp } from 'firebase/firestore';
+import { Timestamp } from "firebase/firestore";
 
 export interface Property {
   id?: string;
@@ -11,7 +10,7 @@ export interface Property {
   description: string;
   features: string[];
   agentId: string;
-  status: 'available' | 'occupied' | 'hidden';
+  status: "available" | "occupied" | "hidden";
   media: MediaItem[];
   createdAt: Timestamp;
   updatedAt: Timestamp;
@@ -20,7 +19,7 @@ export interface Property {
 export interface MediaItem {
   public_id: string;
   secure_url: string;
-  resource_type: 'image' | 'video';
+  resource_type: "image" | "video";
   format: string;
   order: number;
 }
@@ -49,4 +48,3 @@ export interface SiteSettings {
   ctaText: string;
   featuredProperties: string[];
 }
-

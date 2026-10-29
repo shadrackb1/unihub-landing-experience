@@ -1,6 +1,7 @@
 # UniHub ads (landing video)
 
 Pair with:
+
 - `public/ads/unihub-landing-social-45s.mp4` (feed / TikTok / IG)
 - `public/ads/unihub-landing-status-28s.mp4` (WhatsApp status)
 
@@ -17,6 +18,7 @@ UNIHUB is a student housing initiative run by people who know how messy finding 
 Helping those who need a hostel, bedsitter, or single room without the usual WhatsApp group chaos and fake agents.
 
 **What we put on the table**
+
 - Verified hostels and bedsitters
 - Rooms near UoN, JKUAT, Kenyatta, Moi, Egerton, Strathmore
 - Clear monthly prices in KES
@@ -28,6 +30,7 @@ Watch the landing page in the clip. Browse free. No account drama.
 If you want a functional room before semester starts… DM and let’s discuss.
 
 # FindYourPerfectHome
+
 # UniHubKE
 
 ---
@@ -78,12 +81,12 @@ Watch the site, then DM to list.
 
 ## Shot list if you re-edit the video
 
-1. Hero (headline + Browse Listings) — 3–4s  
-2. How it works four steps — 4–5s  
-3. Residence clips grid — 5–6s  
-4. Featured listings with KES prices — 5–6s  
-5. Campus map + pins — 4–5s  
-6. Final Browse CTA — 2–3s  
+1. Hero (headline + Browse Listings) — 3–4s
+2. How it works four steps — 4–5s
+3. Residence clips grid — 5–6s
+4. Featured listings with KES prices — 5–6s
+5. Campus map + pins — 4–5s
+6. Final Browse CTA — 2–3s
 
 End card: logo + “UniHub · Campus housing · Kenya” + WhatsApp handle.
 

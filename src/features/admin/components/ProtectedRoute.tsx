@@ -1,7 +1,7 @@
-import React from 'react';
-import { Navigate, Outlet } from '@tanstack/react-router';
-import { useAuth } from '@/shared/context/AuthContext';
-import { Loader2 } from 'lucide-react';
+import React from "react";
+import { Navigate, Outlet } from "@tanstack/react-router";
+import { useAuth } from "@/shared/context/AuthContext";
+import { Loader2 } from "lucide-react";
 
 export const ProtectedRoute = () => {
   const { user, loading } = useAuth();

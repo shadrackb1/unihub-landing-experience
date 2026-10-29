@@ -1,13 +1,20 @@
-// @ts-nocheck
-import React, { useRef, useState, useEffect } from 'react';
-import { motion, useScroll, useTransform, AnimatePresence } from 'motion/react';
-import { Search, MapPin, ShieldCheck, Home as HomeIcon, MessageSquare, GraduationCap, ArrowRight } from 'lucide-react';
-import { cn } from '../../lib/utils';
-import { getProperties, getSiteSettings } from '../../services/firestore';
-import { Property, SiteSettings } from '../../types';
-import { ListingCard } from '../../components/ListingCard';
-import { Link, useNavigate } from 'react-router-dom';
-import { optimizeCloudinaryUrl } from '../../lib/optimizeMedia';
+import React, { useRef, useState, useEffect } from "react";
+import { motion, useScroll, useTransform, AnimatePresence } from "motion/react";
+import {
+  Search,
+  MapPin,
+  ShieldCheck,
+  Home as HomeIcon,
+  MessageSquare,
+  GraduationCap,
+  ArrowRight,
+} from "lucide-react";
+import { cn } from "../../lib/utils";
+import { getProperties, getSiteSettings } from "../../services/firestore";
+import { Property, SiteSettings } from "../../types";
+import { ListingCard } from "../../components/ListingCard";
+import { Link, useNavigate } from "react-router-dom";
+import { optimizeCloudinaryUrl } from "../../lib/optimizeMedia";
 
 export const Home = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -17,7 +24,7 @@ export const Home = () => {
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start start", "end start"]
+    offset: ["start start", "end start"],
   });
 
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
@@ -28,23 +35,26 @@ export const Home = () => {
       try {
         const [siteSettings, properties] = await Promise.all([
           getSiteSettings(),
-          getProperties('available')
+          getProperties("available"),
         ]);
         setSettings(siteSettings);
-        
+
         let displayListings: Property[] = [];
         if (siteSettings?.featuredProperties?.length) {
-          displayListings = properties.filter(p => siteSettings.featuredProperties.includes(p.id!));
+          displayListings = properties.filter((p) =>
+            siteSettings.featuredProperties.includes(p.id!),
+          );
         }
         if (displayListings.length === 0) {
           displayListings = properties.slice(0, 6);
         }
         setFeaturedListings(displayListings);
-      } catch (err: any) {
-        if (err?.message?.includes('offline')) {
-          console.warn('App is running in offline mode. Home page data may be limited.');
+      } catch (err) {
+        const error = err as Error;
+        if (error.message?.includes("offline")) {
+          console.warn("App is running in offline mode. Home page data may be limited.");
         } else {
-          console.error("Error fetching homepage data", err);
+          console.error("Error fetching homepage data", error);
         }
       }
     };
@@ -55,28 +65,38 @@ export const Home = () => {
     <div className="flex flex-col w-full overflow-hidden" ref={containerRef}>
       {/* Hero Section */}
       <section className="relative min-h-[95vh] flex items-center justify-center pt-24 pb-40 lg:pb-56">
-        
         {/* Dynamic CMS Background Media */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-           {settings?.heroImage && (
-             <div className="absolute inset-0 w-full h-full opacity-40">
-                {settings.heroImage.match(/\.(mp4|webm|ogg|mov|quicktime)$/i) ? (
-                  <video src={optimizeCloudinaryUrl(settings.heroImage, 'video')} className="w-full h-full object-cover" autoPlay muted loop playsInline />
-                ) : (
-                  <img src={optimizeCloudinaryUrl(settings.heroImage, 'image')} className="w-full h-full object-cover" alt="" />
-                )}
-             </div>
-           )}
-           <div className="absolute inset-0 bg-gradient-to-b from-surface-900/80 via-surface-900/90 to-surface-900"></div>
+          {settings?.heroImage && (
+            <div className="absolute inset-0 w-full h-full opacity-40">
+              {settings.heroImage.match(/\.(mp4|webm|ogg|mov|quicktime)$/i) ? (
+                <video
+                  src={optimizeCloudinaryUrl(settings.heroImage, "video")}
+                  className="w-full h-full object-cover"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                />
+              ) : (
+                <img
+                  src={optimizeCloudinaryUrl(settings.heroImage, "image")}
+                  className="w-full h-full object-cover"
+                  alt=""
+                />
+              )}
+            </div>
+          )}
+          <div className="absolute inset-0 bg-gradient-to-b from-surface-900/80 via-surface-900/90 to-surface-900"></div>
         </div>
 
         {/* Abstract Background Elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-          <motion.div 
+          <motion.div
             style={{ y, opacity }}
             className="absolute top-1/4 left-1/4 w-[800px] h-[800px] bg-white/5 rounded-full blur-[120px] mix-blend-screen -translate-x-1/2 -translate-y-1/2"
           />
-          <motion.div 
+          <motion.div
             style={{ y: useTransform(scrollYProgress, [0, 1], ["0%", "80%"]), opacity }}
             className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-white/5 rounded-full blur-[100px] mix-blend-screen translate-x-1/2 translate-y-1/2"
           />
@@ -100,8 +120,8 @@ export const Home = () => {
               transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
               className="w-full flex justify-center px-4"
             >
-              <button 
-                onClick={() => navigate('/listings')}
+              <button
+                onClick={() => navigate("/listings")}
                 className="group relative w-full sm:w-auto overflow-hidden bg-white text-black px-8 py-4 rounded-full font-medium text-lg shadow-[0_0_40px_rgba(255,255,255,0.15)] flex items-center justify-center transition-transform hover:scale-105 active:scale-95 duration-500"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-[150%] skew-x-[-30deg] group-hover:translate-x-[150%] transition-transform duration-[1s] ease-in-out"></div>
@@ -115,31 +135,35 @@ export const Home = () => {
       {/* Trust Section */}
       <section className="py-32 bg-surface-900 relative z-10">
         <div className="container mx-auto px-6 max-w-7xl">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="text-center max-w-3xl mx-auto mb-20"
           >
-            <h2 className="text-3xl md:text-5xl font-display font-medium mb-6">Designed for Everyone.</h2>
-            <p className="text-white/50 text-lg">We stripped away the noise to give you exactly what you need to find your next home.</p>
+            <h2 className="text-3xl md:text-5xl font-display font-medium mb-6">
+              Designed for Everyone.
+            </h2>
+            <p className="text-white/50 text-lg">
+              We stripped away the noise to give you exactly what you need to find your next home.
+            </p>
           </motion.div>
 
           <div className="grid md:grid-cols-3 gap-6">
-            <FeatureCard 
+            <FeatureCard
               icon={<ShieldCheck className="w-6 h-6 text-white" />}
               title="Verified Listings"
               description="Every listing and landlord is vetted to eliminate scams and ensure you have a safe renting experience."
               delay={0.1}
             />
-            <FeatureCard 
+            <FeatureCard
               icon={<GraduationCap className="w-6 h-6 text-white" />}
               title="Renter Focused"
               description="Focusing strictly on housing options with convenient setups designed for easy living and fast commutes."
               delay={0.2}
             />
-            <FeatureCard 
+            <FeatureCard
               icon={<MessageSquare className="w-6 h-6 text-white" />}
               title="Direct Contact"
               description="Browse, filter, and contact landlords directly via WhatsApp or email. No account required to find a home."
@@ -154,11 +178,14 @@ export const Home = () => {
         <div className="container mx-auto px-6 max-w-7xl">
           <div className="flex items-center justify-between mb-12">
             <h2 className="text-3xl font-display font-medium">Featured Properties</h2>
-            <Link to="/listings" className="text-white/60 hover:text-white transition-colors flex items-center gap-2 text-sm font-medium">
+            <Link
+              to="/listings"
+              className="text-white/60 hover:text-white transition-colors flex items-center gap-2 text-sm font-medium"
+            >
               View All <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
-          
+
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {featuredListings.map((property, i) => (
               <ListingCard key={property.id} property={property} index={i} />
@@ -170,9 +197,19 @@ export const Home = () => {
   );
 };
 
-const FeatureCard = ({ icon, title, description, delay = 0 }: { icon: React.ReactNode, title: string, description: string, delay?: number }) => {
+const FeatureCard = ({
+  icon,
+  title,
+  description,
+  delay = 0,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+  delay?: number;
+}) => {
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
@@ -182,9 +219,12 @@ const FeatureCard = ({ icon, title, description, delay = 0 }: { icon: React.Reac
       <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 group-hover:border-white/30 group-hover:bg-white/10 flex items-center justify-center mb-4 transition-all duration-500">
         {icon}
       </div>
-      <h3 className="text-xl font-medium font-display group-hover:text-white transition-colors">{title}</h3>
-      <p className="text-white/50 leading-relaxed group-hover:text-white/70 transition-colors">{description}</p>
+      <h3 className="text-xl font-medium font-display group-hover:text-white transition-colors">
+        {title}
+      </h3>
+      <p className="text-white/50 leading-relaxed group-hover:text-white/70 transition-colors">
+        {description}
+      </p>
     </motion.div>
   );
 };
-

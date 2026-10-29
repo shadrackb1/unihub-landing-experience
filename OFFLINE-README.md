@@ -34,7 +34,7 @@ Stop the server with `Ctrl+C` in that window.
 
 ## If Node is not installed
 
-- Install Node LTS from nodejs.org, then use `START-OFFLINE.bat` again.  
+- Install Node LTS from nodejs.org, then use `START-OFFLINE.bat` again.
 - Or open `project\` on a machine that already has Node and run `npm install && npm run dev`.
 
 ## Source project
@@ -57,6 +57,6 @@ npm run build
 
 ## Notes
 
-- Do not delete `offline\node_modules` if you want `START-OFFLINE.bat` without reinstall.  
-- First run on a new PC: `cd offline` then `npm install` then `npm start`.  
+- Do not delete `offline\node_modules` if you want `START-OFFLINE.bat` without reinstall.
+- First run on a new PC: `cd offline` then `npm install` then `npm start`.
 - WhatsApp number in the UI may still be a placeholder.

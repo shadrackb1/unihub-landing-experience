@@ -5,6 +5,7 @@
 The codebase has been reorganized following a feature-based, layered architecture inspired by clean architecture principles and domain-driven design.
 
 ### 🏗️ New Structure
+
 ```
 src/
 ├── app/                     # Application bootstrap, providers, routing
@@ -109,4 +110,5 @@ To complete the restructuring:
 The codebase is now significantly more structured, maintainable, and scalable than the original flat structure, while preserving all existing functionality and Lovable compatibility.
 
 ---
-*Restructuring completed with careful attention to maintaining application functionality throughout the process.*
+
+_Restructuring completed with careful attention to maintaining application functionality throughout the process._

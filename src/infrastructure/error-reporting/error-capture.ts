@@ -1,4 +1,3 @@
-
 let lastError: Error | null = null;
 
 export function captureError(error: Error) {

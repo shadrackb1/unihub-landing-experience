@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { sampleListings, type SampleListing } from "@/data/listings";
+import type { Property, Hostel } from "@/shared/types/admin";
 
 export function useListings(): SampleListing[] {
   const [listings, setListings] = useState<SampleListing[]>(sampleListings);
@@ -14,7 +15,7 @@ export function useListings(): SampleListing[] {
             m.getHostels(),
           ]);
           const mapped: SampleListing[] = [
-            ...properties.map((p: any) => ({
+            ...properties.map((p: Property) => ({
               id: p.id,
               title: p.title,
               location: p.location,
@@ -25,18 +26,23 @@ export function useListings(): SampleListing[] {
                 : "Deposit: 1 month",
               image: p.media?.[0]?.secure_url ?? sampleListings[0]!.image,
             })),
-            ...hostels.map((h: any) => ({
+            ...hostels.map((h: Hostel) => ({
               title: h.name,
               location: h.location,
-              category: h.hostel_type === "girls" ? "Girls hostel" : h.hostel_type === "boys" ? "Boys hostel" : "Hostel",
-              price: "KES â€”",
+              category:
+                h.hostel_type === "girls"
+                  ? "Girls hostel"
+                  : h.hostel_type === "boys"
+                    ? "Boys hostel"
+                    : "Hostel",
+              price: "KES —",
               deposit: "Shared facilities",
               image: h.images?.[0]?.secure_url ?? sampleListings[1]!.image,
             })),
           ];
           if (live && mapped.length > 0) setListings(mapped);
         } catch {
-          // offline or empty â€” keep sample listings
+          // offline or empty — keep sample listings
         }
       })
       .catch(() => {});
@@ -47,4 +53,3 @@ export function useListings(): SampleListing[] {
 
   return listings;
 }
-

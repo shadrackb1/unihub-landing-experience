@@ -1,11 +1,11 @@
-import { createFileRoute } from '@tanstack/react-router';
-import { Loader2, Plus, Search, Users } from 'lucide-react';
-import { Link } from '@tanstack/react-router';
-import { getAgentsList, deleteAgent } from '@/shared/services/firestore';
-import { useState } from 'react';
-import type { Agent } from '@/shared/types/admin';
+import { createFileRoute } from "@tanstack/react-router";
+import { Loader2, Plus, Search, Users } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { getAgentsList, deleteAgent } from "@/shared/services/firestore";
+import { useState } from "react";
+import type { Agent } from "@/shared/types/admin";
 
-export const Route = createFileRoute('/admin/agents')({
+export const Route = createFileRoute("/admin/agents")({
   loader: async () => {
     const agents = await getAgentsList();
     return { agents };
@@ -15,26 +15,30 @@ export const Route = createFileRoute('/admin/agents')({
 
 export function AdminAgentsPage() {
   const { agents } = Route.useLoaderData() as { agents: Agent[] };
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState<"all" | "active" | "inactive">("all");
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
-  const filteredAgents = agents.filter(agent => {
-    const matchesSearch = agent.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  const filteredAgents = agents.filter((agent) => {
+    const matchesSearch =
+      agent.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       agent.phone.includes(searchTerm) ||
       agent.whatsappNumber.includes(searchTerm);
-    const matchesStatus = statusFilter === 'all' || (agent.isActive && statusFilter === 'active') || (!agent.isActive && statusFilter === 'inactive');
+    const matchesStatus =
+      statusFilter === "all" ||
+      (agent.isActive && statusFilter === "active") ||
+      (!agent.isActive && statusFilter === "inactive");
     return matchesSearch && matchesStatus;
   });
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this agent?')) return;
+    if (!confirm("Are you sure you want to delete this agent?")) return;
     setDeletingId(id);
     try {
       await deleteAgent(id);
     } catch (error) {
-      console.error('Delete failed:', error);
-      alert('Failed to delete agent');
+      console.error("Delete failed:", error);
+      alert("Failed to delete agent");
     } finally {
       setDeletingId(null);
     }
@@ -50,7 +54,10 @@ export function AdminAgentsPage() {
           </h1>
           <p className="text-zinc-400 mt-2">Manage property agents</p>
         </div>
-        <Link to="/admin/agents/new" className="px-6 py-3 flex items-center gap-2 rounded-xl bg-orange-500 text-black text-sm font-medium hover:bg-orange-400 hover:scale-105 transition-all font-display shadow-[0_0_20px_rgba(249,115,22,0.3)]">
+        <Link
+          to="/admin/agents/new"
+          className="px-6 py-3 flex items-center gap-2 rounded-xl bg-orange-500 text-black text-sm font-medium hover:bg-orange-400 hover:scale-105 transition-all font-display shadow-[0_0_20px_rgba(249,115,22,0.3)]"
+        >
           <Plus className="w-4 h-4" /> Add Agent
         </Link>
       </div>
@@ -58,7 +65,19 @@ export function AdminAgentsPage() {
       <div className="bg-zinc-900/50 border border-zinc-800 rounded-2xl p-6 shadow-xl">
         <div className="flex flex-col sm:flex-row gap-4 mb-6">
           <div className="flex-1 relative">
-            <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+            <svg
+              className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
+            </svg>
             <input
               type="text"
               placeholder="Search agents..."
@@ -69,7 +88,7 @@ export function AdminAgentsPage() {
           </div>
           <select
             value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value as any)}
+            onChange={(e) => setStatusFilter(e.target.value as "all" | "active" | "inactive")}
             className="px-4 py-3 bg-zinc-900 border border-zinc-800 rounded-xl text-white focus:outline-none focus:border-orange-500"
           >
             <option value="all">All Status</option>
@@ -93,7 +112,10 @@ export function AdminAgentsPage() {
               {agents.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="text-center py-12 text-zinc-500">
-                    No agents yet. <Link to="/admin/agents/new" className="text-orange-400 hover:underline">Add your first agent</Link>
+                    No agents yet.{" "}
+                    <Link to="/admin/agents/new" className="text-orange-400 hover:underline">
+                      Add your first agent
+                    </Link>
                   </td>
                 </tr>
               ) : (
@@ -103,7 +125,11 @@ export function AdminAgentsPage() {
                       <div className="flex items-center gap-3">
                         <div className="w-12 h-12 rounded-full bg-zinc-800 flex items-center justify-center overflow-hidden">
                           {agent.profilePhotoURL ? (
-                            <img src={agent.profilePhotoURL} alt={agent.name} className="w-full h-full object-cover" />
+                            <img
+                              src={agent.profilePhotoURL}
+                              alt={agent.name}
+                              className="w-full h-full object-cover"
+                            />
                           ) : (
                             <span className="text-2xl">👤</span>
                           )}
@@ -117,16 +143,37 @@ export function AdminAgentsPage() {
                     <td className="py-4 text-zinc-300">{agent.phone}</td>
                     <td className="py-4 text-zinc-300">{agent.whatsappNumber}</td>
                     <td className="py-4">
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        agent.isActive ? 'bg-green-500/20 text-green-400' : 'bg-zinc-700 text-zinc-400'
-                      }`}>
-                        {agent.isActive ? 'Active' : 'Inactive'}
+                      <span
+                        className={`px-2 py-1 rounded-full text-xs font-medium ${
+                          agent.isActive
+                            ? "bg-green-500/20 text-green-400"
+                            : "bg-zinc-700 text-zinc-400"
+                        }`}
+                      >
+                        {agent.isActive ? "Active" : "Inactive"}
                       </span>
                     </td>
                     <td className="py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <Link to="/admin/agents/$id" params={{ id: agent.id }} className="p-2 text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition-colors" title="Edit">
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5a2.121 2.121 0 013 3z" /></svg>
+                        <Link
+                          to="/admin/agents/$id"
+                          params={{ id: agent.id }}
+                          className="p-2 text-zinc-400 hover:text-white hover:bg-zinc-800 rounded-lg transition-colors"
+                          title="Edit"
+                        >
+                          <svg
+                            className="w-5 h-5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5a2.121 2.121 0 013 3z"
+                            />
+                          </svg>
                         </Link>
                         <button
                           onClick={() => handleDelete(agent.id)}
@@ -134,7 +181,19 @@ export function AdminAgentsPage() {
                           className="p-2 text-zinc-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
                           title="Delete"
                         >
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                          <svg
+                            className="w-5 h-5"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                            />
+                          </svg>
                         </button>
                       </div>
                     </td>

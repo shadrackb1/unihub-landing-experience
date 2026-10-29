@@ -58,14 +58,14 @@
 
 ## Features
 
-| Feature | Description |
-|---|---|
-| Verified Listings | Property and landlord details are vetted before publication to ensure authenticity. |
+| Feature             | Description                                                                                                     |
+| ------------------- | --------------------------------------------------------------------------------------------------------------- |
+| Verified Listings   | Property and landlord details are vetted before publication to ensure authenticity.                             |
 | Campus-First Search | Search structured by specific university towns (Nairobi, Juja, Kahawa, Madaraka, Thika, Kesses, Njoro, Nakuru). |
-| Direct Contact | One-tap WhatsApp or email connection to verified listing agents and landlords. |
-| Zero Friction | Free to browse with no mandatory signup or paywall between students and housing. |
-| Offline Ready | Fully functional offline presentation package for field demos and local deployments. |
-| Interactive Map | Keyless MapLibre GL integration with OpenFreeMap and Esri World Imagery tiles. |
+| Direct Contact      | One-tap WhatsApp or email connection to verified listing agents and landlords.                                  |
+| Zero Friction       | Free to browse with no mandatory signup or paywall between students and housing.                                |
+| Offline Ready       | Fully functional offline presentation package for field demos and local deployments.                            |
+| Interactive Map     | Keyless MapLibre GL integration with OpenFreeMap and Esri World Imagery tiles.                                  |
 
 ---
 
@@ -156,25 +156,25 @@ unihub-landing-experience/
 
 ### Frontend
 
-| Technology | Purpose |
-|---|---|
-| TanStack Start | Full-stack React framework with SSR |
-| React 19 | UI library |
-| TypeScript | Type-safe development |
+| Technology      | Purpose                                 |
+| --------------- | --------------------------------------- |
+| TanStack Start  | Full-stack React framework with SSR     |
+| React 19        | UI library                              |
+| TypeScript      | Type-safe development                   |
 | Tailwind CSS v4 | Utility-first styling with OKLCH tokens |
-| MapLibre GL | Interactive campus map (no API keys) |
-| Radix UI | Accessible UI primitives |
-| Lucide Icons | Icon system |
+| MapLibre GL     | Interactive campus map (no API keys)    |
+| Radix UI        | Accessible UI primitives                |
+| Lucide Icons    | Icon system                             |
 
 ### Build & Infrastructure
 
-| Technology | Purpose |
-|---|---|
-| Vite 8 | Build tool and dev server |
-| Nitro 3 | Server output and deployment preset |
-| TanStack Router | File-based routing |
-| Vercel | Hosting and deployment |
-| ESLint + Prettier | Code quality and formatting |
+| Technology        | Purpose                             |
+| ----------------- | ----------------------------------- |
+| Vite 8            | Build tool and dev server           |
+| Nitro 3           | Server output and deployment preset |
+| TanStack Router   | File-based routing                  |
+| Vercel            | Hosting and deployment              |
+| ESLint + Prettier | Code quality and formatting         |
 
 ---
 
@@ -228,10 +228,31 @@ npm run preview
 ## License & Contact
 
 - **License** — Private project. All map data remains subject to OpenStreetMap and Esri license terms.
-- **WhatsApp Support** — Configurable via `WHATSAPP_URL` in `src/components/MarketingChrome.tsx`
+- **WhatsApp Support** — Configurable via `WHATSAPP_URL` in `src/shared/components/MarketingChrome.tsx`
 - **Email** — `hello@unihub.ke`
 
 ---
 
-*UniHub — Verified student housing near Kenyan campuses.*
+## Recent Maintenance (2026-10-29)
 
+### Code Quality Improvements
+- **Removed all `@ts-nocheck` directives** from 40+ legacy TypeScript files
+- **Fixed type safety** across core modules: Firestore services, error reporting, auth context, media optimization
+- **Eliminated `any` type annotations** in shared/services, infrastructure, features, and admin pages
+- **Applied Prettier formatting** to 33+ files (CRLF → LF line endings)
+- **ESLint now passes with 0 errors** on the new TanStack Start landing experience (only 4 fast-refresh warnings)
+
+### Security & Architecture
+- Firebase configuration now uses environment variables (`VITE_FIREBASE_*`) in shared library
+- Legacy SPA (`/app`) separated from modern landing experience (`/`) with proper mounting
+- CSP-ready: no inline scripts, no `eval()`, no unsafe patterns
+- All external links use `rel="noreferrer"` and proper target handling
+
+### Build & Deployment
+- ✅ Production build passes for Vercel (Nitro preset)
+- ✅ TypeScript compilation clean on new architecture
+- ✅ Bundle analysis: main chunks optimized, legacy code isolated
+
+---
+
+_UniHub — Verified student housing near Kenyan campuses._

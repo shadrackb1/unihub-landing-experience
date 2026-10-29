@@ -1,10 +1,9 @@
-// @ts-nocheck
-import { Timestamp } from 'firebase/firestore';
+import { Timestamp } from "firebase/firestore";
 
 export interface MediaItem {
   public_id: string;
   secure_url: string;
-  resource_type: 'image' | 'video';
+  resource_type: "image" | "video";
   format: string;
   order: number;
 }
@@ -20,7 +19,7 @@ export interface University {
   description: string;
   verified: boolean;
   admin_user_id?: string;
-  status: 'active' | 'inactive';
+  status: "active" | "inactive";
   metadata?: {
     founded_year?: number;
     student_count?: number;
@@ -35,13 +34,13 @@ export interface Hostel {
   name: string;
   location: string;
   description: string;
-  hostel_type: 'boys' | 'girls' | 'mixed';
+  hostel_type: "boys" | "girls" | "mixed";
   images: MediaItem[];
   amenities: string[];
   warden_name?: string;
   warden_phone?: string;
   warden_email?: string;
-  status: 'active' | 'inactive';
+  status: "active" | "inactive";
   createdAt?: Timestamp;
   updatedAt?: Timestamp;
 }
@@ -51,20 +50,20 @@ export interface HostelRoom {
   hostelId: string;
   room_number: string;
   bed_number?: string;
-  room_type: 'single' | 'shared_double' | 'shared_quad' | 'shared_open';
+  room_type: "single" | "shared_double" | "shared_quad" | "shared_open";
   pricing?: {
     per_month?: number;
     per_semester?: number;
     per_year?: number;
   };
-  status: 'available' | 'booked' | 'maintenance' | 'closed';
+  status: "available" | "booked" | "maintenance" | "closed";
   occupancy?: {
     current_occupants: number;
     max_occupants: number;
     occupancy_percentage: number;
   };
   media?: {
-    type: 'video' | 'image';
+    type: "video" | "image";
     url: string;
     thumbnail?: string;
     caption?: string;
@@ -74,19 +73,19 @@ export interface HostelRoom {
   amenities?: string[];
   features?: string[];
   availability?: {
-    available_from: any;
-    available_until: any;
-    booking_deadline?: any;
+    available_from: Date | Timestamp | string;
+    available_until: Date | Timestamp | string;
+    booking_deadline?: Date | Timestamp | string;
   };
   current_tenant?: {
     name: string;
     student_id: string;
-    admission_date: any;
-    expected_checkout: any;
+    admission_date: Date | Timestamp | string;
+    expected_checkout: Date | Timestamp | string;
   };
   price_notes?: string;
-  createdAt?: any;
-  updatedAt?: any;
+  createdAt?: Date | Timestamp | number;
+  updatedAt?: Date | Timestamp | number;
 }
 
 export interface Apartment {
@@ -102,11 +101,11 @@ export interface Apartment {
   amenities: string[];
   images: MediaItem[];
   agentId: string;
-  owner_type: 'individual' | 'company';
+  owner_type: "individual" | "company";
   owner_name?: string;
   contact_email?: string;
   contact_phone?: string;
-  status: 'active' | 'inactive';
+  status: "active" | "inactive";
   createdAt?: Timestamp;
   updatedAt?: Timestamp;
 }
@@ -115,13 +114,13 @@ export interface Room {
   id?: string;
   apartmentId: string;
   room_number: string;
-  room_type: 'single' | 'double' | 'bedsitter' | 'studio' | 'one_bedroom' | 'two_bedroom';
+  room_type: "single" | "double" | "bedsitter" | "studio" | "one_bedroom" | "two_bedroom";
   price: number;
   deposit?: number;
   description: string;
   features: string[];
   images: MediaItem[];
-  status: 'available' | 'occupied' | 'maintenance' | 'hidden';
+  status: "available" | "occupied" | "maintenance" | "hidden";
   max_occupants: number;
   square_meters?: number;
   availability_date?: Timestamp;
@@ -129,8 +128,7 @@ export interface Room {
   updatedAt?: Timestamp;
 }
 
-export type UserRole = 'tenant' | 'landlord' | 'admin' | 'university_admin';
-
+export type UserRole = "tenant" | "landlord" | "admin" | "university_admin";
 
 export interface User {
   id: string;
@@ -142,7 +140,7 @@ export interface User {
   updatedAt?: number;
 }
 
-export type PropertyType = 'hostel' | 'apartment' | 'bedsitter';
+export type PropertyType = "hostel" | "apartment" | "bedsitter";
 
 export interface Listing {
   id: string;
@@ -162,10 +160,10 @@ export interface Listing {
   distanceFromCampus?: string;
   hasWifi?: boolean;
   hasWater?: boolean;
-  genderRestriction?: 'none' | 'male_only' | 'female_only';
+  genderRestriction?: "none" | "male_only" | "female_only";
   videoUrl?: string;
   amenities?: string[];
-  status: 'available' | 'rented';
+  status: "available" | "rented";
   isVerified?: boolean;
   createdAt: number;
   updatedAt?: number;
@@ -179,13 +177,13 @@ export interface Property {
   deposit?: number;
   location: string;
   coordinates?: {
-     lat: number;
-     lng: number;
+    lat: number;
+    lng: number;
   };
   description: string;
   features: string[];
   agentId: string;
-  status: 'available' | 'occupied' | 'hidden';
+  status: "available" | "occupied" | "hidden";
   media: MediaItem[];
   createdAt: Timestamp;
   updatedAt: Timestamp;
@@ -194,7 +192,7 @@ export interface Property {
 export interface MediaItem {
   public_id: string;
   secure_url: string;
-  resource_type: 'image' | 'video';
+  resource_type: "image" | "video";
   format: string;
   order: number;
 }
@@ -243,4 +241,3 @@ export interface SiteSettings {
   };
   teamMembers?: TeamMember[];
 }
-

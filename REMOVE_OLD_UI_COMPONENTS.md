@@ -1,6 +1,7 @@
 Remove all files in src/components/ui because they have been migrated to src/shared/ui/primitives.
 
 List of files to remove:
+
 - accordion.tsx
 - alert-dialog.tsx
 - alert.tsx

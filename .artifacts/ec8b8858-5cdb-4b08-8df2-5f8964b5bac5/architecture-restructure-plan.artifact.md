@@ -9,6 +9,7 @@
 ## 1. Current State Analysis
 
 ### Existing Structure
+
 ```
 src/
 ├── components/           # Mixed: UI primitives + feature components
@@ -49,15 +50,16 @@ src/
 ```
 
 ### Pain Points Identified
-| Issue | Impact |
-|-------|--------|
-| **Monolithic `index.tsx` (701 lines)** | Hard to maintain, test, collaborate |
-| **Mixed `components/`** | UI primitives mixed with feature-specific components |
-| **No domain layer** | Types, schemas, constants scattered |
-| **Single `data/` file** | Will not scale with API integration |
-| **No barrel exports** | Deep import paths (`@/components/VideoPanel`) |
-| **Limited path aliases** | Only `@/*` mapped to `./src/*` |
-| **No feature boundaries** | Cross-coupling between unrelated features |
+
+| Issue                                  | Impact                                               |
+| -------------------------------------- | ---------------------------------------------------- |
+| **Monolithic `index.tsx` (701 lines)** | Hard to maintain, test, collaborate                  |
+| **Mixed `components/`**                | UI primitives mixed with feature-specific components |
+| **No domain layer**                    | Types, schemas, constants scattered                  |
+| **Single `data/` file**                | Will not scale with API integration                  |
+| **No barrel exports**                  | Deep import paths (`@/components/VideoPanel`)        |
+| **Limited path aliases**               | Only `@/*` mapped to `./src/*`                       |
+| **No feature boundaries**              | Cross-coupling between unrelated features            |
 
 ---
 
@@ -417,9 +419,7 @@ export interface PaginatedResponse<T> {
   };
 }
 
-export type Result<T, E = Error> =
-  | { ok: true; value: T }
-  | { ok: false; error: E };
+export type Result<T, E = Error> = { ok: true; value: T } | { ok: false; error: E };
 
 export type DeepPartial<T> = {
   [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
@@ -432,8 +432,8 @@ export interface Listing {
   location: string;
   campusId: string;
   category: ListingCategory;
-  price: number;           // In smallest currency unit (cents)
-  priceFormatted: string;  // "KES 9,500"
+  price: number; // In smallest currency unit (cents)
+  priceFormatted: string; // "KES 9,500"
   deposit: string;
   description: string;
   amenities: string[];
@@ -447,12 +447,7 @@ export interface Listing {
 }
 
 export type ListingCategory =
-  | 'hostel'
-  | 'bedsitter'
-  | 'single-room'
-  | 'studio'
-  | 'apartment'
-  | 'shared-apartment';
+  "hostel" | "bedsitter" | "single-room" | "studio" | "apartment" | "shared-apartment";
 
 export interface ListingImage {
   id: string;
@@ -479,21 +474,15 @@ export interface GeoCoordinates {
 // domain/types/campus.ts
 export interface Campus {
   id: string;
-  code: string;        // "UoN", "JKUAT"
-  name: string;        // "University of Nairobi"
-  town: string;        // "Nairobi", "Juja"
+  code: string; // "UoN", "JKUAT"
+  name: string; // "University of Nairobi"
+  town: string; // "Nairobi", "Juja"
   coordinates: GeoCoordinates;
   region: CampusRegion;
 }
 
 export type CampusRegion =
-  | 'nairobi'
-  | 'central'
-  | 'rift-valley'
-  | 'western'
-  | 'coast'
-  | 'eastern'
-  | 'north-eastern';
+  "nairobi" | "central" | "rift-valley" | "western" | "coast" | "eastern" | "north-eastern";
 
 // domain/types/residence.ts
 export interface ResidenceClip {
@@ -513,8 +502,8 @@ export interface ResidenceClip {
 
 ```typescript
 // domain/schemas/listing.zod.ts
-import { z } from 'zod';
-import type { Listing, ListingCategory, AgentContact } from '../types/listing';
+import { z } from "zod";
+import type { Listing, ListingCategory, AgentContact } from "../types/listing";
 
 export const agentContactSchema = z.object({
   name: z.string().min(1),
@@ -530,29 +519,39 @@ export const listingSchema: z.ZodType<Listing> = z.object({
   location: z.string().min(2).max(100),
   campusId: z.string().min(1),
   category: z.enum([
-    'hostel', 'bedsitter', 'single-room',
-    'studio', 'apartment', 'shared-apartment'
+    "hostel",
+    "bedsitter",
+    "single-room",
+    "studio",
+    "apartment",
+    "shared-apartment",
   ]),
   price: z.number().positive(),
   priceFormatted: z.string(),
   deposit: z.string().min(1),
   description: z.string().min(20).max(5000),
   amenities: z.array(z.string()).min(1),
-  images: z.array(z.object({
-    id: z.string(),
-    url: z.string().url(),
-    alt: z.string(),
-    width: z.number().positive(),
-    height: z.number().positive(),
-    blurDataUrl: z.string().url().optional(),
-  })).min(1),
+  images: z
+    .array(
+      z.object({
+        id: z.string(),
+        url: z.string().url(),
+        alt: z.string(),
+        width: z.number().positive(),
+        height: z.number().positive(),
+        blurDataUrl: z.string().url().optional(),
+      }),
+    )
+    .min(1),
   agent: agentContactSchema,
   verified: z.boolean(),
   availableFrom: z.date(),
-  coordinates: z.object({
-    lat: z.number().min(-90).max(90),
-    lng: z.number().min(-180).max(180),
-  }).optional(),
+  coordinates: z
+    .object({
+      lat: z.number().min(-90).max(90),
+      lng: z.number().min(-180).max(180),
+    })
+    .optional(),
   createdAt: z.date(),
   updatedAt: z.date(),
 });
@@ -570,64 +569,64 @@ export const createListingSchema = listingSchema.omit({
 ```typescript
 // domain/constants/app.ts
 export const APP_CONFIG = {
-  name: 'UniHub',
-  tagline: 'Verified Student Housing in Kenya',
-  description: 'Browse verified hostels, bedsitters, and rentals near campus.',
-  url: 'https://unihub.ke',
-  supportEmail: 'hello@unihub.ke',
-  version: '1.0.0',
+  name: "UniHub",
+  tagline: "Verified Student Housing in Kenya",
+  description: "Browse verified hostels, bedsitters, and rentals near campus.",
+  url: "https://unihub.ke",
+  supportEmail: "hello@unihub.ke",
+  version: "1.0.0",
 } as const;
 
 // domain/constants/routes.ts
 export const ROUTES = {
-  home: '/',
-  listings: '/listings',
+  home: "/",
+  listings: "/listings",
   listingDetail: (slug: string) => `/listings/${slug}`,
-  listProperty: '/list-property',
-  about: '/about',
-  contact: '/contact',
-  privacy: '/privacy',
-  terms: '/terms',
+  listProperty: "/list-property",
+  about: "/about",
+  contact: "/contact",
+  privacy: "/privacy",
+  terms: "/terms",
 } as const;
 
 // domain/constants/whatsapp.ts
 export const WHATSAPP_CONFIG = {
-  businessNumber: '254700000000',
+  businessNumber: "254700000000",
   defaultMessage: "Hi UniHub, I'd like help finding verified student housing",
-  supportUrl: 'https://wa.me/254700000000',
+  supportUrl: "https://wa.me/254700000000",
   buildUrl: (message?: string) =>
     `https://wa.me/254700000000?text=${encodeURIComponent(message || WHATSAPP_CONFIG.defaultMessage)}`,
 } as const;
 
 // domain/constants/pricing.ts
 export const CURRENCY = {
-  code: 'KES',
-  symbol: 'KES',
-  locale: 'en-KE',
+  code: "KES",
+  symbol: "KES",
+  locale: "en-KE",
   format: (amount: number) =>
-    new Intl.NumberFormat('en-KE', {
-      style: 'currency',
-      currency: 'KES',
+    new Intl.NumberFormat("en-KE", {
+      style: "currency",
+      currency: "KES",
       minimumFractionDigits: 0,
     }).format(amount),
 } as const;
 
 export const PRICE_RANGES = [
-  { min: 0, max: 5000, label: 'Under KES 5,000' },
-  { min: 5000, max: 10000, label: 'KES 5,000 - 10,000' },
-  { min: 10000, max: 15000, label: 'KES 10,000 - 15,000' },
-  { min: 15000, max: 25000, label: 'KES 15,000 - 25,000' },
-  { min: 25000, max: Infinity, label: 'Above KES 25,000' },
+  { min: 0, max: 5000, label: "Under KES 5,000" },
+  { min: 5000, max: 10000, label: "KES 5,000 - 10,000" },
+  { min: 10000, max: 15000, label: "KES 10,000 - 15,000" },
+  { min: 15000, max: 25000, label: "KES 15,000 - 25,000" },
+  { min: 25000, max: Infinity, label: "Above KES 25,000" },
 ] as const;
 
 // domain/constants/categories.ts
 export const LISTING_CATEGORIES = [
-  { value: 'hostel', label: 'Hostel', icon: 'building-2' },
-  { value: 'bedsitter', label: 'Bedsitter', icon: 'home' },
-  { value: 'single-room', label: 'Single Room', icon: 'door-open' },
-  { value: 'studio', label: 'Studio', icon: 'layout' },
-  { value: 'apartment', label: 'Apartment', icon: 'building' },
-  { value: 'shared-apartment', label: 'Shared Apartment', icon: 'users' },
+  { value: "hostel", label: "Hostel", icon: "building-2" },
+  { value: "bedsitter", label: "Bedsitter", icon: "home" },
+  { value: "single-room", label: "Single Room", icon: "door-open" },
+  { value: "studio", label: "Studio", icon: "layout" },
+  { value: "apartment", label: "Apartment", icon: "building" },
+  { value: "shared-apartment", label: "Shared Apartment", icon: "users" },
 ] as const;
 
 // domain/constants/breakpoints.ts
@@ -636,7 +635,7 @@ export const BREAKPOINTS = {
   md: 768,
   lg: 1024,
   xl: 1280,
-  '2xl': 1536,
+  "2xl": 1536,
 } as const;
 
 export const MOBILE_BREAKPOINT = BREAKPOINTS.md;
@@ -649,12 +648,13 @@ export const MOBILE_BREAKPOINT = BREAKPOINTS.md;
 ### 5.1 Feature Module Contract
 
 Each feature module **MUST** expose:
+
 ```typescript
 // features/<feature>/index.ts
-export * from './components';      // Public components
-export * from './hooks';           // Public hooks
-export * from './types';           // Public types
-export * from './schemas';         // Public schemas (if any)
+export * from "./components"; // Public components
+export * from "./hooks"; // Public hooks
+export * from "./types"; // Public types
+export * from "./schemas"; // Public schemas (if any)
 // NO direct exports from internal utils, constants, etc.
 ```
 
@@ -673,13 +673,13 @@ export * from './schemas';         // Public schemas (if any)
 └─────────────┘     └─────────────┘     └─────────────┘
 ```
 
-| Layer | Can Import From |
-|-------|-----------------|
-| **Features** | Domain, Infrastructure, Shared |
-| **Domain** | (Nothing — pure TypeScript) |
-| **Infrastructure** | Domain, Shared |
-| **Shared** | Domain (types only) |
-| **App** | Features, Domain, Infrastructure, Shared |
+| Layer              | Can Import From                          |
+| ------------------ | ---------------------------------------- |
+| **Features**       | Domain, Infrastructure, Shared           |
+| **Domain**         | (Nothing — pure TypeScript)              |
+| **Infrastructure** | Domain, Shared                           |
+| **Shared**         | Domain (types only)                      |
+| **App**            | Features, Domain, Infrastructure, Shared |
 
 ### 5.3 Example: `features/listings/`
 
@@ -729,24 +729,21 @@ export * from './schemas';
 
 ```typescript
 // infrastructure/api/client.ts
-import type { Result } from '@/domain/types/common';
+import type { Result } from "@/domain/types/common";
 
 class ApiClient {
   private baseUrl: string;
   private defaultHeaders: HeadersInit;
 
   constructor() {
-    this.baseUrl = import.meta.env.VITE_API_URL || '/api';
+    this.baseUrl = import.meta.env.VITE_API_URL || "/api";
     this.defaultHeaders = {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
+      "Content-Type": "application/json",
+      Accept: "application/json",
     };
   }
 
-  async request<T>(
-    endpoint: string,
-    options: RequestInit = {}
-  ): Promise<Result<T>> {
+  async request<T>(endpoint: string, options: RequestInit = {}): Promise<Result<T>> {
     try {
       const response = await fetch(`${this.baseUrl}${endpoint}`, {
         ...options,
@@ -764,39 +761,41 @@ class ApiClient {
     }
   }
 
-  get<T>(endpoint: string) { return this.request<T>(endpoint, { method: 'GET' }); }
-  post<T>(endpoint: string, body: unknown) { return this.request<T>(endpoint, { method: 'POST', body: JSON.stringify(body) }); }
+  get<T>(endpoint: string) {
+    return this.request<T>(endpoint, { method: "GET" });
+  }
+  post<T>(endpoint: string, body: unknown) {
+    return this.request<T>(endpoint, { method: "POST", body: JSON.stringify(body) });
+  }
 }
 
 export const apiClient = new ApiClient();
 
 // infrastructure/api/listings.api.ts
-import { apiClient } from './client';
-import type { Listing, PaginatedResponse } from '@/domain/types/listing';
-import type { ListingFilters } from '@/features/listings/types';
+import { apiClient } from "./client";
+import type { Listing, PaginatedResponse } from "@/domain/types/listing";
+import type { ListingFilters } from "@/features/listings/types";
 
 export const listingsApi = {
   getAll: (filters: ListingFilters) =>
-    apiClient.get<PaginatedResponse<Listing>>('/listings', { params: filters }),
+    apiClient.get<PaginatedResponse<Listing>>("/listings", { params: filters }),
 
-  getById: (id: string) =>
-    apiClient.get<Listing>(`/listings/${id}`),
+  getById: (id: string) => apiClient.get<Listing>(`/listings/${id}`),
 
-  getFeatured: (limit = 6) =>
-    apiClient.get<Listing[]>(`/listings/featured?limit=${limit}`),
+  getFeatured: (limit = 6) => apiClient.get<Listing[]>(`/listings/featured?limit=${limit}`),
 
-  create: (data: Omit<Listing, 'id' | 'createdAt' | 'updatedAt'>) =>
-    apiClient.post<Listing>('/listings', data),
+  create: (data: Omit<Listing, "id" | "createdAt" | "updatedAt">) =>
+    apiClient.post<Listing>("/listings", data),
 };
 
 // infrastructure/api/queryKeys.ts
 export const queryKeys = {
-  listings: (filters?: Record<string, unknown>) => ['listings', filters] as const,
-  listing: (id: string) => ['listings', id] as const,
-  featuredListings: (limit: number) => ['listings', 'featured', limit] as const,
-  campuses: () => ['campuses'] as const,
-  campus: (id: string) => ['campuses', id] as const,
-  residenceClips: () => ['residences', 'clips'] as const,
+  listings: (filters?: Record<string, unknown>) => ["listings", filters] as const,
+  listing: (id: string) => ["listings", id] as const,
+  featuredListings: (limit: number) => ["listings", "featured", limit] as const,
+  campuses: () => ["campuses"] as const,
+  campus: (id: string) => ["campuses", id] as const,
+  residenceClips: () => ["residences", "clips"] as const,
 } as const;
 ```
 
@@ -806,13 +805,13 @@ export const queryKeys = {
 // infrastructure/media/optimization.ts
 export function getOptimizedImageUrl(
   src: string,
-  options: { width?: number; height?: number; quality?: number; format?: 'webp' | 'avif' } = {}
+  options: { width?: number; height?: number; quality?: number; format?: "webp" | "avif" } = {},
 ): string {
   const params = new URLSearchParams();
-  if (options.width) params.set('w', String(options.width));
-  if (options.height) params.set('h', String(options.height));
-  if (options.quality) params.set('q', String(options.quality));
-  if (options.format) params.set('fm', options.format);
+  if (options.width) params.set("w", String(options.width));
+  if (options.height) params.set("h", String(options.height));
+  if (options.quality) params.set("q", String(options.quality));
+  if (options.format) params.set("fm", options.format);
   return `${src}?${params.toString()}`;
 }
 
@@ -823,7 +822,7 @@ export function generateBlurDataUrl(width: number, height: number): string {
 
 // infrastructure/media/cdn.ts
 export const CDN_CONFIG = {
-  baseUrl: import.meta.env.VITE_CDN_URL || '',
+  baseUrl: import.meta.env.VITE_CDN_URL || "",
   imageTransforms: {
     thumbnail: { width: 400, height: 300, quality: 75 },
     card: { width: 800, height: 600, quality: 80 },
@@ -831,7 +830,10 @@ export const CDN_CONFIG = {
   },
 } as const;
 
-export function getImageUrl(path: string, variant: keyof typeof CDN_CONFIG.imageTransforms = 'card'): string {
+export function getImageUrl(
+  path: string,
+  variant: keyof typeof CDN_CONFIG.imageTransforms = "card",
+): string {
   const { baseUrl, imageTransforms } = CDN_CONFIG;
   const transform = imageTransforms[variant];
   return `${baseUrl}${path}?w=${transform.width}&h=${transform.height}&q=${transform.quality}&fm=webp`;
@@ -862,28 +864,28 @@ export function getImageUrl(path: string, variant: keyof typeof CDN_CONFIG.image
 ### 7.1 Vite Config Update (`vite.config.ts`)
 
 ```typescript
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import tanstackRouter from '@tanstack/router-plugin/vite';
-import tsconfigPaths from 'vite-tsconfig-paths';
-import tailwindcss from '@tailwindcss/vite';
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import tanstackRouter from "@tanstack/router-plugin/vite";
+import tsconfigPaths from "vite-tsconfig-paths";
+import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
   plugins: [
-    tanstackRouter({ target: 'react', autoCodeSplitting: true }),
+    tanstackRouter({ target: "react", autoCodeSplitting: true }),
     react(),
     tailwindcss(),
     tsconfigPaths(),
   ],
   resolve: {
     alias: {
-      '@': '/src',
-      '@app': '/src/app',
-      '@features': '/src/features',
-      '@domain': '/src/domain',
-      '@infrastructure': '/src/infrastructure',
-      '@shared': '/src/shared',
-      '@assets': '/src/assets',
+      "@": "/src",
+      "@app": "/src/app",
+      "@features": "/src/features",
+      "@domain": "/src/domain",
+      "@infrastructure": "/src/infrastructure",
+      "@shared": "/src/shared",
+      "@assets": "/src/assets",
     },
   },
 });
@@ -897,45 +899,45 @@ export default defineConfig({
 
 ```typescript
 // src/domain/index.ts
-export * from './types';
-export * from './schemas';
-export * from './constants';
-export * from './utils';
+export * from "./types";
+export * from "./schemas";
+export * from "./constants";
+export * from "./utils";
 
 // src/infrastructure/index.ts
-export * from './api';
-export * from './storage';
-export * from './media';
-export * from './analytics';
-export * from './mapping';
-export * from './messaging';
+export * from "./api";
+export * from "./storage";
+export * from "./media";
+export * from "./analytics";
+export * from "./mapping";
+export * from "./messaging";
 
 // src/shared/index.ts
-export * from './ui';
-export * from './components';
-export * from './hooks';
-export * from './utils';
-export * from './styles';
-export * from './types';
+export * from "./ui";
+export * from "./components";
+export * from "./hooks";
+export * from "./utils";
+export * from "./styles";
+export * from "./types";
 
 // src/features/index.ts
-export * from './home';
-export * from './listings';
-export * from './property';
-export * from './campus';
-export * from './residence';
-export * from './contact';
-export * from './marketing';
+export * from "./home";
+export * from "./listings";
+export * from "./property";
+export * from "./campus";
+export * from "./residence";
+export * from "./contact";
+export * from "./marketing";
 ```
 
 ### 8.2 Feature Barrels
 
 ```typescript
 // src/features/listings/index.ts
-export { ListingGrid, ListingCard, ListingFilters, ListingSort, Pagination } from './components';
-export { useListings, useFilters, useListing } from './hooks';
-export type { ListingFilters, ListingSortOption, ListingViewMode } from './types';
-export { listingSchema, createListingSchema } from './schemas';
+export { ListingGrid, ListingCard, ListingFilters, ListingSort, Pagination } from "./components";
+export { useListings, useFilters, useListing } from "./hooks";
+export type { ListingFilters, ListingSortOption, ListingViewMode } from "./types";
+export { listingSchema, createListingSchema } from "./schemas";
 ```
 
 ### 8.3 Shared UI Barrels
@@ -943,45 +945,52 @@ export { listingSchema, createListingSchema } from './schemas';
 ```typescript
 // src/shared/ui/primitives/index.ts
 // Re-export all 40+ Radix wrappers
-export { Button, buttonVariants } from './button';
-export { Card, CardHeader, CardContent, CardFooter } from './card';
-export { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from './dialog';
+export { Button, buttonVariants } from "./button";
+export { Card, CardHeader, CardContent, CardFooter } from "./card";
+export {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "./dialog";
 // ... all primitives
 
 // src/shared/ui/composites/index.ts
-export { FormField } from './FormField';
-export { DataTable } from './DataTable';
-export { Modal } from './Modal';
-export { PageHeader } from './PageHeader';
-export { Section } from './Section';
+export { FormField } from "./FormField";
+export { DataTable } from "./DataTable";
+export { Modal } from "./Modal";
+export { PageHeader } from "./PageHeader";
+export { Section } from "./Section";
 
 // src/shared/ui/patterns/index.ts
-export { LoadingSkeleton } from './LoadingSkeleton';
-export { EmptyState } from './EmptyState';
-export { ErrorBoundary } from './ErrorBoundary';
-export { ConfirmDialog } from './ConfirmDialog';
+export { LoadingSkeleton } from "./LoadingSkeleton";
+export { EmptyState } from "./EmptyState";
+export { ErrorBoundary } from "./ErrorBoundary";
+export { ConfirmDialog } from "./ConfirmDialog";
 ```
 
 ### 8.4 Import Examples After Restructure
 
 ```typescript
 // BEFORE (current)
-import { ListingGrid } from '@/components/ListingGrid';
-import { cn } from '@/lib/utils';
-import { sampleListings } from '@/data/listings';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { VideoPanel, PortraitVideo, Reveal } from '@/components/VideoPanel';
+import { ListingGrid } from "@/components/ListingGrid";
+import { cn } from "@/lib/utils";
+import { sampleListings } from "@/data/listings";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { VideoPanel, PortraitVideo, Reveal } from "@/components/VideoPanel";
 
 // AFTER (restructured)
-import { ListingGrid, ListingCard } from '@/features/listings';
-import { cn } from '@/shared/utils';
-import { formatPrice } from '@/domain/utils/formatting';
-import { useIsMobile } from '@/shared/hooks';
-import { VideoPanel, PortraitVideo, Reveal } from '@/shared/components';
-import { WHATSAPP_CONFIG } from '@/domain/constants/whatsapp';
-import { LISTING_CATEGORIES } from '@/domain/constants/categories';
-import { queryKeys } from '@/infrastructure/api/queryKeys';
-import { getOptimizedImageUrl } from '@/infrastructure/media/optimization';
+import { ListingGrid, ListingCard } from "@/features/listings";
+import { cn } from "@/shared/utils";
+import { formatPrice } from "@/domain/utils/formatting";
+import { useIsMobile } from "@/shared/hooks";
+import { VideoPanel, PortraitVideo, Reveal } from "@/shared/components";
+import { WHATSAPP_CONFIG } from "@/domain/constants/whatsapp";
+import { LISTING_CATEGORIES } from "@/domain/constants/categories";
+import { queryKeys } from "@/infrastructure/api/queryKeys";
+import { getOptimizedImageUrl } from "@/infrastructure/media/optimization";
 ```
 
 ---
@@ -990,53 +999,53 @@ import { getOptimizedImageUrl } from '@/infrastructure/media/optimization';
 
 ### 9.1 Phase 1: Foundation (Week 1) — **Zero Risk**
 
-| Task | Description | Verification |
-|------|-------------|--------------|
-| 1.1 | Create new directory structure (empty dirs + index.ts) | `tsc --noEmit` passes |
-| 1.2 | Update `tsconfig.json` with new path aliases | All imports resolve |
-| 1.3 | Update `vite.config.ts` aliases | Dev server starts |
-| 1.4 | Move `src/lib/utils.ts` → `src/shared/utils/cn.ts` | No broken imports |
-| 1.5 | Move `src/hooks/use-mobile.tsx` → `src/shared/hooks/useIsMobile.ts` | No broken imports |
-| 1.6 | Move `src/styles.css` → `src/shared/styles/globals.css` | Styles apply correctly |
-| 1.7 | Move `src/components/ui/` → `src/shared/ui/primitives/` | All UI components work |
+| Task | Description                                                         | Verification           |
+| ---- | ------------------------------------------------------------------- | ---------------------- |
+| 1.1  | Create new directory structure (empty dirs + index.ts)              | `tsc --noEmit` passes  |
+| 1.2  | Update `tsconfig.json` with new path aliases                        | All imports resolve    |
+| 1.3  | Update `vite.config.ts` aliases                                     | Dev server starts      |
+| 1.4  | Move `src/lib/utils.ts` → `src/shared/utils/cn.ts`                  | No broken imports      |
+| 1.5  | Move `src/hooks/use-mobile.tsx` → `src/shared/hooks/useIsMobile.ts` | No broken imports      |
+| 1.6  | Move `src/styles.css` → `src/shared/styles/globals.css`             | Styles apply correctly |
+| 1.7  | Move `src/components/ui/` → `src/shared/ui/primitives/`             | All UI components work |
 
 **Deliverable:** Working app with new aliases, old paths still functional via `@/*`
 
 ### 9.2 Phase 2: Domain Layer (Week 1-2) — **Low Risk**
 
-| Task | Description | Verification |
-|------|-------------|--------------|
-| 2.1 | Create `src/domain/types/` with core interfaces | Types compile |
-| 2.2 | Create `src/domain/schemas/` with Zod schemas | Validation works |
-| 2.3 | Create `src/domain/constants/` with app constants | Constants usable |
-| 2.4 | Create `src/domain/utils/` with pure utilities | Utils testable |
-| 2.5 | Move `src/data/listings.ts` types → `domain/types/listing.ts` | Types match |
-| 2.6 | Create barrel exports for domain layer | `@domain/*` imports work |
+| Task | Description                                                   | Verification             |
+| ---- | ------------------------------------------------------------- | ------------------------ |
+| 2.1  | Create `src/domain/types/` with core interfaces               | Types compile            |
+| 2.2  | Create `src/domain/schemas/` with Zod schemas                 | Validation works         |
+| 2.3  | Create `src/domain/constants/` with app constants             | Constants usable         |
+| 2.4  | Create `src/domain/utils/` with pure utilities                | Utils testable           |
+| 2.5  | Move `src/data/listings.ts` types → `domain/types/listing.ts` | Types match              |
+| 2.6  | Create barrel exports for domain layer                        | `@domain/*` imports work |
 
 **Deliverable:** Pure TypeScript domain layer, zero React dependencies
 
 ### 9.3 Phase 3: Infrastructure Layer (Week 2) — **Medium Risk**
 
-| Task | Description | Verification |
-|------|-------------|--------------|
-| 3.1 | Create API client with Result<T> pattern | Network calls work |
-| 3.2 | Define query keys factory | Query keys consistent |
-| 3.3 | Create media optimization helpers | Images load correctly |
-| 3.4 | Extract WhatsApp/email helpers | Links work |
-| 3.5 | Create MapLibre adapter | Map renders |
-| 3.6 | Add analytics event constants | Events fire |
+| Task | Description                              | Verification          |
+| ---- | ---------------------------------------- | --------------------- |
+| 3.1  | Create API client with Result<T> pattern | Network calls work    |
+| 3.2  | Define query keys factory                | Query keys consistent |
+| 3.3  | Create media optimization helpers        | Images load correctly |
+| 3.4  | Extract WhatsApp/email helpers           | Links work            |
+| 3.5  | Create MapLibre adapter                  | Map renders           |
+| 3.6  | Add analytics event constants            | Events fire           |
 
 **Deliverable:** Infrastructure ready for feature consumption
 
 ### 9.4 Phase 4: Shared UI Reorganization (Week 2-3) — **Medium Risk**
 
-| Task | Description | Verification |
-|------|-------------|--------------|
-| 4.1 | Split `shared/ui` into primitives/composites/patterns | All components render |
-| 4.2 | Move `MarketingChrome` → `shared/components/` | Header/Footer render |
-| 4.3 | Move `VideoPanel`, `Experience`, `LetterReveal` → `shared/components/` | Animations work |
-| 4.4 | Create composite components (FormField, Modal, Section) | Used in features |
-| 4.5 | Create pattern components (LoadingSkeleton, EmptyState) | Used in features |
+| Task | Description                                                            | Verification          |
+| ---- | ---------------------------------------------------------------------- | --------------------- |
+| 4.1  | Split `shared/ui` into primitives/composites/patterns                  | All components render |
+| 4.2  | Move `MarketingChrome` → `shared/components/`                          | Header/Footer render  |
+| 4.3  | Move `VideoPanel`, `Experience`, `LetterReveal` → `shared/components/` | Animations work       |
+| 4.4  | Create composite components (FormField, Modal, Section)                | Used in features      |
+| 4.5  | Create pattern components (LoadingSkeleton, EmptyState)                | Used in features      |
 
 **Deliverable:** Clean shared UI layer with clear separation
 
@@ -1044,17 +1053,18 @@ import { getOptimizedImageUrl } from '@/infrastructure/media/optimization';
 
 > **Strategy:** Extract one feature at a time, verify, then proceed.
 
-| Feature | Source Files | Target Location | Priority |
-|---------|--------------|-----------------|----------|
-| **home** | `routes/index.tsx` (sections) | `features/home/` | 1 |
-| **listings** | `routes/listings.tsx`, `components/ListingGrid.tsx` | `features/listings/` | 2 |
-| **property** | `routes/list-property.tsx`, `routes/listings.tsx` (detail) | `features/property/` | 3 |
-| **campus** | `components/CampusMap.tsx`, campus codes in `index.tsx` | `features/campus/` | 4 |
-| **residence** | `components/ResidenceVideoGallery.tsx`, clips data | `features/residence/` | 5 |
-| **contact** | `routes/contact.tsx`, WhatsApp links | `features/contact/` | 6 |
-| **marketing** | SEO meta in routes, analytics | `features/marketing/` | 7 |
+| Feature       | Source Files                                               | Target Location       | Priority |
+| ------------- | ---------------------------------------------------------- | --------------------- | -------- |
+| **home**      | `routes/index.tsx` (sections)                              | `features/home/`      | 1        |
+| **listings**  | `routes/listings.tsx`, `components/ListingGrid.tsx`        | `features/listings/`  | 2        |
+| **property**  | `routes/list-property.tsx`, `routes/listings.tsx` (detail) | `features/property/`  | 3        |
+| **campus**    | `components/CampusMap.tsx`, campus codes in `index.tsx`    | `features/campus/`    | 4        |
+| **residence** | `components/ResidenceVideoGallery.tsx`, clips data         | `features/residence/` | 5        |
+| **contact**   | `routes/contact.tsx`, WhatsApp links                       | `features/contact/`   | 6        |
+| **marketing** | SEO meta in routes, analytics                              | `features/marketing/` | 7        |
 
 **Extraction Pattern per Feature:**
+
 ```bash
 # 1. Create feature directory structure
 mkdir -p src/features/home/{components,hooks,types,schemas}
@@ -1085,28 +1095,30 @@ src/app/router/routes/
 
 ### 9.7 Phase 7: Cleanup & Optimization (Week 5) — **Low Risk**
 
-| Task | Description |
-|------|-------------|
-| 7.1 | Delete old `src/components/` (except `ui/` already moved) |
-| 7.2 | Delete old `src/data/`, `src/hooks/`, `src/lib/` |
-| 7.3 | Delete old `src/styles.css` |
-| 7.4 | Remove `@/*` alias, keep only namespaced aliases |
-| 7.5 | Add ESLint rules to enforce layer boundaries |
-| 7.6 | Update import statements across codebase |
-| 7.7 | Run full test suite + visual regression |
-| 7.8 | Document new architecture in `ARCHITECTURE.md` |
+| Task | Description                                               |
+| ---- | --------------------------------------------------------- |
+| 7.1  | Delete old `src/components/` (except `ui/` already moved) |
+| 7.2  | Delete old `src/data/`, `src/hooks/`, `src/lib/`          |
+| 7.3  | Delete old `src/styles.css`                               |
+| 7.4  | Remove `@/*` alias, keep only namespaced aliases          |
+| 7.5  | Add ESLint rules to enforce layer boundaries              |
+| 7.6  | Update import statements across codebase                  |
+| 7.7  | Run full test suite + visual regression                   |
+| 7.8  | Document new architecture in `ARCHITECTURE.md`            |
 
 ---
 
 ## 10. Validation Checklist
 
 ### Pre-Migration
+
 - [ ] All tests pass
 - [ ] Visual regression baseline captured
 - [ ] Bundle size recorded
 - [ ] Lint/typecheck clean
 
 ### Per-Phase
+
 - [ ] `pnpm lint` passes
 - [ ] `pnpm tsc --noEmit` passes
 - [ ] Dev server starts without errors
@@ -1114,6 +1126,7 @@ src/app/router/routes/
 - [ ] Visual regression matches baseline (±1%)
 
 ### Post-Migration
+
 - [ ] All phases complete
 - [ ] No `@/components/*` imports remain (except `ui/primitives`)
 - [ ] No `@/data/*`, `@/hooks/*`, `@/lib/*` imports remain
@@ -1126,14 +1139,14 @@ src/app/router/routes/
 
 ## 11. Risk Mitigation
 
-| Risk | Likelihood | Impact | Mitigation |
-|------|------------|--------|------------|
-| Breaking existing imports during alias migration | High | High | Keep `@/*` alias during transition; migrate imports incrementally |
-| Circular dependencies between features | Medium | High | Enforce dependency rules with ESLint `import/no-restricted-paths` |
-| TanStack Router route tree conflicts | Low | High | Generate route tree after each feature extraction |
-| Lost styling during component moves | Medium | Medium | Use visual regression testing; preserve CSS module structure |
-| Performance regression from over-abstraction | Low | Medium | Profile bundle size; tree-shaking should eliminate unused code |
-| Team friction with new patterns | Medium | Low | Pair program first feature; document patterns in `CONTRIBUTING.md` |
+| Risk                                             | Likelihood | Impact | Mitigation                                                         |
+| ------------------------------------------------ | ---------- | ------ | ------------------------------------------------------------------ |
+| Breaking existing imports during alias migration | High       | High   | Keep `@/*` alias during transition; migrate imports incrementally  |
+| Circular dependencies between features           | Medium     | High   | Enforce dependency rules with ESLint `import/no-restricted-paths`  |
+| TanStack Router route tree conflicts             | Low        | High   | Generate route tree after each feature extraction                  |
+| Lost styling during component moves              | Medium     | Medium | Use visual regression testing; preserve CSS module structure       |
+| Performance regression from over-abstraction     | Low        | Medium | Profile bundle size; tree-shaking should eliminate unused code     |
+| Team friction with new patterns                  | Medium     | Low    | Pair program first feature; document patterns in `CONTRIBUTING.md` |
 
 ---
 
@@ -1196,42 +1209,42 @@ src/app/router/routes/
 
 ### Component Migration Map
 
-| Current Path | New Path | Layer |
-|--------------|----------|-------|
-| `src/components/ui/*` | `src/shared/ui/primitives/*` | Shared |
-| `src/components/MarketingChrome.tsx` | `src/shared/components/MarketingChrome.tsx` | Shared |
-| `src/components/VideoPanel.tsx` | `src/shared/components/VideoPanel.tsx` | Shared |
-| `src/components/Experience.tsx` | `src/shared/components/Experience.tsx` | Shared |
-| `src/components/LetterReveal.tsx` | `src/shared/components/LetterReveal.tsx` | Shared |
-| `src/components/CampusMap.tsx` | `src/features/campus/components/CampusMap.tsx` | Feature |
+| Current Path                               | New Path                                                      | Layer   |
+| ------------------------------------------ | ------------------------------------------------------------- | ------- |
+| `src/components/ui/*`                      | `src/shared/ui/primitives/*`                                  | Shared  |
+| `src/components/MarketingChrome.tsx`       | `src/shared/components/MarketingChrome.tsx`                   | Shared  |
+| `src/components/VideoPanel.tsx`            | `src/shared/components/VideoPanel.tsx`                        | Shared  |
+| `src/components/Experience.tsx`            | `src/shared/components/Experience.tsx`                        | Shared  |
+| `src/components/LetterReveal.tsx`          | `src/shared/components/LetterReveal.tsx`                      | Shared  |
+| `src/components/CampusMap.tsx`             | `src/features/campus/components/CampusMap.tsx`                | Feature |
 | `src/components/ResidenceVideoGallery.tsx` | `src/features/residence/components/ResidenceVideoGallery.tsx` | Feature |
-| `src/components/ListingGrid.tsx` | `src/features/listings/components/ListingGrid.tsx` | Feature |
-| `src/components/Logo.tsx` | `src/shared/components/Logo.tsx` | Shared |
-| `src/components/PlaceholderPage.tsx` | `src/shared/components/PlaceholderPage.tsx` | Shared |
+| `src/components/ListingGrid.tsx`           | `src/features/listings/components/ListingGrid.tsx`            | Feature |
+| `src/components/Logo.tsx`                  | `src/shared/components/Logo.tsx`                              | Shared  |
+| `src/components/PlaceholderPage.tsx`       | `src/shared/components/PlaceholderPage.tsx`                   | Shared  |
 
 ### Data/Logic Migration Map
 
-| Current Path | New Path | Layer |
-|--------------|----------|-------|
-| `src/data/listings.ts` (types) | `src/domain/types/listing.ts` | Domain |
-| `src/data/listings.ts` (sample data) | `src/features/listings/data/sampleListings.ts` | Feature |
-| `src/data/listings.ts` (data) | `src/features/residence/data/residenceClips.ts` | Feature |
-| `src/hooks/use-mobile.tsx` | `src/shared/hooks/useIsMobile.ts` | Shared |
-| `src/lib/utils.ts` | `src/shared/utils/cn.ts` | Shared |
-| `src/lib/error-*.ts` | `src/infrastructure/error-reporting/` | Infrastructure |
-| `src/styles.css` | `src/shared/styles/globals.css` | Shared |
+| Current Path                         | New Path                                        | Layer          |
+| ------------------------------------ | ----------------------------------------------- | -------------- |
+| `src/data/listings.ts` (types)       | `src/domain/types/listing.ts`                   | Domain         |
+| `src/data/listings.ts` (sample data) | `src/features/listings/data/sampleListings.ts`  | Feature        |
+| `src/data/listings.ts` (data)        | `src/features/residence/data/residenceClips.ts` | Feature        |
+| `src/hooks/use-mobile.tsx`           | `src/shared/hooks/useIsMobile.ts`               | Shared         |
+| `src/lib/utils.ts`                   | `src/shared/utils/cn.ts`                        | Shared         |
+| `src/lib/error-*.ts`                 | `src/infrastructure/error-reporting/`           | Infrastructure |
+| `src/styles.css`                     | `src/shared/styles/globals.css`                 | Shared         |
 
 ### Route Migration Map
 
-| Current Route | New Route | Feature |
-|---------------|-----------|---------|
-| `src/routes/index.tsx` | `src/app/router/routes/index.tsx` | home |
-| `src/routes/listings.tsx` | `src/app/router/routes/listings.tsx` | listings |
-| `src/routes/list-property.tsx` | `src/app/router/routes/list-property.tsx` | property |
-| `src/routes/about.tsx` | `src/app/router/routes/about.tsx` | marketing |
-| `src/routes/contact.tsx` | `src/app/router/routes/contact.tsx` | contact |
-| `src/routes/terms.tsx` | `src/app/router/routes/terms.tsx` | marketing |
-| `src/routes/privacy.tsx` | `src/app/router/routes/privacy.tsx` | marketing |
+| Current Route                  | New Route                                 | Feature   |
+| ------------------------------ | ----------------------------------------- | --------- |
+| `src/routes/index.tsx`         | `src/app/router/routes/index.tsx`         | home      |
+| `src/routes/listings.tsx`      | `src/app/router/routes/listings.tsx`      | listings  |
+| `src/routes/list-property.tsx` | `src/app/router/routes/list-property.tsx` | property  |
+| `src/routes/about.tsx`         | `src/app/router/routes/about.tsx`         | marketing |
+| `src/routes/contact.tsx`       | `src/app/router/routes/contact.tsx`       | contact   |
+| `src/routes/terms.tsx`         | `src/app/router/routes/terms.tsx`         | marketing |
+| `src/routes/privacy.tsx`       | `src/app/router/routes/privacy.tsx`       | marketing |
 
 ---
 
@@ -1245,6 +1258,6 @@ src/app/router/routes/
 
 ---
 
-*Document Version: 1.0*
-*Created: 2025*
-*Author: Architecture Planning Agent*
+_Document Version: 1.0_
+_Created: 2025_
+_Author: Architecture Planning Agent_

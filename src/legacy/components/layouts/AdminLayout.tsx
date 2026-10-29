@@ -1,24 +1,35 @@
-// @ts-nocheck
-import React from 'react';
-import { Outlet, NavLink } from 'react-router-dom';
-import { LayoutDashboard, Home, Users, Tag, Settings, LogOut, Menu, X, Monitor, School, Building } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
-import { cn } from '../../lib/utils';
-import { useState } from 'react';
+import React from "react";
+import { Outlet, NavLink } from "react-router-dom";
+import {
+  LayoutDashboard,
+  Home,
+  Users,
+  Tag,
+  Settings,
+  LogOut,
+  Menu,
+  X,
+  Monitor,
+  School,
+  Building,
+} from "lucide-react";
+import { useAuth } from "../../context/AuthContext";
+import { cn } from "../../lib/utils";
+import { useState } from "react";
 
 export const AdminLayout = () => {
   const { logout } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navItems = [
-    { to: '/admin', icon: <LayoutDashboard className="w-5 h-5" />, label: 'Dashboard', end: true },
-    { to: '/admin/properties', icon: <Home className="w-5 h-5" />, label: 'Properties' },
-    { to: '/admin/universities', icon: <School className="w-5 h-5" />, label: 'Universities' },
-    { to: '/admin/hostels', icon: <Building className="w-5 h-5" />, label: 'Hostels' },
-    { to: '/admin/cms', icon: <Monitor className="w-5 h-5" />, label: 'Site Builder' },
-    { to: '/admin/agents', icon: <Users className="w-5 h-5" />, label: 'Agents' },
-    { to: '/admin/categories', icon: <Tag className="w-5 h-5" />, label: 'Categories' },
-    { to: '/admin/settings', icon: <Settings className="w-5 h-5" />, label: 'Settings' },
+    { to: "/admin", icon: <LayoutDashboard className="w-5 h-5" />, label: "Dashboard", end: true },
+    { to: "/admin/properties", icon: <Home className="w-5 h-5" />, label: "Properties" },
+    { to: "/admin/universities", icon: <School className="w-5 h-5" />, label: "Universities" },
+    { to: "/admin/hostels", icon: <Building className="w-5 h-5" />, label: "Hostels" },
+    { to: "/admin/cms", icon: <Monitor className="w-5 h-5" />, label: "Site Builder" },
+    { to: "/admin/agents", icon: <Users className="w-5 h-5" />, label: "Agents" },
+    { to: "/admin/categories", icon: <Tag className="w-5 h-5" />, label: "Categories" },
+    { to: "/admin/settings", icon: <Settings className="w-5 h-5" />, label: "Settings" },
   ];
 
   return (
@@ -26,7 +37,10 @@ export const AdminLayout = () => {
       {/* Mobile Header */}
       <div className="md:hidden flex items-center justify-between p-4 border-b border-zinc-800 bg-zinc-900">
         <div className="text-xl font-display font-medium tracking-tight">UniHub Admin</div>
-        <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="text-zinc-400 hover:text-white">
+        <button
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="text-zinc-400 hover:text-white"
+        >
           {mobileMenuOpen ? <X /> : <Menu />}
         </button>
       </div>
@@ -36,7 +50,7 @@ export const AdminLayout = () => {
         className={cn(
           "w-64 bg-zinc-900 border-r border-zinc-800 flex-col transition-transform duration-300 fixed md:relative z-40 inset-y-0 left-0",
           mobileMenuOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0",
-          mobileMenuOpen ? "flex" : "hidden md:flex"
+          mobileMenuOpen ? "flex" : "hidden md:flex",
         )}
       >
         <div className="p-6 border-b border-zinc-800 hidden md:block">
@@ -55,7 +69,7 @@ export const AdminLayout = () => {
                   "flex items-center gap-3 px-4 py-3 rounded-lg font-medium transition-colors",
                   isActive
                     ? "bg-zinc-800 text-white"
-                    : "text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-200"
+                    : "text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-200",
                 )
               }
             >
@@ -81,8 +95,8 @@ export const AdminLayout = () => {
 
       {/* Mobile backdrop */}
       {mobileMenuOpen && (
-        <div 
-          className="fixed inset-0 bg-black/50 z-30 md:hidden" 
+        <div
+          className="fixed inset-0 bg-black/50 z-30 md:hidden"
           onClick={() => setMobileMenuOpen(false)}
         />
       )}
@@ -96,4 +110,3 @@ export const AdminLayout = () => {
     </div>
   );
 };
-

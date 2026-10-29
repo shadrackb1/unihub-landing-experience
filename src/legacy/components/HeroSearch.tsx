@@ -1,29 +1,30 @@
-// @ts-nocheck
-import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { Search, MapPin, History, X, ChevronRight, Loader2 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../lib/firebase';
-import { University } from '../types';
+import React, { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { Search, MapPin, History, X, ChevronRight, Loader2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../lib/firebase";
+import { University } from "../types";
 
 export const HeroSearch = () => {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [universities, setUniversities] = useState<University[]>([]);
   const [suggestions, setSuggestions] = useState<University[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const searchRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const saved = localStorage.getItem('unihub_recent_searches');
+    const saved = localStorage.getItem("unihub_recent_searches");
     if (saved) {
       try {
         setRecentSearches(JSON.parse(saved));
-      } catch (e) {}
+      } catch {
+        // ignore parse errors
+      }
     }
 
     const handleClickOutside = (e: MouseEvent) => {
@@ -31,15 +32,15 @@ export const HeroSearch = () => {
         setIsFocused(false);
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const fetchUniversities = async () => {
     if (universities.length > 0) return;
     try {
-      const snap = await getDocs(collection(db, 'universities'));
-      const data = snap.docs.map(d => ({ id: d.id, ...d.data() } as University));
+      const snap = await getDocs(collection(db, "universities"));
+      const data = snap.docs.map((d) => ({ id: d.id, ...d.data() }) as University);
       setUniversities(data);
     } catch (e) {
       console.error(e);
@@ -50,6 +51,7 @@ export const HeroSearch = () => {
     if (isFocused && universities.length === 0) {
       fetchUniversities();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFocused]);
 
   useEffect(() => {
@@ -57,32 +59,32 @@ export const HeroSearch = () => {
       setSuggestions([]);
       return;
     }
-    
+
     const searchTerm = query.toLowerCase();
-    const results = universities.filter(u => {
+    const results = universities.filter((u) => {
       if (u.name.toLowerCase().includes(searchTerm)) return true;
       if (u.town?.toLowerCase().includes(searchTerm)) return true;
-      if (u.nearbyAreas?.some(a => a.toLowerCase().includes(searchTerm))) return true;
-      if (u.popularKeywords?.some(k => k.toLowerCase().includes(searchTerm))) return true;
+      if (u.nearbyAreas?.some((a) => a.toLowerCase().includes(searchTerm))) return true;
+      if (u.popularKeywords?.some((k) => k.toLowerCase().includes(searchTerm))) return true;
       return false;
     });
-    
+
     setSuggestions(results.slice(0, 5));
     setIsLoading(false);
   }, [query, universities]);
 
   const saveRecentSearch = (term: string) => {
-    if(!term.trim()) return;
-    const updated = [term, ...recentSearches.filter(s => s !== term)].slice(0, 5);
+    if (!term.trim()) return;
+    const updated = [term, ...recentSearches.filter((s) => s !== term)].slice(0, 5);
     setRecentSearches(updated);
-    localStorage.setItem('unihub_recent_searches', JSON.stringify(updated));
+    localStorage.setItem("unihub_recent_searches", JSON.stringify(updated));
   };
 
   const removeRecentSearch = (e: React.MouseEvent, term: string) => {
     e.stopPropagation();
-    const updated = recentSearches.filter(s => s !== term);
+    const updated = recentSearches.filter((s) => s !== term);
     setRecentSearches(updated);
-    localStorage.setItem('unihub_recent_searches', JSON.stringify(updated));
+    localStorage.setItem("unihub_recent_searches", JSON.stringify(updated));
   };
 
   const handleSearch = (term: string) => {
@@ -100,12 +102,20 @@ export const HeroSearch = () => {
 
   const highlightMatch = (text: string, highlight: string) => {
     if (!highlight.trim()) return <span>{text}</span>;
-    const regex = new RegExp(`(${highlight})`, 'gi');
+    const regex = new RegExp(`(${highlight})`, "gi");
     const parts = text.split(regex);
     return (
       <span>
-        {parts.map((part, i) => 
-          regex.test(part) ? <span key={i} className="text-white font-medium">{part}</span> : <span key={i} className="text-white/60">{part}</span>
+        {parts.map((part, i) =>
+          regex.test(part) ? (
+            <span key={i} className="text-white font-medium">
+              {part}
+            </span>
+          ) : (
+            <span key={i} className="text-white/60">
+              {part}
+            </span>
+          ),
         )}
       </span>
     );
@@ -117,7 +127,7 @@ export const HeroSearch = () => {
         <div className="absolute inset-y-0 left-5 flex items-center pointer-events-none">
           <Search className="w-5 h-5 text-white/50 group-focus-within:text-white transition-colors" />
         </div>
-        <input 
+        <input
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
@@ -126,7 +136,7 @@ export const HeroSearch = () => {
           className="w-full bg-surface-800/80 backdrop-blur-xl border border-white/20 text-white rounded-full py-5 pl-14 pr-32 focus:outline-none focus:border-white/50 focus:bg-surface-800 shadow-[0_0_30px_rgba(255,255,255,0.05)] focus:shadow-[0_0_40px_rgba(255,255,255,0.1)] transition-all text-lg"
         />
         <div className="absolute inset-y-2 right-2 flex items-center">
-          <button 
+          <button
             type="submit"
             className="px-6 py-3 bg-white text-black rounded-full font-medium flex items-center gap-2 transition-all hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.2)]"
           >
@@ -134,7 +144,9 @@ export const HeroSearch = () => {
           </button>
         </div>
       </form>
-      <div className="text-left text-xs text-white/30 mt-3 px-4">Try "Kabarak University", "Nakuru", or "London Estate"</div>
+      <div className="text-left text-xs text-white/30 mt-3 px-4">
+        Try "Kabarak University", "Nakuru", or "London Estate"
+      </div>
 
       <AnimatePresence>
         {isFocused && (query.trim() || recentSearches.length > 0) && (
@@ -147,7 +159,9 @@ export const HeroSearch = () => {
           >
             {query.trim() ? (
               <div className="p-4">
-                <div className="px-4 pb-2 text-xs font-medium text-white/40 uppercase tracking-wider">Suggestions</div>
+                <div className="px-4 pb-2 text-xs font-medium text-white/40 uppercase tracking-wider">
+                  Suggestions
+                </div>
                 {isLoading ? (
                   <div className="flex items-center justify-center p-8 text-white/40">
                     <Loader2 className="w-6 h-6 animate-spin" />
@@ -167,7 +181,9 @@ export const HeroSearch = () => {
                             </div>
                             <div>
                               <div className="text-base">{highlightMatch(u.name, query)}</div>
-                              {u.town && <div className="text-sm text-white/40 mt-0.5">{u.town}</div>}
+                              {u.town && (
+                                <div className="text-sm text-white/40 mt-0.5">{u.town}</div>
+                              )}
                             </div>
                           </div>
                           <ChevronRight className="w-4 h-4 text-white/20 group-hover/item:text-white/60 transition-colors opacity-0 group-hover/item:opacity-100" />
@@ -183,7 +199,9 @@ export const HeroSearch = () => {
               </div>
             ) : (
               <div className="p-4">
-                <div className="px-4 pb-2 text-xs font-medium text-white/40 uppercase tracking-wider">Recent Searches</div>
+                <div className="px-4 pb-2 text-xs font-medium text-white/40 uppercase tracking-wider">
+                  Recent Searches
+                </div>
                 <ul className="space-y-1 mt-2">
                   {recentSearches.map((term, idx) => (
                     <li key={idx} className="relative group/recent">
@@ -216,4 +234,3 @@ export const HeroSearch = () => {
     </div>
   );
 };
-

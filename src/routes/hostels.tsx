@@ -5,4 +5,3 @@ export const Route = createFileRoute("/hostels")({
     throw redirect({ href: "/app#/hostels" });
   },
 });
-

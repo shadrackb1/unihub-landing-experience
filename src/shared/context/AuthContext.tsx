@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { User, onAuthStateChanged, signOut, signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '@/shared/lib/firebase';
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { User, onAuthStateChanged, signOut, signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/shared/lib/firebase";
 
 interface AuthContextType {
   user: User | null;
@@ -26,9 +26,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const logout = async () => {
     try {
       await signOut(auth);
-    } catch (e: any) {
-      console.error('Logout error:', e);
-      throw e;
+    } catch (e) {
+      const error = e as Error;
+      console.error("Logout error:", error);
+      throw error;
     }
   };
 
@@ -37,16 +38,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, logout, login }}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={{ user, loading, logout, login }}>{children}</AuthContext.Provider>
   );
 }
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };

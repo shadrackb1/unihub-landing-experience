@@ -1,10 +1,24 @@
-import React, { useState } from 'react';
-import { Outlet, Link, useNavigate } from '@tanstack/react-router';
+import React, { useState } from "react";
+import { Outlet, Link, useNavigate } from "@tanstack/react-router";
 import {
-  LayoutDashboard, Home, Users, Tag, Settings, LogOut, Menu, X, Monitor, School, Building, Palette, Layout, MousePointerClick, Users as UsersIcon
-} from 'lucide-react';
-import { useAuth } from '@/shared/context/AuthContext';
-import { cn } from '@/shared/lib/utils';
+  LayoutDashboard,
+  Home,
+  Users,
+  Tag,
+  Settings,
+  LogOut,
+  Menu,
+  X,
+  Monitor,
+  School,
+  Building,
+  Palette,
+  Layout,
+  MousePointerClick,
+  Users as UsersIcon,
+} from "lucide-react";
+import { useAuth } from "@/shared/context/AuthContext";
+import { cn } from "@/shared/lib/utils";
 
 export const AdminLayout = () => {
   const { logout } = useAuth();
@@ -12,19 +26,19 @@ export const AdminLayout = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navItems = [
-    { to: '/admin', icon: LayoutDashboard, label: 'Dashboard', end: true },
-    { to: '/admin/properties', icon: Home, label: 'Properties' },
-    { to: '/admin/universities', icon: Building, label: 'Universities' },
-    { to: '/admin/hostels', icon: Building, label: 'Hostels' },
-    { to: '/admin/cms', icon: Monitor, label: 'Site Builder' },
-    { to: '/admin/agents', icon: Users, label: 'Agents' },
-    { to: '/admin/categories', icon: Tag, label: 'Categories' },
-    { to: '/admin/settings', icon: Settings, label: 'Settings' },
+    { to: "/admin", icon: LayoutDashboard, label: "Dashboard", end: true },
+    { to: "/admin/properties", icon: Home, label: "Properties" },
+    { to: "/admin/universities", icon: Building, label: "Universities" },
+    { to: "/admin/hostels", icon: Building, label: "Hostels" },
+    { to: "/admin/cms", icon: Monitor, label: "Site Builder" },
+    { to: "/admin/agents", icon: Users, label: "Agents" },
+    { to: "/admin/categories", icon: Tag, label: "Categories" },
+    { to: "/admin/settings", icon: Settings, label: "Settings" },
   ];
 
   const handleLogout = async () => {
     await logout();
-    navigate({ to: '/admin/login' });
+    navigate({ to: "/admin/login" });
   };
 
   return (
@@ -32,7 +46,10 @@ export const AdminLayout = () => {
       {/* Mobile Header */}
       <div className="md:hidden flex items-center justify-between p-4 border-b border-zinc-800 bg-zinc-900">
         <div className="text-xl font-display font-medium tracking-tight">UniHub Admin</div>
-        <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="text-zinc-400 hover:text-white">
+        <button
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="text-zinc-400 hover:text-white"
+        >
           {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </button>
       </div>
@@ -40,8 +57,8 @@ export const AdminLayout = () => {
       {/* Sidebar */}
       <aside
         className={`w-64 bg-zinc-900 border-r border-zinc-800 flex-col transition-transform duration-300 fixed md:relative z-40 inset-y-0 left-0 ${
-          mobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
-        } ${mobileMenuOpen ? 'flex' : 'hidden md:flex'}`}
+          mobileMenuOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+        } ${mobileMenuOpen ? "flex" : "hidden md:flex"}`}
       >
         <div className="p-6 border-b border-zinc-800 hidden md:block">
           <div className="text-2xl font-display font-medium tracking-tight">UniHub Admin</div>
@@ -56,8 +73,10 @@ export const AdminLayout = () => {
               onClick={() => setMobileMenuOpen(false)}
               className={({ isActive }: { isActive: boolean }) =>
                 cn(
-                  'flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors',
-                  isActive ? 'bg-zinc-800 text-white' : 'text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-200'
+                  "flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors",
+                  isActive
+                    ? "bg-zinc-800 text-white"
+                    : "text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-200",
                 )
               }
             >

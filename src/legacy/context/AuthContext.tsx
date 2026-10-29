@@ -1,8 +1,7 @@
-// @ts-nocheck
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { User, onAuthStateChanged, signOut, signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../lib/firebase';
-import toast from 'react-hot-toast';
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { User, onAuthStateChanged, signOut, signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../lib/firebase";
+import toast from "react-hot-toast";
 
 interface AuthContextType {
   user: User | null;
@@ -11,7 +10,7 @@ interface AuthContextType {
   login: (email: string, pass: string) => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextType>({} as AuthContextType);
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
@@ -29,8 +28,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       await signOut(auth);
       toast.success("Successfully logged out");
-    } catch (e: any) {
-      toast.error(e.message || "Failed to log out");
+    } catch (e) {
+      const error = e as Error;
+      toast.error(error.message || "Failed to log out");
     }
   };
 
@@ -39,11 +39,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, logout, login }}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={{ user, loading, logout, login }}>{children}</AuthContext.Provider>
   );
 }
 
-export const useAuth = () => useContext(AuthContext);
-
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
+};

@@ -219,7 +219,12 @@ export function SiteFooter() {
         <div className="mt-14 flex flex-col gap-3 border-t border-border pt-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
           <p>Â© 2026 UniHub Â· Student housing in Kenya</p>
           <div className="flex items-center gap-4">
-            <Link to="/admin" className="text-muted-foreground hover:text-foreground transition-colors" title="Admin Portal" aria-label="Admin Portal">
+            <Link
+              to="/admin"
+              className="text-muted-foreground hover:text-foreground transition-colors"
+              title="Admin Portal"
+              aria-label="Admin Portal"
+            >
               <UserCircle2 className="size-4" />
             </Link>
             <p className="flex items-center gap-2">

@@ -1,8 +1,7 @@
-// @ts-nocheck
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { motion } from 'motion/react';
-import { Home } from 'lucide-react';
+import React from "react";
+import { Link } from "react-router-dom";
+import { motion } from "motion/react";
+import { Home } from "lucide-react";
 
 export const NotFoundPage = () => {
   return (
@@ -17,7 +16,7 @@ export const NotFoundPage = () => {
         <p className="text-white/50 max-w-md mx-auto mb-10 text-lg">
           The page you're looking for doesn't exist or has been moved.
         </p>
-        <Link 
+        <Link
           to="/"
           className="bg-white text-black px-8 py-4 rounded-full font-medium inline-flex items-center gap-2 hover:bg-white/90 transition-colors shadow-lg"
         >
@@ -28,4 +27,3 @@ export const NotFoundPage = () => {
     </div>
   );
 };
-

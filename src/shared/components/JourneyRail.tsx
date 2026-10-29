@@ -12,7 +12,7 @@ export const ACTS = [
   { id: "close", label: "VII · Move" },
 ] as const;
 
-export type ActId = typeof ACTS[number]['id'];
+export type ActId = (typeof ACTS)[number]["id"];
 
 export function JourneyRail() {
   const [active, setActive] = useState<ActId>(ACTS[0]!.id);
